@@ -1,7 +1,7 @@
 import django
 
 from django.db import models
-from models import AbstractBaseModel
+from base_model import AbstractBaseModel
 
 class Member(django.contrib.auth.models.AbstractUser, AbstractBaseModel):
     def __unicode__(self):
