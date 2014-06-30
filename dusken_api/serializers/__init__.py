@@ -1,1 +1,1 @@
-from member_serializer import MemberSerializer
+from member import MemberSerializer

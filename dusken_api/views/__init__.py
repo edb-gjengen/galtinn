@@ -1,1 +1,1 @@
-from member_view import MemberList, MemberDetail
+from member import MemberList, MemberDetail
