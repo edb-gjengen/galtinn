@@ -29,3 +29,13 @@ class Member(django.contrib.auth.models.AbstractUser, AbstractBaseModel):
 
     class Meta:
         app_label = "dusken_api"
+
+class MemberMeta(AbstractBaseModel):
+    key = models.CharField(max_length=255)
+    value = models.TextField(blank=True)
+    member = models.ForeignKey('dusken_api.Member')
+
+    class Meta:
+        app_label = "dusken_api"
+
+

@@ -1,4 +1,7 @@
 *.pyc
 
 /venv/
+
+/dusken.db
 /dusken_site/settings.py
+
