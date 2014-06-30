@@ -1,0 +1,4 @@
+*.pyc
+
+/venv/
+/dusken_site/settings.py
