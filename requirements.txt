@@ -1,5 +1,7 @@
 Django==1.6.5
 argparse==1.2.1
+django-oauth2-provider==0.2.6.1
 django-rest-swagger==0.1.14
 djangorestframework==2.3.14
+shortuuid==0.4.2
 wsgiref==0.1.2

@@ -122,11 +122,14 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'provider',
+    'provider.oauth2',
     'rest_framework',
     'rest_framework_swagger',
     'dusken_api',
+
     # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -137,11 +140,16 @@ REST_FRAMEWORK = {
     'DEFAULT_MODEL_SERIALIZER_CLASS':
         'rest_framework.serializers.HyperlinkedModelSerializer',
 
+    # Use Oauth2 for authentication.
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.OAuth2Authentication',
+    ),
+
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
 }
 
 # A sample logging configuration. The only tangible logging
