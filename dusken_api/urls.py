@@ -14,4 +14,7 @@ urlpatterns = patterns('',
     
     url(r'^members/$', views.MemberList.as_view()),
     url(r'^members/(?P<pk>[0-9]+)/$', views.MemberDetail.as_view()),
+
+    url(r'^memberships/$', views.MembershipList.as_view()),
+    url(r'^memberships/(?P<pk>[0-9]+)/$', views.MembershipDetail.as_view()),
 )

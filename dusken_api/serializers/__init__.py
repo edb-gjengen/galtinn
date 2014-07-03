@@ -1,1 +1,2 @@
 from member import MemberSerializer
+from membership import MembershipSerializer
