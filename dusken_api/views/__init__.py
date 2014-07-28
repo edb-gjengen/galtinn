@@ -1,2 +1,2 @@
-from member import MemberList, MemberDetail
-from membership import MembershipList, MembershipDetail
+from member import MemberViewSet
+from membership import MembershipViewSet

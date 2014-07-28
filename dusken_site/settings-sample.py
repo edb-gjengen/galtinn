@@ -8,6 +8,9 @@ ADMINS = (
 )
 
 AUTH_USER_MODEL = 'dusken_api.Member'
+LOGIN_REDIRECT_URL = '/admin/'
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
 
 MANAGERS = ADMINS
 
