@@ -122,16 +122,12 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admin',
     'provider',
     'provider.oauth2',
     'rest_framework',
     'rest_framework_swagger',
     'dusken_api',
-
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
 )
 
 REST_FRAMEWORK = {
