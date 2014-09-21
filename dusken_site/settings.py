@@ -135,6 +135,8 @@ LOGGING = {
     }
 }
 
+STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
+
 try:
     from local_settings import *
 except:
