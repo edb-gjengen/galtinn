@@ -1,16 +1,31 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
+from dusken_api.models import Member
+from rest_framework.test import APITestCase
 
-Replace this with more appropriate tests for your application.
-"""
+class UserTest(APITestCase):
+    def setUp(self):
+        member = Member.objects.create_user('robert', email='robert.kolner@gmail.com', password='test')
+        member.save()
 
-from django.test import TestCase
-
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
+    def test_get(self):
         """
-        Tests that 1 + 1 always equals 2.
+        Tests that GET /api/v1/users returns correct data.
         """
-        self.assertEqual(1 + 1, 2)
+        pass
+
+    def test_create(self):
+        """
+        Tests that POST /api/v1/users in fact creates user with correct data.
+        """
+        pass
+
+    def test_update(self):
+        """
+        Tests that PUT /api/v1/users/1 and PUT /api/v1/users/2 in fact creates user with correct data.
+        """
+        pass
+
+    def test_delete(self):
+        """
+        Tests that DELETE /api/v1/users/1 deletes the user
+        """
+        pass

@@ -1,9 +1,11 @@
-import django
+import datetime
 
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from base_model import AbstractBaseModel
 
-class Member(django.contrib.auth.models.AbstractUser, AbstractBaseModel):
+
+class Member(AbstractBaseModel, AbstractUser):
     def __unicode__(self):
         if len(self.first_name) + len(self.last_name) > 0:
             return u'{first} {last} ({username})'.format(

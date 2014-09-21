@@ -1,7 +1,8 @@
 *.pyc
 
-/venv/
 /.idea/
+/venv/
+
 /db.sqlite3
 /dusken_site/local_settings.py
 
