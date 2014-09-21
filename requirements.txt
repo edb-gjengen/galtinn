@@ -3,3 +3,4 @@ django-oauth2-provider==0.2.6.1
 django-rest-swagger==0.1.14
 djangorestframework==2.4.3
 shortuuid==0.4.2
+stripe==1.19.0
