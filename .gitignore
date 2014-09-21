@@ -3,5 +3,5 @@
 /venv/
 
 /dusken.db
-/dusken_site/settings.py
+/dusken_site/local_settings.py
 
