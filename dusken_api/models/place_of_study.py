@@ -1,6 +1,7 @@
 from base_model import AbstractBaseModel
 from django.db import models
 
+
 class PlaceOfStudy(AbstractBaseModel):
     class Meta:
         app_label = "dusken_api"

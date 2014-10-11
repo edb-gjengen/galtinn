@@ -5,7 +5,7 @@ from django.db import models
 from base_model import AbstractBaseModel
 
 
-class Member(AbstractBaseModel, AbstractUser):
+class User(AbstractBaseModel, AbstractUser):
     def __unicode__(self):
         if len(self.first_name) + len(self.last_name) > 0:
             return u'{first} {last} ({username})'.format(
@@ -32,10 +32,11 @@ class Member(AbstractBaseModel, AbstractUser):
     class Meta:
         app_label = "dusken_api"
 
-class MemberMeta(AbstractBaseModel):
+
+class UserMeta(AbstractBaseModel):
     key = models.CharField(max_length=255)
     value = models.TextField(blank=True)
-    member = models.ForeignKey('dusken_api.Member')
+    user = models.ForeignKey('dusken_api.User')
 
     class Meta:
         app_label = "dusken_api"

@@ -1,3 +1,5 @@
+# encoding: utf-8
+from __future__ import unicode_literals
 """
 Django settings for dusken project
 
@@ -22,6 +24,9 @@ ALLOWED_HOSTS = []
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # Application definition
+LOCAL_APPS = (
+    'dusken_api',
+)
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,13 +34,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'provider',
-    'provider.oauth2',
     'rest_framework',
     'rest_framework_swagger',
-)
-LOCAL_APPS = (
-    'dusken_api',
+    'rest_framework.authtoken',
 )
 INSTALLED_APPS += LOCAL_APPS
 
@@ -83,7 +84,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'dusken_api.Member'
+AUTH_USER_MODEL = 'dusken_api.User'
 LOGIN_REDIRECT_URL = '/admin/'
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
@@ -96,7 +97,7 @@ REST_FRAMEWORK = {
 
     # Use Oauth2 for authentication.
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.OAuth2Authentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
 
     # Use Django's standard `django.contrib.auth` permissions,

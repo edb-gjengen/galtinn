@@ -7,9 +7,6 @@ admin.site.login = login_required(admin.site.login)
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
-    # Oauth2 Framework
-    url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
-
     # Django Rest Framework
     url(r'', include('rest_framework.urls', namespace='rest_framework')),
 
@@ -18,4 +15,7 @@ urlpatterns = patterns('',
 
     # Dusken
     url(r'api/', include('dusken_api.urls')),
+
+    # Token Auth
+    url(r'^auth/', 'rest_framework.authtoken.views.obtain_auth_token')
 )

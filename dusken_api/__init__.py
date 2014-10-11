@@ -1,0 +1,1 @@
+default_app_config = 'dusken_api.apps.DuskenAppConfig'

@@ -1,6 +1,7 @@
 from base_model import AbstractBaseModel
 from django.db import models
 
+
 class Address(AbstractBaseModel):
     street_address = models.CharField(max_length=255)
     street_address_two = models.CharField(max_length=255, null=True, blank=True)
@@ -26,7 +27,7 @@ class Address(AbstractBaseModel):
 
 class Country(AbstractBaseModel):
     name = models.CharField(max_length=100, unique=True)
-    code = models.CharField(max_length=3, unique=True) #ISO 3166-1 alpha 2
+    code = models.CharField(max_length=3, unique=True)  # ISO 3166-1 alpha 2
 
     class Meta:
         verbose_name_plural = "Countries"

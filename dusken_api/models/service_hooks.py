@@ -1,6 +1,7 @@
 from base_model import AbstractBaseModel
 from django.db import models
 
+
 class ServiceHook(AbstractBaseModel):
     """
     Events with callback_urls
@@ -12,7 +13,7 @@ class ServiceHook(AbstractBaseModel):
         return u"{}".format(self.name)
 
     event = models.CharField(max_length=255)
-    member = models.ForeignKey('dusken_api.Member')
+    user = models.ForeignKey('dusken_api.User')
     is_active = models.BooleanField(default=True)
     callback_url = models.TextField()
 

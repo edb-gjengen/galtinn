@@ -1,6 +1,7 @@
 from base_model import AbstractBaseModel
 from django.db import models
 
+
 class Payment(AbstractBaseModel):
     def __unicode__(self):
         return "{},- via {}".format(self.value, self.payment_type.name)

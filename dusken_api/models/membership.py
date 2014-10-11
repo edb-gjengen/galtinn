@@ -1,6 +1,7 @@
 from base_model import AbstractBaseModel
 from django.db import models
 
+
 class Membership(AbstractBaseModel):
     def __unicode__(self):
         return u"{0}: {1} - {2}".format(
@@ -12,7 +13,7 @@ class Membership(AbstractBaseModel):
     end_date = models.DateField(null=True, blank=True)
     membership_type = models.ForeignKey('dusken_api.MembershipType')
     payment = models.ForeignKey('dusken_api.Payment', unique=True, null=True, blank=True)
-    member = models.ForeignKey('dusken_api.Member')
+    user = models.ForeignKey('dusken_api.User')
 
     def expires(self):
         return self.end_date
@@ -25,6 +26,7 @@ class Membership(AbstractBaseModel):
 
     class Meta:
         app_label = "dusken_api"
+
 
 class MembershipType(AbstractBaseModel):
     def __unicode__(self):
