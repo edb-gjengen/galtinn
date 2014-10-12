@@ -25,9 +25,11 @@ class User(AbstractBaseModel, AbstractUser):
     
     def has_valid_membership(self):
         # FIXME more than one membership?
-        # FIXME membership_type?
-        membership = self.membership_set.filter(end_date__gt=datetime.datetime.now())
-        return len(membership) == 1 and membership[0].is_valid()
+        memberships = self.membership_set.filter(end_date__gt=datetime.datetime.now())
+        for m in memberships:
+            if m.is_valid():
+                return True
+        return False
 
     class Meta:
         app_label = "dusken_api"
@@ -40,5 +42,3 @@ class UserMeta(AbstractBaseModel):
 
     class Meta:
         app_label = "dusken_api"
-
-

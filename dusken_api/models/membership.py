@@ -19,7 +19,7 @@ class Membership(AbstractBaseModel):
         return self.end_date
 
     def is_valid(self):
-        return self.payment is not None
+        return self.payment_pk is not None
 
     def owner(self):
         return self.member
