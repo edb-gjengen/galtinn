@@ -8,5 +8,5 @@ router.register(r'memberships', MembershipViewSet)
 urlpatterns = router.urls
 
 urlpatterns += patterns('',
-    url(r'auth/', 'rest_framework.authtoken.views.obtain_auth_token', name='user-login'),
+    url(r'login/', 'rest_framework.authtoken.views.obtain_auth_token', name='user-login'),
 )

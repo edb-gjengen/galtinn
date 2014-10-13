@@ -22,7 +22,7 @@ class Membership(AbstractBaseModel):
         return self.payment_pk is not None
 
     def owner(self):
-        return self.member
+        return self.user
 
     class Meta:
         app_label = "dusken_api"
