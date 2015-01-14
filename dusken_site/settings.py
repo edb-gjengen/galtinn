@@ -35,7 +35,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_swagger',
     'rest_framework.authtoken',
 )
 INSTALLED_APPS += LOCAL_APPS

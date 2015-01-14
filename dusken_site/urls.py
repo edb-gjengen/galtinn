@@ -10,9 +10,6 @@ urlpatterns = patterns('',
     # Django Rest Framework
     url(r'', include('rest_framework.urls', namespace='rest_framework')),
 
-    # Django Rest Framework Swagger
-    url(r'^docs/', include('rest_framework_swagger.urls')),
-
     # Dusken
     url(r'api/', include('dusken_api.urls')),
 
