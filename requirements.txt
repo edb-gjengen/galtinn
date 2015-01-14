@@ -1,6 +1,7 @@
 Django==1.7.3
 argparse==1.2.1
 django-oauth2-provider==0.2.6.1
+django-suit==0.2.12
 djangorestframework==3.0.3
 requests==2.5.1
 shortuuid==0.4.2
