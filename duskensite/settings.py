@@ -30,6 +30,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'mptt',
+    'django_countries'
 )
 LOCAL_APPS = (
     'apps.hooks',

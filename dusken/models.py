@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import Group as DjangoGroup
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django_countries.fields import CountryField
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
@@ -17,6 +17,43 @@ class AbstractBaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+@python_2_unicode_compatible
+class DuskenUser(AbstractBaseModel, AbstractUser):
+    phone_number = models.CharField(max_length=30, null=True, blank=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    legacy_id = models.IntegerField(null=True, blank=True)
+    place_of_study = models.ManyToManyField('dusken.PlaceOfStudy', blank=True)
+
+    street_address = models.CharField(max_length=255, null=True, blank=True)
+    street_address_two = models.CharField(max_length=255, null=True, blank=True)
+    postal_code = models.CharField(max_length=10, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    country = CountryField(null=True, blank=True)
+
+    @property
+    def full(self):
+        return self.__str__()
+
+    def owner(self):
+        return self
+
+    def has_valid_membership(self):
+        memberships = self.membership_set.filter(end_date__gt=datetime.datetime.now())
+        for m in memberships:
+            if m.is_valid():
+                return True
+
+        return False
+
+    def __str__(self):
+        if len(self.first_name) + len(self.last_name) > 0:
+            return '{first} {last} ({username})'.format(
+                first=self.first_name,
+                last=self.last_name,
+                username=self.username)
+        return "{username}".format(username=self.username)
 
 
 @python_2_unicode_compatible
@@ -96,6 +133,7 @@ class Payment(AbstractBaseModel):
         return "{},- via {}".format(self.value, self.payment_type.name)
 
 
+@python_2_unicode_compatible
 class PaymentType(models.Model):
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -104,6 +142,7 @@ class PaymentType(models.Model):
         return "{}".format(self.name)
 
 
+@python_2_unicode_compatible
 class PlaceOfStudy(AbstractBaseModel):
     from_date = models.DateField()
     institution = models.ForeignKey('dusken.Institution')
@@ -112,70 +151,10 @@ class PlaceOfStudy(AbstractBaseModel):
         return "{institution}, {year}".format(institution=self.institution, year=self.from_date.year)
 
 
+@python_2_unicode_compatible
 class Institution(AbstractBaseModel):
     name = models.CharField(max_length=255)
     short_name = models.CharField(max_length=16)
 
     def __str__(self):
         return '{} - {}'.format(self.short_name, self.name)
-
-
-class DuskenUser(AbstractBaseModel, AbstractUser):
-
-    phone_number = models.CharField(max_length=30, null=True, blank=True)
-    date_of_birth = models.DateField(blank=True, null=True)
-    legacy_id = models.IntegerField(null=True, blank=True)
-    address = models.OneToOneField('dusken.Address', null=True, blank=True)
-    place_of_study = models.ManyToManyField('dusken.PlaceOfStudy', blank=True)
-
-    def owner(self):
-        return self
-
-    def has_valid_membership(self):
-        memberships = self.membership_set.filter(end_date__gt=datetime.datetime.now())
-        for m in memberships:
-            if m.is_valid():
-                return True
-
-        return False
-
-    def __str__(self):
-        if len(self.first_name) + len(self.last_name) > 0:
-            return '{first} {last} ({username})'.format(
-                first=self.first_name,
-                last=self.last_name,
-                username=self.username)
-        return "{username}".format(username=self.username)
-
-
-class Address(AbstractBaseModel):
-    street_address = models.CharField(max_length=255)
-    street_address_two = models.CharField(max_length=255, null=True, blank=True)
-    postal_code = models.CharField(max_length=10)
-    city = models.CharField(max_length=100)
-    country = models.ForeignKey('dusken.Country', null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = "Addresses"
-
-    @property
-    def full(self):
-        return self.__str__()
-
-    def __str__(self):
-        return "{street}, {code} {city}, {country}".format(
-            street=self.street_address,
-            code=self.postal_code,
-            city=self.city,
-            country=self.country)
-
-
-class Country(AbstractBaseModel):
-    name = models.CharField(max_length=100, unique=True)
-    code = models.CharField(max_length=3, unique=True, help_text=_('ISO 3166-1 alpha 2'))
-
-    class Meta:
-        verbose_name_plural = "Countries"
-
-    def __str__(self):
-        return self.name
