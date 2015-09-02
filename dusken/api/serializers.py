@@ -12,7 +12,7 @@ class DuskenUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DuskenUser
         fields = (
-            'id', 'username', 'password', 'email', 'first_name', 'last_name',
+            'id', 'username', 'email', 'first_name', 'last_name',
             'phone_number', 'date_of_birth', 'legacy_id', 'place_of_study',
         )
         read_only_fields = ('id', 'username',)
