@@ -1,5 +1,8 @@
 DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
 
+[![Build Status](https://travis-ci.org/edb-gjengen/dusken.svg?branch=master)](https://travis-ci.org/edb-gjengen/dusken)
+[![Coverage Status](https://coveralls.io/repos/edb-gjengen/dusken/badge.svg?branch=master&service=github)](https://coveralls.io/github/edb-gjengen/dusken?branch=master)
+
 # Install
     sudo apt install python-virtualenv
     virtualenv venv -p python3
