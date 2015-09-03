@@ -1,9 +1,8 @@
 #/bin/bash
 
-virtualenv venv
+virtualenv venv -p python3
 source venv/bin/activate
 
 pip install -q -r requirements.txt
 
-export SECRET_KEY='secret'
 python manage.py test
