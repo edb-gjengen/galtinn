@@ -4,7 +4,7 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
 [![Coverage Status](https://coveralls.io/repos/edb-gjengen/dusken/badge.svg?branch=master&service=github)](https://coveralls.io/github/edb-gjengen/dusken?branch=master)
 
 # Install
-    sudo apt install python-virtualenv
+    sudo apt install python-virtualenv libpq-dev python3-dev
     virtualenv venv -p python3
     . venv/bin/activate
     pip install -r requirements.txt
