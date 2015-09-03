@@ -5,6 +5,7 @@ django-flat-theme==1.1.0
 django-mptt==0.7.4
 django-oauth2-provider==0.2.6.1
 djangorestframework==3.2.3
+gunicorn==19.3.0
 Markdown==2.6.2
 psycopg2==2.6.1
 requests==2.7.0

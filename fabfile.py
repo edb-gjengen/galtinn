@@ -35,4 +35,4 @@ def deploy():
         run('python manage.py migrate')  # Run DB migrations
 
     # Reload gunicorn
-    sudo('/etc/init.d/gunicorn reload dusken.neuf.no', shell=False)
+    sudo('/usr/bin/supervisorctl reload dusken.neuf.no', shell=False)
