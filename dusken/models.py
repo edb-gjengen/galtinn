@@ -32,13 +32,6 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
     city = models.CharField(max_length=100, null=True, blank=True)
     country = CountryField(null=True, blank=True)
 
-    @property
-    def full(self):
-        return self.__str__()
-
-    def owner(self):
-        return self
-
     def has_valid_membership(self):
         memberships = self.membership_set.filter(end_date__gt=datetime.datetime.now())
         for m in memberships:
@@ -69,9 +62,6 @@ class Membership(AbstractBaseModel):
 
     def is_valid(self):
         return self.payment is not None
-
-    def owner(self):
-        return self.user
 
     def __str__(self):
         return "{}: {} - {}".format(self.member, self.start_date, self.end_date)

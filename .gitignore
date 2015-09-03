@@ -5,3 +5,4 @@ venv/
 db.sqlite3
 duskensite/local_settings.py
 docs/_build
+staticfiles
