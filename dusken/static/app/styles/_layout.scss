@@ -1,0 +1,14 @@
+/* Home */
+.navbar {
+  margin-bottom: 1rem;
+}
+.content {
+  @include make-container();
+}
+.login-form {
+  max-width: 350px;
+
+  button[type=submit] {
+    margin-top: 0.8rem;
+  }
+}

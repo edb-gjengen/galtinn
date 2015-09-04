@@ -1,0 +1,9 @@
+{% load bootstrap i18n %}
+<div class="login-form">
+    <form method="post">
+        {{ form|bootstrap }}
+        {% csrf_token %}
+        <a href="https://brukerinfo.neuf.no/accounts/password/reset">{% trans "Forgot username or passowrd?" %}</a><br>
+        <button type="submit" class="btn btn-primary btn-lg">{% trans "Log in" %}</button>
+    </form>
+</div>

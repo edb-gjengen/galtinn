@@ -30,7 +30,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'mptt',
-    'django_countries'
+    'django_countries',
+    'bootstrapform'
 )
 LOCAL_APPS = (
     'apps.hooks',

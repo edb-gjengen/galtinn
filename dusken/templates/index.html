@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block "body-css-classes" %}index{% endblock %}
+{% block "body" %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12"><p>Her kan du administrere epostlistene på <a href="https://studentersamfundet.no">Det Norske Studentersamfund</a>.<br>Logg inn med din DNS-konto under.</p></div>
+        <div class="col-md-12">{% include "registration/login_form.html" %}</div>
+    </div>
+</div>
+{% endblock %}

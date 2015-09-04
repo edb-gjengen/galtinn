@@ -1,13 +1,9 @@
-from django.conf.urls import url
-from rest_framework.routers import DefaultRouter
+from django.conf.urls import url, include
+from dusken.views import HomeView, ProfileView, UserView
 
-from dusken.api.views import DuskenUserViewSet, MembershipViewSet
-
-router = DefaultRouter()
-router.register(r'users', DuskenUserViewSet)
-router.register(r'memberships', MembershipViewSet)
-urlpatterns = router.urls
-
-urlpatterns += [
-    url(r'login/$', 'rest_framework.authtoken.views.obtain_auth_token', name='user-login'),
+urlpatterns = [
+    url(r'api/', include('dusken.api.urls')),
+    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^me/$', ProfileView.as_view(), name='profile'),
+    url(r'^user/(?P<pk>\d+)/$', UserView.as_view(), name='user-detail')
 ]

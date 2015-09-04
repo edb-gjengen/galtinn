@@ -1,0 +1,11 @@
+{
+  "name": "static",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha"
+  },
+  "devDependencies": {
+    "chai": "~3.2.0",
+    "mocha": "~2.3.0"
+  }
+}

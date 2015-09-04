@@ -1,0 +1,19 @@
+$icon-font-path: '../fonts/';
+
+// bower:scss
+@import "bower_components/bootstrap/scss/bootstrap.scss";
+// endbower
+
+@import "layout";
+
+/* Footer */
+.credits {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+.love {
+  color: #faafba;
+}

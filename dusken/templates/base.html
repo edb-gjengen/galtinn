@@ -1,0 +1,23 @@
+{% load staticfiles %}<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-csrf-token" content="{{ csrf_token }}">
+    <title>{% block title %}dusken.neuf.no - Medlemsdatabasen til Det Norske Studentersamfund{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'dist/styles/main.css' %}" type="text/css">
+    <script type="text/javascript" src="{% static 'dist/scripts/vendor.js' %}"></script>
+
+</head>
+<body class="{% block body-css-classes %}{% endblock %}">
+	{% include "nav.html" %}
+	<section class="content">{% block body %}{% endblock %}</section>
+    <footer class="footer">
+        <div class="container">
+            <div class="credits"><p><a href="https://studentersamfundet.no" title="Det Norske Studentersamfund"><img src="{% static 'dist/images/logo.png' %}" width="70" height="70"></a></p>
+            Laget med <span class="love" title="kærlighed">♥</span> av <a href="http://kak.studentersamfundet.no/" title="Kommunikasjonsavdelingen">KAK</a></div>
+        </div>
+    </footer>
+    <script type="text/javascript" src="{% static 'dist/scripts/main.js' %}"></script>
+</body>
+</html>
