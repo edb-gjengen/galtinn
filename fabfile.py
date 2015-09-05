@@ -31,12 +31,11 @@ def deploy():
     with virtualenv():
         run('git pull')  # Get source
         run('pip install -r requirements.txt')  # install deps in virtualenv
-        cd('dusken/static')
-        run('npm install')
-        run('bower install')
-        run('gulp')
-        cd('../..')
-        run('python manage.py collectstatic --noinput')  # Collect static
+        with cd('dusken/static'):  # install and compile frontend deps
+            run('npm install')
+            run('bower install')
+            run('gulp')
+        run('python manage.py collectstatic --noinput -i node_modules -i bower_components')  # Collect static
         run('python manage.py migrate')  # Run DB migrations
 
     # Reload gunicorn
