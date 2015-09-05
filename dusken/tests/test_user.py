@@ -27,7 +27,7 @@ class DuskenUserTest(APITestCase):
             'password': 'pass',
         }
 
-        url = reverse('user-login')
+        url = reverse('login')
         response = self.client.post(url, user_data, format='json')
 
         # Check if the response even makes sense:

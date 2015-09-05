@@ -31,9 +31,13 @@ def deploy():
     with virtualenv():
         run('git pull')  # Get source
         run('pip install -r requirements.txt')  # install deps in virtualenv
-        # TODO npm install && bower install && gulp
-        run('umask 002; python manage.py collectstatic --noinput')  # Collect static
+        cd('dusken/static')
+        run('npm install')
+        run('bower install')
+        run('gulp')
+        cd('../..')
+        run('python manage.py collectstatic --noinput')  # Collect static
         run('python manage.py migrate')  # Run DB migrations
 
     # Reload gunicorn
-    sudo('/usr/bin/supervisorctl reload dusken.neuf.no', shell=False)
+    sudo('/usr/bin/supervisorctl pid dusken.neuf.no | xargs kill -HUP', shell=False)
