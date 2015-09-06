@@ -60,7 +60,7 @@ class MembershipChargeView(APIView):
             logger.warning('stripe.Charge did not succeed: %s', charge['status'])
             return Response({'error': 'stripe.Charge did not succeed :-('})
 
-        # Winning!
+        # Winning, save new user with stripe customer id :-)
         user = user_serializer.save(stripe_customer_id=customer.id)
         # Log the user in
         user.backend = 'django.contrib.auth.backends.ModelBackend'  # FIXME: Ninja!
@@ -79,6 +79,7 @@ class MembershipChargeView(APIView):
             user=user,
             payment=payment
         )
+
         return Response({'result': 'Success!'})
 
 
@@ -88,4 +89,4 @@ class MembershipRenewChargeView(APIView):
 
     def post(self, request):
         stripe_customer_id = self.request.user.stripe_customer_id
-        # TODO implement for existing user
+        # TODO implement for existing, logged in user

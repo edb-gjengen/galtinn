@@ -4,7 +4,7 @@
     "fields": {
         "created": "2015-09-05T16:59:59.831Z",
         "is_active": true,
-        "price": 250,
+        "price": 25000,
         "does_not_expire": false,
         "updated": "2015-09-05T17:02:33.350Z",
         "description": "Membership in The Norwegian Student Society for 365 days.",
@@ -17,7 +17,7 @@
     "fields": {
         "created": "2015-09-05T17:03:37.375Z",
         "is_active": true,
-        "price": 200,
+        "price": 20000,
         "does_not_expire": false,
         "updated": "2015-09-05T17:03:37.375Z",
         "description": "Membership, with discount for active members, in The Norwegian Student Society for 365 days.",
