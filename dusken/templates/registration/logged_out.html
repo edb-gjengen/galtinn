@@ -1,0 +1,11 @@
+{% extends "dusken/base.html" %}
+{% load i18n %}
+{% block body-css-classes %}logout{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h3>{% trans "Goodbye" %}</h3>
+        <a href="{% url "home" %}">{% trans "Log in again" %}</a>
+    </div>
+</div>
+{% endblock %}

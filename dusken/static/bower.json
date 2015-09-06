@@ -2,7 +2,8 @@
   "name": "static",
   "private": true,
   "dependencies": {
-    "bootstrap": "v4.0.0-alpha"
+    "bootstrap": "v4.0.0-alpha",
+    "underscore": "~1.8.3"
   },
   "devDependencies": {
     "chai": "~3.2.0",

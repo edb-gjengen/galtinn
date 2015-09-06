@@ -1,16 +1,17 @@
-{% load staticfiles %}<!DOCTYPE html>
+{% load staticfiles i18n %}
+<!DOCTYPE html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="x-csrf-token" content="{{ csrf_token }}">
-    <title>{% block title %}dusken.neuf.no - Medlemsdatabasen til Det Norske Studentersamfund{% endblock %}</title>
+    <title>{% block title %}dusken.neuf.no - {% trans "The membership database at Chateau Neuf - The Norwegian Student Society" %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'dist/styles/main.css' %}" type="text/css">
     <script type="text/javascript" src="{% static 'dist/scripts/vendor.js' %}"></script>
 
 </head>
 <body class="{% block body-css-classes %}{% endblock %}">
-	{% include "nav.html" %}
+	{% include "dusken/nav.html" %}
 	<section class="content">{% block body %}{% endblock %}</section>
     <footer class="footer">
         <div class="container">

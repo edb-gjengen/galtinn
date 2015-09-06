@@ -1,0 +1,11 @@
+{% extends "dusken/base.html" %}
+{% load i18n %}
+{% block body %}
+    <section class="welcome">
+        <h3>Howdy'</h3>
+        <p>DUSKEN - The membership database at <a href="https://studentersamfundet.no">Chateau Neuf - The Norwegian Student Society</a>.</p>
+        <a href="{% url "membership-purchase" %}" class="btn btn-primary btn-lg">Purchase membership</a>
+        <h4>{% trans "I'm a member"%}</h4>
+        {% include "registration/login_form.html" %}
+    </section>
+{% endblock %}

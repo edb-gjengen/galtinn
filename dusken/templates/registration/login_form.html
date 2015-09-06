@@ -3,7 +3,7 @@
     <form method="post">
         {{ form|bootstrap }}
         {% csrf_token %}
-        <a href="https://brukerinfo.neuf.no/accounts/password/reset">{% trans "Forgot username or passowrd?" %}</a><br>
-        <button type="submit" class="btn btn-primary btn-lg">{% trans "Log in" %}</button>
+        <a href="{% url "password_reset" %}">{% trans "Forgot username or password?" %}</a><br>
+        <button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
     </form>
 </div>
