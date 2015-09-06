@@ -5,11 +5,7 @@
 
     <section class="membership-purchase">
         <form method="post" id="user-form">
-            {% if not user %}
-                {{ form|bootstrap }}
-            {% else %}
-                <input id="id_email" type="hidden" value="{{ request.user.email }}">
-            {% endif %}
+            {{ form|bootstrap }}
             <button id="purchase-button" class="btn btn-primary btn-lg">{% trans "Purchase" %}</button>
         </form>
     </section>
