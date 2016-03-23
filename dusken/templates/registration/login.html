@@ -1,9 +1,10 @@
 {% extends "dusken/base.html" %}
+{% load i18n %}
 {% block body-css-classes %}login{% endblock %}
 {% block body %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">{% include "registration/login_form.html" %}</div>
+    <div class="page-login">
+        <h4>{% trans "Log in here" %}</h4>
+        {% include "registration/login_form.html" %}
     </div>
 </div>
 {% endblock %}

@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.core.urlresolvers import reverse_lazy
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
@@ -86,9 +88,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 AUTH_USER_MODEL = 'dusken.DuskenUser'
-LOGIN_REDIRECT_URL = '/me/'
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
+LOGIN_REDIRECT_URL = reverse_lazy('home')
+LOGIN_URL = reverse_lazy('login')
+LOGOUT_URL = reverse_lazy('logout')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
