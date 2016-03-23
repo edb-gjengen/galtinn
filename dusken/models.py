@@ -1,10 +1,10 @@
 # coding: utf-8
-from __future__ import unicode_literals
-import datetime
+import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import Group as DjangoGroup
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
 from mptt.fields import TreeForeignKey
@@ -20,6 +20,7 @@ class AbstractBaseModel(models.Model):
 
 
 class DuskenUser(AbstractBaseModel, AbstractUser):
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     phone_number = models.CharField(max_length=30, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
 
@@ -35,7 +36,7 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
     stripe_customer_id = models.CharField(max_length=254, null=True, blank=True)
 
     def has_valid_membership(self):
-        memberships = self.memberships.filter(end_date__gt=datetime.datetime.now())
+        memberships = self.memberships.filter(end_date__gt=timezone.now())
         for m in memberships:
             if m.is_valid():
                 return True

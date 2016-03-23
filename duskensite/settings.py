@@ -1,5 +1,4 @@
 # encoding: utf-8
-from __future__ import unicode_literals
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

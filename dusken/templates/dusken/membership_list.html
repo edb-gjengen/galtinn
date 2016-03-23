@@ -1,0 +1,12 @@
+{% extends "dusken/base.html" %}
+{% load i18n %}
+{% block body %}
+    <h2>{% trans "Memberships" %}</h2>
+    {% for ms in membership_list %}
+        <section class="membership-item">
+        Period: {{ ms.start_date }} - {{ ms.end_date }}, Type: {{ ms.type }}
+        </section>
+    {% empty %}
+        {% trans "No memberships." %}
+    {% endfor %}
+{% endblock %}

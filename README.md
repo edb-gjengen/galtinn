@@ -16,6 +16,12 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     python manage.py migrate
     python manage.py loaddata testdata
     python manage.py runserver
+    
+    # Frontend
+    npm install -g gulp-cli bower
+    cd dusken/static
+    npm install && bower install
+    gulp serve
 
 ### Tests
 

@@ -4,9 +4,9 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
-from django.views.generic import FormView, DetailView
+from django.views.generic import FormView, DetailView, ListView
 from dusken.forms import DuskenUserForm
-from dusken.models import DuskenUser, MembershipType
+from dusken.models import DuskenUser, MembershipType, Membership
 
 
 class IndexView(FormView):
@@ -24,17 +24,21 @@ class IndexView(FormView):
         if self.request.user.is_authenticated():
             return redirect(settings.LOGIN_REDIRECT_URL)
 
-        return super(IndexView, self).render_to_response(context, **response_kwargs)
+        return super().render_to_response(context, **response_kwargs)
 
 
-class UserView(LoginRequiredMixin, DetailView):
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = DuskenUser
     template_name = 'dusken/user_detail.html'
-
-    def get_queryset(self):
-        return DuskenUser.objects.filter(pk=self.kwargs['pk'])
+    slug_field = 'uuid'
 
 
-class HomeView(UserView):
+class UserDetailMeView(UserDetailView):
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+class HomeView(LoginRequiredMixin, DetailView):
     template_name = 'dusken/home.html'
 
     def get_object(self, queryset=None):
@@ -49,4 +53,11 @@ class MembershipPurchase(FormView):
 
     def get_context_data(self, **kwargs):
         self.membership_type = MembershipType.objects.get(pk=settings.MEMBERSHIP_TYPE_ID)
-        return super(MembershipPurchase, self).get_context_data(**kwargs)
+        return super().get_context_data(**kwargs)
+
+
+class MembershipListView(LoginRequiredMixin, ListView):
+    model = Membership
+
+    def get_queryset(self):
+        return super().get_queryset().filter(pk=self.request.user.pk)

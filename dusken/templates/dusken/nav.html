@@ -1,9 +1,11 @@
 {% load i18n %}
 <nav class="navbar navbar-light bg-faded">
-    <a class="navbar-brand" href="{% url 'home' %}">dusken.neuf.no</a>
+    <a class="navbar-brand" href="{% url 'home' %}">{% trans "dusken.neuf.no" %}</a>
     <ul class="nav navbar-nav">
-        <!--<li class="nav-item active"><a class="nav-link" href="{% url "home" %}">Home</a></li>-->
         {% if user.is_authenticated %}
+            <li class="nav-item active"><a class="nav-link" href="{% url "home" %}">{% trans "Home" %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "user-detail-me" %}">{% trans "Profile" %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "membership-list" %}">{% trans "Membership" %}</a></li>
             <li class="nav-item"><a class="nav-link" href="#">{% trans "Logged in as" %}: <strong>{{ user.get_full_name|default:user.username }}</strong></a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">{% trans "Log out" %}</a></li>
         {% endif %}
