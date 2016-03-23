@@ -9,10 +9,10 @@ from dusken.forms import DuskenUserForm
 from dusken.models import DuskenUser, MembershipType
 
 
-class HomeView(FormView):
+class IndexView(FormView):
     form_class = AuthenticationForm
-    template_name = 'dusken/home.html'
-    success_url = reverse_lazy('profile')
+    template_name = 'dusken/index.html'
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         # Log in and redirect
@@ -24,18 +24,18 @@ class HomeView(FormView):
         if self.request.user.is_authenticated():
             return redirect(settings.LOGIN_REDIRECT_URL)
 
-        return super(HomeView, self).render_to_response(context, **response_kwargs)
+        return super(IndexView, self).render_to_response(context, **response_kwargs)
 
 
 class UserView(LoginRequiredMixin, DetailView):
-    template_name = 'dusken/profile.html'
+    template_name = 'dusken/user_detail.html'
 
     def get_queryset(self):
         return DuskenUser.objects.filter(pk=self.kwargs['pk'])
 
 
-class ProfileView(UserView):
-    template_name = 'dusken/profile.html'
+class HomeView(UserView):
+    template_name = 'dusken/home.html'
 
     def get_object(self, queryset=None):
         return self.request.user

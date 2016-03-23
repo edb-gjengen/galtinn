@@ -1,1 +1,4 @@
-console.log('\'Allo \'Allo!');
+
+$(document).ready(function() {
+    /* something here... */
+});

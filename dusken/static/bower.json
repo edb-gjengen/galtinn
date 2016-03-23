@@ -3,7 +3,8 @@
   "private": true,
   "dependencies": {
     "bootstrap": "v4.0.0-alpha.2",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "tether": "^1.2.0"
   },
   "devDependencies": {
     "chai": "~3.2.0",

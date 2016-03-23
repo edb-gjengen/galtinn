@@ -1,14 +1,54 @@
 /* Home */
+.page-home {
+    text-align: center;
+
+    .login-form {
+        margin: 0 auto;
+    }
+}
+.home {
+    &__welcome {
+
+    }
+    &__login {
+        margin-top: 2rem;
+    }
+}
 .navbar {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 .content {
-  @include make-container();
+    @include make-container();
+    margin: 2rem 0;
 }
 .login-form {
-  max-width: 350px;
+    text-align: left;
+    max-width: 350px;
 
-  button[type=submit] {
-    margin-top: 0.8rem;
-  }
+    .submit-button-wrap {
+        margin-top: 0.8rem;
+
+        @include media-breakpoint-up(sm) {
+            text-align: right;
+        }
+    }
+    [type=submit] {
+        display: block;
+        width: 100%;
+        @include media-breakpoint-up(sm) {
+            text-align: right;
+            display: inline-block;
+            width: auto;
+        }
+    }
+}
+
+/* Purchase */
+.membership-purchase {
+    text-align: center;
+}
+#user-form {
+    margin: 0 auto;
+    max-width: 350px;
+    text-align:left;
 }
