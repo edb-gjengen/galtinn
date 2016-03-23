@@ -2,7 +2,7 @@
   "name": "static",
   "private": true,
   "dependencies": {
-    "bootstrap": "v4.0.0-alpha",
+    "bootstrap": "v4.0.0-alpha.2",
     "underscore": "~1.8.3"
   },
   "devDependencies": {

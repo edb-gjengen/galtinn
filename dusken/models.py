@@ -5,7 +5,6 @@ import datetime
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import Group as DjangoGroup
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
 from mptt.fields import TreeForeignKey
@@ -20,18 +19,18 @@ class AbstractBaseModel(models.Model):
         abstract = True
 
 
-@python_2_unicode_compatible
 class DuskenUser(AbstractBaseModel, AbstractUser):
     phone_number = models.CharField(max_length=30, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
-    legacy_id = models.IntegerField(null=True, blank=True)
-    place_of_study = models.ManyToManyField('dusken.PlaceOfStudy', blank=True)
 
     street_address = models.CharField(max_length=255, null=True, blank=True)
     street_address_two = models.CharField(max_length=255, null=True, blank=True)
     postal_code = models.CharField(max_length=10, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     country = CountryField(null=True, blank=True)
+
+    place_of_study = models.ManyToManyField('dusken.PlaceOfStudy', blank=True)
+    legacy_id = models.IntegerField(null=True, blank=True)
 
     stripe_customer_id = models.CharField(max_length=254, null=True, blank=True)
 
@@ -52,7 +51,6 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
         return "{username}".format(username=self.username)
 
 
-@python_2_unicode_compatible
 class Membership(AbstractBaseModel):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
@@ -70,7 +68,6 @@ class Membership(AbstractBaseModel):
         return "{}: {} - {}".format(self.user, self.start_date, self.end_date)
 
 
-@python_2_unicode_compatible
 class MembershipType(AbstractBaseModel):
     name = models.CharField(max_length=254)
     description = models.TextField(blank=True)
@@ -82,7 +79,6 @@ class MembershipType(AbstractBaseModel):
         return "{}".format(self.name)
 
 
-@python_2_unicode_compatible
 class GroupProfile(AbstractBaseModel):
     """
     django.contrib.auth.model.Group extended with additional fields.
@@ -95,7 +91,6 @@ class GroupProfile(AbstractBaseModel):
         return "{}".format(self.posix_name)
 
 
-@python_2_unicode_compatible
 class OrgUnit(MPTTModel, AbstractBaseModel):
     """
     Association, comittee or similar
@@ -117,7 +112,6 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
         order_insertion_by = ['name']
 
 
-@python_2_unicode_compatible
 class Payment(AbstractBaseModel):
     BY_CARD = 'card'
     BY_SMS = 'sms'
@@ -146,7 +140,6 @@ class Payment(AbstractBaseModel):
         return "{} by {}".format(self.value_in_kr(), self.payment_method)
 
 
-@python_2_unicode_compatible
 class PlaceOfStudy(AbstractBaseModel):
     from_date = models.DateField()
     institution = models.ForeignKey('dusken.Institution')
@@ -155,7 +148,6 @@ class PlaceOfStudy(AbstractBaseModel):
         return "{institution}, {year}".format(institution=self.institution, year=self.from_date.year)
 
 
-@python_2_unicode_compatible
 class Institution(AbstractBaseModel):
     name = models.CharField(max_length=255)
     short_name = models.CharField(max_length=16)

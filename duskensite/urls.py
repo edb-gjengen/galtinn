@@ -20,5 +20,4 @@ urlpatterns += [
     url(r'^logout/$', logout, name='logout'),
     url(r'^password_reset/$', password_reset, name='password_reset'),
     url(r'^password_reset_done/$', password_reset_done, name='password_reset_done'),
-    # TODO: rest of templates and views
 ]
