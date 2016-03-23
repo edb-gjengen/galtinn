@@ -37,6 +37,12 @@
         2,
         "single"
       ]
+    },
+    "globals": {
+      "$": true,
+      "_": true,
+      "config": true,
+      "StripeCheckout": true
     }
   }
 }

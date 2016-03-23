@@ -2,6 +2,14 @@
 {% load i18n bootstrap staticfiles %}
 {% block body %}
     <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script>
+        var config = {
+            logo_url: '{% static "dist/images/logo.png" %}',
+            stripe_pub_key: '{{ view.stripe_public_key }}',
+            membership_name: '{{ view.membership_type.name }}',
+            membership_price: '{{ view.membership_type.price }}',
+        };
+    </script>
 
     <section class="membership-purchase">
         <h4>{% trans "New membership" %}</h4>
@@ -10,66 +18,4 @@
             <button id="purchase-button" class="btn btn-primary btn-lg">{% trans "Purchase" %}</button>
         </form>
     </section>
-
-    <script>
-        var urls = {
-            charge: '{% url "membership-charge" %}',
-            profile: '{% url "profile" %}'
-        };
-        var csrf_token = '{{ csrf_token }}';
-
-        function getFormData(formElement) {
-            var formData = formElement.serializeArray();
-            formData = _.object(_.map(formData, function (x) {
-                return [x.name, x.value];
-            }));
-
-            return formData;
-        }
-        function onToken(token) {
-            // Use the token to create the charge with a server-side script.
-            // You can access the token ID with `token.id` and user email with `token.email`
-            var data = {
-                'stripe_token': token,
-                'user': getFormData($('#user-form'))
-            };
-            $.ajax(urls.charge, {
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                dataType: 'json',
-                type: 'post',
-                headers: {'X-CSRFToken': csrf_token}
-            }).success(function(data) {
-                // redirect to profile
-                // TODO: with success message
-                location.href = urls.profile;
-            }).fail(function(data) {
-                console.log("failed", data);
-            });
-        }
-        var stripeHandler = StripeCheckout.configure({
-            key: '{{ view.stripe_public_key }}',
-            image: '{% static "dist/images/logo.png" %}',
-            locale: 'auto',
-            token: onToken,
-            allowRememberMe: false  // Disallow the remember me function for new users
-        });
-
-        $('#purchase-button').on('click', function(e) {
-            // Open Checkout with further options
-            stripeHandler.open({
-                name: 'Det Norske Studentersamfund',
-                description: '{{ view.membership_type.name }}',
-                currency: "NOK",
-                amount: {{ view.membership_type.price }},
-                email: $('#id_email').val()
-            });
-            e.preventDefault();
-        });
-
-        // Close Checkout on page navigation
-        $(window).on('popstate', function() {
-            stripeHandler.close();
-        });
-    </script>
 {% endblock %}
