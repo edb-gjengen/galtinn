@@ -47,7 +47,7 @@ class MembershipTest(APITestCase):
             'membership_type': self.membership.membership_type.pk
         }
 
-        url = reverse('membership-list')
+        url = reverse('membership-api-list')
         response = self.client.post(url, membership_data, format='json')
 
         # Check if the response even makes sense:
