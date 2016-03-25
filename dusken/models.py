@@ -83,6 +83,13 @@ class MembershipType(AbstractBaseModel):
         return "{}".format(self.name)
 
 
+class MemberCard(AbstractBaseModel):
+    card_number = models.IntegerField()
+    registered_datetime = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='membercards')
+
+
 class GroupProfile(AbstractBaseModel):
     """
     django.contrib.auth.model.Group extended with additional fields.
