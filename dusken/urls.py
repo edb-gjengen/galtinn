@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from dusken.api import urls as api_urls
-from dusken.views import IndexView, HomeView, UserDetailView, MembershipPurchase, UserDetailMeView, MembershipListView
+from dusken.views import IndexView, HomeView, UserDetailView, MembershipPurchase, UserDetailMeView,\
+    MembershipListView, MembershipActivateView
 
 urlpatterns = [
     url(r'api/', include(api_urls)),
@@ -12,4 +13,5 @@ urlpatterns = [
 
     url(r'^memberships/$', MembershipListView.as_view(), name='membership-list'),
     url(r'^membership/purchase/$', MembershipPurchase.as_view(), name='membership-purchase'),
+    url(r'^activate/$', MembershipActivateView.as_view(), name='membership-activate'),
 ]

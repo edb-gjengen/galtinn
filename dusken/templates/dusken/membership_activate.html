@@ -1,0 +1,15 @@
+{% extends "dusken/base.html" %}
+{% load i18n bootstrap %}
+{% block body %}
+    <h2>{% trans "Register the membership you purchased by <strong>SMS</strong> or <strong>at Chateau Neuf</strong>" %}</h2>
+    <p>{% blocktrans %}
+        Hi there,<br>
+        for the membership you purchased by SMS or at Chateau Neuf to be valid, you must register.<br>
+        Proceed with the registration by supplying your phone number, card number/code, name and email.
+    {% endblocktrans %}</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|bootstrap }}
+        <button type="submit" class="btn btn-block btn-lg btn-primary">{% trans "Onwards!" %}</button>
+    </form>
+{% endblock %}

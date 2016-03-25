@@ -1,11 +1,11 @@
-from braces.views import LoginRequiredMixin
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import FormView, DetailView, ListView
-from dusken.forms import DuskenUserForm
+from dusken.forms import DuskenUserForm, MembershipActivateForm
 from dusken.models import DuskenUser, MembershipType, Membership
 
 
@@ -61,3 +61,11 @@ class MembershipListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(pk=self.request.user.pk)
+
+
+class MembershipActivateView(FormView):
+    template_name = 'dusken/membership_activate.html'
+    form_class = MembershipActivateForm
+
+    def form_valid(self, form):
+        print("YEY")

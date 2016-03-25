@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group as DjangoGroup
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
+from jsonfield import JSONField
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
@@ -58,6 +59,8 @@ class Membership(AbstractBaseModel):
     membership_type = models.ForeignKey('dusken.MembershipType')
     payment = models.ForeignKey('dusken.Payment', null=True, blank=True)
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='memberships')
+    # from django.contrib.postgres.fields import JSONField
+    extra_data = JSONField(blank=True, default=dict)
 
     def expires(self):
         return self.end_date

@@ -25,6 +25,7 @@ INSTALLED_APPS = (
     'mptt',
     'django_countries',
     'bootstrapform',
+    'django_extensions',
 )
 LOCAL_APPS = (
     # 'apps.hooks',
@@ -90,6 +91,13 @@ AUTH_USER_MODEL = 'dusken.DuskenUser'
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')
+
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
