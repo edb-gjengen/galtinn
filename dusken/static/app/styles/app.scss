@@ -7,6 +7,9 @@ $icon-font-path: '../fonts/';
 @import "general";
 @import "layout";
 
+/* Pages */
+@import "pages";
+@import "page_home";
 
 /* Footer */
 .credits {

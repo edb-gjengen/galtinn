@@ -1,0 +1,20 @@
+/* Home */
+.page-home {
+    text-align: center;
+
+    .login-form {
+        margin: 0 auto;
+    }
+}
+.home {
+    &__welcome {
+
+    }
+    &__actions {
+        @include make-row();
+
+    }
+    &__login {
+        margin-top: 2rem;
+    }
+}
