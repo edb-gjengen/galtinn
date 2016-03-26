@@ -1,9 +1,5 @@
-import logging
-import sys
-
 from contextlib import contextmanager as _contextmanager
 from fabric.api import run, sudo, env, cd, prefix, lcd
-from fabric.api import local as lrun
 
 env.use_ssh_config = True
 env.hosts = ['dreamcast.neuf.no']
@@ -19,15 +15,7 @@ def virtualenv():
             yield
 
 
-def __git_validate_clean():
-    with lcd(env.project_path):
-        if lrun('git diff-files', capture=True) != '':
-            logging.error("Your git-tree isn't clean! Commit your changes before deploying.")
-            sys.exit(1)
-
-
 def deploy():
-    # __git_validate_clean()
     with virtualenv():
         run('git pull')  # Get source
         run('pip install -r requirements.txt')  # install deps in virtualenv
