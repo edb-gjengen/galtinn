@@ -1,20 +1,33 @@
-/* Home */
-.page-home {
+/* Index/landing page */
+.index {
     text-align: center;
 
+    &__welcome {
+    }
+
+    &__login {
+        margin-top: 2rem;
+    }
     .login-form {
         margin: 0 auto;
     }
 }
-.home {
-    &__welcome {
 
-    }
-    &__actions {
-        @include make-row();
 
-    }
-    &__login {
-        margin-top: 2rem;
+/* Purchase membership page */
+.membership-purchase {
+    text-align: center;
+}
+#user-form {
+    margin: 0 auto;
+    max-width: 350px;
+    text-align:left;
+}
+
+/* Login page */
+.page-login {
+    text-align: center;
+    .login-form {
+        margin: 0 auto;
     }
 }

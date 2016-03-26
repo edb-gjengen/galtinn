@@ -1,0 +1,14 @@
+/* Home */
+.home {
+    &__actions {
+        @include make-col();
+        @include make-col-span(12);
+
+        &-wrap { @include make-row(); }
+
+        &__list {
+            //@include block-grid(4);
+        }
+
+    }
+}

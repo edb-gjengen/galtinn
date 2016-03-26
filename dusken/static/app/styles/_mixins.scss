@@ -1,0 +1,34 @@
+$default-float: left;
+$block-grid-default-spacing: 1rem;
+
+@mixin block-grid(
+  $per-row:false,
+  $spacing:$block-grid-default-spacing,
+  $base-style:true) {
+
+  @if $base-style {
+    display: block;
+    padding: 0;
+    margin: 0 0 0 (-$spacing/2);
+    @include clearfix;
+
+    &>li {
+      display: inline;
+      height: auto;
+      float: $default-float;
+      padding: 0 ($spacing/2) $spacing;
+    }
+  }
+
+  @if $per-row {
+    &>li {
+      width: 100%/$per-row;
+      padding: 0 ($spacing/2) $spacing;
+      list-style: none;
+
+      &:nth-of-type(n) { clear: none; }
+      &:nth-of-type(#{$per-row}n+1) { clear: both; }
+    }
+  }
+
+}

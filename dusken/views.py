@@ -27,6 +27,12 @@ class IndexView(FormView):
         return super().render_to_response(context, **response_kwargs)
 
 
+class UserListView(LoginRequiredMixin, ListView):
+    model = DuskenUser
+    template_name = 'dusken/user_list.html'
+    slug_field = 'uuid'
+
+
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = DuskenUser
     template_name = 'dusken/user_detail.html'

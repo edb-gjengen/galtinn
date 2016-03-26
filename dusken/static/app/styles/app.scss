@@ -3,9 +3,11 @@ $icon-font-path: '../fonts/';
 // bower:scss
 @import "bower_components/bootstrap/scss/bootstrap.scss";
 // endbower
-
+@import "mixins";
 @import "general";
 @import "layout";
+@import "fonts";
+@import "forms";
 
 /* Pages */
 @import "pages";

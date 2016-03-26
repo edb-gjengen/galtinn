@@ -1,6 +1,6 @@
 {% load i18n %}
 <nav class="navbar navbar-light bg-faded">
-    <a class="navbar-brand" href="{% url 'home' %}">{% trans "dusken.neuf.no" %}</a>
+    <a class="navbar-brand" href="{% url 'index' %}">{% trans "dusken.neuf.no" %}</a>
     <ul class="nav navbar-nav">
         {% if user.is_authenticated %}
             <li class="nav-item active"><a class="nav-link" href="{% url "home" %}">{% trans "Home" %}</a></li>

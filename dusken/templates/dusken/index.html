@@ -1,14 +1,15 @@
 {% extends "dusken/base.html" %}
 {% load i18n %}
+{% block body-css-classes %}page-index{% endblock %}
 {% block body %}
-    <div class="page-home">
-        <section class="home__welcome">
+    <div class="index">
+        <section class="index__welcome">
             <h3>{% trans "Welcome" %}</h3>
             <p>{% blocktrans %}DUSKEN - The membership database at <a href="https://studentersamfundet.no">The Norwegian Student Society</a>.{% endblocktrans %}</p>
-            <a href="{% url "membership-purchase" %}" class="btn btn-primary btn-lg">Purchase membership</a>
+            <a href="{% url "membership-purchase" %}" class="btn btn-primary btn-lg">{% trans "Become a member" %}</a>
         </section>
 
-        <section class="home__login">
+        <section class="index__login">
             <em>{% trans "Already a member?"%}</em>
             <h4>{% trans "Log in here" %}</h4>
             {% include "registration/login_form.html" %}

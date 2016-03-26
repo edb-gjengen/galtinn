@@ -1,0 +1,9 @@
+{% extends "dusken/base.html" %}
+{% load i18n %}
+{% block body %}
+    <h2>{% trans "Users" %}</h2>
+    <label for="searc-field">{% trans "Search" %}</label><input id="search-field" type="search" class="form-control">
+    {% for user in user_list %}
+        {{ user }}
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,32 @@
+/* Forms */
+.login-form {
+    text-align: left;
+    max-width: 350px;
+
+    .submit-button-wrap {
+        margin-top: 0.8rem;
+
+        @include media-breakpoint-up(sm) {
+            text-align: right;
+        }
+    }
+    [type=submit] {
+        display: block;
+        width: 100%;
+        @include media-breakpoint-up(sm) {
+            text-align: right;
+            display: inline-block;
+            width: auto;
+        }
+    }
+}
+
+/* Forms: Disable stepper */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}

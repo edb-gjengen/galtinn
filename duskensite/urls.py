@@ -10,7 +10,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include(dusken_urls)),
-    url(r'^auth/', obtain_auth_token),
-    # Built in aut views
-    url('^user/', include('django.contrib.auth.urls'))
+    url(r'^auth/obtain-token/', obtain_auth_token),
+    # Built in auth views
+    url('^auth/', include('django.contrib.auth.urls'))
 ]
