@@ -1,0 +1,9 @@
+{% extends "dusken/base.html" %}
+{% load i18n bootstrap %}
+{% block body %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form|bootstrap }}
+        <button type="submit" class="btn btn-primary">{% trans "Update my profile" %}</button>
+    </form>
+{% endblock %}

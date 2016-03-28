@@ -1,4 +1,18 @@
 {% extends "dusken/base.html" %}
+{% load i18n bootstrap %}
 {% block body %}
-    TODO {{ user }}
+    <h4 class="card-title"><span class="lnr lnr-user"></span> {% trans "Your profile" %}</h4>
+    <ul class="list-group">
+        <li class="list-group-item">{% trans "Full name" %}: <strong>{{ user.get_full_name }}</strong></li>
+        <li class="list-group-item">{% trans "Username" %}: <strong>{{ user.username }}</strong></li>
+        <li class="list-group-item"><span class="lnr lnr-envelope"></span> {% trans "Email" %}: <strong>{{ user.email }}</strong></li><!-- - <a href="#">Resend validation email</a></li>-->
+        <li class="list-group-item"><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></li><!-- - <a href="#">Resend validation code</a></li>-->
+    </ul>
+    <br>
+    <ul class="list-group">
+        <li class="list-group-item"><em>{% trans "Registered" %}: <strong>{{ user.created}}</strong></em></li>
+        <li class="list-group-item"><em>{% trans "Last updated" %}: <strong>{{ user.updated }}</strong></em></li>
+    </ul>
+    <br>
+    <a href="{% url "user-update-me" %}" class="btn btn-primary-outline btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
 {% endblock %}

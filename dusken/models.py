@@ -2,6 +2,7 @@
 import uuid
 
 from django.contrib.auth.models import AbstractUser
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import Group as DjangoGroup
 from django.utils import timezone
@@ -35,6 +36,9 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
     legacy_id = models.IntegerField(null=True, blank=True)
 
     stripe_customer_id = models.CharField(max_length=254, null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('user-detail', kwargs={'slug': self.uuid})
 
     def has_valid_membership(self):
         memberships = self.memberships.filter(end_date__gt=timezone.now())

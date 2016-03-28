@@ -2,9 +2,10 @@ from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.shortcuts import redirect
 from django.views.generic import FormView, DetailView, ListView
+from django.views.generic.edit import UpdateView
 from dusken.forms import DuskenUserForm, MembershipActivateForm
 from dusken.models import DuskenUser, MembershipType, Membership
 
@@ -42,6 +43,20 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 class UserDetailMeView(UserDetailView):
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = DuskenUser
+    template_name = 'dusken/user_update.html'
+    fields = ['first_name', 'last_name', 'email', 'phone_number']
+
+
+class UserUpdateMeView(UserUpdateView):
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self):
+        return reverse('user-detail-me')
 
 
 class HomeView(LoginRequiredMixin, DetailView):

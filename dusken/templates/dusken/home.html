@@ -4,13 +4,13 @@
     <h2><span class="lnr lnr-home"></span> {% trans "Home" %}</h2>
     <div class="home__actions-wrap">
     <section class="home__actions">
-        <h6 class="text-muted">{% trans "What do you want do do?" %}</h6>
+        <h6 class="text-muted">{% trans "What do you want to do?" %}</h6>
         <div class="card-deck-wrapper">
         <div class="card-deck">
 
             <div class="home__quick-profile card">
                 <div class="card-block">
-                    <h4 class="card-title"><span class="lnr lnr-user"></span> {% trans "Profile" %}</h4>
+                    <h4 class="card-title"><a href="{% url "user-detail-me" %}"><span class="lnr lnr-user"></span> {% trans "Your profile" %}</a></h4>
                     <h6 class="card-subtitle text-muted">{% trans "Quick view of your profile details" %}</h6>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -19,13 +19,13 @@
                     <li class="list-group-item"><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></li><!-- - <a href="#">Resend validation code</a></li>-->
                 </ul>
                 <div class="card-block">
-                    <a href="{% url "user-detail-me" %}" class="btn btn-primary-outline btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
+                    <a href="{% url "user-update-me" %}" class="btn btn-primary-outline btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
                 </div>
             </div>
 
             <div class="home__membership-status card">
                 <div class="card-block">
-                    <h4 class="card-title">{% trans "Your Membership" %}</h4>
+                    <h4 class="card-title"><span class="lnr lnr-license"></span> {% trans "Your Membership" %}</h4>
                     <h6 class="card-subtitle text-muted">{% trans "See your membership status" %}</h6>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -36,12 +36,12 @@
                 {% endif %}
 
                 {% if user.has_valid_membership %}
-                    {% for membership in user.memberships.all %}
+                    {% for ms in user.memberships.all %}
                     <li class="list-group-item membership">
-                        {% if membership.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{{ membership.end_date }}</strong>
+                        {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{{ ms.end_date }}</strong>
                     </li>
                     <li class="list-group-item payment">
-                    {% trans "Payment" %}: <strong>{{ membership.payment.value_in_kr }},- {% trans "by" %} {{ membership.payment.payment_method }}</strong>
+                    {% trans "Payment" %}: <strong>{{ ms.payment.value_in_kr }},- {% trans "by" %} {{ ms.payment.payment_method }}</strong>
                     </li>
                     {% endfor %}
                 {% endif %}
