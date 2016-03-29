@@ -30,6 +30,7 @@ INSTALLED_APPS = (
 LOCAL_APPS = (
     # 'apps.hooks',
     'dusken',
+    'apps.inside',  # TODO Remove after import and new integrations are OK
 )
 INSTALLED_APPS += LOCAL_APPS
 
@@ -73,6 +74,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+DATABASE_ROUTERS = ['duskensite.router.Router']
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

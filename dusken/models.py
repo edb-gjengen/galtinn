@@ -24,6 +24,7 @@ class AbstractBaseModel(models.Model):
 class DuskenUser(AbstractBaseModel, AbstractUser):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     phone_number = models.CharField(max_length=30, null=True, blank=True)
+    phone_number_validated = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True, blank=True)
 
     street_address = models.CharField(max_length=255, null=True, blank=True)
@@ -115,7 +116,8 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
     short_name = models.CharField(max_length=128, blank=True)
     is_active = models.BooleanField(default=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    groups = models.ManyToManyField(DjangoGroup, blank=True)
+    groups = models.ManyToManyField(DjangoGroup, blank=True, related_name='member_orgunits')
+    admin_groups = models.ManyToManyField(DjangoGroup, blank=True, related_name='admin_orgunits')
 
     def __str__(self):
         if self.short_name:
@@ -156,14 +158,6 @@ class Payment(AbstractBaseModel):
 
 
 class PlaceOfStudy(AbstractBaseModel):
-    from_date = models.DateField()
-    institution = models.ForeignKey('dusken.Institution')
-
-    def __str__(self):
-        return "{institution}, {year}".format(institution=self.institution, year=self.from_date.year)
-
-
-class Institution(AbstractBaseModel):
     name = models.CharField(max_length=255)
     short_name = models.CharField(max_length=16)
 
