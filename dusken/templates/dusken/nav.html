@@ -3,10 +3,10 @@
     <a class="navbar-brand" href="{% url 'index' %}">{% trans "dusken.neuf.no" %}</a>
     <ul class="nav navbar-nav">
         {% if user.is_authenticated %}
-            <li class="nav-item active"><a class="nav-link" href="{% url "home" %}">{% trans "Home" %}</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url "user-detail-me" %}">{% trans "Profile" %}</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url "membership-list" %}">{% trans "Membership" %}</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">{% trans "Logged in as" %}: <strong>{{ user.get_full_name|default:user.username }}</strong></a></li>
+            <li class="nav-item active"><a class="nav-link" href="{% url "home" %}"><span class="lnr lnr-home"></span> {% trans "Home" %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "membership-list" %}"><span class="lnr lnr-license"></span> {% trans "Membership" %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "home-active" %}"><span class="lnr lnr-apartment"></span> {% trans "Active" %}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "user-detail-me" %}" title="{% trans "Profile" %}"><span class="lnr lnr-user"></span> {{ user.get_full_name|default:user.username }}</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">{% trans "Log out" %}</a></li>
         {% endif %}
     </ul>

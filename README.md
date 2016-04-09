@@ -28,6 +28,9 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     python manage.py test dusken
     # Run this for testing import from Inside (legacy)
     python manage.py test --testrunner apps.inside.tests.NoDbTestRunner apps.inside
+    
+## Development
+Font icons are from: https://linearicons.com/free
 
 ## Card payments
 Dusken supports Stripe for Card Payments

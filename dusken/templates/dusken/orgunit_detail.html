@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block body %}
+    <h1>{{ orgunit.name }}</h1>
+    <h4>{% trans "Groups" %}</h4>
+    {% for group in orgunit.groups.all %}
+        {{ group }}
+    {% endfor %}
+    <h4>{% trans "Admin groups" %}</h4>
+    {% for group in orgunit.admin_groups.all %}
+        {{ group }}
+    {% endfor %}
+{% endblock %}

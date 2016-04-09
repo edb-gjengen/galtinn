@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block body %}
+    <h1>{% trans "Organizational Units" %}</h1>
+    <ul>
+    {% for org in orgunits %}
+        <li><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a><!-- {% trans "Edit" %} --></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

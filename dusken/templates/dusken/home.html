@@ -1,4 +1,4 @@
-{% extends "dusken/base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block body %}
     <h2><span class="lnr lnr-home"></span> {% trans "Home" %}</h2>
@@ -7,6 +7,38 @@
         <h6 class="text-muted">{% trans "What do you want to do?" %}</h6>
         <div class="card-deck-wrapper">
         <div class="card-deck">
+
+            <div class="home__membership-status card">
+                <div class="card-block">
+                    <h4 class="card-title"><span class="lnr lnr-license"></span> {% trans "Your Membership" %}</h4>
+                    <h6 class="card-subtitle text-muted">{% trans "See your membership status" %}</h6>
+                </div>
+                <ul class="list-group list-group-flush">
+                {% with user.get_last_valid_membership as ms %}
+                    {% if ms.is_valid %}
+                        <li class="list-group-item list-group-item-success"><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </li>
+                    {% else %}
+                        <li class="list-group-item list-group-item-warning"><span class="lnr lnr-sad"></span> {% trans "Membership expired." %}</li>
+                    {% endif %}
+
+                    {% if ms.is_valid %}
+                        <li class="list-group-item membership">
+                            {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{{ ms.end_date }}</strong>
+                        </li>
+                        <li class="list-group-item payment">
+                        {% trans "Payment" %}: <strong>{{ ms.payment.value_in_kr }},- {% trans "by" %} {{ ms.payment.payment_method }}</strong>
+                        </li>
+                    {% endif %}
+                </ul>
+                <div class="card-block">
+                    {% if ms.is_valid %}
+                        <a href="{% url "payment-detail" ms.payment.uuid %}" class="btn btn-primary-outline btn-block">{% trans "See reciept" %}</a>
+                    {% else %}
+                        <a href="{% url "membership-purchase" %}" class="btn btn-primary-outline btn-block">{% trans "Renew membership" %}</a>
+                    {% endif %}
+                </div>
+            {% endwith %}
+            </div>
 
             <div class="home__quick-profile card">
                 <div class="card-block">
@@ -20,38 +52,6 @@
                 </ul>
                 <div class="card-block">
                     <a href="{% url "user-update-me" %}" class="btn btn-primary-outline btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
-                </div>
-            </div>
-
-            <div class="home__membership-status card">
-                <div class="card-block">
-                    <h4 class="card-title"><span class="lnr lnr-license"></span> {% trans "Your Membership" %}</h4>
-                    <h6 class="card-subtitle text-muted">{% trans "See your membership status" %}</h6>
-                </div>
-                <ul class="list-group list-group-flush">
-                {% if user.has_valid_membership %}
-                    <li class="list-group-item list-group-item-success"><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </li>
-                {% else %}
-                    <li class="list-group-item list-group-item-warning"><span class="lnr lnr-sad"></span> {% trans "Membership expired." %}</li>
-                {% endif %}
-
-                {% if user.has_valid_membership %}
-                    {% for ms in user.memberships.all %}
-                    <li class="list-group-item membership">
-                        {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{{ ms.end_date }}</strong>
-                    </li>
-                    <li class="list-group-item payment">
-                    {% trans "Payment" %}: <strong>{{ ms.payment.value_in_kr }},- {% trans "by" %} {{ ms.payment.payment_method }}</strong>
-                    </li>
-                    {% endfor %}
-                {% endif %}
-                </ul>
-                <div class="card-block">
-                    {% if user.has_valid_membership %}
-                        <a href="#" class="btn btn-primary-outline btn-block">{% trans "See reciept" %}</a>
-                    {% else %}
-                        <a href="{% url "membership-purchase" %}" class="btn btn-primary-outline btn-block">{% trans "Renew membership" %}</a>
-                    {% endif %}
                 </div>
             </div>
 

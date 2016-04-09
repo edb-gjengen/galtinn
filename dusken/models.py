@@ -49,6 +49,9 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
 
         return False
 
+    def get_last_valid_membership(self):
+        return self.memberships.filter(end_date__gt=timezone.now()).order_by('end_date').first()
+
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:
             return '{first} {last} ({username})'.format(
@@ -62,7 +65,7 @@ class Membership(AbstractBaseModel):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     membership_type = models.ForeignKey('dusken.MembershipType')
-    payment = models.ForeignKey('dusken.Payment', null=True, blank=True)
+    payment = models.OneToOneField('dusken.Payment', null=True, blank=True, related_name='membership')
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='memberships')
     # from django.contrib.postgres.fields import JSONField
     extra_data = JSONField(blank=True, default=dict)
@@ -113,6 +116,7 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
     """
 
     name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, max_length=255, blank=True)
     short_name = models.CharField(max_length=128, blank=True)
     is_active = models.BooleanField(default=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
@@ -141,6 +145,7 @@ class Payment(AbstractBaseModel):
         (PAYMENT_METHOD_OTHER, _('Other (cash register, bar, ...)')),
     )
 
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     payment_method = models.CharField(max_length=254, choices=PAYMENT_METHODS, default=PAYMENT_METHOD_OTHER)
     value = models.IntegerField(help_text=_('In øre'))
     transaction_id = models.CharField(

@@ -19,3 +19,7 @@ class MembershipActivateForm(forms.Form):
     last_name = forms.CharField()
     email = forms.EmailField()
     user_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
+
+class MembershipRenewForm(forms.Form):
+    email = forms.EmailField(widget=forms.HiddenInput())

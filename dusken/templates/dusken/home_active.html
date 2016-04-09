@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block body %}
+    <h2><span class="lnr lnr-apartment"></span> {% trans "Active member" %}</h2>
+    <div class="home-active__actions-wrap">
+    <ul>
+        <li><a href="{% url "orgunit-list" %}">{% trans "List of organizational units" %}</a></li>
+        <li>{% trans "Add member as active to my orgunit" %}</li>
+        <li>{% trans "Remove member from my orgunit" %}</li>
+    </ul>
+    <!--<section class="home-active__actions">
+        <h6 class="text-muted">{% trans "What do you want to do?" %}</h6>
+        <div class="card-deck-wrapper">
+        <div class="card-deck">
+
+            <div class="home-active__TODO card">
+                <div class="card-block">
+                    <h4 class="card-title">{% trans "A" %}</h4>
+                    <h6 class="card-subtitle text-muted">{% trans "Subtitle" %}</h6>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-success">{% trans "B" %} </li>
+                    <li class="list-group-item">C</li>
+                </ul>
+                <div class="card-block">
+                    <a href="#" class="btn btn-primary-outline btn-block">{% trans "C" %}</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>-->
+    </div>
+{% endblock %}
