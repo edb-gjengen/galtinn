@@ -8,3 +8,4 @@ docs/_build
 staticfiles
 node_modules
 bower_components
+/insidedocs

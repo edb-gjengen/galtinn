@@ -108,7 +108,7 @@ class DocumentCategory(models.Model):
 class DocumentData(models.Model):
     connection_name = 'inside'
 
-    data = models.TextField()
+    data = models.BinaryField()
     document = models.ForeignKey(Document)
 
     class Meta:
