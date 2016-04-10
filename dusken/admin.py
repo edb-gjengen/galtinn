@@ -12,7 +12,7 @@ class StartDateYearListFilter(admin.SimpleListFilter):
     title = _('year sold')
     parameter_name = 'start_date_year'
 
-    YEARS = range(2008, timezone.now().year + 1)
+    YEARS = range(2004, timezone.now().year + 1)
 
     def lookups(self, request, model_admin):
         return zip(self.YEARS, self.YEARS)
@@ -30,6 +30,9 @@ class MembershipAdmin(admin.ModelAdmin):
     list_filter = ['membership_type', 'payment__payment_method', StartDateYearListFilter]
 
     def get_payment_type(self, obj):
+        if obj.payment is None:
+            return ''
+
         return obj.payment.get_payment_method_display()
 
     get_payment_type.short_description = _('Payment method')
@@ -45,7 +48,15 @@ class PaymentAdmin(admin.ModelAdmin):
     readonly_fields = ['uuid']
 
 
-admin.site.register(DuskenUser)
+class DuskenUserAdmin(admin.ModelAdmin):
+    list_display = ['username', 'first_name', 'last_name', 'email', 'phone_number', 'is_active',
+                    'phone_number_validated']
+    list_filter = ['is_active', 'phone_number_validated']
+    search_fields = ['username', 'first_name', 'last_name', 'email', 'phone_number']
+    readonly_fields = ['uuid']
+
+
+admin.site.register(DuskenUser, DuskenUserAdmin)
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType)
 admin.site.register(OrgUnit, OrgUnitAdmin)

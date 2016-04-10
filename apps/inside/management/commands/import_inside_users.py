@@ -1,9 +1,14 @@
 # coding: utf-8
+import random
 from datetime import timedelta
+
+import re
+
 from django.core.management.base import BaseCommand
 
 from apps.inside.models import InsideUser, PostalCode, InsideCard
 from django.db.models import Q
+from django.utils import timezone
 from dusken.models import DuskenUser, Membership, MemberCard, MembershipType
 
 
@@ -100,6 +105,17 @@ class Command(BaseCommand):
 
         return cards
 
+    def _generate_username(self, firstname, lastname):
+        firstname = re.sub(r'[^\w]', '', firstname)
+        firstname = firstname.lower()[:5]
+
+        lastname = re.sub(r'[^\w]', '', lastname)
+        lastname = lastname.lower()[:2]
+        rand = random.randint(10000, 100000)
+
+        random_username = '{}{}{}'.format(firstname, lastname, rand).encode('ascii', 'ignore').decode('utf-8')
+        return random_username
+
     def get_user_data(self):
         more_fields = ['addresstype', 'registration_status', 'source', 'placeofstudy', 'expires', 'created',
                        'ldap_password', 'username']
@@ -136,12 +152,17 @@ class Command(BaseCommand):
                 new_val = u.get(src_field)
 
                 if dst_field == 'username' and new_val is None:
-                    # TODO generate username
-                    pass
+                    new_val = self._generate_username(u.get('first_name'), u.get('last_name'))
+
+                if dst_field == 'date_joined':
+                    new_val = timezone.now()
 
                 # Clean
                 if dst_field in ['email', 'username']:
                     new_val = new_val.lower()
+
+                if dst_field == 'phone_number_validated':
+                    new_val = bool(new_val)
 
                 new_user[dst_field] = new_val
 
@@ -176,18 +197,18 @@ class Command(BaseCommand):
         # Get historical memberships ( Ninja-SQL time!)
         users = self.get_user_data()
 
-        import pprint
-        pprint.pprint(list(filter(lambda x: x['username'] is None, users)))
+        # import pprint
+        # pprint.pprint(list(filter(lambda x: x['username'] is None, users)))
 
-        # for u in users:
-        #     memberships = u.pop('memberships')
-        #     membercards = u.pop('membercards')
-        #     new_user = DuskenUser.objects.create(**u)
-        #     for m in memberships:
-        #         m['user_id'] = new_user.pk
-        #         Membership.objects.create(**m)
-        #
-        #     for m in membercards:
-        #         m['user_id'] = new_user.pk
-        #         MemberCard.objects.create(**m)
-        #
+        for u in users:
+            memberships = u.pop('memberships')
+            membercards = u.pop('membercards')
+            new_user = DuskenUser.objects.create(**u)
+            for m in memberships:
+                m['user_id'] = new_user.pk
+                Membership.objects.create(**m)
+
+            for m in membercards:
+                m['user_id'] = new_user.pk
+                MemberCard.objects.create(**m)
+
