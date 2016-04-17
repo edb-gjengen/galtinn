@@ -44,7 +44,7 @@ class Command(BaseCommand):
         'useraddressint__country': 'country',
         'useraddressint__city': 'city',
 
-        'created': 'date_joined',
+        'created': 'date_joined',  # FIXME: Does not work?
     }
 
     def __init__(self):
@@ -70,26 +70,32 @@ class Command(BaseCommand):
     def _get_city_from_postal_code(self, postal_code):
         return self.zip_to_city_map.get(postal_code)
 
-    def _get_start_date(self, user):
+    def _get_start_date(self, user, is_life_long):
+        if is_life_long:
+            return timezone.now()  # Manually fix this later
+
         if user.get('expires') is not None:
             return user.get('expires') - timedelta(days=365)
 
         return None
 
-    def _get_membership_type(self, user):
+    def _get_membership_type(self, user, is_life_long):
         # FIXME: less hardcoding
-        if user.get('pk') in self.life_long_users:
+        if is_life_long:
             return self.membership_types['life_long']
 
         return self.membership_types['standard']
 
     def _get_last_valid_membership(self, user):
-        if user.get('expires') is None:
+        is_life_long = user.get('pk') in self.life_long_users
+
+        if user.get('expires') is None and not is_life_long:
             return None
-        membership_type = self._get_membership_type(user)
+
+        membership_type = self._get_membership_type(user, is_life_long)
         # payment = Payment.objects.create()
         end_date = user.get('expires')
-        start_date = self._get_start_date(user)
+        start_date = self._get_start_date(user, is_life_long)
 
         return {
             'end_date': end_date,
