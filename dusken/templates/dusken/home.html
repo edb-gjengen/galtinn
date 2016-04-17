@@ -34,7 +34,7 @@
                     {% if ms.is_valid %}
                         <a href="{% url "payment-detail" ms.payment.uuid %}" class="btn btn-primary-outline btn-block">{% trans "See reciept" %}</a>
                     {% else %}
-                        <a href="{% url "membership-purchase" %}" class="btn btn-primary-outline btn-block">{% trans "Renew membership" %}</a>
+                        <a href="{% url "membership-renew" %}" class="btn btn-primary-outline btn-block">{% trans "Renew membership" %}</a>
                     {% endif %}
                 </div>
             {% endwith %}

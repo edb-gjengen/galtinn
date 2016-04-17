@@ -28,6 +28,9 @@ class MembershipRenewView(FormView):
         self.membership_type = MembershipType.objects.get(pk=settings.MEMBERSHIP_TYPE_ID)
         return super().get_context_data(**kwargs)
 
+    def get_initial(self):
+        return {'email': self.request.user.email }
+
 
 class MembershipListView(LoginRequiredMixin, ListView):
     model = Membership

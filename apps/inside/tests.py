@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django.core.management import call_command
 from django.test import TestCase
 
@@ -17,6 +19,7 @@ class NoDbTestRunner(DiscoverRunner):
 
 
 class ImportTestCase(TestCase):
+    @skip('Uncomment this if you want to test the import script')
     def test_import_inside_users(self):
         out = call_command('import_inside_users')
         self.assertEquals(out, 'OK')
