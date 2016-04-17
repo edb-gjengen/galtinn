@@ -115,7 +115,7 @@ class Command(BaseCommand):
         }
 
     def _get_cards(self, user):
-        i_cards = self.member_cards_with_user.get(user.get('legacy_id'))
+        i_cards = self.member_cards_with_user.get(user.get('legacy_id'), [])
         cards = []
         for ic in i_cards:
 
@@ -196,11 +196,7 @@ class Command(BaseCommand):
                 new_user['memberships'] = [last_valid_membership]
 
             # Cards
-            cards = self._get_cards(new_user)
-
-            new_user['membercards'] = []
-            if cards is not None:
-                new_user['membercards'] = cards
+            new_user['membercards'] = self._get_cards(new_user)
 
             d_users.append(new_user)
 
@@ -223,6 +219,8 @@ class Command(BaseCommand):
         end = timer()
         print("Done in {:.2f}s".format(end - start))
 
+        # TODO: import all membercards without users
+
         # TODO
         # Get list of users
         # Join with phone number and address
@@ -236,24 +234,20 @@ class Command(BaseCommand):
         end = timer()
         print("Done in {:.2f}s".format(end - start))
 
-        import pprint; pprint.pprint(users[0])
-        for c in list(map(lambda x: x.get('membercards'), filter(lambda x: x.get('membercards'), users))):
-            print(c)
+        start = timer()
+        print("Started database creation...")
 
-        # start = timer()
-        # print("Started database creation...")
-        #
-        # for u in users:
-        #     memberships = u.pop('memberships')
-        #     membercards = u.pop('membercards')
-        #     new_user = DuskenUser.objects.create(**u)
-        #     for m in memberships:
-        #         m['user_id'] = new_user.pk
-        #         Membership.objects.create(**m)
-        #
-        #     for m in membercards:
-        #         m['user_id'] = new_user.pk
-        #         MemberCard.objects.create(**m)
-        #
-        # end = timer()
-        # print("Done in {:.2f}s".format(end - start))
+        for u in users:
+            memberships = u.pop('memberships')
+            membercards = u.pop('membercards')
+            new_user = DuskenUser.objects.create(**u)
+            for m in memberships:
+                m['user_id'] = new_user.pk
+                Membership.objects.create(**m)
+
+            for m in membercards:
+                m['user_id'] = new_user.pk
+                MemberCard.objects.create(**m)
+
+        end = timer()
+        print("Done in {:.2f}s".format(end - start))

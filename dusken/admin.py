@@ -57,13 +57,13 @@ class DuskenUserAdmin(admin.ModelAdmin):
     readonly_fields = ['uuid']
 
 
-admin.site.register(DuskenUser, DuskenUserAdmin)
-
-
 class MemberCardAdmin(admin.ModelAdmin):
-    list_display = ['card_number', 'registered_datetime', 'is_active', 'user']
+    list_display = ['card_number', 'user', 'registered_datetime', 'created', 'is_active']
+    list_filter = ['is_active']
+    search_fields = ['card_number']
 
 
+admin.site.register(DuskenUser, DuskenUserAdmin)
 admin.site.register(MemberCard, MemberCardAdmin)
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType)
