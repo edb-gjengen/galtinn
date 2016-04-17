@@ -1,14 +1,13 @@
 # coding: utf-8
-import random
+from collections import defaultdict
 from datetime import timedelta
-
-import re
-
 from django.core.management.base import BaseCommand
+from django.utils import timezone
+import random
+import re
+from timeit import default_timer as timer
 
 from apps.inside.models import InsideUser, PostalCode, InsideCard
-from django.db.models import Q
-from django.utils import timezone
 from dusken.models import DuskenUser, Membership, MemberCard, MembershipType
 
 
@@ -46,6 +45,13 @@ class Command(BaseCommand):
 
         'created': 'date_joined',  # FIXME: Does not work?
     }
+    CARD_FIELD_MAP = {
+        'card_number': 'card_number',
+        'is_active': 'is_active',
+        'registered': 'registered_datetime',
+        'created': 'created'
+
+    }
 
     def __init__(self):
         super().__init__()
@@ -56,7 +62,12 @@ class Command(BaseCommand):
         self.life_long_users = InsideUser.objects.filter(expires=None).values_list('pk', flat=True)
 
         self.member_cards = InsideCard.objects.values()
-        self.member_cards_with_user = list(filter(lambda c: c['user_id'] is not None, self.member_cards))
+
+        self.member_cards_with_user = defaultdict(list)
+
+        for c in self.member_cards:
+            if c['user_id'] is not None:
+                self.member_cards_with_user[c['user_id']].append(c)
 
         m1, c = MembershipType.objects.get_or_create(pk=1)
         m2, c = MembershipType.objects.get_or_create(pk=2)
@@ -104,10 +115,15 @@ class Command(BaseCommand):
         }
 
     def _get_cards(self, user):
+        i_cards = self.member_cards_with_user.get(user.get('legacy_id'))
         cards = []
-        for c in self.member_cards_with_user:
-            if c['user_id'] == user.get('legacy_id'):
-                cards.append(c)
+        for ic in i_cards:
+
+            new_card = {}
+            for src_field, dst_field in self.CARD_FIELD_MAP.items():
+                new_card[dst_field] = ic.get(src_field)
+
+            cards.append(new_card)
 
         return cards
 
@@ -174,12 +190,17 @@ class Command(BaseCommand):
 
             # Last valid membership
             last_valid_membership = self._get_last_valid_membership(u)
+
+            new_user['memberships'] = []
             if last_valid_membership is not None:
                 new_user['memberships'] = [last_valid_membership]
-            else:
-                new_user['memberships'] = []
 
-            new_user['membercards'] = self._get_cards(u)
+            # Cards
+            cards = self._get_cards(new_user)
+
+            new_user['membercards'] = []
+            if cards is not None:
+                new_user['membercards'] = cards
 
             d_users.append(new_user)
 
@@ -194,27 +215,45 @@ class Command(BaseCommand):
         # Get list of org units
         # Get list of groups
         # Keep concept of admin_group
+        start = timer()
+        print("Started group data fetch...")
+
         group_data = self.get_group_data()
+
+        end = timer()
+        print("Done in {:.2f}s".format(end - start))
 
         # TODO
         # Get list of users
         # Join with phone number and address
         # Get current membership
-        # Get historical memberships ( Ninja-SQL time!)
+        # FIXME Get historical memberships ( Ninja-SQL time!)
+        start = timer()
+        print("Started user data fetch...")
+
         users = self.get_user_data()
 
-        # import pprint
-        # pprint.pprint(list(filter(lambda x: x['username'] is None, users)))
+        end = timer()
+        print("Done in {:.2f}s".format(end - start))
 
-        for u in users:
-            memberships = u.pop('memberships')
-            membercards = u.pop('membercards')
-            new_user = DuskenUser.objects.create(**u)
-            for m in memberships:
-                m['user_id'] = new_user.pk
-                Membership.objects.create(**m)
+        import pprint; pprint.pprint(users[0])
+        for c in list(map(lambda x: x.get('membercards'), filter(lambda x: x.get('membercards'), users))):
+            print(c)
 
-            for m in membercards:
-                m['user_id'] = new_user.pk
-                MemberCard.objects.create(**m)
-
+        # start = timer()
+        # print("Started database creation...")
+        #
+        # for u in users:
+        #     memberships = u.pop('memberships')
+        #     membercards = u.pop('membercards')
+        #     new_user = DuskenUser.objects.create(**u)
+        #     for m in memberships:
+        #         m['user_id'] = new_user.pk
+        #         Membership.objects.create(**m)
+        #
+        #     for m in membercards:
+        #         m['user_id'] = new_user.pk
+        #         MemberCard.objects.create(**m)
+        #
+        # end = timer()
+        # print("Done in {:.2f}s".format(end - start))

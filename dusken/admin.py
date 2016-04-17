@@ -1,18 +1,19 @@
 from datetime import date
 
+from django.conf import settings
 from django.contrib import admin
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from mptt.admin import MPTTModelAdmin
 
-from dusken.models import Membership, OrgUnit, DuskenUser, MembershipType, Payment
+from dusken.models import Membership, OrgUnit, DuskenUser, MembershipType, Payment, MemberCard
 
 
 class StartDateYearListFilter(admin.SimpleListFilter):
     title = _('year sold')
     parameter_name = 'start_date_year'
 
-    YEARS = range(2004, timezone.now().year + 1)
+    YEARS = range(settings.INSIDE_START_YEAR, timezone.now().year + 1)
 
     def lookups(self, request, model_admin):
         return zip(self.YEARS, self.YEARS)
@@ -57,6 +58,13 @@ class DuskenUserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(DuskenUser, DuskenUserAdmin)
+
+
+class MemberCardAdmin(admin.ModelAdmin):
+    list_display = ['card_number', 'registered_datetime', 'is_active', 'user']
+
+
+admin.site.register(MemberCard, MemberCardAdmin)
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType)
 admin.site.register(OrgUnit, OrgUnitAdmin)

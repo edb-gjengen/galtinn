@@ -92,7 +92,7 @@ class MembershipType(AbstractBaseModel):
 
 
 class MemberCard(AbstractBaseModel):
-    card_number = models.IntegerField()
+    card_number = models.IntegerField(unique=True)
     registered_datetime = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='membercards')
