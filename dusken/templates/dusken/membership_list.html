@@ -2,11 +2,34 @@
 {% load i18n %}
 {% block body %}
     <h2>{% trans "Memberships" %}</h2>
+
+    {% with user.get_last_valid_membership as ms %}
+        <div>
+        {% if not ms.is_valid %}
+            {% trans "No valid membership found" %}.<br>
+            <a href="{% url "membership-renew" %}" class="btn btn-outline-primary btn-block">{% trans "Renew membership" %}</a>
+        {% endif %}
+        </div>
+        <br>
+    {% endwith %}
     {% for ms in membership_list %}
-        <section class="membership-item">
-        Period: {{ ms.start_date }} - {{ ms.end_date }}, Type: {{ ms.type }}
+        <section class="membership-item card">
+            <div class="card-block">
+                <h4 class="card-title"><span class="lnr lnr-license"></span> {{ ms.membership_type }}</h4>
+                <h6 class="card-subtitle text-muted">{% trans "Validity period" %}: {{ ms.start_date }} - {{ ms.end_date }}</h6>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% if ms.is_valid %}
+                    <li class="list-group-item list-group-item-success"><span class="lnr lnr-thumbs-up"></span> {% trans "Validity" %}: {% trans "Valid" %} </li>
+                {% else %}
+                    <li class="list-group-item list-group-item-warning"><span class="lnr lnr-sad"></span> {% trans "Validity" %}: {% trans "Expired" %}</li>
+                {% endif %}
+            </ul>
+            {% if ms.payment %}
+                <div class="card-block">
+                    <a href="{% url "payment-detail" ms.payment.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
+                </div>
+            {% endif %}
         </section>
-    {% empty %}
-        {% trans "No memberships." %}
     {% endfor %}
 {% endblock %}

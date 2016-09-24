@@ -2,7 +2,10 @@ from datetime import date
 
 from django.conf import settings
 from django.contrib import admin
+from django.db.models import Min
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from mptt.admin import MPTTModelAdmin
 
@@ -13,10 +16,14 @@ class StartDateYearListFilter(admin.SimpleListFilter):
     title = _('year sold')
     parameter_name = 'start_date_year'
 
-    YEARS = range(settings.INSIDE_START_YEAR, timezone.now().year + 1)
-
     def lookups(self, request, model_admin):
-        return zip(self.YEARS, self.YEARS)
+        Model = model_admin.model
+        min_start_date = Model.objects.aggregate(Min('start_date'))
+        min_year = 0
+        if min_start_date:
+            min_year = min_start_date['start_date__min'].year
+        years = range(min_year, timezone.now().year + 1)
+        return zip(years, years)
 
     def queryset(self, request, queryset):
         # Compare the requested value to decide how to filter the queryset.
@@ -27,8 +34,11 @@ class StartDateYearListFilter(admin.SimpleListFilter):
 
 
 class MembershipAdmin(admin.ModelAdmin):
-    list_display = ['user', 'membership_type', 'start_date', 'end_date', 'get_payment_type', 'created']
+    list_display = ['show_user_link', 'membership_type', 'start_date', 'end_date', 'get_payment_type', 'created']
     list_filter = ['membership_type', 'payment__payment_method', StartDateYearListFilter]
+    search_fields = ['user__username', 'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
+    readonly_fields = ['show_user_link']
+    exclude = ['user']
 
     def get_payment_type(self, obj):
         if obj.payment is None:
@@ -39,9 +49,16 @@ class MembershipAdmin(admin.ModelAdmin):
     get_payment_type.short_description = _('Payment method')
     get_payment_type.admin_order_field = 'payment__payment_method'
 
+    def show_user_link(self, obj):
+        url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
+        return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
+
+    show_user_link.allow_tags = True
+    show_user_link.short_description = _('User')
+
 
 class OrgUnitAdmin(MPTTModelAdmin):
-    filter_horizontal = ['groups']
+    filter_horizontal = ['groups', 'admin_groups']
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -58,9 +75,18 @@ class DuskenUserAdmin(admin.ModelAdmin):
 
 
 class MemberCardAdmin(admin.ModelAdmin):
-    list_display = ['card_number', 'user', 'registered_datetime', 'created', 'is_active']
+    list_display = ['card_number', 'show_user_link', 'registered_datetime', 'created', 'is_active']
     list_filter = ['is_active']
     search_fields = ['card_number']
+    readonly_fields = ['card_number', 'show_user_link']
+    exclude = ['user']
+
+    def show_user_link(self, obj):
+        url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
+        return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
+
+    show_user_link.allow_tags = True
+    show_user_link.short_description = _('User')
 
 
 admin.site.register(DuskenUser, DuskenUserAdmin)

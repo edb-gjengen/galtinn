@@ -11,6 +11,7 @@ from django_countries.fields import CountryField
 from jsonfield import JSONField
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class AbstractBaseModel(models.Model):
@@ -23,7 +24,7 @@ class AbstractBaseModel(models.Model):
 
 class DuskenUser(AbstractBaseModel, AbstractUser):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
-    phone_number = models.CharField(max_length=30, null=True, blank=True)
+    phone_number = PhoneNumberField(blank=True)
     phone_number_validated = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True, blank=True)
 
@@ -86,9 +87,16 @@ class MembershipType(AbstractBaseModel):
     is_active = models.BooleanField(default=True)
     does_not_expire = models.BooleanField(default=False)
     price = models.IntegerField(default=0, help_text=_('Price in øre'))
+    is_default = models.BooleanField(default=False)
 
     def __str__(self):
         return "{}".format(self.name)
+
+    def save(self, **kwargs):
+        # Only one can be default
+        if self.is_default:
+            MembershipType.objects.all().update(is_default=False)
+        super().save(**kwargs)
 
 
 class MemberCard(AbstractBaseModel):
@@ -96,6 +104,9 @@ class MemberCard(AbstractBaseModel):
     registered_datetime = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='membercards')
+
+    def __str__(self):
+        return "{}".format(self.card_number)
 
 
 class GroupProfile(AbstractBaseModel):

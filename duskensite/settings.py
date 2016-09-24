@@ -113,9 +113,6 @@ REST_FRAMEWORK = {
 STRIPE_SECRET_KEY = ''
 STRIPE_PUBLIC_KEY = ''
 
-MEMBERSHIP_TYPE_ID = 1
-INSIDE_START_YEAR = 2004
-
 try:
     from .local_settings import *
 except ImportError:

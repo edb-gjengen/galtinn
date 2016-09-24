@@ -41,3 +41,7 @@ Docs:
 * Stripe API (Python): https://stripe.com/docs/api?lang=python
 
 Test VISA card: 4242 4242 4242 4242
+
+## System Configuration
+
+To sell memberships at least one `MembershipType` has to have the `is_default` flag set.

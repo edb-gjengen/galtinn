@@ -1,6 +1,7 @@
-import random
-from dusken.models import Membership, DuskenUser
 from rest_framework import serializers
+
+from dusken.models import Membership, DuskenUser
+from dusken.utils import generate_username
 
 
 class MembershipSerializer(serializers.ModelSerializer):
@@ -19,17 +20,9 @@ class DuskenUserSerializer(serializers.ModelSerializer):
 
 
 class SimpleDuskenUserSerializer(serializers.ModelSerializer):
-    @staticmethod
-    def _generate_username(first_name, last_name):
-        random_number = random.randint(1, 9999)
-        first_name = first_name.encode('ascii', 'ignore').lower()[:6].decode('utf-8')
-        last_name = last_name.encode('ascii', 'ignore').lower()[:2].decode('utf-8')
-        username = '{}{}{:04d}'.format(first_name, last_name, random_number)
-        return username
-
     def validate(self, data):
         if not data.get('username', ''):
-            data['username'] = SimpleDuskenUserSerializer._generate_username(data['first_name'], data['last_name'])
+            data['username'] = generate_username(data['first_name'], data['last_name'])
 
         return data
 

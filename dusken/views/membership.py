@@ -36,7 +36,7 @@ class MembershipListView(LoginRequiredMixin, ListView):
     model = Membership
 
     def get_queryset(self):
-        return super().get_queryset().filter(pk=self.request.user.pk)
+        return super().get_queryset().filter(pk=self.request.user.pk).order_by('start_date')
 
 
 class MembershipActivateView(FormView):
@@ -44,4 +44,5 @@ class MembershipActivateView(FormView):
     form_class = MembershipActivateForm
 
     def form_valid(self, form):
+        # TODO
         print("YEY")

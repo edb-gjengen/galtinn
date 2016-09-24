@@ -58,7 +58,7 @@ $(document).ready(function() {
 
         var stripeHandler = StripeCheckout.configure({
             key: config.stripe_pub_key,
-            image: config.logo,
+            image: config.image,
             locale: 'auto',
             token: onToken,
             allowRememberMe: false  // Disallow the remember me function for new users

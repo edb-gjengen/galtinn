@@ -3,11 +3,19 @@
 {% block body %}
     <h1>{{ orgunit.name }}</h1>
     <h4>{% trans "Groups" %}</h4>
-    {% for group in orgunit.groups.all %}
-        {{ group }}
-    {% endfor %}
+    {% if orgunit.groups.all %}
+        <ul>
+        {% for group in orgunit.groups.all %}
+            <li>{{ group }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
     <h4>{% trans "Admin groups" %}</h4>
-    {% for group in orgunit.admin_groups.all %}
-        {{ group }}
-    {% endfor %}
+    {% if orgunit.admin_groups.all %}
+        <ul>
+        {% for group in orgunit.admin_groups.all %}
+            <li>{{ group }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}

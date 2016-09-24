@@ -2,6 +2,7 @@ from datetime import timedelta
 import logging
 from django.conf import settings
 from django.contrib.auth import login
+from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -31,8 +32,14 @@ class MembershipChargeView(APIView):
     queryset = Membership.objects.none()
     permission_classes = (AllowAny, )
 
+    def _get_membership_type(self):
+        try:
+            return MembershipType.objects.get(is_default=True)
+        except MembershipType.DoesNotExist:
+            raise ImproperlyConfigured('Error: At least one MembershipType needs the is_default flag set')
+
     def post(self, request):
-        membership_type = MembershipType.objects.get(pk=settings.MEMBERSHIP_TYPE_ID)
+        membership_type = self._get_membership_type()
         stripe.api_key = settings.STRIPE_SECRET_KEY
         currency = 'NOK'
         amount = membership_type.price  # Amount in ore
