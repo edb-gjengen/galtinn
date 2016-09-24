@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AlterModelManagers(
             name='orgunit',
             managers=[
-                ('_default_manager', django.db.models.manager.Manager()),
+                ('objects', django.db.models.manager.Manager()),
             ],
         ),
         migrations.AddField(

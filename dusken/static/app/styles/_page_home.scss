@@ -1,8 +1,8 @@
 /* Home */
 .home {
     &__actions {
-        @include make-col();
-        @include make-col-span(12);
+        @include make-col-ready();
+        @include make-col(12);
 
         &-wrap { @include make-row(); }
 

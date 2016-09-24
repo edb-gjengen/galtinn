@@ -32,9 +32,9 @@
                 </ul>
                 <div class="card-block">
                     {% if ms.is_valid %}
-                        <a href="{% url "payment-detail" ms.payment.uuid %}" class="btn btn-primary-outline btn-block">{% trans "See reciept" %}</a>
+                        <a href="{% url "payment-detail" ms.payment.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
                     {% else %}
-                        <a href="{% url "membership-renew" %}" class="btn btn-primary-outline btn-block">{% trans "Renew membership" %}</a>
+                        <a href="{% url "membership-renew" %}" class="btn btn-outline-primary btn-block">{% trans "Renew membership" %}</a>
                     {% endif %}
                 </div>
             {% endwith %}
@@ -51,7 +51,7 @@
                     <li class="list-group-item"><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></li><!-- - <a href="#">Resend validation code</a></li>-->
                 </ul>
                 <div class="card-block">
-                    <a href="{% url "user-update-me" %}" class="btn btn-primary-outline btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
+                    <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
                 </div>
             </div>
 
@@ -61,7 +61,7 @@
                     <h6 class="card-subtitle text-muted">{% trans "Change it if you want to" %}</h6>
                 </div>
                 <div class="card-block">
-                    <a href="{% url "password_change" %}" class="btn btn-primary-outline btn-block">{% trans "Change password" %}</a>
+                    <a href="{% url "password_change" %}" class="btn btn-outline-primary btn-block">{% trans "Change password" %}</a>
                 </div>
             </div>
         </div>
