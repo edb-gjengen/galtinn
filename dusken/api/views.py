@@ -32,14 +32,10 @@ class MembershipChargeView(APIView):
     queryset = Membership.objects.none()
     permission_classes = (AllowAny, )
 
-    def _get_membership_type(self):
-        try:
-            return MembershipType.objects.get(is_default=True)
-        except MembershipType.DoesNotExist:
-            raise ImproperlyConfigured('Error: At least one MembershipType needs the is_default flag set')
-
     def post(self, request):
-        membership_type = self._get_membership_type()
+        # FIXME(nikolark): membership_type is the product and should be provided by client
+        # and validated (only active users get active product)
+        membership_type = MembershipType.get_default()
         stripe.api_key = settings.STRIPE_SECRET_KEY
         currency = 'NOK'
         amount = membership_type.price  # Amount in ore

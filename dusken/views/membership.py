@@ -13,7 +13,7 @@ class MembershipPurchaseView(FormView):
     membership_type = None
 
     def get_context_data(self, **kwargs):
-        self.membership_type = MembershipType.objects.get(pk=settings.MEMBERSHIP_TYPE_ID)
+        self.membership_type = MembershipType.get_default()
         return super().get_context_data(**kwargs)
 
 
@@ -25,7 +25,7 @@ class MembershipRenewView(FormView):
     membership_type = None
 
     def get_context_data(self, **kwargs):
-        self.membership_type = MembershipType.objects.get(pk=settings.MEMBERSHIP_TYPE_ID)
+        self.membership_type = MembershipType.get_default()
         return super().get_context_data(**kwargs)
 
     def get_initial(self):

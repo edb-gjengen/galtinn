@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
+# FIXME(nikolark): Every user probably does not need an API token
 @receiver(post_save, sender=get_user_model())
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:

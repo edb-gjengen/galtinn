@@ -2,6 +2,7 @@
 import uuid
 
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import Group as DjangoGroup
@@ -97,6 +98,16 @@ class MembershipType(AbstractBaseModel):
         if self.is_default:
             MembershipType.objects.all().update(is_default=False)
         super().save(**kwargs)
+
+    @staticmethod
+    def get_default():
+        # FIXME: Manager method?
+        try:
+            return MembershipType.objects.get(is_default=True)
+        except MembershipType.DoesNotExist:
+            raise ImproperlyConfigured('Error: At least one MembershipType must have is_default set')
+        except MembershipType.MultipleObjectsReturned:
+            raise ImproperlyConfigured('Error: Only one MembershipType can have is_default set')
 
 
 class MemberCard(AbstractBaseModel):
