@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block body %}
+    <h1>{% trans "Reciept" %}</h1>
+    <ul>
+        <li>{{ order.product.membership_type }}: <strong>{{ order.price_nok_kr }},-</strong></li>
+        <li>{% trans "Order ID" %}: {{ order.uuid }}</li>
+        <li>{% trans "Purchased" %}: {{ order.created }}</li>
+        <li>{% trans "Payment method" %}: {{ order.get_payment_method_display }}</li>
+    </ul>
+
+{% endblock %}

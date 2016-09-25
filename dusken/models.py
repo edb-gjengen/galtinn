@@ -1,6 +1,8 @@
 # coding: utf-8
 import uuid
+from datetime import timedelta
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -67,7 +69,6 @@ class Membership(AbstractBaseModel):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     membership_type = models.ForeignKey('dusken.MembershipType')
-    payment = models.OneToOneField('dusken.Payment', null=True, blank=True, related_name='membership')
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='memberships')
     # from django.contrib.postgres.fields import JSONField
     extra_data = JSONField(blank=True, default=dict)
@@ -89,6 +90,7 @@ class MembershipType(AbstractBaseModel):
     does_not_expire = models.BooleanField(default=False)
     price = models.IntegerField(default=0, help_text=_('Price in øre'))
     is_default = models.BooleanField(default=False)
+    duration = models.DurationField(default=timedelta(days=365), null=True, blank=True)
 
     def __str__(self):
         return "{}".format(self.name)
@@ -155,7 +157,8 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
         order_insertion_by = ['name']
 
 
-class Payment(AbstractBaseModel):
+class Order(AbstractBaseModel):
+    """ Simple order model which only supports one product per order """
     BY_CARD = 'card'
     BY_SMS = 'sms'
     BY_APP = 'app'
@@ -164,12 +167,17 @@ class Payment(AbstractBaseModel):
         (BY_APP, _('Mobile app')),
         (BY_SMS, _('SMS')),
         (BY_CARD, _('Credit card')),
-        (PAYMENT_METHOD_OTHER, _('Other (cash register, bar, ...)')),
+        (PAYMENT_METHOD_OTHER, _('Other')),
     )
 
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
+    price_nok = models.IntegerField(help_text=_('In øre'))
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders')
+    product = models.OneToOneField('dusken.Membership', null=True, blank=True)
+
+    # Payment
     payment_method = models.CharField(max_length=254, choices=PAYMENT_METHODS, default=PAYMENT_METHOD_OTHER)
-    value = models.IntegerField(help_text=_('In øre'))
     transaction_id = models.CharField(
         max_length=254,
         null=True,
@@ -177,11 +185,11 @@ class Payment(AbstractBaseModel):
         help_text=_('Stripe charge ID, Kassa event ID, SMS event ID or App event ID')
     )
 
-    def value_in_kr(self):
-        return int(self.value / 100)
+    def price_nok_kr(self):
+        return int(self.price_nok / 100)
 
     def __str__(self):
-        return "{} by {}".format(self.value_in_kr(), self.payment_method)
+        return "{} by {}".format(self.price_nok_kr(), self.payment_method)
 
 
 class PlaceOfStudy(AbstractBaseModel):

@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import FormView, DetailView
 
-from dusken.models import Payment
+from dusken.models import Order
 
 
 class IndexView(FormView):
@@ -41,8 +41,8 @@ class HomeActiveView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-class PaymentDetailView(LoginRequiredMixin, DetailView):
-    model = Payment
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    model = Order
     slug_field = 'uuid'
 
     def get_queryset(self):

@@ -2,6 +2,7 @@
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import sys
 from django.core.urlresolvers import reverse_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -112,6 +113,8 @@ REST_FRAMEWORK = {
 
 STRIPE_SECRET_KEY = ''
 STRIPE_PUBLIC_KEY = ''
+
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 try:
     from .local_settings import *

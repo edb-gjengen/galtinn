@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from dusken.api import urls as api_urls
-from dusken.views.general import IndexView, HomeView, PaymentDetailView, HomeActiveView
+from dusken.views.general import IndexView, HomeView, OrderDetailView, HomeActiveView
 from dusken.views.membership import MembershipPurchaseView, MembershipListView, MembershipActivateView, \
     MembershipRenewView
 from dusken.views.orgunit import OrgUnitListView, OrgUnitDetailView
@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^membership/renew/$', MembershipRenewView.as_view(), name='membership-renew'),
     url(r'^activate/$', MembershipActivateView.as_view(), name='membership-activate'),
 
-    url(r'^reciept/(?P<slug>[0-9a-z-]+)/$', PaymentDetailView.as_view(), name='payment-detail'),
+    url(r'^reciept/(?P<slug>[0-9a-z-]+)/$', OrderDetailView.as_view(), name='payment-detail'),
 
     url(r'^orgunits/$', OrgUnitListView.as_view(), name='orgunit-list'),
     url(r'^orgunit/(?P<slug>[0-9a-z-]+)/$', OrgUnitDetailView.as_view(), name='orgunit-detail'),

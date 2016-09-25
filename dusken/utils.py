@@ -11,3 +11,8 @@ def generate_username(first_name, last_name):
     username = '{}{}{:04d}'.format(first_name, last_name, random_number)
 
     return username
+
+
+class InlineClass(object):
+    def __init__(self, dictionary):
+        self.__dict__ = dictionary

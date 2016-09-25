@@ -9,7 +9,7 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from mptt.admin import MPTTModelAdmin
 
-from dusken.models import Membership, OrgUnit, DuskenUser, MembershipType, Payment, MemberCard
+from dusken.models import Membership, OrgUnit, DuskenUser, MembershipType, Order, MemberCard
 
 
 class StartDateYearListFilter(admin.SimpleListFilter):
@@ -35,7 +35,7 @@ class StartDateYearListFilter(admin.SimpleListFilter):
 
 class MembershipAdmin(admin.ModelAdmin):
     list_display = ['show_user_link', 'membership_type', 'start_date', 'end_date', 'get_payment_type', 'created']
-    list_filter = ['membership_type', 'payment__payment_method', StartDateYearListFilter]
+    list_filter = ['membership_type', 'order__payment_method', StartDateYearListFilter]
     search_fields = ['user__username', 'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
     readonly_fields = ['show_user_link']
     exclude = ['user']
@@ -94,5 +94,5 @@ admin.site.register(MemberCard, MemberCardAdmin)
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType)
 admin.site.register(OrgUnit, OrgUnitAdmin)
-admin.site.register(Payment, PaymentAdmin)
+admin.site.register(Order, PaymentAdmin)
 

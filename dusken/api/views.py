@@ -1,18 +1,19 @@
-from datetime import timedelta
-import logging
 from django.conf import settings
 from django.contrib.auth import login
-from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, AllowAny
+import logging
 
-from dusken.models import DuskenUser, Membership, MembershipType, Payment
-from dusken.api.serializers import DuskenUserSerializer, MembershipSerializer, SimpleDuskenUserSerializer
+from rest_framework import status
+from rest_framework import viewsets
+from rest_framework.exceptions import APIException
+from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
 import stripe
 
+from dusken.api.serializers import DuskenUserSerializer, MembershipSerializer, OrderChargeSerializer
+from dusken.models import DuskenUser, Membership, MembershipType, Order
+from dusken.utils import InlineClass
 
 logger = logging.getLogger(__name__)
 
@@ -28,66 +29,87 @@ class MembershipViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 
 
-class MembershipChargeView(APIView):
+class MembershipChargeView(GenericAPIView):
     queryset = Membership.objects.none()
     permission_classes = (AllowAny, )
+    serializer_class = OrderChargeSerializer
+
+    CURRENCY = 'NOK'
+    STATUS_CHARGE_SUCCEEDED = 'succeeded'
+    _user = None
 
     def post(self, request):
-        # FIXME(nikolark): membership_type is the product and should be provided by client
-        # and validated (only active users get active product)
-        membership_type = MembershipType.get_default()
         stripe.api_key = settings.STRIPE_SECRET_KEY
-        currency = 'NOK'
-        amount = membership_type.price  # Amount in ore
 
-        user_serializer = SimpleDuskenUserSerializer(data=self.request.data.get('user'))
-        user_serializer.is_valid(raise_exception=True)
+        serializer = self.serializer_class(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
 
         stripe_token = request.data.get('stripe_token')
-        email = stripe_token.get('email')
+
+        membership_type = serializer.validated_data.get('product')
+        amount = membership_type.price  # Amount in ore
 
         # New customer
-        customer = stripe.Customer.create(
-            email=email,
-            card=stripe_token.get('id')
-        )
+        customer = self._create_stripe_customer(stripe_token)
 
-        charge = stripe.Charge.create(
-            customer=customer.id,
-            amount=amount,
-            currency=currency,
-            description='{}: {}'.format(membership_type.name, membership_type.description)
-        )
+        # Charge
+        description = '{}: {}'.format(membership_type.name, membership_type.description)
+        charge = self._create_stripe_charge(customer, amount, description)
 
-        if charge['status'] != 'succeeded':
-            logger.warning('stripe.Charge did not succeed: %s', charge['status'])
+        if charge.status != self.STATUS_CHARGE_SUCCEEDED:
+            logger.warning('stripe.Charge did not succeed: %s', charge.status)
             return Response({'error': 'stripe.Charge did not succeed :-('})
 
-        # Winning, save new user with stripe customer id :-)
-        user = user_serializer.save(stripe_customer_id=customer.id)
-        # Log the user in
+        # Winning, save new order, with user and stripe customer id :-)
+        order = serializer.save(
+            transaction_id=charge.id,
+            stripe_customer_id=customer.id
+        )
+        self._login_user(order.user)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def _create_order(self, amount, charge, membership_type):
+        return
+
+    def _create_stripe_customer(self, stripe_token):
+        if settings.TESTING:
+            return InlineClass({'id': 'someid'})
+
+        try:
+            return stripe.Customer.create(
+                email=stripe_token['email'],
+                card=stripe_token['id'])
+        except stripe.error.InvalidRequestError as e:
+            logger.warning('Invalid Stripe request! %s', str(e))
+            if settings.DEBUG:
+                raise APIException(e)
+            else:
+                raise APIException('Stripe charge failed with API error.')
+
+    def _create_stripe_charge(self, customer, amount, description):
+        if settings.TESTING:
+            return InlineClass({'status': self.STATUS_CHARGE_SUCCEEDED, 'id': 'someid'})
+
+        try:
+            return stripe.Charge.create(
+                customer=customer.id,
+                amount=amount,
+                currency=self.CURRENCY,
+                description=description)
+        except stripe.error.InvalidRequestError as e:
+            logger.warning('Invalid Stripe request! %s', str(e))
+            if settings.DEBUG:
+                raise APIException(e)
+            else:
+                raise APIException('Stripe charge failed with API error.')
+
+    def _login_user(self, user):
         user.backend = 'django.contrib.auth.backends.ModelBackend'  # FIXME: Ninja!
         login(self.request, user)
 
-        payment = Payment.objects.create(
-            payment_method=Payment.BY_CARD,
-            transaction_id=charge.id,
-            value=amount
-        )
-        start_date = timezone.now()
-        membership = Membership.objects.create(
-            start_date=start_date,
-            end_date=start_date + timedelta(days=365),
-            membership_type=membership_type,
-            user=user,
-            payment=payment
-        )
 
-        return Response({'result': 'Success!'})
-
-
-class MembershipRenewChargeView(APIView):
-    queryset = Membership.objects.none()
+class MembershipRenewChargeView(MembershipChargeView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):
