@@ -6,12 +6,18 @@
         var config = {
             image: '{% static "dist/images/logo.png" %}',
             stripe_pub_key: '{{ view.stripe_public_key }}',
+            membership_type: '{{ view.membership_type.pk }}',
             membership_name: '{{ view.membership_type.name }}',
             membership_price: {{ view.membership_type.price }},
+            charge_url: '{% url "membership-charge-renew" %}'
         };
     </script>
 
     <section class="membership-purchase">
+        <!--
+            TODO: Can't renew membership if has existing expiring in more than 1 month
+            TODO: Can't renew if existing lifelong
+        -->
         <h4>{% trans "Renew membership" %}</h4>
         <form method="post" id="user-form">
             {{ form|bootstrap }}

@@ -33,4 +33,3 @@ urlpatterns = [
     # "Active member" home view - a user which is registered with at least one orgunit
     url(r'^home/active/$', HomeActiveView.as_view(), name='home-active'),  # FIXME: Move to own app?
 ]
-

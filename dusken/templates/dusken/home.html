@@ -26,13 +26,13 @@
                             {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{{ ms.end_date }}</strong>
                         </li>
                         <li class="list-group-item payment">
-                        {% trans "Payment" %}: <strong>{{ ms.payment.value_in_kr }},- {% trans "by" %} {{ ms.payment.payment_method }}</strong>
+                        {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.payment_method }}</strong>
                         </li>
                     {% endif %}
                 </ul>
                 <div class="card-block">
                     {% if ms.is_valid %}
-                        <a href="{% url "payment-detail" ms.payment.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
+                        <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
                     {% else %}
                         <a href="{% url "membership-renew" %}" class="btn btn-outline-primary btn-block">{% trans "Renew membership" %}</a>
                     {% endif %}

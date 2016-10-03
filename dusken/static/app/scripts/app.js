@@ -21,12 +21,13 @@ function isFormValid() {
     return !isNotValid;
 }
 
-function onToken(token) {
+function onStripeToken(token) {
     // Use the token to create the charge with a server-side script.
     // You can access the token ID with `token.id` and user email with `token.email`
     var postData = {
         'stripe_token': token,
-        'user': getFormData($('#user-form'))
+        'user': getFormData($('#user-form')),
+        'product': config.membership_type
     };
     $.ajax(urls.charge, {
         data: JSON.stringify(postData),
@@ -34,7 +35,7 @@ function onToken(token) {
         dataType: 'json',
         type: 'post',
         headers: {'X-CSRFToken': csrfToken}
-    }).success(function(data) {
+    }).done(function(data) {
         // TODO: with success message
         console.log(data);
 
@@ -51,7 +52,7 @@ $(document).ready(function() {
 
         /* Membership purchase */
         urls = {
-            charge: '/membership/charge/',
+            charge: config.charge_url,
             profile: '/home/'
         };
         csrfToken = $('[name="x-csrf-token"]').attr('content');
@@ -60,7 +61,7 @@ $(document).ready(function() {
             key: config.stripe_pub_key,
             image: config.image,
             locale: 'auto',
-            token: onToken,
+            token: onStripeToken,
             allowRememberMe: false  // Disallow the remember me function for new users
         });
 

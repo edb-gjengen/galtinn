@@ -14,4 +14,3 @@ class OrgUnitDetailView(LoginRequiredMixin, DetailView):
     model = OrgUnit
     template_name = 'dusken/orgunit_detail.html'
     context_object_name = 'orgunit'
-

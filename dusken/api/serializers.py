@@ -22,7 +22,7 @@ class DuskenUserSerializer(serializers.ModelSerializer):
         write_only_fields = ('password',)
 
 
-class SimpleDuskenUserSerializer(serializers.ModelSerializer):
+class NewDuskenUserSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if not data.get('username', ''):
             data['username'] = generate_username(data['first_name'], data['last_name'])
@@ -38,7 +38,7 @@ class SimpleDuskenUserSerializer(serializers.ModelSerializer):
 
 class OrderChargeSerializer(serializers.ModelSerializer):
     product = serializers.PrimaryKeyRelatedField(queryset=MembershipType.objects.filter(is_active=True))
-    user = SimpleDuskenUserSerializer()
+    user = NewDuskenUserSerializer()
 
     def validate_product(self, value):
         # FIXME(nikolark): validate membership_type, only active users get active product
@@ -73,7 +73,7 @@ class OrderChargeSerializer(serializers.ModelSerializer):
     def _create_user(self, user_data, stripe_customer_id):
         # FIXME: Easier way?
         user_data['stripe_customer_id'] = stripe_customer_id
-        user_serializer = SimpleDuskenUserSerializer(data=user_data)
+        user_serializer = NewDuskenUserSerializer(data=user_data)
         user_serializer.is_valid(raise_exception=True)
         return user_serializer.save()
 
@@ -83,5 +83,19 @@ class OrderChargeSerializer(serializers.ModelSerializer):
 
 
 class OrderChargeRenewSerializer(OrderChargeSerializer):
-    pass
-    # TODO: reuse customer_id
+    user = NewDuskenUserSerializer(read_only=True)
+
+    def validate(self, attrs):
+        # TODO: Implement business logic
+        # TODO: Can't renew membership if has existing expiring in more than 1 month
+        # TODO: Can't renew if existing lifelong
+        pass
+
+    def create(self, validated_data, **kwargs):
+        logged_in_user = validated_data.get('logged_in_user')
+
+        with transaction.atomic():
+            membership = self._create_membership(logged_in_user, validated_data.get('product'))
+            order = self._create_order(membership, validated_data.get('transaction_id'))
+
+        return order

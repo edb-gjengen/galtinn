@@ -46,4 +46,4 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     slug_field = 'uuid'
 
     def get_queryset(self):
-        return self.model.objects.filter(membership__user=self.request.user)
+        return self.model.objects.filter(user=self.request.user)

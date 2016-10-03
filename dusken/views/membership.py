@@ -29,14 +29,14 @@ class MembershipRenewView(FormView):
         return super().get_context_data(**kwargs)
 
     def get_initial(self):
-        return {'email': self.request.user.email }
+        return {'email': self.request.user.email}
 
 
 class MembershipListView(LoginRequiredMixin, ListView):
     model = Membership
 
     def get_queryset(self):
-        return super().get_queryset().filter(pk=self.request.user.pk).order_by('start_date')
+        return super().get_queryset().filter(user=self.request.user).order_by('-start_date')
 
 
 class MembershipActivateView(FormView):

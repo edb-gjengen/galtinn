@@ -70,9 +70,6 @@ class MembershipTest(APITestCase):
         pass
 
     def test_create_charge(self):
-        # Auth
-        self.__set_login()
-
         url = reverse('membership-charge')
         raw_data = {
             'product': self.membership_type.pk,
@@ -92,3 +89,18 @@ class MembershipTest(APITestCase):
         self.assertEqual(response.status_code, HTTP_201_CREATED, response.data)
         self.assertEqual(Order.objects.count(), 1)
 
+    def test_create_renew_charge(self):
+        self.__set_login()
+
+        url = reverse('membership-charge-renew')
+        raw_data = {
+            'product': self.membership_type.pk,
+            'stripe_token': {
+                'id': 'asdf',
+                'email': 'asdf@example.com'
+            }
+        }
+        response = self.client.post(url, raw_data, format='json')
+
+        self.assertEqual(response.status_code, HTTP_201_CREATED, response.data)
+        self.assertEqual(Order.objects.count(), 1)

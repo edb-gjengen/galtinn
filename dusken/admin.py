@@ -34,17 +34,17 @@ class StartDateYearListFilter(admin.SimpleListFilter):
 
 
 class MembershipAdmin(admin.ModelAdmin):
-    list_display = ['show_user_link', 'membership_type', 'start_date', 'end_date', 'get_payment_type', 'created']
+    list_display = ['pk', 'show_user_link', 'membership_type', 'start_date', 'end_date', 'get_payment_type', 'created']
     list_filter = ['membership_type', 'order__payment_method', StartDateYearListFilter]
     search_fields = ['user__username', 'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
     readonly_fields = ['show_user_link']
     exclude = ['user']
 
     def get_payment_type(self, obj):
-        if obj.payment is None:
+        if obj.order is None:
             return ''
 
-        return obj.payment.get_payment_method_display()
+        return obj.order.get_payment_method_display()
 
     get_payment_type.short_description = _('Payment method')
     get_payment_type.admin_order_field = 'payment__payment_method'
@@ -62,8 +62,17 @@ class OrgUnitAdmin(MPTTModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
-class PaymentAdmin(admin.ModelAdmin):
-    readonly_fields = ['uuid']
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['uuid', 'show_user_link', 'product', 'created']
+    search_fields = ['user__username', 'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
+    readonly_fields = ['uuid', 'product', 'price_nok', 'user', 'payment_method', 'transaction_id']
+
+    def show_user_link(self, obj):
+        url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
+        return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
+
+    show_user_link.allow_tags = True
+    show_user_link.short_description = _('User')
 
 
 class DuskenUserAdmin(admin.ModelAdmin):
@@ -94,5 +103,4 @@ admin.site.register(MemberCard, MemberCardAdmin)
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType)
 admin.site.register(OrgUnit, OrgUnitAdmin)
-admin.site.register(Order, PaymentAdmin)
-
+admin.site.register(Order, OrderAdmin)

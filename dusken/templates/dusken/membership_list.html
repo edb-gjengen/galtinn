@@ -25,9 +25,9 @@
                     <li class="list-group-item list-group-item-warning"><span class="lnr lnr-sad"></span> {% trans "Validity" %}: {% trans "Expired" %}</li>
                 {% endif %}
             </ul>
-            {% if ms.payment %}
+            {% if ms.order %}
                 <div class="card-block">
-                    <a href="{% url "payment-detail" ms.payment.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
+                    <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
                 </div>
             {% endif %}
         </section>
