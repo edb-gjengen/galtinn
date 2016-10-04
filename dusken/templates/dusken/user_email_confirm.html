@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n bootstrap %}
+{% block body %}
+    {% for error in errors %}
+        {{ error }}<br>
+    {% endfor %}
+    <a href="{% url "home" %}" class="btn btn-primary btn-block">{% trans "Go home" %}</a>
+{% endblock %}

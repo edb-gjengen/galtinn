@@ -16,6 +16,8 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
+from dusken.utils import create_email_key, send_validation_email
+
 
 class AbstractBaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -27,10 +29,13 @@ class AbstractBaseModel(models.Model):
 
 class DuskenUser(AbstractBaseModel, AbstractUser):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
+    email_confirmed_at = models.DateTimeField(blank=True, null=True)
+    email_key = models.CharField(max_length=40, default=create_email_key)
     phone_number = PhoneNumberField(blank=True)
     phone_number_validated = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True, blank=True)
 
+    # Address
     street_address = models.CharField(max_length=255, null=True, blank=True)
     street_address_two = models.CharField(max_length=255, null=True, blank=True)
     postal_code = models.CharField(max_length=10, null=True, blank=True)
@@ -41,6 +46,16 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
     legacy_id = models.IntegerField(null=True, blank=True)
 
     stripe_customer_id = models.CharField(max_length=254, null=True, blank=True)
+
+    @property
+    def email_is_confirmed(self):
+        return self.email_confirmed_at is not None
+
+    def confirm_email(self, save=True):
+        if not self.email_is_confirmed:
+            self.email_confirmed_at = timezone.now()
+            if save:
+                self.save()
 
     def get_absolute_url(self):
         return reverse('user-detail', kwargs={'slug': self.uuid})
@@ -55,6 +70,17 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
 
     def get_last_valid_membership(self):
         return self.memberships.filter(end_date__gt=timezone.now()).order_by('-start_date').first()
+
+    def save(self, **kwargs):
+        # If email has changed, invalidate confirmation state
+        if self.pk is not None:
+            orig = DuskenUser.objects.get(pk=self.pk)
+            if orig.email != self.email:
+                self.email_confirmed_at = None
+                self.email_key = create_email_key()
+                send_validation_email(self)
+
+        super().save(**kwargs)
 
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:

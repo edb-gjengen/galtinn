@@ -1,7 +1,7 @@
 # encoding: utf-8
-import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
 import sys
 from django.core.urlresolvers import reverse_lazy
 
@@ -14,26 +14,27 @@ ALLOWED_HOSTS = []
 SECRET_KEY = os.getenv('SECRET_KEY', 'insecure_default')
 
 # Application definition
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
     'rest_framework',
     'rest_framework.authtoken',
     'mptt',
     'django_countries',
     'bootstrapform',
     'django_extensions',
-)
-LOCAL_APPS = (
-    # 'apps.hooks',
+]
+INSTALLED_APPS += [
     'dusken',
+    # 'apps.hooks',
     'apps.inside',  # TODO Remove after import and new integrations are OK
-)
-INSTALLED_APPS += LOCAL_APPS
+]
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -91,6 +92,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+SITE_ID = 1
+
+# Email
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+
 AUTH_USER_MODEL = 'dusken.DuskenUser'
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGIN_URL = reverse_lazy('login')
@@ -113,8 +119,8 @@ REST_FRAMEWORK = {
     ],
 }
 
-STRIPE_SECRET_KEY = ''
-STRIPE_PUBLIC_KEY = ''
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 

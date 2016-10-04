@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.views.generic import FormView, ListView
 
 from dusken.forms import DuskenUserForm, MembershipActivateForm, MembershipRenewForm
@@ -11,6 +12,12 @@ class MembershipPurchaseView(FormView):
     form_class = DuskenUserForm
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     membership_type = None
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return redirect('home')
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         self.membership_type = MembershipType.get_default()

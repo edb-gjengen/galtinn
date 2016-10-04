@@ -24,6 +24,7 @@
                 {% else %}
                     <li class="list-group-item list-group-item-warning"><span class="lnr lnr-sad"></span> {% trans "Validity" %}: {% trans "Expired" %}</li>
                 {% endif %}
+                    <li class="list-group-item">{% trans "Purchased" %} {{ ms.order.created }} {% trans "by" %} {{ ms.order.get_payment_method_display }}</li>
             </ul>
             {% if ms.order %}
                 <div class="card-block">
