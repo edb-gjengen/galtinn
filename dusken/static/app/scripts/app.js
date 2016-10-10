@@ -1,6 +1,35 @@
 'use strict';
 var urls, csrfToken;
 
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
+});
+
 function getFormData(formElement) {
     var formData = formElement.serializeArray();
     formData = _.object(_.map(formData, function (x) {
@@ -34,7 +63,6 @@ function onStripeToken(token) {
         contentType: 'application/json',
         dataType: 'json',
         type: 'post',
-        headers: {'X-CSRFToken': csrfToken}
     }).done(function(data) {
         // TODO: with success message
         console.log(data);
@@ -55,7 +83,6 @@ $(document).ready(function() {
             charge: config.charge_url,
             profile: '/home/'
         };
-        csrfToken = $('[name="x-csrf-token"]').attr('content');
 
         var stripeHandler = StripeCheckout.configure({
             key: config.stripe_pub_key,
@@ -88,4 +115,12 @@ $(document).ready(function() {
         });
 
     }
+    /**/
+    var $validationEmailBtn = $('.js-send-validation-email');
+    $validationEmailBtn.on('click', function (e) {
+        e.preventDefault();
+        $.post(config.validateEmail, function(data) {
+            $validationEmailBtn.text('Sent.')
+        })
+    })
 });

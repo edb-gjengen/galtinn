@@ -2,11 +2,11 @@ from django.conf.urls import url, include
 
 from dusken.api import urls as api_urls
 from dusken.views.general import IndexView, HomeView, OrderDetailView, HomeActiveView
-from dusken.views.membership import MembershipPurchaseView, MembershipListView, MembershipActivateView, \
-    MembershipRenewView
+from dusken.views.membership import (MembershipPurchaseView, MembershipListView, MembershipActivateView,
+                                     MembershipRenewView)
 from dusken.views.orgunit import OrgUnitListView, OrgUnitDetailView
-from dusken.views.user import UserDetailView, UserDetailMeView, UserListView, UserUpdateView, UserUpdateMeView, \
-    UserEmailValidateView, UserEmailValidateSuccessView
+from dusken.views.user import (UserDetailView, UserDetailMeView, UserListView, UserUpdateView, UserUpdateMeView,
+                               UserEmailValidateView, UserEmailValidateSuccessView)
 
 urlpatterns = [
     url(r'api/', include(api_urls)),

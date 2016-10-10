@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.auth import login
-from django.utils import timezone
 import logging
 
 from rest_framework import status
@@ -10,11 +9,12 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 import stripe
+from rest_framework.views import APIView
 
-from dusken.api.serializers import DuskenUserSerializer, MembershipSerializer, OrderChargeSerializer, \
-    OrderChargeRenewSerializer
-from dusken.models import DuskenUser, Membership, MembershipType, Order
-from dusken.utils import InlineClass
+from dusken.api.serializers import (DuskenUserSerializer, MembershipSerializer, OrderChargeSerializer,
+                                    OrderChargeRenewSerializer)
+from dusken.models import DuskenUser, Membership
+from dusken.utils import InlineClass, send_validation_email
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +22,10 @@ logger = logging.getLogger(__name__)
 class DuskenUserViewSet(viewsets.ModelViewSet):
     queryset = DuskenUser.objects.all()
     serializer_class = DuskenUserSerializer
+    permission_classes = (IsAuthenticated, )
+
+    def get_queryset(self):
+        return self.queryset.filter(pk=self.request.user.pk)
 
 
 class MembershipViewSet(viewsets.ModelViewSet):
@@ -135,3 +139,11 @@ class MembershipChargeRenewView(MembershipChargeView):
     def post(self, request):
         self._logged_in_user = request.user
         return super().post(request)
+
+
+class ResendValidationEmailView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request, format=None):
+        send_validation_email(request.user)
+        return Response({'response': 'success'})

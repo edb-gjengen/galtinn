@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block body %}
+    <script>
+    var config = {
+        validateEmail: '{% url "resend-validation-email" %}'
+    };
+    </script>
     <h2><span class="lnr lnr-home"></span> {% trans "Home" %}</h2>
     <div class="home__actions-wrap">
     <section class="home__actions">
@@ -47,7 +52,15 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">{% trans "Full name" %}: <strong>{{ user }}</strong></li>
-                    <li class="list-group-item"><span class="lnr lnr-envelope"></span> {% trans "Email" %}: <strong>{{ user.email }}</strong></li><!-- - <a href="#">Resend validation email</a></li>-->
+                    <li class="list-group-item">
+                        <span class="lnr lnr-envelope"></span> {% trans "Email" %}: <strong>{{ user.email }}</strong>
+                        {% if user.email_is_confirmed %}
+                            <span class="tag tag-success">{% trans "Validated" %}</span>
+                        {% else %}
+                            <span class="tag tag-warning">{% trans "Not validated" %}</span>
+                            <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
+                        {% endif %}
+                    </li>
                     <li class="list-group-item"><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></li><!-- - <a href="#">Resend validation code</a></li>-->
                 </ul>
                 <div class="card-block">

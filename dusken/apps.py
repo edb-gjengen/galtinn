@@ -7,4 +7,4 @@ class DuskenAppConfig(AppConfig):
     verbose_name = _('Dusken')
 
     def ready(self):
-        import dusken.signals
+        import dusken.signals  # noqa

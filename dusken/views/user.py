@@ -1,9 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, redirect
-from django.views.generic import FormView
-from django.views.generic import ListView, DetailView, UpdateView
-from django.views.generic import TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView
 
 from dusken.forms import UserEmailValidateForm
 from dusken.models import DuskenUser
