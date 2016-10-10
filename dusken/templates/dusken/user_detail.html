@@ -19,8 +19,10 @@
                 <span class="tag tag-warning">{% trans "Not validated" %}</span>
                 <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
             {% endif %}
-        </li><!-- - <a href="#">Resend validation email</a></li>-->
-        <li class="list-group-item"><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></li><!-- - <a href="#">Resend validation code</a></li>-->
+        </li>
+        <li class="list-group-item">
+            <span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong>
+        </li>
     </ul>
     <br>
     <ul class="list-group">

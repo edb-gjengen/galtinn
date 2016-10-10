@@ -61,7 +61,7 @@
                             <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
                         {% endif %}
                     </li>
-                    <li class="list-group-item"><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></li><!-- - <a href="#">Resend validation code</a></li>-->
+                    <li class="list-group-item"><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></li>
                 </ul>
                 <div class="card-block">
                     <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
