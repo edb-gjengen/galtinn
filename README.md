@@ -21,7 +21,11 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     npm install -g gulp-cli bower
     cd dusken/static
     npm install && bower install
+    gulp build
     gulp serve
+    
+    # Add Stripe keys in duskensite/local_settings.py
+    # Note: get this from your account on stripe.com
 
 ### Tests
 

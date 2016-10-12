@@ -14,7 +14,7 @@ class DuskenUserTest(APITestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user('robert', email='robert.kolner@gmail.com', password='pass')
         self.user.save()
-        self.token = Token.objects.get(user=self.user).key
+        self.token = Token.objects.create(user=self.user).key
 
     def __set_login(self, user_is_logged_in=True):
         if user_is_logged_in:

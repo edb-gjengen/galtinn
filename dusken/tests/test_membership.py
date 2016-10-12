@@ -14,7 +14,7 @@ class MembershipTest(APITestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user('robert', email='robert.kolner@gmail.com', password='pass')
         self.user.save()
-        self.token = Token.objects.get(user=self.user).key
+        self.token = Token.objects.create(user=self.user).key
         self.membership_type = MembershipType.objects.create(
             name='Medlemskap DNS (årlig',
             duration=datetime.timedelta(days=365),

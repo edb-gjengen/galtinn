@@ -88,7 +88,7 @@ class OrderChargeRenewSerializer(OrderChargeSerializer):
         # TODO: Implement business logic
         # TODO: Can't renew membership if has existing expiring in more than 1 month
         # TODO: Can't renew if existing lifelong
-        pass
+        return attrs
 
     def create(self, validated_data, **kwargs):
         logged_in_user = validated_data.get('logged_in_user')
