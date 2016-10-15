@@ -1,5 +1,5 @@
 {% load i18n %}
-{% blocktrans %}Hi, {{ user.first_name }}! Do you want to confirm your email?{% endblocktrans %}
+{% trans "Hi" %}, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}! {% trans "Do you want to confirm your email?" %}
 {% blocktrans %}Go forth and click the link to confirm: {{ validation_url }}{% endblocktrans %}
 
 --
