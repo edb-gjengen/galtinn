@@ -10,19 +10,19 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
 
 ## Install
     sudo apt install python3-venv libpq-dev python3-dev
-    pyvenv venv
+    python3 -m venv venv
     . venv/bin/activate
+    pip install -U pip wheel
     pip install -r requirements.txt
+    pip install -r requirements-dev.txt
     python manage.py migrate
     python manage.py loaddata testdata
     python manage.py runserver
     
     # Frontend
     npm install -g gulp-cli bower
-    cd dusken/static
-    npm install && bower install
-    gulp build
-    gulp serve
+    fab install  # cd dusken/static && npm install && bower install && gulp build
+    fab serve
     
     # Add Stripe keys in duskensite/local_settings.py
     # Note: get this from your account on stripe.com
@@ -37,14 +37,12 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
 Font icons are from: https://linearicons.com/free
 
 ## Card payments
-Dusken supports Stripe for Card Payments
-
-Docs:
+Dusken supports Stripe for card payments. The Stripe API's are documented here:
 
 * Stripe Checkout (JS): https://stripe.com/docs/checkout
 * Stripe API (Python): https://stripe.com/docs/api?lang=python
 
-Test VISA card: 4242 4242 4242 4242
+Use this VISA card for testing: 4242 4242 4242 4242
 
 ## System Configuration
 

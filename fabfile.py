@@ -1,5 +1,5 @@
 from contextlib import contextmanager as _contextmanager
-from fabric.api import run, sudo, env, cd, prefix, lcd
+from fabric.api import run, sudo, env, cd, prefix, lcd, local
 
 env.use_ssh_config = True
 env.hosts = ['dreamcast.neuf.no']
@@ -28,3 +28,15 @@ def deploy():
 
     # Reload gunicorn
     sudo('/usr/bin/supervisorctl pid dusken.neuf.no | xargs kill -HUP', shell=False)
+
+
+def install():
+    with lcd('dusken/static/'):
+        local('npm install')
+        local('bower install')
+        local('gulp')
+
+
+def serve():
+    with lcd('dusken/static/'):
+        local('gulp serve')
