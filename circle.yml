@@ -1,3 +1,6 @@
 machine:
   python:
     version: 3.5.1
+test:
+  post:
+    - bash <(curl -s https://codecov.io/bash)
