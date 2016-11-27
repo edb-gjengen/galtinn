@@ -18,4 +18,4 @@ class CardTestCase(APITestCase):
         }
         res = self.client.get(url, data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data[0]['card_number'], self.card.card_number)
+        self.assertEqual(res.data['results'][0]['card_number'], self.card.card_number)
