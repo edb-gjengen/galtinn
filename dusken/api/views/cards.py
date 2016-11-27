@@ -5,7 +5,7 @@ from dusken.models import MemberCard
 
 
 class MemberCardViewSet(viewsets.ModelViewSet):
-    """MemberCard Internal API"""
+    """MemberCard internal API"""
     queryset = MemberCard.objects.all()
     serializer_class = MemberCardSerializer
     filter_backends = (DjangoFilterBackend,)

@@ -2,11 +2,13 @@ from django.conf import settings
 import logging
 
 from django.contrib.auth import login
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoModelPermissions
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated, AllowAny
 import stripe
 from rest_framework.response import Response
 
@@ -20,11 +22,19 @@ logger = logging.getLogger(__name__)
 
 
 class MembershipViewSet(viewsets.ModelViewSet):
+    """ Membership internal API """
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+    filter_backends = (DjangoFilterBackend,)
+    pagination_class = PageNumberPagination
+
+    # TODO: Everyone should not be able to view memberships
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+        if not self.request.user.is_authenticated:
+            return self.queryset.none()
+
+        return self.queryset
 
 
 class MembershipChargeView(GenericAPIView):
