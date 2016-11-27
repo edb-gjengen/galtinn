@@ -1,17 +1,34 @@
 {% load i18n %}
 <nav class="navbar navbar-light bg-faded">
+    <button class="navbar-toggler float-xs-right hidden-sm-up collapsed" type="button" data-toggle="collapse" data-target="#bd-main-nav" aria-controls="bd-main-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="lnr lnr-menu"></span>
+    </button>
     <a class="navbar-brand" href="{% url 'index' %}">{% trans "dusken.neuf.no" %}</a>
-    <ul class="nav navbar-nav">
+    <div class="navbar-toggleable-xs collapse" id="bd-main-nav" aria-expanded="false">
+        <ul class="nav navbar-nav">
+            {% if user.is_authenticated %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url "home" %}"><span class="lnr lnr-home"></span> {% trans "Home" %}</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url "membership-list" %}"><span class="lnr lnr-license"></span> {% trans "Membership" %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url "home-active" %}"><span class="lnr lnr-apartment"></span> {% trans "Active" %}</a>
+                </li>
+            {% endif %}
+        </ul>
         {% if user.is_authenticated %}
-            <li class="nav-item active"><a class="nav-link" href="{% url "home" %}"><span class="lnr lnr-home"></span> {% trans "Home" %}</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url "membership-list" %}"><span class="lnr lnr-license"></span> {% trans "Membership" %}</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url "home-active" %}"><span class="lnr lnr-apartment"></span> {% trans "Active" %}</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url "user-detail-me" %}" title="{% trans "Profile" %}"><span class="lnr lnr-user"></span> {{ user.get_full_name|default:user.username }}</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">{% trans "Log out" %}</a></li>
-        {% endif %}
-    </ul>
-    <!--<form class="form-inline navbar-form pull-right">
-        <input class="form-control" type="text" placeholder="Search">
-        <button class="btn btn-success-outline" type="submit">Search</button>
-    </form>-->
+        <ul class="nav navbar-nav user-menu">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="responsiveNavbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ user.get_full_name|default:user.username }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="responsiveNavbarDropdown">
+                    <a class="dropdown-item" href="{% url "user-detail-me" %}" title="{% trans "Profile" %}"><span class="lnr lnr-user"></span> {% trans "Profile" %}</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}"><span class="lnr lnr-exit"></span> {% trans "Log out" %}</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
 </nav>
