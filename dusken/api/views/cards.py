@@ -1,14 +1,11 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-
 from dusken.api.serializers.cards import MemberCardSerializer
 from dusken.models import MemberCard
 
 
 class MemberCardViewSet(viewsets.ModelViewSet):
+    """MemberCard Internal API"""
     queryset = MemberCard.objects.all()
     serializer_class = MemberCardSerializer
-    permission_classes = (IsAuthenticated, )
-
-    def get_queryset(self):
-        return self.queryset.filter(pk=self.request.user.pk)
+    filter_backends = (DjangoFilterBackend,)

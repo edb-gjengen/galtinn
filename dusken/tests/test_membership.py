@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 import datetime
-from rest_framework.authtoken.models import Token
+
+from django.contrib.auth.models import Permission
 from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -12,8 +13,8 @@ from dusken.models import DuskenUser, Membership, MembershipType, Order
 class MembershipTest(APITestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user('robert', email='robert.kolner@gmail.com', password='pass')
-        self.user.save()
-        self.token = Token.objects.create(user=self.user).key
+        self.user.user_permissions.add(Permission.objects.get(codename='add_membership'))
+        self.client.force_login(self.user)
         self.membership_type = MembershipType.objects.create(
             name='Medlemskap DNS (årlig',
             duration=datetime.timedelta(days=365),
@@ -26,17 +27,10 @@ class MembershipTest(APITestCase):
             user=self.user
         )
 
-    def __set_login(self, user_is_logged_in=True):
-        if user_is_logged_in:
-            self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
-        else:
-            self.client.credentials()
-
     def test_create(self):
         """
         Tests that POST /api/v1/memberships in fact creates membership with correct data.
         """
-        self.__set_login()
         membership_data = {
             'start_date': self.membership.start_date.isoformat(),
             'end_date': self.membership.end_date.isoformat(),
@@ -72,8 +66,6 @@ class MembershipTest(APITestCase):
         self.assertEqual(Order.objects.count(), 1)
 
     def test_create_renew_charge(self):
-        self.__set_login()
-
         url = reverse('membership-charge-renew')
         raw_data = {
             'product': self.membership_type.pk,
