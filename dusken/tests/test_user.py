@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import json
 from unittest import skip
 from rest_framework.authtoken.models import Token
@@ -34,33 +32,8 @@ class DuskenUserTest(APITestCase):
 
         # Check if the response even makes sense:
         self.assertEqual(response.status_code, HTTP_200_OK, 'Got wrong response code {}'.format(response.status_code))
-        data = json.loads(response.content.decode())
-        token = data.get('token', None)
+        token = response.data.get('token', None)
 
         # Check if the returned login token is correct:
         self.assertIsNotNone(token, 'No token was returned in response')
         self.assertEqual(token, self.token, "Token from login and real token are not the same!")
-
-    def test_get(self):
-        """
-        Tests that GET /api/v1/users returns correct data.
-        """
-        pass
-
-    def test_create(self):
-        """
-        Tests that POST /api/v1/users in fact creates user with correct data.
-        """
-        pass
-
-    def test_update(self):
-        """
-        Tests that PUT /api/v1/users/1 and PUT /api/v1/users/2 in fact creates user with correct data.
-        """
-        pass
-
-    def test_delete(self):
-        """
-        Tests that DELETE /api/v1/users/1 deletes the user
-        """
-        pass

@@ -1,10 +1,9 @@
 # encoding: utf-8
-from __future__ import unicode_literals
 
 import datetime
 from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
-from rest_framework.status import HTTP_201_CREATED
+from rest_framework import status
 from rest_framework.test import APITestCase
 
 from dusken.models import DuskenUser, Membership, MembershipType, Order
@@ -33,11 +32,6 @@ class MembershipTest(APITestCase):
         else:
             self.client.credentials()
 
-    def test_get(self):
-        """
-        Tests that GET /api/v1/memberships returns correct data.
-        """
-
     def test_create(self):
         """
         Tests that POST /api/v1/memberships in fact creates membership with correct data.
@@ -55,19 +49,7 @@ class MembershipTest(APITestCase):
         response = self.client.post(url, membership_data, format='json')
 
         # Check if the response even makes sense
-        self.assertEqual(response.status_code, HTTP_201_CREATED, response.content.decode('utf-8'))
-
-    def test_update(self):
-        """
-        Tests that PUT /api/v1/memberships/1 and PUT /api/v1/memberships/2 in fact creates membership with correct data.
-        """
-        pass
-
-    def test_delete(self):
-        """
-        Tests that DELETE /api/v1/memberships/1 deletes the membership
-        """
-        pass
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
 
     def test_create_charge(self):
         url = reverse('membership-charge')
@@ -86,7 +68,7 @@ class MembershipTest(APITestCase):
         }
         response = self.client.post(url, raw_data, format='json')
 
-        self.assertEqual(response.status_code, HTTP_201_CREATED, response.data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
         self.assertEqual(Order.objects.count(), 1)
 
     def test_create_renew_charge(self):
@@ -102,5 +84,5 @@ class MembershipTest(APITestCase):
         }
         response = self.client.post(url, raw_data, format='json')
 
-        self.assertEqual(response.status_code, HTTP_201_CREATED, response.data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
         self.assertEqual(Order.objects.count(), 1)
