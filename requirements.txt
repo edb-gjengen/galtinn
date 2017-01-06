@@ -15,4 +15,4 @@ psycopg2==2.6.2
 python-social-auth==0.2.21
 pytz==2016.10
 requests==2.12.4
-stripe==1.44.0
+stripe==1.45.0
