@@ -1,6 +1,7 @@
-from django.conf import settings
 import logging
+import stripe
 
+from django.conf import settings
 from django.contrib.auth import login
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
@@ -9,7 +10,6 @@ from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, AllowAny
-import stripe
 from rest_framework.response import Response
 
 from dusken.api.serializers.memberships import MembershipSerializer

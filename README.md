@@ -27,6 +27,11 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     # Add Stripe keys in duskensite/local_settings.py
     # Note: get this from your account on stripe.com
 
+### Useful local_settings.py
+
+    AUTH_PASSWORD_VALIDATORS = []
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 ### Tests
 
     python manage.py test dusken

@@ -23,7 +23,7 @@
                     {% if ms.is_valid %}
                         <li class="list-group-item list-group-item-success"><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </li>
                     {% else %}
-                        <li class="list-group-item list-group-item-warning"><span class="lnr lnr-sad"></span> {% trans "Membership expired." %}</li>
+                        <li class="list-group-item list-group-item-danger"><span class="lnr lnr-sad"></span> {% trans "Membership expired." %}</li>
                     {% endif %}
 
                     {% if ms.is_valid %}
