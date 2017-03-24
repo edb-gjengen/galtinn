@@ -15,7 +15,7 @@ cache:
 
 before_script:
   - python -V
-  - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+  - curl -sL https://deb.nodesource.com/setup_6.x | bash -
   - apt-get install nodejs -yqq
   - cd dusken/static && npm install && bower install && gulp
   - cd && pip install -r requirements.txt
