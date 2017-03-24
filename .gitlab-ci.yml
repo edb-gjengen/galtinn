@@ -17,7 +17,7 @@ before_script:
   - python -V
   - apt-get update -q && apt-get install nodejs -yqq
   - cd dusken/static && npm install && bower install && gulp
-  - pip install -r requirements.txt
+  - cd && pip install -r requirements.txt
 
 test:
   variables:
