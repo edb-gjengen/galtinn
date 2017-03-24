@@ -17,8 +17,9 @@ before_script:
   - python -V
   - curl -sL https://deb.nodesource.com/setup_6.x | bash -
   - apt-get install nodejs -yqq
-  - cd dusken/static && npm install && bower install && gulp
-  - cd && pip install -r requirements.txt
+  - npm install -g bower gulp-cli
+  - cd dusken/static; npm install && bower install && gulp; cd ../..
+  - pip install -r requirements.txt
 
 test:
   variables:
