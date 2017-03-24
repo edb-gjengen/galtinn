@@ -2,7 +2,7 @@ image: python:3.6.1
 
 services:
   - postgres:latest
-  - redis:latest
+#  - redis:latest
 
 variables:
   POSTGRES_DB: dusken
@@ -11,7 +11,7 @@ variables:
 cache:
   paths:
   - ~/.cache/pip/
-  - 
+  - dusken/static/node_modules
 
 before_script:
   - python -V
