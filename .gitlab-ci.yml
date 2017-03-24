@@ -1,0 +1,27 @@
+image: python:3.6.1
+
+services:
+  - postgres:latest
+  - redis:latest
+
+variables:
+  POSTGRES_DB: dusken
+
+# This folder is cached between builds
+cache:
+  paths:
+  - ~/.cache/pip/
+  - 
+
+before_script:
+  - python -V
+  - apt-get update -q && apt-get install nodejs -yqq
+  - cd dusken/static && npm install && bower install && gulp
+  - pip install -r requirements.txt
+
+test:
+  variables:
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+  script:
+  - python manage.py migrate
+  - python manage.py test
