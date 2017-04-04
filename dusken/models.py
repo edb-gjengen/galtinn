@@ -82,6 +82,15 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
 
         super().save(**kwargs)
 
+    def get_full_address(self):
+        return '{address} {address_two} {code} {city} {country}'.format(
+            address=self.street_address,
+            address_two=self.street_address_two,
+            code=self.postal_code,
+            city=self.city,
+            country=self.country
+        )
+
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:
             return '{first} {last} ({username})'.format(
@@ -221,6 +230,9 @@ class Order(AbstractBaseModel):
 class PlaceOfStudy(AbstractBaseModel):
     name = models.CharField(max_length=255)
     short_name = models.CharField(max_length=16)
+    class Meta:
+        verbose_name = 'Place of study'
+        verbose_name_plural = 'Places of study'
 
     def __str__(self):
         return '{} - {}'.format(self.short_name, self.name)

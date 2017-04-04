@@ -23,6 +23,8 @@
         <li class="list-group-item">
             <span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong>
         </li>
+        <li class="list-group-item">{% trans "Address" %}: <strong>{{ user.get_full_address }}</strong></li>
+        <li class="list-group-item">{% trans "Place of study" %}: <strong>{{ user.place_of_study.all | join:", " }}</strong></li>
     </ul>
     <br>
     <ul class="list-group">
