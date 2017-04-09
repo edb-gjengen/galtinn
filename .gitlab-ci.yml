@@ -17,7 +17,7 @@ before_script:
   - python -V
   - node -v
   - npm install -g bower gulp-cli
-  - cd dusken/static; npm install && bower --allow-root install && gulp; cd ../..
+  - cd dusken/static; yarn && bower --allow-root install && gulp; cd ../..
   - pip install -r requirements.txt
 
 test:
