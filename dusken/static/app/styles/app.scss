@@ -3,25 +3,15 @@ $icon-font-path: '../fonts/';
 // bower:scss
 @import "bootstrap.scss";
 // endbower
+
 @import "mixins";
 @import "general";
 @import "layout";
 @import "fonts";
 @import "forms";
 @import "navigation";
+@import "footer";
 
 /* Pages */
 @import "pages";
 @import "page_home";
-
-/* Footer */
-.credits {
-  margin-top: 25px;
-  margin-bottom: 25px;
-  text-align: center;
-  color: #666;
-  font-size: 12px;
-}
-.love {
-  color: #faafba;
-}

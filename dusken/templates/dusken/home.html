@@ -51,17 +51,18 @@
                     <h6 class="card-subtitle text-muted">{% trans "Quick view of your profile details" %}</h6>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">{% trans "Full name" %}: <strong>{{ user }}</strong></li>
-                    <li class="list-group-item">
-                        <span class="lnr lnr-envelope"></span> {% trans "Email" %}: <strong>{{ user.email }}</strong>
+                    <li class="list-group-item"><span>{% trans "Full name" %}: <strong>{{ user }}</strong></span></li>
+                    <li class="list-group-item justify-content-between">
+
+                        <span><span class="lnr lnr-envelope"></span> {% trans "Email" %}: <strong>{{ user.email }}</strong></span>
                         {% if user.email_is_confirmed %}
-                            <span class="tag tag-success">{% trans "Validated" %}</span>
+                            <span class="badge badge-success">{% trans "Validated" %}</span>
                         {% else %}
-                            <span class="tag tag-warning">{% trans "Not validated" %}</span>
+                            <span class="badge badge-warning">{% trans "Not validated" %}</span>
                             <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
                         {% endif %}
                     </li>
-                    <li class="list-group-item"><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></li>
+                    <li class="list-group-item"><span><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span></li>
                 </ul>
                 <div class="card-block">
                     <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>

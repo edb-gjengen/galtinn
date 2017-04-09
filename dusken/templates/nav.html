@@ -1,0 +1,30 @@
+{% load i18n %}
+<nav class="navbar navbar-light bg-faded navbar-toggleable-md">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{% trans "Toggle navigation" %}">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+    <a class="navbar-brand" href="{% url 'index' %}">{% trans "dusken.neuf.no" %}</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto">
+            {% if user.is_authenticated %}
+                <a class="nav-item nav-link active" href="{% url "home" %}"><span class="lnr lnr-home"></span> {% trans "Home" %}</a></li>
+                <a class="nav-item nav-link" href="{% url "membership-list" %}"><span class="lnr lnr-license"></span> {% trans "Membership" %}</a>
+                <a class="nav-item nav-link" href="{% url "home-active" %}"><span class="lnr lnr-apartment"></span> {% trans "Active" %}</a>
+            {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+            <div class="navbar-nav">
+                <div class="nav-item dropdown user-menu">
+                    <a class="nav-link  dropdown-toggle" href="http://example.com" id="responsiveNavbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ user.get_full_name|default:user.username }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="responsiveNavbarDropdown">
+                        <a class="dropdown-item" href="{% url "user-detail-me" %}" title="{% trans "Profile" %}"><span class="lnr lnr-user"></span> {% trans "Profile" %}</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><span class="lnr lnr-exit"></span> {% trans "Log out" %}</a>
+                    </div>
+                </div>
+             </div>
+        {% endif %}
+    </div>
+</nav>

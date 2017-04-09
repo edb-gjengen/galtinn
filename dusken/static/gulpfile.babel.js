@@ -3,7 +3,6 @@ import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import del from 'del';
-import {stream as wiredep} from 'wiredep';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -33,7 +32,6 @@ gulp.task('scripts', () => {
     .pipe(reload({stream: true}));
 });
 
-
 function lint(files, options) {
   return gulp.src(files)
     .pipe(reload({stream: true, once: true}))
@@ -49,22 +47,11 @@ gulp.task('lint', () => {
     .pipe(gulp.dest('app/scripts'));
 });
 
-gulp.task('lint:test', () => {
-    return lint('test/spec/**/*.js', {
-        fix: true,
-        env: {
-            mocha: true
-        }
-    })
-});
-
-
 gulp.task('images', () => {
     return gulp.src('app/images/**/*')
         .pipe($.cache($.imagemin()))
         .pipe(gulp.dest('dist/images'));
 });
-
 
 gulp.task('vendorscripts', () => {
     return gulp.src(require('main-bower-files')({
@@ -118,19 +105,6 @@ gulp.task('serve:dist', () => {
         proxy: 'localhost:8000'
     });
 });
-
-gulp.task('serve:test', () => {
-    browserSync({
-        notify: false,
-        proxy: 'localhost:8000',
-        port: 9000,
-        ui: false
-    });
-
-    gulp.watch('test/spec/**/*.js').on('change', reload);
-    gulp.watch('test/spec/**/*.js', ['lint:test']);
-});
-
 
 gulp.task('build', ['lint', 'styles', 'images', 'scripts', 'vendorscripts', 'fonts', 'extras'], () => {
     return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));

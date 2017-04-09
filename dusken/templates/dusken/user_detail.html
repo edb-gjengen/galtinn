@@ -8,28 +8,28 @@
     </script>
     <h4 class="card-title"><span class="lnr lnr-user"></span> {% trans "Your profile" %}</h4>
     <ul class="list-group">
-        <li class="list-group-item">{% trans "Full name" %}: <strong>{{ user.get_full_name }}</strong></li>
-        <li class="list-group-item">{% trans "Username" %}: <strong>{{ user.username }}</strong></li>
-        <li class="list-group-item">
+        <li class="list-group-item"><span>{% trans "Full name" %}: <strong>{{ user.get_full_name }}</strong></span></li>
+        <li class="list-group-item"><span>{% trans "Username" %}: <strong>{{ user.username }}</strong></span></li>
+        <li class="list-group-item justify-content-between"><span>
             <span class="lnr lnr-envelope"></span> {% trans "Email" %}:
-            <strong>{{ user.email }}</strong>
+            <strong>{{ user.email }}</strong></span>
             {% if user.email_is_confirmed %}
-                <span class="tag tag-success">{% trans "Validated" %}</span>
+                <span class="badge badge-success">{% trans "Validated" %}</span>
             {% else %}
-                <span class="tag tag-warning">{% trans "Not validated" %}</span>
+                <span class="badge badge-warning">{% trans "Not validated" %}</span>
                 <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
             {% endif %}
         </li>
         <li class="list-group-item">
-            <span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong>
+            <span><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
         </li>
-        <li class="list-group-item">{% trans "Address" %}: <strong>{{ user.get_full_address }}</strong></li>
-        <li class="list-group-item">{% trans "Place of study" %}: <strong>{{ user.place_of_study.all | join:", " }}</strong></li>
+        <li class="list-group-item"><span>{% trans "Address" %}: <strong>{{ user.get_full_address }}</strong></span></li>
+        <li class="list-group-item"><span>{% trans "Place of study" %}: <strong>{{ user.place_of_study.all | join:", " }}</strong></span></li>
     </ul>
     <br>
     <ul class="list-group">
-        <li class="list-group-item"><em>{% trans "Registered" %}: <strong>{{ user.created}}</strong></em></li>
-        <li class="list-group-item"><em>{% trans "Last updated" %}: <strong>{{ user.updated }}</strong></em></li>
+        <li class="list-group-item"><em><span>{% trans "Registered" %}: <strong>{{ user.created}}</strong></span></em></li>
+        <li class="list-group-item"><em><span>{% trans "Last updated" %}: <strong>{{ user.updated }}</strong></span></em></li>
     </ul>
     <br>
     <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
