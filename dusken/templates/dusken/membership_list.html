@@ -20,11 +20,11 @@
             </div>
             <ul class="list-group list-group-flush">
                 {% if ms.is_valid %}
-                    <li class="list-group-item list-group-item-success"><span class="lnr lnr-thumbs-up"></span> {% trans "Validity" %}: {% trans "Valid" %} </li>
+                    <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "Validity" %}: {% trans "Valid" %}</span></li>
                 {% else %}
-                    <li class="list-group-item list-group-item-warning"><span class="lnr lnr-sad"></span> {% trans "Validity" %}: {% trans "Expired" %}</li>
+                    <li class="list-group-item list-group-item-warning"><span><span class="lnr lnr-sad"></span> {% trans "Validity" %}: {% trans "Expired" %}</span></li>
                 {% endif %}
-                    <li class="list-group-item">{% trans "Purchased" %} {{ ms.order.created }} {% trans "by" %} {{ ms.order.get_payment_method_display }}</li>
+                    <li class="list-group-item">{% trans "Purchased" %}<span>{{ ms.order.created }} {% trans "by" %} {{ ms.order.get_payment_method_display }}</span></li>
             </ul>
             {% if ms.order %}
                 <div class="card-block">

@@ -1,27 +1,7 @@
-
-.navbar-brand {
-    width: 100%;
-    padding-bottom: 1rem;
-
-    @include media-breakpoint-up(sm) {
-        width: auto;
-        padding-bottom: 0.25rem;
-    }
-}
-.navbar-toggler {
-    position: absolute;
-    right: 0;
-}
-.navbar-nav {
-    text-align: right;
-}
-
 .user-menu {
-    //position: relative;
-    float: right;
-
     .dropdown-item {
         padding: 8px 16px;
+        text-align: right;
 
         .lnr {
             margin-right: 4px;
