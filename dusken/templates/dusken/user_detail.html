@@ -23,7 +23,7 @@
         <li class="list-group-item">
             <span><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
         </li>
-        {% if user.get_full_address|cut:" " %}
+        {% if user.have_address %}
             <li class="list-group-item"><span>{% trans "Address" %}: <strong>{{ user.get_full_address }}</strong></span></li>
         {% endif %}
         {% if user.place_of_study.all %}

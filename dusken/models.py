@@ -91,6 +91,13 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
             country=self.country
         )
 
+    def have_address(self):
+        return any((self.street_address,
+                   self.street_address_two,
+                   self.postal_code,
+                   self.city,
+                   self.country))
+
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:
             return '{first} {last} ({username})'.format(
