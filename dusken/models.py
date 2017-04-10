@@ -230,6 +230,7 @@ class Order(AbstractBaseModel):
 class PlaceOfStudy(AbstractBaseModel):
     name = models.CharField(max_length=255)
     short_name = models.CharField(max_length=16)
+
     class Meta:
         verbose_name = 'Place of study'
         verbose_name_plural = 'Places of study'

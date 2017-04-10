@@ -23,8 +23,12 @@
         <li class="list-group-item">
             <span><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
         </li>
-        <li class="list-group-item"><span>{% trans "Address" %}: <strong>{{ user.get_full_address }}</strong></span></li>
-        <li class="list-group-item"><span>{% trans "Place of study" %}: <strong>{{ user.place_of_study.all | join:", " }}</strong></span></li>
+        {% if user.get_full_address|cut:" " %}
+            <li class="list-group-item"><span>{% trans "Address" %}: <strong>{{ user.get_full_address }}</strong></span></li>
+        {% endif %}
+        {% if user.place_of_study.all %}
+            <li class="list-group-item"><span>{% trans "Place of study" %}: <strong>{{ user.place_of_study.all | join:", " }}</strong></span></li>
+        {% endif %}
     </ul>
     <br>
     <ul class="list-group">
