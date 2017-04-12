@@ -98,6 +98,9 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
                    self.city,
                    self.country))
 
+    def has_org_unit(self):
+        return DuskenUser.objects.filter(pk=self.pk, groups__member_orgunits__isnull=False).exists()
+
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:
             return '{first} {last} ({username})'.format(
