@@ -190,9 +190,10 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
     is_active = models.BooleanField(_('is active'), default=True)
     parent = TreeForeignKey(
         'self', verbose_name=_('parent'), null=True, blank=True, related_name='children', db_index=True)
-    groups = models.ManyToManyField(DjangoGroup, verbose_name=_('groups'), blank=True, related_name='member_orgunits')
-    admin_groups = models.ManyToManyField(
-        DjangoGroup, verbose_name=_('admin roups'), blank=True, related_name='admin_orgunits')
+    group = models.ForeignKey(
+        DjangoGroup, verbose_name=_('group'), blank=True, null=True, related_name='member_orgunits')
+    admin_group = models.ForeignKey(
+        DjangoGroup, verbose_name=_('admin group'), blank=True, null=True, related_name='admin_orgunits')
 
     def __str__(self):
         if self.short_name:
