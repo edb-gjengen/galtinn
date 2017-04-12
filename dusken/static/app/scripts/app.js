@@ -62,7 +62,7 @@ function onStripeToken(token) {
         data: JSON.stringify(postData),
         contentType: 'application/json',
         dataType: 'json',
-        type: 'post',
+        type: 'post'
     }).done(function(data) {
         // TODO: with success message
         console.log(data);
@@ -71,6 +71,8 @@ function onStripeToken(token) {
         location.href = urls.profile;
     }).fail(function(data) {
         console.log('failed', data);
+        // TODO: Format error as HTML
+        $('.js-validation-errors').html('<div class="alert-danger">'+ JSON.stringify(data) +'</div>')
     });
 }
 
@@ -115,7 +117,7 @@ $(document).ready(function() {
         });
 
     }
-    /**/
+    /* Send validation email */
     var $validationEmailBtn = $('.js-send-validation-email');
     $validationEmailBtn.on('click', function (e) {
         e.preventDefault();
