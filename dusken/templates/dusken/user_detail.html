@@ -24,10 +24,14 @@
             <span><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
         </li>
         {% if user.have_address %}
-            <li class="list-group-item"><span>{% trans "Address" %}: <strong>{{ user.get_full_address }}</strong></span></li>
+            <li class="list-group-item">
+                <span><span class="lnr lnr-map-marker"></span> {% trans "Address" %}: <strong>{{ user.get_full_address }}</strong></span>
+            </li>
         {% endif %}
         {% if user.place_of_study.all %}
-            <li class="list-group-item"><span>{% trans "Place of study" %}: <strong>{{ user.place_of_study.all | join:", " }}</strong></span></li>
+            <li class="list-group-item">
+                <span><span class="lnr lnr-graduation-hat"></span> {% trans "Place of study" %}: <strong>{{ user.place_of_study.all | join:", " }}</strong></span>
+            </li>
         {% endif %}
     </ul>
     <br>
