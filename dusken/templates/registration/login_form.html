@@ -1,7 +1,7 @@
-{% load bootstrap i18n %}
+{% load bootstrap4 i18n %}
 <div class="login-form">
     <form method="post">
-        {{ form|bootstrap }}
+        {% bootstrap_form form %}
         {% csrf_token %}
         <a href="{% url "password_reset" %}">{% trans "Forgot username or password?" %}</a><br>
         <div class="submit-button-wrap"><button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
