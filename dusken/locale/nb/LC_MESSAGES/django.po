@@ -1,0 +1,583 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-04-12 20:15+0200\n"
+"PO-Revision-Date: 2017-04-12 20:17+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.1\n"
+
+#: admin.py:15
+msgid "year sold"
+msgstr "år solgt"
+
+#: admin.py:48 templates/dusken/order_detail.html:9
+msgid "Payment method"
+msgstr "Betalingsmåte"
+
+#: admin.py:56 admin.py:74 admin.py:97
+msgid "User"
+msgstr "Bruker"
+
+#: apps.py:7
+msgid "Dusken"
+msgstr "Dusken"
+
+#: forms.py:40
+msgid "User does not exist"
+msgstr "Brukeren finnes ikke"
+
+#: forms.py:43
+msgid "Invalid email key for user"
+msgstr "Ugyldig e-postnøkkel for bruker"
+
+#: forms.py:46
+msgid "Email already confirmed"
+msgstr "E-post allerede bekreftet"
+
+#: models.py:34
+msgid "phone number"
+msgstr "telefonnummer"
+
+#: models.py:36
+msgid "date of birth"
+msgstr "fødselsdato"
+
+#: models.py:39
+msgid "street address"
+msgstr "adresse"
+
+#: models.py:40
+msgid "street address 2"
+msgstr "adresselinje 2"
+
+#: models.py:41
+msgid "postal code"
+msgstr "postnummer"
+
+#: models.py:42
+msgid "city"
+msgstr "by"
+
+#: models.py:43
+msgid "country"
+msgstr "land"
+
+#: models.py:45
+msgid "place of study"
+msgstr "studiested"
+
+#: models.py:46
+msgid "legacy id"
+msgstr "foreldet id"
+
+#: models.py:48
+msgid "stripe customer id"
+msgstr "stripe kunde-id"
+
+#: models.py:134
+msgid "Price in øre"
+msgstr "Pris i øre"
+
+#: models.py:158
+msgid "card number"
+msgstr "kortnummer"
+
+#: models.py:159
+msgid "registered datetime"
+msgstr "Registrert tidspunkt"
+
+#: models.py:160 models.py:187
+msgid "is active"
+msgstr "Aktiv"
+
+#: models.py:161
+msgid "user"
+msgstr "bruker"
+
+#: models.py:184 models.py:240
+msgid "name"
+msgstr "Navn"
+
+#: models.py:185
+msgid "slug"
+msgstr "slug"
+
+#: models.py:186 models.py:241
+msgid "short name"
+msgstr "kort navn"
+
+#: models.py:189
+msgid "parent"
+msgstr "forelder"
+
+#: models.py:190
+msgid "groups"
+msgstr "grupper"
+
+#: models.py:192
+msgid "admin roups"
+msgstr "admingrupper"
+
+#: models.py:211
+msgid "Mobile app"
+msgstr "Mobilapplikasjon"
+
+#: models.py:212
+msgid "SMS"
+msgstr "SMS"
+
+#: models.py:213
+msgid "Credit card"
+msgstr "Kredittkort"
+
+#: models.py:214
+msgid "Other"
+msgstr "Annet"
+
+#: models.py:218
+msgid "In øre"
+msgstr "I øre"
+
+#: models.py:229
+msgid "Stripe charge ID, Kassa event ID, SMS event ID or App event ID"
+msgstr "Stripe transaksjons-ID, Kassa-hendelses-ID, SMS-hendelses-ID"
+
+#: models.py:244 templates/dusken/user_detail.html:30
+msgid "Place of study"
+msgstr "Studiested"
+
+#: models.py:245
+msgid "Places of study"
+msgstr "Studiesteder"
+
+#: templates/base.html:8
+msgid "The membership database at Chateau Neuf - The Norwegian Student Society"
+msgstr "Medlemskapsdatabasen på Chateau Neuf - Det Norske Studentersamfundet"
+
+#: templates/dusken/emails/validation_email.html:2
+#: templates/dusken/emails/validation_email.txt:2
+msgid "Hi"
+msgstr "Hei"
+
+#: templates/dusken/emails/validation_email.html:2
+#: templates/dusken/emails/validation_email.txt:2
+msgid "Do you want to confirm your email?"
+msgstr "Vil du bekrefte din e-postadresse?"
+
+#: templates/dusken/emails/validation_email.html:4
+msgid "Go forth and confirm!"
+msgstr "Bekreft min e-post!"
+
+#: templates/dusken/emails/validation_email.html:7
+#: templates/dusken/emails/validation_email.txt:6
+msgid "From the friendly people at"
+msgstr "Fra folka på"
+
+#: templates/dusken/emails/validation_email.txt:3
+#, python-format
+msgid "Go forth and click the link to confirm: %(validation_url)s"
+msgstr "Trykk på lenken for å bekrefte: %(validation_url)s"
+
+#: templates/dusken/home.html:9 templates/nav.html:11
+msgid "Home"
+msgstr "Hjem"
+
+#: templates/dusken/home.html:12 templates/dusken/home_active.html:12
+msgid "What do you want to do?"
+msgstr "Hva vil du gjøre?"
+
+#: templates/dusken/home.html:18
+msgid "Your Membership"
+msgstr "Ditt medlemskap"
+
+#: templates/dusken/home.html:19
+msgid "See your membership status"
+msgstr "Se medlemskapsstatus"
+
+#: templates/dusken/home.html:24
+msgid "You have a valid membership"
+msgstr "Du har gyldig medlemskap"
+
+#: templates/dusken/home.html:26
+msgid "Membership expired."
+msgstr "Medlemskapet er utløpt"
+
+#: templates/dusken/home.html:31
+msgid "Valid until"
+msgstr "Gyldig til"
+
+#: templates/dusken/home.html:31 templates/dusken/membership_list.html:25
+msgid "Expired"
+msgstr "Utløpt"
+
+#: templates/dusken/home.html:34
+msgid "Payment"
+msgstr "Betaling"
+
+#: templates/dusken/home.html:34 templates/dusken/membership_list.html:27
+msgid "by"
+msgstr "av"
+
+#: templates/dusken/home.html:40 templates/dusken/membership_list.html:31
+msgid "See reciept"
+msgstr "Se kvittering"
+
+#: templates/dusken/home.html:42 templates/dusken/membership_list.html:10
+#: templates/dusken/membership_renew.html:21
+msgid "Renew membership"
+msgstr "Forny medlemskap"
+
+#: templates/dusken/home.html:50 templates/dusken/user_detail.html:9
+msgid "Your profile"
+msgstr "Din profil"
+
+#: templates/dusken/home.html:51
+msgid "Quick view of your profile details"
+msgstr "Oversikt over dine profildetaljer"
+
+#: templates/dusken/home.html:54 templates/dusken/user_detail.html:11
+msgid "Full name"
+msgstr "Fullt navn"
+
+#: templates/dusken/home.html:57 templates/dusken/user_detail.html:14
+msgid "Email"
+msgstr "E-post"
+
+#: templates/dusken/home.html:59 templates/dusken/user_detail.html:17
+msgid "Validated"
+msgstr "Bekreftet"
+
+#: templates/dusken/home.html:61 templates/dusken/user_detail.html:19
+msgid "Not validated"
+msgstr "Ubekreftet"
+
+#: templates/dusken/home.html:62 templates/dusken/user_detail.html:20
+msgid "Resend validation email"
+msgstr "Send ny bekreftelse på e-post"
+
+#: templates/dusken/home.html:65 templates/dusken/user_detail.html:24
+msgid "Phone number"
+msgstr "Telefonnummer"
+
+#: templates/dusken/home.html:68 templates/dusken/user_detail.html:39
+msgid "Edit your profile"
+msgstr "Endre din profil"
+
+#: templates/dusken/home.html:74
+msgid "Password"
+msgstr "Passord"
+
+#: templates/dusken/home.html:75
+msgid "Change it if you want to"
+msgstr "Endre passordet hvis du vil"
+
+#: templates/dusken/home.html:78
+#: templates/registration/password_change_form.html:5
+msgid "Change password"
+msgstr "Endre passord"
+
+#: templates/dusken/home_active.html:4
+msgid "Active member"
+msgstr "Aktiver medlem"
+
+#: templates/dusken/home_active.html:7
+msgid "List of organizational units"
+msgstr "Foreningsoversikt"
+
+#: templates/dusken/home_active.html:8
+msgid "Add member as active to my orgunit"
+msgstr "Legg til nytt medlem som aktiv i min forening"
+
+#: templates/dusken/home_active.html:9
+msgid "Remove member from my orgunit"
+msgstr "Fjern medlem fra min forening"
+
+#: templates/dusken/home_active.html:18
+msgid "A"
+msgstr "A"
+
+#: templates/dusken/home_active.html:19
+msgid "Subtitle"
+msgstr "Undertittel"
+
+#: templates/dusken/home_active.html:22
+msgid "B"
+msgstr "B"
+
+#: templates/dusken/home_active.html:26
+msgid "C"
+msgstr "C"
+
+#: templates/dusken/index.html:7
+msgid "Welcome"
+msgstr "Velkommen"
+
+#: templates/dusken/index.html:8
+msgid ""
+"DUSKEN - The membership database at <a href=\"https://studentersamfundet.no"
+"\">The Norwegian Student Society</a>."
+msgstr ""
+"DUSKEN - Medlemskapsdatabasen på Chateau Neuf <a href=\"https://"
+"studentersamfundet.no\">Det Norske Studentersamfundet</a>."
+
+#: templates/dusken/index.html:9
+msgid "Become a member"
+msgstr "Bli medlem"
+
+#: templates/dusken/index.html:13
+msgid "Already a member?"
+msgstr "Allerede medlem?"
+
+#: templates/dusken/index.html:14 templates/registration/login.html:6
+msgid "Log in here"
+msgstr "Logg inn her"
+
+#: templates/dusken/membership_activate.html:4
+msgid ""
+"Register the membership you purchased by <strong>SMS</strong> or <strong>at "
+"Chateau Neuf</strong>"
+msgstr ""
+"Registrer medlemskapet du har kjøpt på <strong>SMS</strong> eller <strong>på "
+"Chateau Neuf</strong>"
+
+#: templates/dusken/membership_activate.html:5
+msgid ""
+"\n"
+"        Hi there,<br>\n"
+"        for the membership you purchased by SMS or at Chateau Neuf to be "
+"valid, you must register.<br>\n"
+"        Proceed with the registration by supplying your phone number, card "
+"number/code, name and email.\n"
+"    "
+msgstr ""
+"\n"
+"        Hei der, <br>\n"
+"        for at medlemskapet du har kjøpt via SMS eller på Chateau Neuf skal "
+"være gyldig, må du registrere deg.<br>\n"
+"         Fortsett med registreringen ved å oppgi telefonnummer, kortnummer/"
+"kode, navn og e-post."
+
+#: templates/dusken/membership_activate.html:13
+msgid "Onwards!"
+msgstr "Fremad!"
+
+#: templates/dusken/membership_list.html:4
+msgid "Memberships"
+msgstr "Medlemskap"
+
+#: templates/dusken/membership_list.html:9
+msgid "No valid membership found"
+msgstr "Ingen gyldige medlemskap"
+
+#: templates/dusken/membership_list.html:19
+msgid "Validity period"
+msgstr "Gyldig periode"
+
+#: templates/dusken/membership_list.html:23
+#: templates/dusken/membership_list.html:25
+msgid "Validity"
+msgstr "Gyldighet"
+
+#: templates/dusken/membership_list.html:23
+msgid "Valid"
+msgstr "Gyldig"
+
+#: templates/dusken/membership_list.html:27
+#: templates/dusken/order_detail.html:8
+msgid "Purchased"
+msgstr "Kjøpt"
+
+#: templates/dusken/membership_purchase.html:16
+msgid "New membership"
+msgstr "Nytt medlemskap"
+
+#: templates/dusken/membership_purchase.html:19
+#: templates/dusken/membership_renew.html:24
+msgid "Purchase"
+msgstr "Kjøp"
+
+#: templates/dusken/order_detail.html:4
+msgid "Reciept"
+msgstr "Kvittering"
+
+#: templates/dusken/order_detail.html:7
+msgid "Order ID"
+msgstr "Ordre-ID"
+
+#: templates/dusken/orgunit_detail.html:5
+msgid "Groups"
+msgstr "Grupper"
+
+#: templates/dusken/orgunit_detail.html:13
+msgid "Admin groups"
+msgstr "Admingrupper"
+
+#: templates/dusken/orgunit_list.html:4
+msgid "Organizational Units"
+msgstr "Foreninger"
+
+#: templates/dusken/orgunit_list.html:7
+msgid "Edit"
+msgstr "Rediger"
+
+#: templates/dusken/user_detail.html:12
+msgid "Username"
+msgstr "Brukernavn"
+
+#: templates/dusken/user_detail.html:27
+msgid "Address"
+msgstr "Adresse"
+
+#: templates/dusken/user_detail.html:35
+msgid "Registered"
+msgstr "Registrert"
+
+#: templates/dusken/user_detail.html:36
+msgid "Last updated"
+msgstr "Sist oppdatert"
+
+#: templates/dusken/user_email_confirm.html:7
+#: templates/dusken/user_email_confirm_success.html:5
+msgid "Go home"
+msgstr "Tilbake til hjem"
+
+#: templates/dusken/user_email_confirm_success.html:4
+msgid "Success!"
+msgstr "Hurra!"
+
+#: templates/dusken/user_list.html:4
+msgid "Users"
+msgstr "Brukere"
+
+#: templates/dusken/user_list.html:5
+msgid "Search"
+msgstr "Søk"
+
+#: templates/dusken/user_update.html:7
+msgid "Update my profile"
+msgstr "Oppdater min profil"
+
+#: templates/nav.html:3
+msgid "Toggle navigation"
+msgstr "Svitsj navigasjon"
+
+#: templates/nav.html:6
+msgid "dusken.neuf.no"
+msgstr "dusken.neuf.no"
+
+#: templates/nav.html:12
+msgid "Membership"
+msgstr "Medlemskap"
+
+#: templates/nav.html:13
+msgid "Active"
+msgstr "Aktiv"
+
+#: templates/nav.html:23
+msgid "Profile"
+msgstr "Profil"
+
+#: templates/nav.html:24
+msgid "Log out"
+msgstr "Logg ut"
+
+#: templates/registration/logged_out.html:7
+msgid "Goodbye"
+msgstr "Hade bra"
+
+#: templates/registration/logged_out.html:8
+msgid "Log in again"
+msgstr "Logg inn igjen"
+
+#: templates/registration/login_form.html:6
+msgid "Forgot username or password?"
+msgstr "Glemt brukernavn eller passord?"
+
+#: templates/registration/login_form.html:7
+msgid "Log in"
+msgstr "Logg inn"
+
+#: templates/registration/password_change_done.html:4
+msgid "Your password has been changed."
+msgstr "Passordet ditt har blitt endret."
+
+#: templates/registration/password_change_done.html:5
+msgid "Back"
+msgstr "Tilbake"
+
+#: templates/registration/password_change_form.html:9
+msgid "Change my password"
+msgstr "Endre mitt passord"
+
+#: templates/registration/password_reset_complete.html:5
+msgid "Brilliant, your password has been changed"
+msgstr "Brilliant, passordet ditt har blitt endret"
+
+#: templates/registration/password_reset_complete.html:6
+msgid "You can now"
+msgstr "Du kan nå"
+
+#: templates/registration/password_reset_complete.html:6
+msgid "log in"
+msgstr "logge inn"
+
+#: templates/registration/password_reset_complete.html:6
+msgid "with your new password"
+msgstr "med ditt nye passord"
+
+#: templates/registration/password_reset_confirm.html:6
+msgid "Please choose a new password"
+msgstr "Velg nytt passord"
+
+#: templates/registration/password_reset_confirm.html:11
+msgid "Change it"
+msgstr "Endre"
+
+#: templates/registration/password_reset_confirm.html:14
+msgid "The password reset link is not valid or has allready been used."
+msgstr "Passordlenken er ugyldig eller har allerede blitt brukt."
+
+#: templates/registration/password_reset_done.html:5
+msgid "We have sent you an email with a link to reset your password"
+msgstr "Vi har sent deg en e-post med informasjon om bytte av passord"
+
+#: templates/registration/password_reset_done.html:6
+msgid "Go check your email! Could even be in your spam folder."
+msgstr "Sjekk e-posten din! Den kan fort ha havnet i spammappen."
+
+#: templates/registration/password_reset_email.html:2
+#, python-format
+msgid ""
+"Someone has asked to reset the password of the user %(user.username)s "
+"(email: %(email)s). Please follow the link: "
+msgstr ""
+"Noen har bedt om å bytte passordet til brukeren %(user.username)s (email: "
+"%(email)s). Vennligst følg lenken: "
+
+#: templates/registration/password_reset_form.html:4
+msgid "Forgot your username or password?"
+msgstr "Glemt brukernavn og passord?"
+
+#: templates/registration/password_reset_form.html:8
+msgid "Send me a new one"
+msgstr "Send meg et nytt"
+
+#: templates/registration/password_reset_subject.txt:1
+msgid "Your new password"
+msgstr "Ditt nye passord"
+
+#: utils.py:45
+msgid "Confirm your email address at Chateau Neuf"
+msgstr "Bekreft din e-postadresse"

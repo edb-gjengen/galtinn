@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n bootstrap staticfiles %}
+{% load i18n bootstrap4 staticfiles %}
 {% block body %}
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script>
@@ -15,7 +15,7 @@
     <section class="membership-purchase">
         <h4>{% trans "New membership" %}</h4>
         <form method="post" id="user-form">
-            {{ form|bootstrap }}
+            {% bootstrap_form form %}
             <button id="purchase-button" class="btn btn-primary btn-lg btn-block">{% trans "Purchase" %}</button>
         </form>
     </section>

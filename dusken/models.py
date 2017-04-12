@@ -31,21 +31,21 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     email_confirmed_at = models.DateTimeField(blank=True, null=True)
     email_key = models.CharField(max_length=40, default=create_email_key)
-    phone_number = PhoneNumberField(blank=True)
+    phone_number = PhoneNumberField(_('phone number'), blank=True)
     phone_number_validated = models.BooleanField(default=False)
-    date_of_birth = models.DateField(null=True, blank=True)
+    date_of_birth = models.DateField(_('date of birth'), null=True, blank=True)
 
     # Address
-    street_address = models.CharField(max_length=255, null=True, blank=True)
-    street_address_two = models.CharField(max_length=255, null=True, blank=True)
-    postal_code = models.CharField(max_length=10, null=True, blank=True)
-    city = models.CharField(max_length=100, null=True, blank=True)
-    country = CountryField(null=True, blank=True)
+    street_address = models.CharField(_('street address'), max_length=255, null=True, blank=True)
+    street_address_two = models.CharField(_('street address 2'), max_length=255, null=True, blank=True)
+    postal_code = models.CharField(_('postal code'), max_length=10, null=True, blank=True)
+    city = models.CharField(_('city'), max_length=100, null=True, blank=True)
+    country = CountryField(_('country'), null=True, blank=True)
 
-    place_of_study = models.ManyToManyField('dusken.PlaceOfStudy', blank=True)
-    legacy_id = models.IntegerField(null=True, blank=True)
+    place_of_study = models.ManyToManyField('dusken.PlaceOfStudy', verbose_name=_('place of study'), blank=True)
+    legacy_id = models.IntegerField(_('legacy id'), null=True, blank=True)
 
-    stripe_customer_id = models.CharField(max_length=254, null=True, blank=True)
+    stripe_customer_id = models.CharField(_('stripe customer id'), max_length=254, null=True, blank=True)
 
     @property
     def email_is_confirmed(self):
@@ -155,10 +155,10 @@ class MembershipType(AbstractBaseModel):
 
 
 class MemberCard(AbstractBaseModel):
-    card_number = models.IntegerField(unique=True)
-    registered_datetime = models.DateTimeField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-    user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='membercards')
+    card_number = models.IntegerField(_('card number'), unique=True)
+    registered_datetime = models.DateTimeField(_('registered datetime'), null=True, blank=True)
+    is_active = models.BooleanField(_('is active'), default=True)
+    user = models.ForeignKey('dusken.DuskenUser', verbose_name=_('user'), null=True, blank=True, related_name='membercards')
 
     def __str__(self):
         return "{}".format(self.card_number)
@@ -181,13 +181,15 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
     Association, comittee or similar
     """
 
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True, max_length=255, blank=True)
-    short_name = models.CharField(max_length=128, blank=True)
-    is_active = models.BooleanField(default=True)
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    groups = models.ManyToManyField(DjangoGroup, blank=True, related_name='member_orgunits')
-    admin_groups = models.ManyToManyField(DjangoGroup, blank=True, related_name='admin_orgunits')
+    name = models.CharField(_('name'), max_length=255)
+    slug = models.SlugField(_('slug'), unique=True, max_length=255, blank=True)
+    short_name = models.CharField(_('short name'), max_length=128, blank=True)
+    is_active = models.BooleanField(_('is active'), default=True)
+    parent = TreeForeignKey(
+        'self', verbose_name=_('parent'), null=True, blank=True, related_name='children', db_index=True)
+    groups = models.ManyToManyField(DjangoGroup, verbose_name=_('groups'), blank=True, related_name='member_orgunits')
+    admin_groups = models.ManyToManyField(
+        DjangoGroup, verbose_name=_('admin roups'), blank=True, related_name='admin_orgunits')
 
     def __str__(self):
         if self.short_name:
@@ -235,12 +237,12 @@ class Order(AbstractBaseModel):
 
 
 class PlaceOfStudy(AbstractBaseModel):
-    name = models.CharField(max_length=255)
-    short_name = models.CharField(max_length=16)
+    name = models.CharField(_('name'), max_length=255)
+    short_name = models.CharField(_('short name'), max_length=16)
 
     class Meta:
-        verbose_name = 'Place of study'
-        verbose_name_plural = 'Places of study'
+        verbose_name = _('Place of study')
+        verbose_name_plural = _('Places of study')
 
     def __str__(self):
         return '{} - {}'.format(self.short_name, self.name)
