@@ -57,7 +57,6 @@ class MembershipAdmin(admin.ModelAdmin):
 
 
 class OrgUnitAdmin(MPTTModelAdmin):
-    filter_horizontal = ['groups', 'admin_groups']
     prepopulated_fields = {'slug': ('name',)}
 
 

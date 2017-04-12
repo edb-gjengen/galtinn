@@ -2,19 +2,21 @@
 {% load i18n %}
 {% block body %}
     <h1>{{ orgunit.name }}</h1>
-    <h4>{% trans "Groups" %}</h4>
-    {% if orgunit.groups.all %}
+    <h4>{% trans "Members" %}</h4>
+    {% if orgunit.group %}
+        <h5>{{ orgunit.group.name }}</h5>
         <ul>
-        {% for group in orgunit.groups.all %}
-            <li>{{ group }}</li>
+        {% for user in orgunit.group.user_set.all %}
+            <li>{{ user }}</li>
         {% endfor %}
         </ul>
     {% endif %}
-    <h4>{% trans "Admin groups" %}</h4>
-    {% if orgunit.admin_groups.all %}
+    <h4>{% trans "Admins" %}</h4>
+    {% if orgunit.admin_group %}
+        <h5>{{ orgunit.admin_group.name }}</h5>
         <ul>
-        {% for group in orgunit.admin_groups.all %}
-            <li>{{ group }}</li>
+        {% for user in orgunit.admin_group.user_set.all %}
+            <li>{{ user }}</li>
         {% endfor %}
         </ul>
     {% endif %}
