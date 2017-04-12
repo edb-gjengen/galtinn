@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n bootstrap %}
+{% load i18n bootstrap4 %}
 {% block body %}
     <h2>{% trans "Register the membership you purchased by <strong>SMS</strong> or <strong>at Chateau Neuf</strong>" %}</h2>
     <p>{% blocktrans %}
@@ -9,7 +9,7 @@
     {% endblocktrans %}</p>
     <form method="post">
         {% csrf_token %}
-        {{ form|bootstrap }}
+        {% bootstrap_form form %}
         <button type="submit" class="btn btn-block btn-lg btn-primary">{% trans "Onwards!" %}</button>
     </form>
 {% endblock %}

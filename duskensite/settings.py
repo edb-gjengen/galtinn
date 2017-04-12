@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'mptt',
     'django_countries',
-    'bootstrapform',
+    'bootstrap4',
     'django_extensions',
 ]
 INSTALLED_APPS += [
