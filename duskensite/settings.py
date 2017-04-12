@@ -125,6 +125,9 @@ STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
+PHONENUMBER_DB_FORMAT = 'E164'
+PHONENUMBER_DEFAULT_REGION = 'NO'
+
 try:
     from .local_settings import *
 except ImportError:
