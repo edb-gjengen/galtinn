@@ -1,4 +1,6 @@
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordChangeView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView
@@ -60,3 +62,7 @@ class UserEmailValidateView(TemplateView):
 
 class UserEmailValidateSuccessView(TemplateView):
     template_name = 'dusken/user_email_confirm_success.html'
+
+
+class MyPasswordChangeView(PasswordChangeView):
+    form_class = SetPasswordForm
