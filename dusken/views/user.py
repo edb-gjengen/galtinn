@@ -29,7 +29,7 @@ class UserDetailMeView(UserDetailView):
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = DuskenUser
     template_name = 'dusken/user_update.html'
-    fields = ['first_name', 'last_name', 'email', 'phone_number',  'street_address', 'street_address_two', 'postal_code', 'city', 'country', 'place_of_study']
+    fields = ['first_name', 'last_name', 'email', 'phone_number', 'place_of_study', 'postal_code', 'city', 'country']
 
 
 class UserUpdateMeView(UserUpdateView):

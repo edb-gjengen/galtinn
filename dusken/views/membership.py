@@ -7,7 +7,7 @@ from dusken.forms import DuskenUserForm, MembershipActivateForm, MembershipRenew
 from dusken.models import MembershipType, Membership
 
 
-class MembershipPurchaseView(FormView):
+class MembershipPurchaseView(LoginRequiredMixin, FormView):
     template_name = 'dusken/membership_purchase.html'
     form_class = DuskenUserForm
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
@@ -24,7 +24,7 @@ class MembershipPurchaseView(FormView):
         return super().get_context_data(**kwargs)
 
 
-class MembershipRenewView(FormView):
+class MembershipRenewView(LoginRequiredMixin, FormView):
     template_name = 'dusken/membership_renew.html'
     form_class = MembershipRenewForm
 

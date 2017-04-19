@@ -40,7 +40,7 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
     street_address_two = models.CharField(_('street address 2'), max_length=255, null=True, blank=True)
     postal_code = models.CharField(_('postal code'), max_length=10, null=True, blank=True)
     city = models.CharField(_('city'), max_length=100, null=True, blank=True)
-    country = CountryField(_('country'), null=True, blank=True)
+    country = CountryField(_('country'), default='NO', null=True, blank=True)
 
     place_of_study = models.ManyToManyField('dusken.PlaceOfStudy', verbose_name=_('place of study'), blank=True)
     legacy_id = models.IntegerField(_('legacy id'), null=True, blank=True)
