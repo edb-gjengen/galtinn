@@ -76,6 +76,33 @@ function onStripeToken(token) {
     });
 }
 
+function emailValidation() {
+    var email = $('#id_email').val();
+
+    $.ajax({
+        url: '/validate/email/',
+        data: {
+            'email': email
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.is_taken) {
+                $('#id_email').parent().addClass('has-danger');
+                $('.js-validation-errors').addClass('alert alert-danger');
+                $('.js-validation-errors').text('Email is already in use.');
+                $('#purchase-button').attr('disabled', true);
+            } else {
+                $('#id_email').parent().removeClass('has-danger');
+                $('.js-validation-errors').removeClass('alert alert-danger');
+                $('.js-validation-errors').text('');
+                $('#purchase-button').removeAttr('disabled');
+            }
+        }
+    });
+}
+
+
+
 
 $(document).ready(function() {
     if($('.membership-purchase').length) {
@@ -125,4 +152,7 @@ $(document).ready(function() {
             $validationEmailBtn.text('Sent.')
         })
     })
+
+    $('#id_email').change(emailValidation);
+    emailValidation();
 });
