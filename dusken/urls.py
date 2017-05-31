@@ -7,7 +7,7 @@ from dusken.views.membership import (MembershipPurchaseView, MembershipListView,
 from dusken.views.orgunit import OrgUnitListView, OrgUnitDetailView
 from dusken.views.user import (UserDetailView, UserDetailMeView, UserListView, UserUpdateView, UserUpdateMeView,
                                UserEmailValidateView, UserEmailValidateSuccessView)
-from dusken.views.validate import validate_email
+from dusken.views.validate import validate_email, validate_phone_number
 
 urlpatterns = [
     url(r'api/', include(api_urls)),
@@ -43,4 +43,5 @@ urlpatterns = [
 
     # Validation
     url(r'validate/email/$', validate_email, name='validate-email'),
+    url(r'validate/phone_number/$', validate_phone_number, name='validate-phone-number'),
 ]

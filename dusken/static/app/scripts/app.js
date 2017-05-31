@@ -76,8 +76,29 @@ function onStripeToken(token) {
     });
 }
 
+var emailError = '';
+var phoneNumberError = '';
+function validationErrorHandler() {
+    var message = emailError;
+    if (phoneNumberError.length && emailError.length) {
+        message += '<br>';
+    }
+    message += phoneNumberError;
+    $('.js-validation-errors').html(message);
+    if (message.length) {
+        $('.js-validation-errors').addClass('alert alert-danger');
+        $('#purchase-button').attr('disabled', true);
+    } else {
+        $('.js-validation-errors').removeClass('alert alert-danger');
+        $('#purchase-button').removeAttr('disabled');
+    }
+}
+
 function emailValidation() {
     var email = $('#id_email').val();
+    if (email === '') {
+        return;
+    }
 
     $.ajax({
         url: '/validate/email/',
@@ -86,23 +107,39 @@ function emailValidation() {
         },
         dataType: 'json',
         success: function (data) {
-            if (data.is_taken) {
+            if (data.message) {
                 $('#id_email').parent().addClass('has-danger');
-                $('.js-validation-errors').addClass('alert alert-danger');
-                $('.js-validation-errors').text('Email is already in use.');
-                $('#purchase-button').attr('disabled', true);
+                emailError = data.message;
             } else {
                 $('#id_email').parent().removeClass('has-danger');
-                $('.js-validation-errors').removeClass('alert alert-danger');
-                $('.js-validation-errors').text('');
-                $('#purchase-button').removeAttr('disabled');
+                emailError = '';
             }
+            validationErrorHandler();
         }
     });
 }
 
+function phoneNumberValidation() {
+    var phone_number = $('#id_phone_number').val();
 
-
+    $.ajax({
+        url: '/validate/phone_number/',
+        data: {
+            'phone_number': phone_number
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.message) {
+                $('#id_phone_number').parent().addClass('has-danger');
+                phoneNumberError = data.message;
+            } else {
+                $('#id_phone_number').parent().removeClass('has-danger');
+                phoneNumberError = '';
+            }
+            validationErrorHandler();
+        }
+    });
+}
 
 $(document).ready(function() {
     if($('.membership-purchase').length) {
@@ -143,6 +180,10 @@ $(document).ready(function() {
             stripeHandler.close();
         });
 
+        $('#id_email').change(emailValidation);
+        $('#id_phone_number').change(phoneNumberValidation);
+        emailValidation();
+        phoneNumberValidation();
     }
     /* Send validation email */
     var $validationEmailBtn = $('.js-send-validation-email');
@@ -153,6 +194,4 @@ $(document).ready(function() {
         })
     })
 
-    $('#id_email').change(emailValidation);
-    emailValidation();
 });
