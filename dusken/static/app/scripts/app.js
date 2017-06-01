@@ -39,15 +39,82 @@ function getFormData(formElement) {
     return formData;
 }
 
-function isFormValid() {
-    // TODO: Feedback to the user
-    var formData = getFormData($('#user-form'));
-    var isNotValid = _.any(_.values(formData), function(value) {
-        /* empty? */
-        return $.trim(value) === '';
+function serverValidation(formData) {
+    $.ajax({
+        url: '/validate/',
+        data: {
+            'email': formData.email,
+            'number': formData.phone_number
+        },
+        dataType: 'json',
+        formData: formData,
+        success: function (serverData) {
+            validate(this.formData, serverData);
+        }
+    });
+}
+
+function catMessage(message, string) {
+    if (message) {
+        message += '<br>' + string;
+        return message;
+    }
+    return string;
+}
+
+function validate(formData, serverData) {
+    clearError();
+    var valid = true;
+    var message = '';
+    if ($.trim(formData.first_name) === '') {
+        $('#id_first_name').parent().addClass('has-danger');
+        message = serverData.missing_first_name;
+        valid = false;
+    }
+    if ($.trim(formData.last_name) === '') {
+        $('#id_last_name').parent().addClass('has-danger');
+        message = catMessage(message, serverData.missing_last_name)
+        valid = false;
+    }
+    if (serverData.email_message) {
+        $('#id_email').parent().addClass('has-danger');
+        message = catMessage(message, serverData.email_message);
+        valid = false;
+    }
+    if (serverData.number_message) {
+        $('#id_phone_number').parent().addClass('has-danger');
+        message = catMessage(message, serverData.number_message);
+        valid = false;
+    }
+    if (valid) {
+        isValid(formData.email);
+    } else {
+        displayError(message);
+    }
+}
+
+function isValid(email) {
+    var stripeHandler = StripeCheckout.configure({
+        key: config.stripe_pub_key,
+        image: config.image,
+        locale: 'auto',
+        token: onStripeToken,
+        allowRememberMe: false  // Disallow the remember me function for new users
     });
 
-    return !isNotValid;
+    // Open Checkout with further options
+    stripeHandler.open({
+        name: 'Det Norske Studentersamfund',
+        description: config.membership_name,
+        currency: 'NOK',
+        amount: config.membership_price,
+        email: email
+    });
+
+    // Close Checkout on page navigation
+    $(window).on('popstate', function() {
+        stripeHandler.close();
+    });
 }
 
 function onStripeToken(token) {
@@ -76,69 +143,18 @@ function onStripeToken(token) {
     });
 }
 
-var emailError = '';
-var phoneNumberError = '';
-function validationErrorHandler() {
-    var message = emailError;
-    if (phoneNumberError.length && emailError.length) {
-        message += '<br>';
-    }
-    message += phoneNumberError;
+function displayError(message) {
     $('.js-validation-errors').html(message);
-    if (message.length) {
-        $('.js-validation-errors').addClass('alert alert-danger');
-        $('#purchase-button').attr('disabled', true);
-    } else {
-        $('.js-validation-errors').removeClass('alert alert-danger');
-        $('#purchase-button').removeAttr('disabled');
-    }
+    $('.js-validation-errors').addClass('alert alert-danger');
 }
 
-function emailValidation() {
-    var email = $('#id_email').val();
-    if (email === '') {
-        return;
-    }
-
-    $.ajax({
-        url: '/validate/email/',
-        data: {
-            'email': email
-        },
-        dataType: 'json',
-        success: function (data) {
-            if (data.message) {
-                $('#id_email').parent().addClass('has-danger');
-                emailError = data.message;
-            } else {
-                $('#id_email').parent().removeClass('has-danger');
-                emailError = '';
-            }
-            validationErrorHandler();
-        }
-    });
-}
-
-function phoneNumberValidation() {
-    var phone_number = $('#id_phone_number').val();
-
-    $.ajax({
-        url: '/validate/phone_number/',
-        data: {
-            'phone_number': phone_number
-        },
-        dataType: 'json',
-        success: function (data) {
-            if (data.message) {
-                $('#id_phone_number').parent().addClass('has-danger');
-                phoneNumberError = data.message;
-            } else {
-                $('#id_phone_number').parent().removeClass('has-danger');
-                phoneNumberError = '';
-            }
-            validationErrorHandler();
-        }
-    });
+function clearError() {
+    $('.js-validation-errors').html('');
+    $('.js-validation-errors').removeClass('alert alert-danger');
+    $('#id_first_name').parent().removeClass('has-danger');
+    $('#id_last_name').parent().removeClass('has-danger');
+    $('#id_email').parent().removeClass('has-danger');
+    $('#id_phone_number').parent().removeClass('has-danger');
 }
 
 $(document).ready(function() {
@@ -150,40 +166,11 @@ $(document).ready(function() {
             profile: '/home/'
         };
 
-        var stripeHandler = StripeCheckout.configure({
-            key: config.stripe_pub_key,
-            image: config.image,
-            locale: 'auto',
-            token: onStripeToken,
-            allowRememberMe: false  // Disallow the remember me function for new users
-        });
-
         $('#purchase-button').on('click', function(e) {
             e.preventDefault();
-
-            if( !isFormValid() ) {
-                console.log('not valid!');
-            } else {
-                // Open Checkout with further options
-                stripeHandler.open({
-                    name: 'Det Norske Studentersamfund',
-                    description: config.membership_name,
-                    currency: 'NOK',
-                    amount: config.membership_price,
-                    email: $('#id_email').val()
-                });
-            }
+            serverValidation(getFormData($('#user-form')));
         });
 
-        // Close Checkout on page navigation
-        $(window).on('popstate', function() {
-            stripeHandler.close();
-        });
-
-        $('#id_email').change(emailValidation);
-        $('#id_phone_number').change(phoneNumberValidation);
-        emailValidation();
-        phoneNumberValidation();
     }
     /* Send validation email */
     var $validationEmailBtn = $('.js-send-validation-email');
