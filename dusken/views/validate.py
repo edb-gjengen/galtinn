@@ -23,32 +23,26 @@ def validate(request):
 
 
 def validate_email(email):
-    valid = True
+    if email == '':
+        return _('You need to enter an email.')
+
     try:
         validators.validate_email(email)
     except ValidationError:
-        valid = False
+        return _('Email is invalid.')
 
-    message = ''
-    if not valid:
-        message = _('Email is invalid.')
-    elif DuskenUser.objects.filter(email=email).exists():
-        message = _('Email is already in use.')
-    return message
+    if DuskenUser.objects.filter(email=email).exists():
+        return _('Email is already in use.')
 
 
 def validate_phone_number(number):
-    valid = True
     if number == '':
-        valid = False
+        return _('You need to enter a phone number.')
+
     try:
         validate_international_phonenumber(number)
     except ValidationError:
-        valid = False
+        return _('Phone number is invalid')
 
-    message = ''
-    if not valid:
-        message += _('Phone number is invalid')
-    elif DuskenUser.objects.filter(phone_number=number).exists():
-        message = _('Phone number is already in use.')
-    return message
+    if DuskenUser.objects.filter(phone_number=number).exists():
+        return _('Phone number is already in use.')

@@ -56,8 +56,7 @@ function serverValidation(formData) {
 
 function catMessage(message, string) {
     if (message) {
-        message += '<br>' + string;
-        return message;
+        return message + '<br>' + string;
     }
     return string;
 }
@@ -87,13 +86,13 @@ function validate(formData, serverData) {
         valid = false;
     }
     if (valid) {
-        isValid(formData.email);
+        openStripe(formData.email);
     } else {
         displayError(message);
     }
 }
 
-function isValid(email) {
+function openStripe(email) {
     var stripeHandler = StripeCheckout.configure({
         key: config.stripe_pub_key,
         image: config.image,
