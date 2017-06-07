@@ -54,41 +54,29 @@ function serverValidation(formData) {
     });
 }
 
-function catMessage(message, string) {
-    if (message) {
-        return message + '<br>' + string;
-    }
-    return string;
-}
-
 function validate(formData, serverData) {
     clearError();
-    var valid = true;
-    var message = '';
+    var errors = [];
     if ($.trim(formData.first_name) === '') {
         $('#id_first_name').parent().addClass('has-danger');
-        message = serverData.missing_first_name;
-        valid = false;
+        errors.push(serverData.missing_first_name);
     }
     if ($.trim(formData.last_name) === '') {
         $('#id_last_name').parent().addClass('has-danger');
-        message = catMessage(message, serverData.missing_last_name)
-        valid = false;
+        errors.push(serverData.missing_last_name);
     }
     if (serverData.email_message) {
         $('#id_email').parent().addClass('has-danger');
-        message = catMessage(message, serverData.email_message);
-        valid = false;
+        errors.push(serverData.email_message);
     }
     if (serverData.number_message) {
         $('#id_phone_number').parent().addClass('has-danger');
-        message = catMessage(message, serverData.number_message);
-        valid = false;
+        errors.push(serverData.number_message);
     }
-    if (valid) {
-        openStripe(formData.email);
+    if (errors.length) {
+        displayError(errors.join('<br>'));
     } else {
-        displayError(message);
+        openStripe(formData.email);
     }
 }
 
