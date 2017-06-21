@@ -126,7 +126,7 @@ function onStripeToken(token) {
     }).fail(function(data) {
         console.log('failed', data);
         // TODO: Format error as HTML
-        $('.js-validation-errors').html('<div class="alert-danger">'+ JSON.stringify(data) +'</div>')
+        $('.js-validation-errors').html('<div class="alert-danger">'+ data.responseText +'</div>')
     });
 }
 
@@ -156,6 +156,11 @@ $(document).ready(function() {
         $('#purchase-button').on('click', function(e) {
             e.preventDefault();
             serverValidation(getFormData($('#user-form')));
+        });
+
+        $('#renew-button').on('click', function(e) {
+            e.preventDefault();
+            openStripe(getFormData($('#user-form')).email);
         });
 
     }
