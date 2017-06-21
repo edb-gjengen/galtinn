@@ -31,7 +31,7 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     email_confirmed_at = models.DateTimeField(blank=True, null=True)
     email_key = models.CharField(max_length=40, default=create_email_key)
-    phone_number = PhoneNumberField(_('phone number'), blank=True)
+    phone_number = PhoneNumberField(_('phone number'), blank=True, default='')
     phone_number_validated = models.BooleanField(default=False)
     date_of_birth = models.DateField(_('date of birth'), null=True, blank=True)
 
@@ -40,7 +40,7 @@ class DuskenUser(AbstractBaseModel, AbstractUser):
     street_address_two = models.CharField(_('street address 2'), max_length=255, null=True, blank=True)
     postal_code = models.CharField(_('postal code'), max_length=10, null=True, blank=True)
     city = models.CharField(_('city'), max_length=100, null=True, blank=True)
-    country = CountryField(_('country'), default='NO', null=True, blank=True)
+    country = CountryField(_('country'), default='NO', blank=True)
 
     place_of_study = models.ManyToManyField('dusken.PlaceOfStudy', verbose_name=_('place of study'), blank=True)
     legacy_id = models.IntegerField(_('legacy id'), null=True, blank=True)
@@ -219,7 +219,7 @@ class Order(AbstractBaseModel):
     )
 
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
-    price_nok = models.IntegerField(help_text=_('In øre'))
+    price_nok = models.IntegerField(help_text=_('Price in øre'))
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders')
     product = models.OneToOneField('dusken.Membership', null=True, blank=True)

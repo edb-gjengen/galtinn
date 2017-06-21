@@ -7,6 +7,8 @@ import random
 import re
 from timeit import default_timer as timer
 
+from signal_disabler import signal_disabler
+
 from apps.inside.models import InsideUser, PostalCode, InsideCard
 from dusken.models import DuskenUser, Membership, MemberCard, MembershipType
 
@@ -50,12 +52,15 @@ class Command(BaseCommand):
         'is_active': 'is_active',
         'registered': 'registered_datetime',
         'created': 'created'
-
     }
 
     def __init__(self):
         super().__init__()
-        self.inside_users = InsideUser.objects.all()
+
+        # No email notifications
+        signal_disabler.disable().disconnect_all()
+
+        self.inside_users = InsideUser.objects.order_by('pk')
 
         self.zip_to_city_map = dict(PostalCode.objects.values_list('postnummer', 'poststed'))
 
@@ -71,11 +76,9 @@ class Command(BaseCommand):
 
         m1, c = MembershipType.objects.get_or_create(pk=1)
         m2, c = MembershipType.objects.get_or_create(pk=2)
-        m3, c = MembershipType.objects.get_or_create(pk=3)
         self.membership_types = {
             'standard': m1,
-            'active': m2,  # FIXME: need this?
-            'life_long': m3,
+            'life_long': m2,
         }
 
     def _get_city_from_postal_code(self, postal_code):
@@ -90,7 +93,7 @@ class Command(BaseCommand):
 
         return None
 
-    def _get_membership_type(self, user, is_life_long):
+    def _get_membership_type(self, is_life_long):
         # FIXME: less hardcoding
         if is_life_long:
             return self.membership_types['life_long']
@@ -103,8 +106,9 @@ class Command(BaseCommand):
         if user.get('expires') is None and not is_life_long:
             return None
 
-        membership_type = self._get_membership_type(user, is_life_long)
-        # payment = Payment.objects.create()
+        _type = 'life_long' if is_life_long else 'standard'
+        membership_type = self.membership_types[_type]
+
         end_date = user.get('expires')
         start_date = self._get_start_date(user, is_life_long)
 
@@ -139,6 +143,7 @@ class Command(BaseCommand):
         return random_username
 
     def get_user_data(self):
+        skip_usernames = ['ukjent']
         more_fields = ['addresstype', 'registration_status', 'source', 'placeofstudy', 'expires', 'created',
                        'ldap_password', 'username']
         fields = list(self.USER_FIELD_MAP.keys()) + more_fields
@@ -146,6 +151,9 @@ class Command(BaseCommand):
         i_users = self.inside_users.order_by('pk').reverse().values(*fields)
         d_users = []
         for u in i_users:
+            if u['username'] in skip_usernames:
+                continue
+
             new_user = {}
             for src_field, dst_field in self.USER_FIELD_MAP.items():
                 # Address
@@ -178,6 +186,9 @@ class Command(BaseCommand):
 
                 if dst_field == 'date_joined':
                     new_val = timezone.now()
+
+                if dst_field == 'phone_number' and new_val is None:
+                    new_val = ''
 
                 # Clean
                 if dst_field in ['email', 'username']:
