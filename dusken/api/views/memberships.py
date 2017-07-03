@@ -68,7 +68,7 @@ class MembershipChargeView(GenericAPIView):
 
         if charge.status != self.STATUS_CHARGE_SUCCEEDED:
             logger.warning('stripe.Charge did not succeed: %s', charge.status)
-            return Response({'error': 'stripe.Charge did not succeed :-('})
+            return Response({'error': charge.status}, status=500)
 
         # Winning, save new order, with user and stripe customer id :-)
         order = serializer.save(
@@ -116,6 +116,8 @@ class MembershipChargeView(GenericAPIView):
                 raise APIException(e)
             else:
                 raise APIException('Stripe charge failed with API error.')
+        except stripe.error.CardError as e:
+            return InlineClass({'status': e._message})
 
     def _login_user(self, user):
         user.backend = 'django.contrib.auth.backends.ModelBackend'  # FIXME: Ninja!

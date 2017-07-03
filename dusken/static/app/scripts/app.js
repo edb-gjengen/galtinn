@@ -125,8 +125,7 @@ function onStripeToken(token) {
         location.href = urls.profile;
     }).fail(function(data) {
         console.log('failed', data);
-        // TODO: Format error as HTML
-        $('.js-validation-errors').html('<div class="alert-danger">'+ data.responseText +'</div>')
+        $('.js-validation-errors').html('<div class="alert-danger">'+ JSON.parse(data.responseText).error +'</div>')
     });
 }
 
