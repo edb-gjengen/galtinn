@@ -96,6 +96,7 @@ SITE_ID = 1
 
 # Email
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTH_USER_MODEL = 'dusken.DuskenUser'
 LOGIN_REDIRECT_URL = reverse_lazy('home')
