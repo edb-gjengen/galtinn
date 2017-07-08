@@ -110,6 +110,9 @@ class DuskenUser(AbstractUser):
                 username=self.username)
         return "{username}".format(username=self.username)
 
+    class Meta:
+        verbose_name = _('User')
+
 
 class Membership(AbstractBaseModel):
     start_date = models.DateField()
@@ -129,6 +132,10 @@ class Membership(AbstractBaseModel):
             return '{}: Life long'.format(name)
         end_date = ' - {}'.format(self.end_date) if self.end_date is not None else 'N/A'
         return "{}: {}{}".format(name, self.start_date, end_date)
+
+    class Meta:
+        verbose_name = _('Membership')
+        verbose_name_plural = _('Memberships')
 
 
 class MembershipType(AbstractBaseModel):
@@ -187,6 +194,9 @@ class MembershipType(AbstractBaseModel):
         except cls.MultipleObjectsReturned:
             raise ImproperlyConfigured('Error: Only one MembershipType can have is_default set')
 
+    class Meta:
+        verbose_name = _('Membership type')
+
 
 class MemberCard(AbstractBaseModel):
     card_number = models.IntegerField(_('card number'), unique=True)
@@ -196,6 +206,9 @@ class MemberCard(AbstractBaseModel):
 
     def __str__(self):
         return "{}".format(self.card_number)
+
+    class Meta:
+        verbose_name = _('Member card')
 
 
 class GroupProfile(AbstractBaseModel):
@@ -208,6 +221,9 @@ class GroupProfile(AbstractBaseModel):
 
     def __str__(self):
         return "{}".format(self.posix_name)
+
+    class Meta:
+        verbose_name = _('Group profile')
 
 
 class OrgUnit(MPTTModel, AbstractBaseModel):
@@ -234,6 +250,9 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
 
     class MPTTMeta:
         order_insertion_by = ['name']
+
+    class Meta:
+        verbose_name = _('Org unit')
 
 
 class Order(AbstractBaseModel):
@@ -273,6 +292,10 @@ class Order(AbstractBaseModel):
     def __str__(self):
         return "{}".format(self.uuid)
 
+    class Meta:
+        verbose_name = _('Order')
+        verbose_name_plural = _('Orders')
+
 
 class PlaceOfStudy(AbstractBaseModel):
     name = models.CharField(_('name'), max_length=255)
@@ -284,3 +307,7 @@ class PlaceOfStudy(AbstractBaseModel):
 
     def __str__(self):
         return '{} - {}'.format(self.short_name, self.name)
+
+    class Meta:
+        verbose_name = _('Place of study')
+        verbose_name_plural = _('Places of study')

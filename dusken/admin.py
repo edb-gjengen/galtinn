@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from mptt.admin import MPTTModelAdmin
 
-from dusken.models import Membership, OrgUnit, DuskenUser, MembershipType, Order, MemberCard, PlaceOfStudy
+from dusken.models import Membership, OrgUnit, DuskenUser, MembershipType, Order, MemberCard, PlaceOfStudy, GroupProfile
 
 
 class StartDateYearListFilter(admin.SimpleListFilter):
@@ -121,6 +121,7 @@ class MemberCardAdmin(admin.ModelAdmin):
 
 
 admin.site.register(DuskenUser, DuskenUserAdmin)
+admin.site.register(GroupProfile)
 admin.site.register(MemberCard, MemberCardAdmin)
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType)
