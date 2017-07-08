@@ -1,5 +1,7 @@
 from datetime import date
 
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserChangeForm
 from django.contrib import admin
 from django.db.models import Min
 from django.urls import reverse
@@ -18,8 +20,8 @@ class StartDateYearListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         Model = model_admin.model
         min_start_date = Model.objects.aggregate(Min('start_date'))
-        min_year = 0
-        if min_start_date:
+        min_year = 2005
+        if min_start_date and min_start_date['start_date__min'] is not None:
             min_year = min_start_date['start_date__min'].year
         years = range(min_year, timezone.now().year + 1)
         return zip(years, years)
@@ -49,6 +51,9 @@ class MembershipAdmin(admin.ModelAdmin):
     get_payment_type.admin_order_field = 'payment__payment_method'
 
     def show_user_link(self, obj):
+        if obj.user is None:
+            return ''
+
         url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
 
@@ -61,11 +66,15 @@ class OrgUnitAdmin(MPTTModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['uuid', 'show_user_link', 'product', 'created']
+    list_display = ['uuid', 'product', 'show_user_link', 'created', 'payment_method']
+    list_filter = ['payment_method']
     search_fields = ['user__username', 'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
     readonly_fields = ['uuid', 'product', 'price_nok', 'user', 'payment_method', 'transaction_id']
 
     def show_user_link(self, obj):
+        if obj.user is None:
+            return ''
+
         url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
 
@@ -73,22 +82,37 @@ class OrderAdmin(admin.ModelAdmin):
     show_user_link.short_description = _('User')
 
 
-class DuskenUserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'first_name', 'last_name', 'email', 'phone_number', 'is_active',
-                    'phone_number_validated']
-    list_filter = ['is_active', 'phone_number_validated']
-    search_fields = ['username', 'first_name', 'last_name', 'email', 'phone_number']
-    readonly_fields = ['uuid']
+class DuskenUserChangeForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        model = DuskenUser
+
+
+class DuskenUserAdmin(UserAdmin):
+    form = DuskenUserChangeForm
+
+    _extra_fields = ('phone_number', 'date_of_birth', 'street_address', 'street_address_two', 'postal_code', 'city',
+                     'country', 'place_of_study', 'legacy_id', 'uuid', 'stripe_customer_id')
+
+    fieldsets = UserAdmin.fieldsets + (
+            (_('Dusken fields'), {'fields': _extra_fields}),
+    )
+
+    def __init__(self, model, admin_site):
+        super().__init__(model, admin_site)
+        self.readonly_fields += ('uuid', 'legacy_id', 'stripe_customer_id')
 
 
 class MemberCardAdmin(admin.ModelAdmin):
-    list_display = ['card_number', 'show_user_link', 'registered_datetime', 'created', 'is_active']
+    list_display = ['card_number', 'show_user_link', 'registered', 'created', 'is_active']
     list_filter = ['is_active']
     search_fields = ['card_number']
     readonly_fields = ['card_number', 'show_user_link']
     exclude = ['user']
 
     def show_user_link(self, obj):
+        if obj.user is None:
+            return ''
+
         url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
 

@@ -27,7 +27,8 @@ class AbstractBaseModel(models.Model):
         abstract = True
 
 
-class DuskenUser(AbstractBaseModel, AbstractUser):
+class DuskenUser(AbstractUser):
+    updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     email_confirmed_at = models.DateTimeField(blank=True, null=True)
     email_key = models.CharField(max_length=40, default=create_email_key)
@@ -115,8 +116,6 @@ class Membership(AbstractBaseModel):
     end_date = models.DateField(null=True, blank=True)
     membership_type = models.ForeignKey('dusken.MembershipType')
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='memberships')
-    # from django.contrib.postgres.fields import JSONField
-    extra_data = JSONField(blank=True, default=dict)
 
     def expires(self):
         return self.end_date
@@ -125,18 +124,37 @@ class Membership(AbstractBaseModel):
         return self.order is not None
 
     def __str__(self):
-        end_date = self.end_date if self.end_date is not None else 'N/A'
-        return "{} - {} ({})".format(self.start_date, end_date, self.user_id)
+        name = self.__class__.__name__
+        if self.end_date is None:
+            return '{}: Life long'.format(name)
+        end_date = ' - {}'.format(self.end_date) if self.end_date is not None else 'N/A'
+        return "{}: {}{}".format(name, self.start_date, end_date)
 
 
 class MembershipType(AbstractBaseModel):
+    """ Type of membership
+
+    A membership expires in different ways
+     - EXPIRY_DURATION: Expires after n time has past, specified by the duration field
+     - EXPIRY_NEVER: Never expires
+     - EXPIRY_END_OF_YEAR: Expiry is set to the first day of the year after the current year
+    """
+    EXPIRY_DURATION = 'duration'
+    EXPIRY_NEVER = 'never'
+    EXPIRY_END_OF_YEAR = 'end_of_year'
+    EXPIRY_TYPES = (
+        (EXPIRY_DURATION, _('Duration')),
+        (EXPIRY_NEVER, _('Never')),
+        (EXPIRY_END_OF_YEAR, _('End of year')),
+    )
+
     name = models.CharField(max_length=254)
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
-    does_not_expire = models.BooleanField(default=False)
     price = models.IntegerField(default=0, help_text=_('Price in øre'))
     is_default = models.BooleanField(default=False)
     duration = models.DurationField(default=timedelta(days=365), null=True, blank=True)
+    expiry_type = models.CharField(max_length=254, choices=EXPIRY_TYPES, default=EXPIRY_DURATION)
 
     def __str__(self):
         return "{}".format(self.name)
@@ -147,19 +165,32 @@ class MembershipType(AbstractBaseModel):
             MembershipType.objects.all().update(is_default=False)
         super().save(**kwargs)
 
-    @staticmethod
-    def get_default():
+    def get_expiry_date(self):
+        """Get the correct end date for this membership type."""
+
+        now = timezone.now()
+        if self.expiry_type == self.EXPIRY_DURATION:
+            return (now + self.duration).date()
+        elif self.expiry_type == self.EXPIRY_END_OF_YEAR:
+            return now.date().replace(year=now.year + 1, month=1, day=1)
+        elif self.expiry_type == self.EXPIRY_NEVER:
+            return None
+
+        raise Exception("MembershipType object {} is configured incorrectly".format(self.__str__()))
+
+    @classmethod
+    def get_default(cls):
         try:
-            return MembershipType.objects.get(is_default=True)
-        except MembershipType.DoesNotExist:
+            return cls.objects.get(is_default=True)
+        except cls.DoesNotExist:
             raise ImproperlyConfigured('Error: At least one MembershipType must have is_default set')
-        except MembershipType.MultipleObjectsReturned:
+        except cls.MultipleObjectsReturned:
             raise ImproperlyConfigured('Error: Only one MembershipType can have is_default set')
 
 
 class MemberCard(AbstractBaseModel):
     card_number = models.IntegerField(_('card number'), unique=True)
-    registered_datetime = models.DateTimeField(_('registered datetime'), null=True, blank=True)
+    registered = models.DateTimeField(_('registered datetime'), null=True, blank=True)
     is_active = models.BooleanField(_('is active'), default=True)
     user = models.ForeignKey('dusken.DuskenUser', verbose_name=_('user'), null=True, blank=True, related_name='membercards')
 
@@ -210,18 +241,20 @@ class Order(AbstractBaseModel):
     BY_CARD = 'card'
     BY_SMS = 'sms'
     BY_APP = 'app'
+    BY_PHYSICAL_CARD = 'physical_card'
     PAYMENT_METHOD_OTHER = 'other'
     PAYMENT_METHODS = (
         (BY_APP, _('Mobile app')),
         (BY_SMS, _('SMS')),
         (BY_CARD, _('Credit card')),
+        (BY_PHYSICAL_CARD, _('Physical card')),
         (PAYMENT_METHOD_OTHER, _('Other')),
     )
 
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     price_nok = models.IntegerField(help_text=_('Price in øre'))
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', null=True, blank=True)
     product = models.OneToOneField('dusken.Membership', null=True, blank=True)
 
     # Payment
@@ -232,6 +265,7 @@ class Order(AbstractBaseModel):
         blank=True,
         help_text=_('Stripe charge ID, Kassa event ID, SMS event ID or App event ID')
     )
+    extra_data = JSONField(blank=True, default=dict, help_text=_('f.ex phone_number, card_number, one time code, etc'))
 
     def price_nok_kr(self):
         return int(self.price_nok / 100)
