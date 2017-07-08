@@ -2,6 +2,8 @@
 import random
 import re
 from datetime import timedelta, datetime
+from pprint import pprint
+
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from signal_disabler import signal_disabler
@@ -251,7 +253,7 @@ class Command(BaseCommand):
                 Order.objects.create(product=m, user=new_user, price_nok=0)
 
         for c in member_cards_data['cards']:
-            if 'legacy_user_id' in c:
+            if c['legacy_user_id'] is not None:
                 c['user'] = DuskenUser.objects.get(legacy_id=c.pop('legacy_user_id'))
             MemberCard.objects.create(**c)
 
@@ -273,6 +275,6 @@ class Command(BaseCommand):
         users = self.get_user_data()
 
         member_cards_data = self.get_member_card_data()
-        # pprint(len(member_cards_data['memberships']))
+        # pprint(member_cards_data['cards'][0])
 
         self.create_database(users, member_cards_data)
