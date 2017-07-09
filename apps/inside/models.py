@@ -151,7 +151,7 @@ class MemberCard(models.Model):
         db_table = 'din_membercard'
 
 
-class Order(models.Model):
+class InsideOrder(models.Model):
     connection_name = 'inside'
 
     user = models.ForeignKey('inside.InsideUser')
@@ -181,7 +181,7 @@ class OrderItem(models.Model):
 
     product = models.ForeignKey('inside.Product')
     quantity = models.IntegerField()
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey('inside.InsideOrder')
     discount = models.IntegerField()
     comment = models.TextField()
 
@@ -300,7 +300,7 @@ class Transaction(models.Model):
 
     id_string = models.CharField(max_length=25)
     user = models.ForeignKey('inside.InsideUser')
-    order = models.ForeignKey('inside.Order')
+    order = models.ForeignKey('inside.InsideOrder')
     timestamp = models.DateTimeField()
     status = models.CharField(max_length=8, blank=True)
     amount = models.IntegerField()
@@ -345,7 +345,7 @@ class InsideUser(models.Model):
     valid_address = models.IntegerField()
     email = models.CharField(unique=True, max_length=120)
     birthdate = models.DateField()
-    placeofstudy = models.IntegerField(db_column='placeOfStudy')  # Field name made lowercase.
+    placeofstudy = models.ForeignKey('inside.InsidePlaceOfStudy', db_column='placeOfStudy')
     passwordreset = models.CharField(db_column='passwordReset', max_length=1)  # Field name made lowercase.
     expires = models.DateField(blank=True, null=True)
     division_id_request = models.ForeignKey('inside.Division', db_column='division_id_request', blank=True, null=True)
@@ -469,7 +469,7 @@ class PostalCode(models.Model):
         db_table = 'postnummer'
 
 
-class PlaceOfStudy(models.Model):
+class InsidePlaceOfStudy(models.Model):
     connection_name = 'inside'
 
     navn = models.CharField(unique=True, max_length=120)

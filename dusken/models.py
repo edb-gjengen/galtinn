@@ -307,8 +307,4 @@ class PlaceOfStudy(AbstractBaseModel):
         verbose_name_plural = _('Places of study')
 
     def __str__(self):
-        return '{} - {}'.format(self.short_name, self.name)
-
-    class Meta:
-        verbose_name = _('Place of study')
-        verbose_name_plural = _('Places of study')
+        return '{} ({})'.format(self.name, self.short_name)
