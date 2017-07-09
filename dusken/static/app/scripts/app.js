@@ -39,15 +39,69 @@ function getFormData(formElement) {
     return formData;
 }
 
-function isFormValid() {
-    // TODO: Feedback to the user
-    var formData = getFormData($('#user-form'));
-    var isNotValid = _.any(_.values(formData), function(value) {
-        /* empty? */
-        return $.trim(value) === '';
+function serverValidation(formData) {
+    $.ajax({
+        url: '/api/validate/',
+        data: {
+            'email': formData.email,
+            'number': formData.phone_number
+        },
+        dataType: 'json',
+        formData: formData,
+        success: function (serverData) {
+            validate(this.formData, serverData);
+        }
+    });
+}
+
+function validate(formData, serverData) {
+    clearError();
+    var errors = [];
+    if ($.trim(formData.first_name) === '') {
+        $('#id_first_name').parent().addClass('has-danger');
+        errors.push(serverData.missing_first_name);
+    }
+    if ($.trim(formData.last_name) === '') {
+        $('#id_last_name').parent().addClass('has-danger');
+        errors.push(serverData.missing_last_name);
+    }
+    if (serverData.email_message) {
+        $('#id_email').parent().addClass('has-danger');
+        errors.push(serverData.email_message);
+    }
+    if (serverData.number_message) {
+        $('#id_phone_number').parent().addClass('has-danger');
+        errors.push(serverData.number_message);
+    }
+    if (errors.length) {
+        displayError(errors.join('<br>'));
+    } else {
+        openStripe(formData.email);
+    }
+}
+
+function openStripe(email) {
+    var stripeHandler = StripeCheckout.configure({
+        key: config.stripe_pub_key,
+        image: config.image,
+        locale: 'auto',
+        token: onStripeToken,
+        allowRememberMe: false  // Disallow the remember me function for new users
     });
 
-    return !isNotValid;
+    // Open Checkout with further options
+    stripeHandler.open({
+        name: 'Det Norske Studentersamfund',
+        description: config.membership_name,
+        currency: 'NOK',
+        amount: config.membership_price,
+        email: email
+    });
+
+    // Close Checkout on page navigation
+    $(window).on('popstate', function() {
+        stripeHandler.close();
+    });
 }
 
 function onStripeToken(token) {
@@ -71,38 +125,24 @@ function onStripeToken(token) {
         location.href = urls.profile;
     }).fail(function(data) {
         console.log('failed', data);
-        // TODO: Format error as HTML
-        $('.js-validation-errors').html('<div class="alert-danger">'+ JSON.stringify(data) +'</div>')
+        $('.js-validation-errors').addClass('alert alert-danger');
+        $('.js-validation-errors').html(JSON.parse(data.responseText).error)
     });
 }
 
-function emailValidation() {
-    var email = $('#id_email').val();
-
-    $.ajax({
-        url: '/validate/email/',
-        data: {
-            'email': email
-        },
-        dataType: 'json',
-        success: function (data) {
-            if (data.is_taken) {
-                $('#id_email').parent().addClass('has-danger');
-                $('.js-validation-errors').addClass('alert alert-danger');
-                $('.js-validation-errors').text('Email is already in use.');
-                $('#purchase-button').attr('disabled', true);
-            } else {
-                $('#id_email').parent().removeClass('has-danger');
-                $('.js-validation-errors').removeClass('alert alert-danger');
-                $('.js-validation-errors').text('');
-                $('#purchase-button').removeAttr('disabled');
-            }
-        }
-    });
+function displayError(message) {
+    $('.js-validation-errors').html(message);
+    $('.js-validation-errors').addClass('alert alert-danger');
 }
 
-
-
+function clearError() {
+    $('.js-validation-errors').html('');
+    $('.js-validation-errors').removeClass('alert alert-danger');
+    $('#id_first_name').parent().removeClass('has-danger');
+    $('#id_last_name').parent().removeClass('has-danger');
+    $('#id_email').parent().removeClass('has-danger');
+    $('#id_phone_number').parent().removeClass('has-danger');
+}
 
 $(document).ready(function() {
     if($('.membership-purchase').length) {
@@ -113,34 +153,14 @@ $(document).ready(function() {
             profile: '/home/'
         };
 
-        var stripeHandler = StripeCheckout.configure({
-            key: config.stripe_pub_key,
-            image: config.image,
-            locale: 'auto',
-            token: onStripeToken,
-            allowRememberMe: false  // Disallow the remember me function for new users
-        });
-
         $('#purchase-button').on('click', function(e) {
             e.preventDefault();
-
-            if( !isFormValid() ) {
-                console.log('not valid!');
-            } else {
-                // Open Checkout with further options
-                stripeHandler.open({
-                    name: 'Det Norske Studentersamfund',
-                    description: config.membership_name,
-                    currency: 'NOK',
-                    amount: config.membership_price,
-                    email: $('#id_email').val()
-                });
-            }
+            serverValidation(getFormData($('#user-form')));
         });
 
-        // Close Checkout on page navigation
-        $(window).on('popstate', function() {
-            stripeHandler.close();
+        $('#renew-button').on('click', function(e) {
+            e.preventDefault();
+            openStripe(getFormData($('#user-form')).email);
         });
 
     }
@@ -153,6 +173,4 @@ $(document).ready(function() {
         })
     })
 
-    $('#id_email').change(emailValidation);
-    emailValidation();
 });

@@ -1,13 +1,13 @@
 from django.conf.urls import url, include
 
 from dusken.api import urls as api_urls
+from dusken.api.views.validate import validate
 from dusken.views.general import IndexView, HomeView, OrderDetailView, HomeActiveView
-from dusken.views.membership import (MembershipPurchaseView, MembershipListView, MembershipActivateView,
-                                     MembershipRenewView)
+from dusken.views.membership import (MembershipRegisterView, MembershipPurchaseView, MembershipListView,
+                                     MembershipActivateView, MembershipRenewView)
 from dusken.views.orgunit import OrgUnitListView, OrgUnitDetailView
 from dusken.views.user import (UserDetailView, UserDetailMeView, UserListView, UserUpdateView, UserUpdateMeView,
                                UserEmailValidateView, UserEmailValidateSuccessView)
-from dusken.views.validate import validate_email
 
 urlpatterns = [
     url(r'api/', include(api_urls)),
@@ -29,6 +29,7 @@ urlpatterns = [
     # Membership
     url(r'^memberships/$', MembershipListView.as_view(), name='membership-list'),
     url(r'^membership/purchase/$', MembershipPurchaseView.as_view(), name='membership-purchase'),
+    url(r'^membership/register/$', MembershipRegisterView.as_view(), name='membership-register'),
     url(r'^membership/renew/$', MembershipRenewView.as_view(), name='membership-renew'),
     url(r'^activate/$', MembershipActivateView.as_view(), name='membership-activate'),
 
@@ -41,6 +42,5 @@ urlpatterns = [
     # "Active member" home view - a user which is registered with at least one orgunit
     url(r'^home/active/$', HomeActiveView.as_view(), name='home-active'),  # FIXME: Move to own app?
 
-    # Validation
-    url(r'validate/email/$', validate_email, name='validate-email'),
+
 ]

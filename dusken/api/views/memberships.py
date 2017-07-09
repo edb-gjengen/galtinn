@@ -16,8 +16,7 @@ from dusken.api.serializers.memberships import MembershipSerializer
 from dusken.api.serializers.orders import OrderChargeRenewSerializer, OrderChargeSerializer
 from dusken.models import Membership
 from dusken.utils import InlineClass
-
-
+from django.utils.translation import ugettext_lazy as _
 logger = logging.getLogger(__name__)
 
 
@@ -44,6 +43,7 @@ class MembershipChargeView(GenericAPIView):
 
     CURRENCY = 'NOK'
     STATUS_CHARGE_SUCCEEDED = 'succeeded'
+    STATUS_CHARGE_FAILED = 'failed'
     _logged_in_user = None
 
     def post(self, request):
@@ -68,7 +68,7 @@ class MembershipChargeView(GenericAPIView):
 
         if charge.status != self.STATUS_CHARGE_SUCCEEDED:
             logger.warning('stripe.Charge did not succeed: %s', charge.status)
-            return Response({'error': 'stripe.Charge did not succeed :-('})
+            return Response({'error': _('Your card has been declined')}, status=500)
 
         # Winning, save new order, with user and stripe customer id :-)
         order = serializer.save(
@@ -116,6 +116,8 @@ class MembershipChargeView(GenericAPIView):
                 raise APIException(e)
             else:
                 raise APIException('Stripe charge failed with API error.')
+        except stripe.error.CardError:
+            return InlineClass({'status': self.STATUS_CHARGE_FAILED})
 
     def _login_user(self, user):
         user.backend = 'django.contrib.auth.backends.ModelBackend'  # FIXME: Ninja!

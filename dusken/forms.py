@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import fields
 from django.utils.translation import ugettext as _
 
 from dusken.models import DuskenUser
@@ -8,8 +7,6 @@ from phonenumber_field.formfields import PhoneNumberField
 
 
 class DuskenUserForm(forms.ModelForm):
-    email = fields.EmailField()
-
     class Meta:
         model = DuskenUser
         fields = ['first_name', 'last_name', 'email', 'phone_number']

@@ -16,7 +16,7 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
-from dusken.utils import create_email_key, send_validation_email
+from dusken.utils import create_email_key, send_validation_email, generate_username
 
 
 class AbstractBaseModel(models.Model):
@@ -80,6 +80,8 @@ class DuskenUser(AbstractUser):
                 self.email_confirmed_at = None
                 self.email_key = create_email_key()
                 send_validation_email(self)
+        if self.username is '':
+            self.username = generate_username(self.first_name, self.last_name)
 
         super().save(**kwargs)
 

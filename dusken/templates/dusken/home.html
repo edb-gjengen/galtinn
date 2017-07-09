@@ -21,18 +21,18 @@
                 <ul class="list-group list-group-flush">
                 {% with user.get_last_valid_membership as ms %}
                     {% if ms.is_valid %}
-                        <li class="list-group-item list-group-item-success"><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </li>
+                        <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </span></li>
                     {% else %}
-                        <li class="list-group-item list-group-item-danger"><span class="lnr lnr-sad"></span> {% trans "Membership expired." %}</li>
+                        <li class="list-group-item list-group-item-danger"><span><span class="lnr lnr-sad"></span> {% trans "Membership expired." %} </span></li>
                     {% endif %}
 
                     {% if ms.is_valid %}
-                        <li class="list-group-item membership">
+                        <li class="list-group-item membership"><span>
                             {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{{ ms.end_date }}</strong>
-                        </li>
-                        <li class="list-group-item payment">
+                        </span></li>
+                        <li class="list-group-item payment"><span>
                         {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.payment_method }}</strong>
-                        </li>
+                        </span></li>
                     {% endif %}
                 </ul>
                 <div class="card-block">

@@ -5,6 +5,7 @@ from dusken.api.views import ResendValidationEmailView
 from dusken.api.views.cards import MemberCardViewSet
 from dusken.api.views.memberships import MembershipViewSet, MembershipChargeView, MembershipChargeRenewView
 from dusken.api.views.users import DuskenUserViewSet
+from dusken.api.views.validate import validate
 
 router = DefaultRouter()
 router.register(r'users', DuskenUserViewSet, base_name='user-api')
@@ -17,4 +18,6 @@ urlpatterns += [
     url(r'membership/charge_renew/$', MembershipChargeRenewView.as_view(), name='membership-charge-renew'),
 
     url(r'user/resend_validation_email/$', ResendValidationEmailView.as_view(), name='resend-validation-email'),
+    # Validation
+    url(r'validate/$', validate, name='validate'),
 ]

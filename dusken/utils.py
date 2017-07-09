@@ -7,6 +7,12 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext as _
 
+from django.core import validators
+from django.core.exceptions import ValidationError
+from phonenumber_field.validators import validate_international_phonenumber
+
+import dusken
+
 
 def generate_username(first_name, last_name):
     """ Generate a fairly unique username based on first and last name.
@@ -47,3 +53,29 @@ def send_validation_email(user):
 
 def create_email_key():
     return get_random_string()
+
+
+def validate_email(email):
+    if email == '':
+        return _('You need to enter an email.')
+
+    try:
+        validators.validate_email(email)
+    except ValidationError:
+        return _('Email is invalid.')
+
+    if dusken.models.DuskenUser.objects.filter(email=email).exists():
+        return _('Email is already in use.')
+
+
+def validate_phone_number(number):
+    if number == '':
+        return _('You need to enter a phone number.')
+
+    try:
+        validate_international_phonenumber(number)
+    except ValidationError:
+        return _('Phone number is invalid')
+
+    if dusken.models.DuskenUser.objects.filter(phone_number=number).exists():
+        return _('Phone number is already in use.')
