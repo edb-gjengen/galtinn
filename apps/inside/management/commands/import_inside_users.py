@@ -309,7 +309,7 @@ class Command(BaseCommand):
             ou_contact_id = ou.pop('legacy_contact_id')
             o = OrgUnit.objects.create(**ou)
 
-            message = 'Imported division_id={} from Inside'.format(ou_legacy_id)
+            message = 'Imported from Inside (division_id={})'.format(ou_legacy_id)
             OrgUnitLogMessage.objects.create(org_unit=o, message=message)
             ou_map[ou_legacy_id] = o.pk
             if ou_contact_id:
@@ -354,7 +354,7 @@ class Command(BaseCommand):
                 ou.contact_person = new_user
                 ou.save()
 
-            message = 'Imported user_id={} from Inside'.format(new_user.legacy_id)
+            message = 'Imported from Inside (user_id={})'.format(new_user.legacy_id)
             UserLogMessage.objects.create(user=new_user, message=message)
             for m_data in memberships:
                 m_data['user_id'] = new_user.pk

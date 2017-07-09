@@ -1,8 +1,5 @@
 image: nikolaik/python-nodejs:latest
 
-services:
-  - postgres:latest
-
 variables:
   POSTGRES_DB: dusken
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
