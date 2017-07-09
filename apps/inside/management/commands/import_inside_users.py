@@ -1,4 +1,5 @@
 # coding: utf-8
+import html
 import random
 import re
 from datetime import timedelta, datetime
@@ -9,7 +10,7 @@ from django.utils import timezone
 from signal_disabler import signal_disabler
 
 from apps.common.utils import log_time
-from apps.inside.models import InsideUser, InsideCard
+from apps.inside.models import InsideUser, InsideCard, InsideGroup, Division
 from dusken.models import DuskenUser, Membership, MemberCard, MembershipType, Order, UserLogMessage
 from dusken.zip_to_city import ZIP_TO_CITY_MAP
 
@@ -192,9 +193,34 @@ class Command(BaseCommand):
 
     @log_time('Fetching group data...')
     def get_group_data(self):
-        # TODO
+        field_map = {
+            'email': 'email',
+            'phone': 'phone_number',
+            'name': 'name',
+            'nicename': 'slug',
+            'text': 'description',
+            'url': 'website'
+        }
+        fields = list(field_map.keys()) + ['user_id_contact']
+        divisions = list(Division.objects.values(*fields))
 
-        return []
+        org_units = []
+        for d in divisions:
+            org_unit = {}
+            for src_key, dst_key in field_map.items():
+                if dst_key == 'phone_number' and len(d[src_key]) == 8:
+                    org_unit[dst_key] = '+47{}'.format(d[src_key])
+                elif dst_key == 'description':
+                    new_val = html.unescape(d[src_key]).replace(u'\xa0', u' ').replace('\\"', '"').replace('\\\'', '\'')
+                    new_val = new_val.strip()
+                    new_val = re.sub("(<!--.*?-->)", "", new_val)
+                    org_unit[dst_key] = new_val
+                else:
+                    org_unit[dst_key] = d[src_key]
+
+            org_units.append(org_unit)
+
+        return org_units
 
     def _get_card_end_date(self, card):
         if not card['owner_membership_trial']:
@@ -274,9 +300,10 @@ class Command(BaseCommand):
         # Note: Keep concept of admin_group
 
         group_data = self.get_group_data()
-        users = self.get_user_data()
+        pprint(group_data)
+        # users = self.get_user_data()
 
-        member_cards_data = self.get_member_card_data()
+        # member_cards_data = self.get_member_card_data()
         # pprint(member_cards_data['cards'][0])
 
-        self.create_database(users, member_cards_data)
+        # self.create_database(users, member_cards_data)

@@ -236,12 +236,24 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
     slug = models.SlugField(_('slug'), unique=True, max_length=255, blank=True)
     short_name = models.CharField(_('short name'), max_length=128, blank=True)
     is_active = models.BooleanField(_('is active'), default=True)
-    parent = TreeForeignKey(
-        'self', verbose_name=_('parent'), null=True, blank=True, related_name='children', db_index=True)
+    description = models.TextField(_('description'), blank=True, default='')
+
+    # Contact
+    email = models.EmailField(_('email'), blank=True, default='')
+    phone_number = PhoneNumberField(_('phone number'), blank=True, default='')
+    contact_person = models.ForeignKey(
+        'dusken.DuskenUser', verbose_name=_('contact person'), blank=True, null=True, on_delete=models.SET_NULL)
+    website = models.URLField(_('website'), blank=True, default='')
+
+    # Member and permission groups
     group = models.ForeignKey(
         DjangoGroup, verbose_name=_('group'), blank=True, null=True, related_name='member_orgunits')
     admin_group = models.ForeignKey(
         DjangoGroup, verbose_name=_('admin group'), blank=True, null=True, related_name='admin_orgunits')
+
+    # Hierarchical :-)
+    parent = TreeForeignKey(
+        'self', verbose_name=_('parent'), null=True, blank=True, related_name='children', db_index=True)
 
     def __str__(self):
         if self.short_name:
@@ -254,6 +266,7 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
 
     class Meta:
         verbose_name = _('Org unit')
+        verbose_name_plural = _('Org units')
 
 
 class Order(AbstractBaseModel):
@@ -322,3 +335,17 @@ class UserLogMessage(AbstractBaseModel):
     class Meta:
         verbose_name = _('User log message')
         verbose_name_plural = _('User log messages')
+
+
+class OrgUnitLogMessage(AbstractBaseModel):
+    org_unit = models.ForeignKey('dusken.OrgUnit', related_name='log_messages')
+    message = models.CharField(max_length=500)
+    changed_by = models.ForeignKey(
+        'dusken.DuskenUser', related_name='org_unit_changes', on_delete=models.SET_NULL, blank=True, null=True)
+
+    def __str__(self):
+        return '{}: {} ({})'.format(self.__class__.__name__, self.message, self.org_unit_id)
+
+    class Meta:
+        verbose_name = _('Org unit log message')
+        verbose_name_plural = _('Org unit log messages')
