@@ -41,7 +41,7 @@ function getFormData(formElement) {
 
 function serverValidation(formData) {
     $.ajax({
-        url: '/validate/',
+        url: '/api/validate/',
         data: {
             'email': formData.email,
             'number': formData.phone_number
@@ -125,7 +125,8 @@ function onStripeToken(token) {
         location.href = urls.profile;
     }).fail(function(data) {
         console.log('failed', data);
-        $('.js-validation-errors').html('<div class="alert-danger">'+ JSON.parse(data.responseText).error +'</div>')
+        $('.js-validation-errors').addClass('alert alert-danger');
+        $('.js-validation-errors').html(JSON.parse(data.responseText).error)
     });
 }
 
