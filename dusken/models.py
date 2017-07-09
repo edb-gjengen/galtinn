@@ -308,3 +308,14 @@ class PlaceOfStudy(AbstractBaseModel):
 
     def __str__(self):
         return '{} ({})'.format(self.name, self.short_name)
+
+
+class UserLogMessage(AbstractBaseModel):
+    user = models.ForeignKey('dusken.DuskenUser', related_name='log_messages')
+    message = models.CharField(max_length=500)
+    changed_by = models.ForeignKey(
+        'dusken.DuskenUser', related_name='user_changes', on_delete=models.SET_NULL, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _('User log message')
+        verbose_name_plural = _('User log messages')
