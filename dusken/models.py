@@ -80,6 +80,8 @@ class DuskenUser(AbstractUser):
                 self.email_confirmed_at = None
                 self.email_key = create_email_key()
                 send_validation_email(self)
+
+        # FIXME: This does not seem like a good idea
         if self.username is '':
             self.username = generate_username(self.first_name, self.last_name)
 
