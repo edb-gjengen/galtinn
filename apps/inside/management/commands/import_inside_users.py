@@ -5,13 +5,16 @@ import re
 from datetime import timedelta, datetime
 from pprint import pprint
 
+from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from django.utils import timezone
 from signal_disabler import signal_disabler
 
 from apps.common.utils import log_time
 from apps.inside.models import InsideUser, InsideCard, InsideGroup, Division
-from dusken.models import DuskenUser, Membership, MemberCard, MembershipType, Order, UserLogMessage
+from dusken.models import (DuskenUser, Membership, MemberCard, MembershipType, Order, UserLogMessage, GroupProfile,
+                           OrgUnit, OrgUnitLogMessage)
 from dusken.zip_to_city import ZIP_TO_CITY_MAP
 
 
@@ -28,38 +31,12 @@ class Command(BaseCommand):
         * Studiested
         * Brukerlogg
     """
-    USER_FIELD_MAP = {
-        'pk': 'legacy_id',
-        'first_name': 'first_name',
-        'last_name': 'last_name',
-        'ldap_username': 'username',
-        'email': 'email',
-        'birthdate': 'date_of_birth',
-
-        'userphonenumber__number': 'phone_number',
-        'userphonenumber__validated': 'phone_number_validated',
-
-        'useraddressno__street': 'street_address',
-        'useraddressno__zipcode': 'postal_code',
-
-        'useraddressint__street': 'street_address',
-        'useraddressint__zipcode': 'postal_code',
-        'useraddressint__country': 'country',
-        'useraddressint__city': 'city',
-
-        'created': 'date_joined',  # FIXME: Does not work?
-    }
-
     def __init__(self):
         super().__init__()
-
         # No email notifications
         signal_disabler.disable().disconnect_all()
 
-        self.inside_users = InsideUser.objects.order_by('pk')
-
         self.zip_to_city_map = ZIP_TO_CITY_MAP
-
         self.life_long_users = InsideUser.objects.filter(expires=None).values_list('pk', flat=True)
 
         m1, c = MembershipType.objects.get_or_create(pk=1, defaults={'name': 'Membership'})
@@ -124,19 +101,40 @@ class Command(BaseCommand):
 
     @log_time('Fetching user data...')
     def get_user_data(self):
+        user_field_map = {
+            'pk': 'legacy_id',
+            'first_name': 'first_name',
+            'last_name': 'last_name',
+            'ldap_username': 'username',
+            'email': 'email',
+            'birthdate': 'date_of_birth',
+
+            'userphonenumber__number': 'phone_number',
+            'userphonenumber__validated': 'phone_number_validated',
+
+            'useraddressno__street': 'street_address',
+            'useraddressno__zipcode': 'postal_code',
+
+            'useraddressint__street': 'street_address',
+            'useraddressint__zipcode': 'postal_code',
+            'useraddressint__country': 'country',
+            'useraddressint__city': 'city',
+
+            'created': 'date_joined',  # FIXME: Does not work?
+        }
         skip_usernames = ['ukjent']
         more_fields = ['addresstype', 'registration_status', 'source', 'placeofstudy', 'expires', 'created',
                        'ldap_password', 'username']
-        fields = list(self.USER_FIELD_MAP.keys()) + more_fields
+        fields = list(user_field_map.keys()) + more_fields
 
-        i_users = self.inside_users.order_by('pk').reverse().values(*fields)
+        i_users = InsideUser.objects.order_by('pk').reverse().values(*fields)
         d_users = []
         for u in i_users:
             if u['username'] in skip_usernames:
                 continue
 
             new_user = {}
-            for src_field, dst_field in self.USER_FIELD_MAP.items():
+            for src_field, dst_field in user_field_map.items():
                 # Address
                 if u.get('addresstype') == 'no' and dst_field == 'country':
                     new_user[dst_field] = 'NO'
@@ -187,22 +185,27 @@ class Command(BaseCommand):
             if last_valid_membership is not None:
                 new_user['memberships'] = [last_valid_membership]
 
+            # Groups
+            group_ids = list(InsideGroup.objects.filter(user_rels__user=u['pk']).values_list('pk', flat=True))
+            new_user['legacy_group_ids'] = group_ids
+
             d_users.append(new_user)
 
         return d_users
 
-    @log_time('Fetching group data...')
-    def get_group_data(self):
+    @log_time('Fetching org unit data...')
+    def get_org_units_data(self):
         field_map = {
             'email': 'email',
             'phone': 'phone_number',
             'name': 'name',
             'nicename': 'slug',
             'text': 'description',
-            'url': 'website'
+            'url': 'website',
+            'id': 'legacy_id',
+            'user_id_contact': 'legacy_contact_id'
         }
-        fields = list(field_map.keys()) + ['user_id_contact']
-        divisions = list(Division.objects.values(*fields))
+        divisions = list(Division.objects.values(*field_map.keys()))
 
         org_units = []
         for d in divisions:
@@ -221,6 +224,34 @@ class Command(BaseCommand):
             org_units.append(org_unit)
 
         return org_units
+
+    @log_time('Fetching group data...')
+    def get_group_data(self):
+        field_map = {
+            'name': 'name',
+            'posix_group': 'posix_name',
+            'text': 'description',
+            'division_id': 'legacy_division_id',
+            'admin': 'is_admin_group',
+            'id': 'legacy_id'
+
+        }
+        groups = list(InsideGroup.objects.values(*field_map.keys()))
+
+        group_data = []
+        for g in groups:
+            group = {}
+            for src_key, dst_key in field_map.items():
+                if dst_key == 'description':
+                    group[dst_key] = g[src_key].replace('...', '')
+                elif dst_key == 'is_admin_group':
+                    group[dst_key] = g[src_key] == '1'
+                else:
+                    group[dst_key] = g[src_key]
+
+            group_data.append(group)
+
+        return group_data
 
     def _get_card_end_date(self, card):
         if not card['owner_membership_trial']:
@@ -266,11 +297,63 @@ class Command(BaseCommand):
         return ret
 
     @log_time('Creating database...')
-    def create_database(self, users, member_cards_data):
-        # Create users first, use legacy_id to reference later
+    def create_database(self, users, member_cards_data, org_unit_data, group_data):
+        # Maps of old ID's to new
+        group_map = {}
+        ou_map = {}
+        ou_contact_map = {}  # From legacy user contact id to org unit
+
+        # Create org units
+        for ou in org_unit_data:
+            ou_legacy_id = ou.pop('legacy_id')
+            ou_contact_id = ou.pop('legacy_contact_id')
+            o = OrgUnit.objects.create(**ou)
+
+            message = 'Imported division_id={} from Inside'.format(ou_legacy_id)
+            OrgUnitLogMessage.objects.create(org_unit=o, message=message)
+            ou_map[ou_legacy_id] = o.pk
+            if ou_contact_id:
+                ou_contact_map[ou_contact_id] = o
+
+        # Create groups
+        for g in group_data:
+            gp_data = {
+                'description': g.pop('description'),
+                'posix_name': g.pop('posix_name')
+            }
+            legacy_division_id = g.pop('legacy_division_id')
+            legacy_id = g.pop('legacy_id')
+            is_admin_group = g.pop('is_admin_group')
+
+            g = Group.objects.create(**g)
+            group_map[legacy_id] = g.pk
+            GroupProfile.objects.create(group=g, **gp_data)
+
+            # Add ou admin group or member group
+            if legacy_division_id:
+                _ou = OrgUnit.objects.get(pk=ou_map[legacy_division_id])
+                if is_admin_group:
+                    _ou.admin_group = g
+                else:
+                    _ou.group = g
+                _ou.save()
+
+        # Create users, use legacy_id to reference later
         for u in users:
             memberships = u.pop('memberships')
+
+            group_ids = [group_map[g] for g in u.pop('legacy_group_ids')]
+            groups = Group.objects.filter(pk__in=group_ids)
+
             new_user = DuskenUser.objects.create(**u)
+            new_user.groups.add(*groups)
+
+            # Add org unit contact
+            if new_user.legacy_id in ou_contact_map:
+                ou = ou_contact_map[new_user.legacy_id]
+                ou.contact_person = new_user
+                ou.save()
+
             message = 'Imported user_id={} from Inside'.format(new_user.legacy_id)
             UserLogMessage.objects.create(user=new_user, message=message)
             for m_data in memberships:
@@ -281,8 +364,9 @@ class Command(BaseCommand):
                 Order.objects.create(product=m, user=new_user, price_nok=0)
 
         for c in member_cards_data['cards']:
-            if c['legacy_user_id'] is not None:
-                c['user'] = DuskenUser.objects.get(legacy_id=c.pop('legacy_user_id'))
+            legacy_user_id = c.pop('legacy_user_id')
+            if legacy_user_id is not None:
+                c['user'] = DuskenUser.objects.get(legacy_id=legacy_user_id)
             MemberCard.objects.create(**c)
 
         for m in member_cards_data['memberships']:
@@ -295,15 +379,12 @@ class Command(BaseCommand):
             Order.objects.create(product=m, **order_data)
 
     def handle(self, *args, **options):
-        # TODO: Get list of org units
-        # TODO: Get list of groups
-        # Note: Keep concept of admin_group
-
+        # Get data
+        org_units_data = self.get_org_units_data()
         group_data = self.get_group_data()
-        pprint(group_data)
-        # users = self.get_user_data()
+        users = self.get_user_data()
+        member_cards_data = self.get_member_card_data()
 
-        # member_cards_data = self.get_member_card_data()
-        # pprint(member_cards_data['cards'][0])
-
-        # self.create_database(users, member_cards_data)
+        # Create database
+        with transaction.atomic():
+            self.create_database(users, member_cards_data, org_units_data, group_data)

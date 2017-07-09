@@ -19,7 +19,7 @@ class NoDbTestRunner(DiscoverRunner):
 
 
 class ImportTestCase(TestCase):
-    # @skip('Uncomment this if you want to test the import script')
+    @skip('Uncomment this if you want to test the import script')
     def test_import_inside_users(self):
         call_command('import_inside_users')
         # self.assertEquals(out, 'OK')

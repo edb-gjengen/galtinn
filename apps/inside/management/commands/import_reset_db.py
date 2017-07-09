@@ -13,7 +13,7 @@ class Command(BaseCommand):
             return
 
         superusers = DuskenUser.objects.filter(is_superuser=True)
-        DuskenUser.objects.exclude(pk__in=superusers)
+        DuskenUser.objects.exclude(pk__in=superusers).delete()
         MemberCard.objects.all().delete()
         Membership.objects.all().delete()
         Order.objects.all().delete()

@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import Group as DjangoGroup
@@ -203,7 +203,8 @@ class MemberCard(AbstractBaseModel):
     card_number = models.IntegerField(_('card number'), unique=True)
     registered = models.DateTimeField(_('registered'), null=True, blank=True)
     is_active = models.BooleanField(_('is active'), default=True)
-    user = models.ForeignKey('dusken.DuskenUser', verbose_name=_('user'), null=True, blank=True, related_name='membercards')
+    user = models.ForeignKey(
+        'dusken.DuskenUser', verbose_name=_('user'), null=True, blank=True, related_name='member_cards')
 
     def __str__(self):
         return "{}".format(self.card_number)
@@ -217,8 +218,14 @@ class GroupProfile(AbstractBaseModel):
     django.contrib.auth.model.Group extended with additional fields.
     """
 
-    posix_name = models.CharField(max_length=255, unique=True)
+    posix_name = models.CharField(max_length=255, blank=True, default='')
+    description = models.TextField(blank=True, default='')
     group = models.OneToOneField(DjangoGroup)
+
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        if self.posix_name != '' and self.__class__.objects.filter(posix_name=self.posix_name).exists():
+            raise ValidationError(_('Posix name must be unique or empty'))
 
     def __str__(self):
         return "{}".format(self.posix_name)
