@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from django.core.management import BaseCommand
 
-from dusken.models import DuskenUser, MemberCard, Order, Membership, OrgUnit, GroupProfile
+from dusken.models import DuskenUser, MemberCard, Order, Membership, OrgUnit, GroupProfile, PlaceOfStudy
 
 
 class Command(BaseCommand):
@@ -21,5 +21,6 @@ class Command(BaseCommand):
         OrgUnit.objects.all().delete()
         GroupProfile.objects.all().delete()
         Group.objects.all().delete()
+        PlaceOfStudy.objects.all().delete()
 
         print("All gone.")

@@ -43,7 +43,7 @@ class DuskenUser(AbstractUser):
     city = models.CharField(_('city'), max_length=100, null=True, blank=True)
     country = CountryField(_('country'), default='NO', blank=True)
 
-    place_of_study = models.ManyToManyField('dusken.PlaceOfStudy', verbose_name=_('place of study'), blank=True)
+    place_of_study = models.ForeignKey('dusken.PlaceOfStudy', verbose_name=_('place of study'), blank=True, null=True)
     legacy_id = models.IntegerField(_('legacy id'), null=True, blank=True)
 
     stripe_customer_id = models.CharField(_('stripe customer id'), max_length=254, null=True, blank=True)

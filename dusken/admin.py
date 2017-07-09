@@ -64,6 +64,8 @@ class MembershipAdmin(admin.ModelAdmin):
 
 class OrgUnitAdmin(MPTTModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+    list_display = ['name', 'contact_person', 'is_active']
+    list_filter = ['is_active']
     readonly_fields = ['contact_person']
 
 

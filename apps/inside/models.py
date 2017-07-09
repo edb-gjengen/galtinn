@@ -345,7 +345,7 @@ class InsideUser(models.Model):
     valid_address = models.IntegerField()
     email = models.CharField(unique=True, max_length=120)
     birthdate = models.DateField()
-    placeofstudy = models.ForeignKey('inside.InsidePlaceOfStudy', db_column='placeOfStudy')
+    placeofstudy = models.IntegerField(db_column='placeOfStudy')
     passwordreset = models.CharField(db_column='passwordReset', max_length=1)  # Field name made lowercase.
     expires = models.DateField(blank=True, null=True)
     division_id_request = models.ForeignKey('inside.Division', db_column='division_id_request', blank=True, null=True)

@@ -12,9 +12,9 @@ from django.utils import timezone
 from signal_disabler import signal_disabler
 
 from apps.common.utils import log_time
-from apps.inside.models import InsideUser, InsideCard, InsideGroup, Division
+from apps.inside.models import InsideUser, InsideCard, InsideGroup, Division, InsidePlaceOfStudy
 from dusken.models import (DuskenUser, Membership, MemberCard, MembershipType, Order, UserLogMessage, GroupProfile,
-                           OrgUnit, OrgUnitLogMessage)
+                           OrgUnit, OrgUnitLogMessage, PlaceOfStudy)
 from dusken.zip_to_city import ZIP_TO_CITY_MAP
 
 
@@ -51,6 +51,12 @@ class Command(BaseCommand):
             'life_long': m2,
             'trial': m3,
         }
+
+        # Create places of study
+        self.pos_map = {}
+        for ipos in InsidePlaceOfStudy.objects.all():
+            pos, _ = PlaceOfStudy.objects.get_or_create(name=ipos.navn)
+            self.pos_map[ipos.pk] = pos.pk
 
     def _get_city_from_postal_code(self, postal_code):
         return self.zip_to_city_map.get(postal_code)
@@ -108,6 +114,7 @@ class Command(BaseCommand):
             'ldap_username': 'username',
             'email': 'email',
             'birthdate': 'date_of_birth',
+            'placeofstudy': 'place_of_study',
 
             'userphonenumber__number': 'phone_number',
             'userphonenumber__validated': 'phone_number_validated',
@@ -165,6 +172,12 @@ class Command(BaseCommand):
 
                 if dst_field == 'date_joined':
                     new_val = timezone.now()
+
+                if dst_field == 'place_of_study':
+                    pos_id = self.pos_map.get(new_val)
+                    if pos_id is None:
+                        continue
+                    new_val = PlaceOfStudy.objects.get(pk=pos_id)
 
                 if dst_field == 'phone_number' and (new_val is None or new_val == '-'):
                     new_val = ''
@@ -332,6 +345,7 @@ class Command(BaseCommand):
             # Add ou admin group or member group
             if legacy_division_id:
                 _ou = OrgUnit.objects.get(pk=ou_map[legacy_division_id])
+                # Note: This ovewrites when there are multiple groups tied to same division
                 if is_admin_group:
                     _ou.admin_group = g
                 else:
@@ -344,7 +358,6 @@ class Command(BaseCommand):
 
             group_ids = [group_map[g] for g in u.pop('legacy_group_ids')]
             groups = Group.objects.filter(pk__in=group_ids)
-
             new_user = DuskenUser.objects.create(**u)
             new_user.groups.add(*groups)
 
