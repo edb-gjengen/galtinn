@@ -10,7 +10,7 @@ from signal_disabler import signal_disabler
 
 from apps.common.utils import log_time
 from apps.inside.models import InsideUser, InsideCard
-from dusken.models import DuskenUser, Membership, MemberCard, MembershipType, Order
+from dusken.models import DuskenUser, Membership, MemberCard, MembershipType, Order, UserLogMessage
 from dusken.zip_to_city import ZIP_TO_CITY_MAP
 
 
@@ -245,6 +245,8 @@ class Command(BaseCommand):
         for u in users:
             memberships = u.pop('memberships')
             new_user = DuskenUser.objects.create(**u)
+            message = 'Imported user_id={} from Inside'.format(new_user.legacy_id)
+            UserLogMessage.objects.create(user=new_user, message=message)
             for m_data in memberships:
                 m_data['user_id'] = new_user.pk
                 m = Membership.objects.create(**m_data)
