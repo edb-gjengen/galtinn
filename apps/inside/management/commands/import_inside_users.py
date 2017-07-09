@@ -301,7 +301,7 @@ class Command(BaseCommand):
         # Maps of old ID's to new
         group_map = {}
         ou_map = {}
-        ou_contact_map = {}  # From legacy user contact id to org unit
+        ou_contact_map = {}  # From legacy user contact id to org unit id
 
         # Create org units
         for ou in org_unit_data:
@@ -313,7 +313,7 @@ class Command(BaseCommand):
             OrgUnitLogMessage.objects.create(org_unit=o, message=message)
             ou_map[ou_legacy_id] = o.pk
             if ou_contact_id:
-                ou_contact_map[ou_contact_id] = o
+                ou_contact_map[ou_contact_id] = o.pk
 
         # Create groups
         for g in group_data:
@@ -350,7 +350,7 @@ class Command(BaseCommand):
 
             # Add org unit contact
             if new_user.legacy_id in ou_contact_map:
-                ou = ou_contact_map[new_user.legacy_id]
+                ou = OrgUnit.objects.get(pk=ou_contact_map[new_user.legacy_id])
                 ou.contact_person = new_user
                 ou.save()
 
