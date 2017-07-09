@@ -302,12 +302,12 @@ class PlaceOfStudy(AbstractBaseModel):
     name = models.CharField(_('name'), max_length=255)
     short_name = models.CharField(_('short name'), max_length=16)
 
+    def __str__(self):
+        return '{} ({})'.format(self.name, self.short_name)
+
     class Meta:
         verbose_name = _('Place of study')
         verbose_name_plural = _('Places of study')
-
-    def __str__(self):
-        return '{} ({})'.format(self.name, self.short_name)
 
 
 class UserLogMessage(AbstractBaseModel):
@@ -315,6 +315,9 @@ class UserLogMessage(AbstractBaseModel):
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
         'dusken.DuskenUser', related_name='user_changes', on_delete=models.SET_NULL, blank=True, null=True)
+
+    def __str__(self):
+        return '{}: {} ({})'.format(self.__class__.__name__, self.message, self.user_id)
 
     class Meta:
         verbose_name = _('User log message')
