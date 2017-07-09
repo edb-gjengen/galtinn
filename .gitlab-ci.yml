@@ -2,16 +2,17 @@ image: nikolaik/python-nodejs:latest
 
 services:
   - postgres:latest
-#  - redis:latest
 
 variables:
   POSTGRES_DB: dusken
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
 
-# This folder is cached between builds
 cache:
   paths:
-  - ~/.cache/pip/
-  - dusken/static/node_modules
+    - "$CI_PROJECT_DIR/pip-cache"
+    - "$CI_PROJECT_DIR/dusken/static/node_modules"
+    - "$CI_PROJECT_DIR/dusken/static/bower_components"
+  key: "$CI_PROJECT_ID"
 
 before_script:
   - python -V
