@@ -33,7 +33,10 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     'dusken',
     # 'apps.hooks',
-    'apps.inside',  # TODO Remove after import and new integrations are OK
+    # TODO Remove these after import and new integrations are OK
+    'apps.inside',
+    'apps.kassa',
+    'apps.tekstmelding',
 ]
 
 MIDDLEWARE_CLASSES = (
