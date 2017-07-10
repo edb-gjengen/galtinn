@@ -135,6 +135,9 @@ class OutgoingResponse(models.Model):
     error_number = models.IntegerField(db_column='ErrorNumber')
     error_message = models.TextField(db_column='ErrorMessage', blank=True, null=True)
 
+    def __str__(self):
+        return '{}: {}'.format(self.__class__.__name__, self.pk)
+
     class Meta:
         managed = False
         db_table = 'outgoing_response'
