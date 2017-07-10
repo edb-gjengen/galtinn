@@ -1,12 +1,32 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import fields
 from django.utils.translation import ugettext as _
 
 from dusken.models import DuskenUser
 from phonenumber_field.formfields import PhoneNumberField
 
+from dusken.utils import email_exist, phone_number_exist
+
 
 class DuskenUserForm(forms.ModelForm):
+    first_name = fields.CharField()
+    last_name = fields.CharField()
+    email = fields.EmailField()
+    phone_number = PhoneNumberField()
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if email_exist(email):
+            raise forms.ValidationError(_('Email already in use'))
+        return email
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data['phone_number']
+        if phone_number_exist(phone_number):
+            raise forms.ValidationError(_('Phone number already in use'))
+        return phone_number
+
     class Meta:
         model = DuskenUser
         fields = ['first_name', 'last_name', 'email', 'phone_number']

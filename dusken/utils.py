@@ -55,6 +55,12 @@ def create_email_key():
     return get_random_string()
 
 
+def email_exist(email):
+    if dusken.models.DuskenUser.objects.filter(email=email).exists():
+        return True
+    return False
+
+
 def validate_email(email):
     if email == '':
         return _('You need to enter an email.')
@@ -64,18 +70,24 @@ def validate_email(email):
     except ValidationError:
         return _('Email is invalid.')
 
-    if dusken.models.DuskenUser.objects.filter(email=email).exists():
+    if email_exist(email):
         return _('Email is already in use.')
 
 
-def validate_phone_number(number):
-    if number == '':
+def phone_number_exist(phone_number):
+    if dusken.models.DuskenUser.objects.filter(phone_number=phone_number).exists():
+        return True
+    return False
+
+
+def validate_phone_number(phone_number):
+    if phone_number == '':
         return _('You need to enter a phone number.')
 
     try:
-        validate_international_phonenumber(number)
+        validate_international_phonenumber(phone_number)
     except ValidationError:
         return _('Phone number is invalid')
 
-    if dusken.models.DuskenUser.objects.filter(phone_number=number).exists():
+    if phone_number_exist(phone_number):
         return _('Phone number is already in use.')
