@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django_countries',
     'bootstrap4',
     'django_extensions',
+    'captcha',
 ]
 INSTALLED_APPS += [
     'dusken',
@@ -131,6 +132,8 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 PHONENUMBER_DB_FORMAT = 'E164'
 PHONENUMBER_DEFAULT_REGION = 'NO'
+
+NOCAPTCHA = True
 
 try:
     from .local_settings import *

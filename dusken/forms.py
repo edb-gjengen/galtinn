@@ -5,6 +5,8 @@ from django.utils.translation import ugettext as _
 
 from dusken.models import DuskenUser
 from phonenumber_field.formfields import PhoneNumberField
+from captcha.fields import ReCaptchaField
+
 
 from dusken.utils import email_exist, phone_number_exist
 
@@ -14,6 +16,7 @@ class DuskenUserForm(forms.ModelForm):
     last_name = fields.CharField()
     email = fields.EmailField()
     phone_number = PhoneNumberField()
+    captcha = ReCaptchaField()
 
     def clean_email(self):
         email = self.cleaned_data['email']

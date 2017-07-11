@@ -22,6 +22,10 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     # Add Stripe keys in duskensite/local_settings.py
     # Note: get this from your account on stripe.com
 
+    # Add reCAPTCHA keys in duskensite/local_settings.py
+    # As: RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY
+
+
 ### Useful local_settings.py
 
     AUTH_PASSWORD_VALIDATORS = []
