@@ -14,5 +14,7 @@ urlpatterns = [
 
     url(r'^auth/password_change/$', MyPasswordChangeView.as_view(), name='password_change'),
     # Built in auth views
-    url('^auth/', include('django.contrib.auth.urls'))
+    url('^auth/', include('django.contrib.auth.urls')),
+    # Language selection
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 ]
