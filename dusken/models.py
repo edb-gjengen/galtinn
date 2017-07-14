@@ -117,6 +117,7 @@ class DuskenUser(AbstractUser):
     class Meta:
         verbose_name = _('User')
         verbose_name_plural = _('Users')
+        default_permissions = ('add', 'change', 'delete', 'view')
 
 
 class Membership(AbstractBaseModel):
@@ -141,6 +142,7 @@ class Membership(AbstractBaseModel):
     class Meta:
         verbose_name = _('Membership')
         verbose_name_plural = _('Memberships')
+        default_permissions = ('add', 'change', 'delete', 'view')
 
 
 class MembershipType(AbstractBaseModel):
@@ -215,6 +217,7 @@ class MemberCard(AbstractBaseModel):
 
     class Meta:
         verbose_name = _('Member card')
+        default_permissions = ('add', 'change', 'delete', 'view')
 
 
 class GroupProfile(AbstractBaseModel):

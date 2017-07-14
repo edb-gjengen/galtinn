@@ -1,9 +1,9 @@
-
 from phonenumber_field.phonenumber import to_python
 
 from django.http import JsonResponse
 from django.utils.translation import ugettext as _
 from dusken.utils import validate_email, validate_phone_number
+
 
 def validate(request):
     email = request.GET.get('email', None)
@@ -17,5 +17,3 @@ def validate(request):
         'missing_last_name': _('You need to enter your last name.')
     }
     return JsonResponse(data)
-
-

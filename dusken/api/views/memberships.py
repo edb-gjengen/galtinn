@@ -1,9 +1,10 @@
 import logging
 import stripe
+import django_filters
 
 from django.conf import settings
 from django.contrib.auth import login
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
@@ -20,20 +21,27 @@ from django.utils.translation import ugettext_lazy as _
 logger = logging.getLogger(__name__)
 
 
+class MembershipFilter(FilterSet):
+    # Filter users by number to avoid DRF dropdown
+    user = django_filters.NumberFilter()
+
+    class Meta:
+        model = Membership
+        fields = ('id', 'user', 'start_date')
+
+
 class MembershipViewSet(viewsets.ModelViewSet):
-    """ Membership internal API """
+    """ Membership API """
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
     filter_backends = (DjangoFilterBackend,)
+    filter_class = MembershipFilter
     pagination_class = PageNumberPagination
 
-    # TODO: Everyone should not be able to view memberships
-
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return self.queryset.none()
-
-        return self.queryset
+        if self.request.user.has_perm('dusken.view_membership'):
+            return self.queryset
+        return self.queryset.filter(user=self.request.user.pk)
 
 
 class MembershipChargeView(GenericAPIView):
