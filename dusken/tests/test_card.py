@@ -9,9 +9,9 @@ class CardTestCase(APITestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user('robert', email='robert.kolner@gmail.com', password='pass')
         self.client.force_login(self.user)
-        self.card = MemberCard.objects.create(card_number=111111111)
+        self.card = MemberCard.objects.create(card_number=111111111, user=self.user)
 
-    def test_membership_search(self):
+    def test_membercard_search(self):
         url = reverse('membercard-api-list')
         data = {
             'card_number': self.card.card_number
