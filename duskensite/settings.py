@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django_countries',
     'bootstrap4',
     'django_extensions',
+    'django_filters',
     'captcha',
 ]
 INSTALLED_APPS += [
