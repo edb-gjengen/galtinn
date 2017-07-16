@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import Group as DjangoGroup
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -61,8 +62,12 @@ class DuskenUser(AbstractUser):
     def get_absolute_url(self):
         return reverse('user-detail', kwargs={'slug': self.uuid})
 
+    @property
+    def valid_membership_filter(self):
+        return Q(end_date__gt=timezone.now()) | Q(end_date__isnull=True)
+
     def has_valid_membership(self):
-        memberships = self.memberships.filter(end_date__gt=timezone.now())
+        memberships = self.memberships.filter(self.valid_membership_filter)
         for m in memberships:
             if m.is_valid():
                 return True
@@ -70,7 +75,7 @@ class DuskenUser(AbstractUser):
         return False
 
     def get_last_valid_membership(self):
-        return self.memberships.filter(end_date__gt=timezone.now()).order_by('-start_date').first()
+        return self.memberships.filter(self.valid_membership_filter).order_by('-start_date').first()
 
     def save(self, **kwargs):
         # If email has changed, invalidate confirmation state
