@@ -1,7 +1,6 @@
-from unittest import skip
+from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
-from rest_framework.status import HTTP_200_OK
 from rest_framework.test import APITestCase
 
 from dusken.models import DuskenUser
@@ -9,8 +8,12 @@ from dusken.models import DuskenUser
 
 class DuskenUserTest(APITestCase):
     def setUp(self):
-        self.user = DuskenUser.objects.create_user('robert', email='robert.kolner@gmail.com', password='pass')
+        self.user = DuskenUser.objects.create_user(
+            'olanord', email='olanord@example.com', password='mypassword')
         self.user.save()
+        self.other_user = DuskenUser.objects.create_user(
+            'karinord', email='karinord@example.com', password='mypassword')
+        self.other_user.save()
         self.token = Token.objects.create(user=self.user).key
 
     def __set_login(self, user_is_logged_in=True):
@@ -19,20 +22,27 @@ class DuskenUserTest(APITestCase):
         else:
             self.client.credentials()
 
-    @skip("Not implemented")
-    def test_user_login(self):
-        user_data = {
+    def test_user_can_obtain_token(self):
+        data = {
             'username': self.user.username,
-            'password': 'pass',
+            'password': 'mypassword',
         }
-
-        url = reverse('api-login')
-        response = self.client.post(url, user_data, format='json')
+        url = reverse('obtain-auth-token')
+        response = self.client.post(url, data, format='json')
 
         # Check if the response even makes sense:
-        self.assertEqual(response.status_code, HTTP_200_OK, 'Got wrong response code {}'.format(response.status_code))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         token = response.data.get('token', None)
 
         # Check if the returned login token is correct:
         self.assertIsNotNone(token, 'No token was returned in response')
         self.assertEqual(token, self.token, "Token from login and real token are not the same!")
+
+    def test_user_can_only_view_self(self):
+        self.assertEqual(DuskenUser.objects.count(), 2)
+        self.client.force_login(self.user)
+        url = reverse('user-api-list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['id'], self.user.pk)

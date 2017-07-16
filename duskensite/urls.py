@@ -10,7 +10,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include(dusken_urls)),
-    url(r'^auth/obtain-token/', obtain_auth_token),
+    url(r'^auth/obtain-token/', obtain_auth_token, name='obtain-auth-token'),
 
     url(r'^auth/password_change/$', MyPasswordChangeView.as_view(), name='password_change'),
     # Built in auth views
