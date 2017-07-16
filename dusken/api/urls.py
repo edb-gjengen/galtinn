@@ -5,12 +5,14 @@ from dusken.api.views import ResendValidationEmailView
 from dusken.api.views.cards import MemberCardViewSet
 from dusken.api.views.memberships import MembershipViewSet, MembershipChargeView, MembershipChargeRenewView
 from dusken.api.views.users import DuskenUserViewSet
+from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.validate import validate
 
 router = DefaultRouter()
 router.register(r'users', DuskenUserViewSet, base_name='user-api')
 router.register(r'cards', MemberCardViewSet, base_name='membercard-api')
 router.register(r'memberships', MembershipViewSet, base_name='membership-api')
+router.register(r'orders', OrderViewSet, base_name='order-api')
 urlpatterns = router.urls
 
 urlpatterns += [

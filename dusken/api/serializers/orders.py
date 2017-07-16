@@ -6,6 +6,13 @@ from dusken.api.serializers.users import NewDuskenUserSerializer
 from dusken.models import Membership, MembershipType, Order
 
 
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('uuid', 'price_nok', 'user', 'product', 'payment_method',
+                  'transaction_id', 'extra_data')
+
+
 class OrderChargeSerializer(serializers.ModelSerializer):
     product = serializers.PrimaryKeyRelatedField(queryset=MembershipType.objects.filter(is_active=True))
     user = NewDuskenUserSerializer()
