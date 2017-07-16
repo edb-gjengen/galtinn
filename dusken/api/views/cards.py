@@ -20,6 +20,7 @@ class MemberCardViewSet(viewsets.ModelViewSet):
     serializer_class = MemberCardSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = MemberCardFilter
+    lookup_field = 'card_number'
 
     def get_queryset(self):
         if self.request.user.has_perm('dusken.view_membercard'):

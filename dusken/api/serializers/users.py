@@ -2,14 +2,20 @@ from rest_framework import serializers
 
 from dusken.models import DuskenUser
 from dusken.utils import generate_username
+from dusken.api.serializers.cards import MemberCardSerializer
+from dusken.api.serializers.memberships import MembershipSerializer
 
 
 class DuskenUserSerializer(serializers.ModelSerializer):
+    cards = MemberCardSerializer(source='member_cards', many=True)
+    memberships = MembershipSerializer(many=True)
+
     class Meta:
         model = DuskenUser
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'phone_number', 'date_of_birth', 'legacy_id',
-                  'place_of_study',)
-        read_only_fields = ('id', 'username',)
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'phone_number',
+                  'date_of_birth', 'legacy_id', 'place_of_study', 'cards',
+                  'memberships', )
+        read_only_fields = ('id', 'username', 'cards', 'memberships')
         write_only_fields = ('password',)
 
 
