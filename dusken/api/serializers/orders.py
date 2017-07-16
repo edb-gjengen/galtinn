@@ -3,14 +3,18 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from dusken.api.serializers.users import NewDuskenUserSerializer
+from dusken.api.serializers.memberships import MembershipSerializer
 from dusken.models import Membership, MembershipType, Order
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    member_card = serializers.SlugRelatedField(slug_field='card_number', read_only=True)
+    product = MembershipSerializer()
+
     class Meta:
         model = Order
         fields = ('uuid', 'price_nok', 'user', 'product', 'payment_method',
-                  'transaction_id', 'extra_data')
+                  'transaction_id', 'phone_number', 'member_card')
 
 
 class OrderChargeSerializer(serializers.ModelSerializer):

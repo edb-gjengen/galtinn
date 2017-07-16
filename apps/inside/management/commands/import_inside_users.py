@@ -300,7 +300,8 @@ class Command(BaseCommand):
                     'start_date': c['registered'],
                     'end_date': self._get_card_end_date(c),
                     'payment_method': Order.BY_PHYSICAL_CARD,
-                    'extra_data': {'phone_number': c['owner_phone_number'], 'card_number': c['card_number']},
+                    'phone_number': c['owner_phone_number'],
+                    'card_number': c['card_number'],
                     'membership_type': self.membership_types[_type],
                     'price_nok': 25000 if not is_trial else 0
 
@@ -384,12 +385,14 @@ class Command(BaseCommand):
 
         for m in member_cards_data['memberships']:
             order_data = {
-                'extra_data': m.pop('extra_data'),
+                'phone_number': m.pop('phone_number'),
                 'payment_method': m.pop('payment_method'),
                 'price_nok': m.pop('price_nok')
             }
+            card_number = m.pop('card_number')
+            card = MemberCard.objects.get(card_number=card_number)
             m = Membership.objects.create(**m)
-            Order.objects.create(product=m, **order_data)
+            Order.objects.create(product=m, member_card=card, **order_data)
 
     def handle(self, *args, **options):
         # Get data

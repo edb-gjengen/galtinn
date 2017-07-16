@@ -1,17 +1,25 @@
 import django_filters
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
+from phonenumber_field.modelfields import PhoneNumberField
 from dusken.api.serializers.orders import OrderSerializer
 from dusken.models import Order
 
 
 class OrderFilter(FilterSet):
-    # Filter users by number to avoid DRF dropdown
+    # Filter users and member cards by number to avoid DRF dropdown
     user = django_filters.NumberFilter()
+    card_number = django_filters.NumberFilter(name='member_card__card_number')
 
     class Meta:
         model = Order
-        fields = ('uuid', 'price_nok', 'user', 'product', 'payment_method', 'transaction_id')
+        fields = ('uuid', 'price_nok', 'user', 'product', 'payment_method', 'transaction_id',
+                  'phone_number', 'card_number')
+        filter_overrides = {
+            PhoneNumberField: {
+                'filter_class': django_filters.CharFilter
+            }
+        }
 
 
 class OrderViewSet(viewsets.ModelViewSet):

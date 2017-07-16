@@ -312,7 +312,9 @@ class Order(AbstractBaseModel):
         blank=True,
         help_text=_('Stripe charge ID, Kassa event ID, SMS event ID or App event ID')
     )
-    extra_data = JSONField(blank=True, default=dict, help_text=_('f.ex phone_number, card_number, one time code, etc'))
+
+    phone_number = PhoneNumberField(blank=True, null=True)
+    member_card = models.ForeignKey('dusken.MemberCard', related_name='orders', null=True, blank=True)
 
     def price_nok_kr(self):
         return int(self.price_nok / 100)
