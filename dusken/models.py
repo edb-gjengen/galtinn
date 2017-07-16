@@ -323,6 +323,7 @@ class Order(AbstractBaseModel):
     class Meta:
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
+        default_permissions = ('add', 'change', 'delete', 'view')
 
 
 class PlaceOfStudy(AbstractBaseModel):
