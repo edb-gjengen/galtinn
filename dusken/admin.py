@@ -109,7 +109,7 @@ class DuskenUserAdmin(UserAdmin):
 class MemberCardAdmin(admin.ModelAdmin):
     list_display = ['card_number', 'show_user_link', 'registered', 'created', 'is_active']
     list_filter = ['is_active', 'registered']
-    search_fields = ['card_number']
+    search_fields = ['card_number', 'user__username', 'user__first_name', 'user__last_name', ]
     readonly_fields = ['card_number', 'show_user_link']
     exclude = ['user']
 
