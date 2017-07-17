@@ -64,7 +64,7 @@ class DuskenUser(AbstractUser):
 
     @property
     def has_valid_membership(self):
-        return bool(self.last_membership and self.last_membership.is_valid())
+        return bool(self.last_membership and self.last_membership.is_valid)
 
     @property
     def last_membership(self):
@@ -124,6 +124,7 @@ class Membership(AbstractBaseModel):
     membership_type = models.ForeignKey('dusken.MembershipType')
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='memberships')
 
+    @property
     def is_valid(self):
         return self.end_date is None or self.end_date >= timezone.now().date()
 

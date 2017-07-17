@@ -6,4 +6,5 @@ from dusken.models import Membership
 class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
-        fields = ('id', 'start_date', 'end_date', 'order', 'user', 'membership_type')
+        fields = ('id', 'start_date', 'end_date', 'order', 'user', 'membership_type', 'is_valid')
+        read_only_fields = ('id', 'is_valid')
