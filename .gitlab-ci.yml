@@ -17,10 +17,11 @@ before_script:
   - npm install -g bower gulp-cli
   - cd dusken/static; yarn && bower --allow-root install && gulp; cd ../..
   - pip install -r requirements.txt
+  - pip install coverage
 
 test:
-  variables:
-    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
   script:
-  - python manage.py migrate
-  - python manage.py test
+    - python manage.py migrate
+    - coverage run --source='./dusken/' manage.py test
+    - coverage report
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
