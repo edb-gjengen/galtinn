@@ -63,19 +63,12 @@ class DuskenUser(AbstractUser):
         return reverse('user-detail', kwargs={'slug': self.uuid})
 
     @property
-    def valid_membership_filter(self):
-        return Q(end_date__gt=timezone.now()) | Q(end_date__isnull=True)
-
     def has_valid_membership(self):
-        memberships = self.memberships.filter(self.valid_membership_filter)
-        for m in memberships:
-            if m.is_valid():
-                return True
+        return bool(self.last_membership and self.last_membership.is_valid())
 
-        return False
-
-    def get_last_valid_membership(self):
-        return self.memberships.filter(self.valid_membership_filter).order_by('-start_date').first()
+    @property
+    def last_membership(self):
+        return self.memberships.order_by('-start_date').first()
 
     def save(self, **kwargs):
         # If email has changed, invalidate confirmation state
@@ -131,11 +124,8 @@ class Membership(AbstractBaseModel):
     membership_type = models.ForeignKey('dusken.MembershipType')
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='memberships')
 
-    def expires(self):
-        return self.end_date
-
     def is_valid(self):
-        return self.order is not None
+        return self.end_date is None or self.end_date >= timezone.now().date()
 
     def __str__(self):
         name = self.__class__.__name__

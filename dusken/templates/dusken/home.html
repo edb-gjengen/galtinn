@@ -19,7 +19,7 @@
                     <h6 class="card-subtitle text-muted">{% trans "See your membership status" %}</h6>
                 </div>
                 <ul class="list-group list-group-flush">
-                {% with user.get_last_valid_membership as ms %}
+                {% with user.last_membership as ms %}
                     {% if ms.is_valid %}
                         <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </span></li>
                     {% else %}
@@ -28,7 +28,7 @@
 
                     {% if ms.is_valid %}
                         <li class="list-group-item membership"><span>
-                            {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{{ ms.end_date }}</strong>
+                            {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</strong>
                         </span></li>
                         <li class="list-group-item payment"><span>
                         {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.payment_method }}</strong>
