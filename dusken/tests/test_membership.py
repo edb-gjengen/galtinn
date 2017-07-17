@@ -16,7 +16,8 @@ class MembershipTest(APITestCase):
         self.user.user_permissions.add(Permission.objects.get(codename='add_membership'))
         self.client.force_login(self.user)
         self.membership_type = MembershipType.objects.create(
-            name='Medlemskap DNS (årlig',
+            name='Cool Club Membership',
+            slug='membership',
             duration=datetime.timedelta(days=365),
             is_default=True)
 
@@ -35,7 +36,7 @@ class MembershipTest(APITestCase):
             'start_date': self.membership.start_date.isoformat(),
             'end_date': self.membership.end_date.isoformat(),
             'user': self.user.pk,
-            'membership_type': self.membership.membership_type.pk,
+            'membership_type': self.membership.membership_type.slug,
             'order': Order.objects.create(price_nok=self.membership.membership_type.price, user=self.user).pk
         }
 
