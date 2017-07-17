@@ -20,7 +20,7 @@ class DuskenUserFilter(FilterSet):
 
 class DuskenUserViewSet(viewsets.ModelViewSet):
     """ DuskenUser API """
-    queryset = DuskenUser.objects.all()
+    queryset = DuskenUser.objects.all().order_by('id')
     serializer_class = DuskenUserSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, )
     filter_class = DuskenUserFilter

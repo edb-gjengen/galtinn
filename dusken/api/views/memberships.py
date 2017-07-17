@@ -32,7 +32,7 @@ class MembershipFilter(FilterSet):
 
 class MembershipViewSet(viewsets.ModelViewSet):
     """ Membership API """
-    queryset = Membership.objects.all()
+    queryset = Membership.objects.all().order_by('pk')
     serializer_class = MembershipSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_class = MembershipFilter

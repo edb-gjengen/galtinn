@@ -16,7 +16,7 @@ class MemberCardFilter(FilterSet):
 
 class MemberCardViewSet(viewsets.ModelViewSet):
     """MemberCard API"""
-    queryset = MemberCard.objects.all()
+    queryset = MemberCard.objects.all().order_by('pk')
     serializer_class = MemberCardSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = MemberCardFilter

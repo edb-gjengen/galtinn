@@ -13,8 +13,8 @@ class OrderFilter(FilterSet):
 
     class Meta:
         model = Order
-        fields = ('uuid', 'price_nok', 'user', 'product', 'payment_method', 'transaction_id',
-                  'phone_number', 'card_number')
+        fields = ('uuid', 'created', 'price_nok', 'user', 'product', 'payment_method',
+                  'transaction_id', 'phone_number', 'card_number')
         filter_overrides = {
             PhoneNumberField: {
                 'filter_class': django_filters.CharFilter
@@ -24,7 +24,7 @@ class OrderFilter(FilterSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     """Order API"""
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().order_by('created')
     serializer_class = OrderSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = OrderFilter
