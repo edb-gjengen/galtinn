@@ -39,13 +39,17 @@ class Command(BaseCommand):
         self.zip_to_city_map = ZIP_TO_CITY_MAP
         self.life_long_users = InsideUser.objects.filter(expires=None).values_list('pk', flat=True)
 
-        m1, c = MembershipType.objects.get_or_create(pk=1, defaults={'name': 'Membership'})
+        m1, c = MembershipType.objects.get_or_create(pk=1,
+                                                     defaults={'name': 'Membership',
+                                                               'slug': 'standard'})
         m2, c = MembershipType.objects.get_or_create(pk=2,
                                                      expiry_type=MembershipType.EXPIRY_NEVER,
-                                                     defaults={'name': 'Life long'})
+                                                     defaults={'name': 'Life long',
+                                                               'slug': 'lifelong'})
         m3, c = MembershipType.objects.get_or_create(pk=3,
                                                      expiry_type=MembershipType.EXPIRY_END_OF_YEAR,
-                                                     defaults={'name': 'Trial membership'})
+                                                     defaults={'name': 'Trial membership',
+                                                               'slug': 'trial'})
         self.membership_types = {
             'standard': m1,
             'life_long': m2,

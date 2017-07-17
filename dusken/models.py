@@ -159,6 +159,7 @@ class MembershipType(AbstractBaseModel):
     )
 
     name = models.CharField(max_length=254)
+    slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
     price = models.IntegerField(default=0, help_text=_('Price in øre'))
