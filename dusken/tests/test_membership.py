@@ -37,7 +37,8 @@ class MembershipTest(APITestCase):
             'end_date': self.membership.end_date.isoformat(),
             'user': self.user.pk,
             'membership_type': self.membership.membership_type.slug,
-            'order': Order.objects.create(price_nok=self.membership.membership_type.price, user=self.user).pk
+            'order': Order.objects.create(price_nok=self.membership.membership_type.price,
+                                          user=self.user).pk
         }
 
         url = reverse('membership-api-list')
@@ -49,7 +50,7 @@ class MembershipTest(APITestCase):
     def test_create_charge(self):
         url = reverse('membership-charge')
         raw_data = {
-            'product': self.membership_type.pk,
+            'membership_type': self.membership_type.slug,
             'user': {
                 'first_name': 'jan',
                 'last_name': 'johansen',
@@ -69,7 +70,7 @@ class MembershipTest(APITestCase):
     def test_create_renew_charge(self):
         url = reverse('membership-charge-renew')
         raw_data = {
-            'product': self.membership_type.pk,
+            'membership_type': self.membership_type.slug,
             'stripe_token': {
                 'id': 'asdf',
                 'email': 'asdf@example.com'

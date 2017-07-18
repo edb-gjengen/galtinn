@@ -3,18 +3,18 @@ import stripe
 import django_filters
 
 from django.conf import settings
-from django.contrib.auth import login
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from dusken.api.serializers.memberships import MembershipSerializer
-from dusken.api.serializers.orders import OrderChargeRenewSerializer, OrderChargeSerializer
+from dusken.api.serializers.orders import (OrderChargeSerializer,
+                                           OrderChargeRenewSerializer)
 from dusken.models import Membership
 from dusken.utils import InlineClass
 from django.utils.translation import ugettext_lazy as _
@@ -57,19 +57,22 @@ class MembershipChargeView(GenericAPIView):
         stripe.api_key = settings.STRIPE_SECRET_KEY
 
         # Validate
-        serializer = self.serializer_class(data=self.request.data)
+        serializer = self.serializer_class(data=self.request.data,
+                                           context={'request': request})
         serializer.is_valid(raise_exception=True)
 
-        # Customer
+        # Stripe customer
         if request.user.stripe_customer_id:
             # Existing
             customer = self._get_stripe_customer(request.user.stripe_customer_id)
         else:
             # New
             customer = self._create_stripe_customer(request.data.get('stripe_token'))
+            request.user.stripe_customer_id = customer.id
+            request.user.save()
 
         # Charge
-        membership_type = serializer.validated_data.get('product')
+        membership_type = serializer.validated_data.get('membership_type')
         description = '{}: {}'.format(membership_type.name, membership_type.description)
         charge = self._create_stripe_charge(customer, membership_type.price, description)
 
@@ -81,7 +84,7 @@ class MembershipChargeView(GenericAPIView):
         order = serializer.save(
             transaction_id=charge.id,
             stripe_customer_id=customer.id,
-            logged_in_user=request.user
+            user=request.user
         )
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)

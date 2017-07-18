@@ -18,17 +18,21 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderChargeSerializer(serializers.ModelSerializer):
-    product = serializers.PrimaryKeyRelatedField(queryset=MembershipType.objects.filter(is_active=True))
-    user = NewDuskenUserSerializer()
+    membership_type = serializers.SlugRelatedField(
+        write_only=True,
+        slug_field='slug',
+        queryset=MembershipType.objects.filter(is_active=True),)
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    def validate_product(self, value):
+    def validate_membership_type(self, value):
         # FIXME(nikolark): validate membership_type, only active users get active product
         return value
 
     def create(self, validated_data, **kwargs):
+        user = validated_data.get('user')
+
         with transaction.atomic():
-            user = self._create_user(validated_data.get('user'), validated_data.get('stripe_customer_id'))
-            membership = self._create_membership(user, validated_data.get('product'))
+            membership = self._create_membership(user, validated_data.get('membership_type'))
             order = self._create_order(membership, validated_data.get('transaction_id'))
 
         return order
@@ -51,16 +55,9 @@ class OrderChargeSerializer(serializers.ModelSerializer):
             user=user)
         return membership
 
-    def _create_user(self, user_data, stripe_customer_id):
-        # FIXME: Easier way?
-        user_data['stripe_customer_id'] = stripe_customer_id
-        user_serializer = NewDuskenUserSerializer(data=user_data)
-        user_serializer.is_valid(raise_exception=True)
-        return user_serializer.save()
-
     class Meta:
         model = Order
-        fields = ('user', 'product')
+        fields = ('user', 'membership_type')
 
 
 class OrderChargeRenewSerializer(OrderChargeSerializer):
@@ -73,10 +70,10 @@ class OrderChargeRenewSerializer(OrderChargeSerializer):
         return attrs
 
     def create(self, validated_data, **kwargs):
-        logged_in_user = validated_data.get('logged_in_user')
+        user = validated_data.get('user')
 
         with transaction.atomic():
-            membership = self._create_membership(logged_in_user, validated_data.get('product'))
+            membership = self._create_membership(user, validated_data.get('membership_type'))
             order = self._create_order(membership, validated_data.get('transaction_id'))
 
         return order

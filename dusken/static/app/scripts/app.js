@@ -109,8 +109,7 @@ function onStripeToken(token) {
     // You can access the token ID with `token.id` and user email with `token.email`
     var postData = {
         'stripe_token': token,
-        'user': getFormData($('#user-form')),
-        'product': config.membership_type
+        'membership_type': config.membership_type
     };
     $.ajax(urls.charge, {
         data: JSON.stringify(postData),
