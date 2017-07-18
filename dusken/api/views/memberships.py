@@ -46,13 +46,12 @@ class MembershipViewSet(viewsets.ModelViewSet):
 
 class MembershipChargeView(GenericAPIView):
     queryset = Membership.objects.none()
-    permission_classes = (AllowAny, )
+    permission_classes = (IsAuthenticated, )
     serializer_class = OrderChargeSerializer
 
     CURRENCY = 'NOK'
     STATUS_CHARGE_SUCCEEDED = 'succeeded'
     STATUS_CHARGE_FAILED = 'failed'
-    _logged_in_user = None
 
     def post(self, request):
         stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -62,9 +61,9 @@ class MembershipChargeView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
 
         # Customer
-        if self._logged_in_user and self._logged_in_user.stripe_customer_id:
+        if request.user.stripe_customer_id:
             # Existing
-            customer = self._get_stripe_customer(self._logged_in_user.stripe_customer_id)
+            customer = self._get_stripe_customer(request.user.stripe_customer_id)
         else:
             # New
             customer = self._create_stripe_customer(request.data.get('stripe_token'))
@@ -76,17 +75,14 @@ class MembershipChargeView(GenericAPIView):
 
         if charge.status != self.STATUS_CHARGE_SUCCEEDED:
             logger.warning('stripe.Charge did not succeed: %s', charge.status)
-            return Response({'error': _('Your card has been declined')}, status=500)
+            return Response({'error': _('Your card has been declined')}, status=400)
 
         # Winning, save new order, with user and stripe customer id :-)
         order = serializer.save(
             transaction_id=charge.id,
             stripe_customer_id=customer.id,
-            logged_in_user=self._logged_in_user
+            logged_in_user=request.user
         )
-
-        if self._logged_in_user is None:
-            self._login_user(order.user)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -127,10 +123,6 @@ class MembershipChargeView(GenericAPIView):
         except stripe.error.CardError:
             return InlineClass({'status': self.STATUS_CHARGE_FAILED})
 
-    def _login_user(self, user):
-        user.backend = 'django.contrib.auth.backends.ModelBackend'  # FIXME: Ninja!
-        login(self.request, user)
-
     def _get_stripe_customer(self, stripe_customer_id):
         if settings.TESTING:
             return InlineClass({'id': 'someid'})
@@ -146,9 +138,4 @@ class MembershipChargeView(GenericAPIView):
 
 
 class MembershipChargeRenewView(MembershipChargeView):
-    permission_classes = (IsAuthenticated, )
     serializer_class = OrderChargeRenewSerializer
-
-    def post(self, request):
-        self._logged_in_user = request.user
-        return super().post(request)
