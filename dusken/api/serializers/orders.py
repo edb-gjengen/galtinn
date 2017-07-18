@@ -2,7 +2,6 @@ from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
 
-from dusken.api.serializers.users import NewDuskenUserSerializer
 from dusken.api.serializers.memberships import MembershipSerializer
 from dusken.models import Membership, MembershipType, Order
 
@@ -61,8 +60,6 @@ class OrderChargeSerializer(serializers.ModelSerializer):
 
 
 class OrderChargeRenewSerializer(OrderChargeSerializer):
-    user = NewDuskenUserSerializer(read_only=True)
-
     def validate(self, attrs):
         # TODO: Implement business logic
         # TODO: Can't renew membership if has existing expiring in more than 1 month
