@@ -1,9 +1,8 @@
 import logging
 
 from django.conf import settings
-from django.contrib.auth import login
+
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views.generic import FormView, ListView
 
@@ -11,20 +10,6 @@ from dusken.forms import DuskenUserForm, MembershipActivateForm, MembershipRenew
 from dusken.models import MembershipType, Membership
 
 logger = logging.getLogger(__name__)
-
-
-class MembershipRegisterView(FormView):
-    template_name = 'dusken/membership_register.html'
-    form_class = DuskenUserForm
-    success_url = '/home'
-
-    def form_valid(self, form):
-        # FIXME: better way?
-        self.object = form.save()
-        self.object.backend = 'django.contrib.auth.backends.ModelBackend'  # FIXME: Ninja!
-        login(self.request, self.object)
-        return HttpResponseRedirect(self.get_success_url())
-
 
 
 class MembershipPurchaseView(FormView):

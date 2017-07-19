@@ -23,16 +23,16 @@
             {% get_available_languages as LANGUAGES %}
             {% get_language_info_list for LANGUAGES as languages %}
             <form class="form-inline" action="{% url "set_language" %}" method="post">{% csrf_token %}
-            <span class="p-2 lnr lnr-earth"></span>
-            <input name="next" type="hidden" value="{{ redirect_to }}">
-            <select name="language" onchange="this.form.submit()">
-                {% for language in languages %}
-                    <option value="{{ language.code }}"
-                        {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
-                        {{ language.name_local }}
-                    </option>
-                {% endfor %}
-            </select>
+                <span class="pr-2 lnr lnr-earth"></span>
+                <input name="next" type="hidden" value="{{ redirect_to }}">
+                <select class="form-control" name="language" onchange="this.form.submit()">
+                    {% for language in languages %}
+                        <option value="{{ language.code }}"
+                            {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+                            {{ language.name_local }}
+                        </option>
+                    {% endfor %}
+                </select>
             </form>
         </div>
     </div>

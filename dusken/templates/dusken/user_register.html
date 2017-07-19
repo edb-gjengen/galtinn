@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n bootstrap4 staticfiles %}
 {% block body %}
-    <section class="membership-register">
+    <section class="user-register">
         <h4>{% trans "New membership" %}</h4>
         <form method="post" id="user-form">
             {% csrf_token %}
