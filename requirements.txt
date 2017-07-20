@@ -1,6 +1,7 @@
 django-countries==4.6.1
 django-extensions==1.8.1
 django-filter==1.0.4
+django-inline-svg==0.1.1
 django-jsonfield==1.0.1
 django-mptt==0.8.7
 django-oauth2-provider==0.2.6.1

@@ -170,6 +170,17 @@ $(document).ready(function() {
         $.post(config.validateEmail, function(data) {
             $validationEmailBtn.text('Sent.')
         })
-    })
+    });
+
+    /* Hidden language select */
+    const $languageToggle = $('.js-language-select-toggle');
+    const $languageSelect = $('.language-select');
+    $languageToggle.on('click', function (e) {
+       e.preventDefault();
+       $languageSelect.toggleClass('hidden');
+       if( !$languageSelect.hasClass('hidden') ) {
+           $languageSelect.focus();
+       }
+    });
 
 });

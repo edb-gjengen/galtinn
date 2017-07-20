@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'captcha',
+    'svg',
 ]
 INSTALLED_APPS += [
     'dusken',
@@ -144,6 +145,10 @@ PHONENUMBER_DB_FORMAT = 'E164'
 PHONENUMBER_DEFAULT_REGION = 'NO'
 
 NOCAPTCHA = True
+
+SVG_DIRS = [
+    os.path.join(BASE_DIR, 'dusken/static/dist/images')
+]
 
 try:
     from .local_settings import *

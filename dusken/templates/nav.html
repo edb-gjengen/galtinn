@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n svg %}
 <nav class="navbar navbar-light bg-faded navbar-toggleable-md">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{% trans "Toggle navigation" %}">
         <span class="navbar-toggler-icon"></span>
@@ -8,32 +8,33 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
-                <a class="nav-item nav-link active" href="{% url "home" %}"><span class="lnr lnr-home"></span> {% trans "Home" %}</a></li>
-                <a class="nav-item nav-link" href="{% url "membership-list" %}"><span class="lnr lnr-license"></span> {% trans "Membership" %}</a>
-                <a class="nav-item nav-link" href="{% url "home-active" %}"><span class="lnr lnr-apartment"></span> {% trans "Active" %}</a>
+                <a class="nav-item nav-link active" href="{% url "home" %}">{% svg "icons/home" %} {% trans "Home" %}</a></li>
+                <a class="nav-item nav-link" href="{% url "membership-list" %}">{% svg "icons/license" %} {% trans "Membership" %}</a>
+                <a class="nav-item nav-link" href="{% url "home-active" %}">{% svg "icons/apartment" %} {% trans "Active" %}</a>
             {% endif %}
         </div>
         <div class="navbar-nav">
             {% if user.is_authenticated %}
-                <a class="nav-item nav-link" href="{% url "user-detail-me" %}" title="{% trans "Profile" %}"><span class="lnr lnr-user"></span> {{ user.get_full_name|default:user.username }}</a>
-                <a class="nav-item nav-link" href="{% url 'logout' %}"><span class="lnr lnr-exit"></span> {% trans "Log out" %}</a>
+                <a class="nav-item nav-link" href="{% url "user-detail-me" %}" title="{% trans "Profile" %}">{% svg "icons/user" %} {{ user.get_full_name|default:user.username }}</a>
             {% endif %}
-            {% load i18n %}
             {% get_current_language as LANGUAGE_CODE %}
             {% get_available_languages as LANGUAGES %}
             {% get_language_info_list for LANGUAGES as languages %}
             <form class="form-inline" action="{% url "set_language" %}" method="post">{% csrf_token %}
-                <span class="pr-2 lnr lnr-earth"></span>
-                <input name="next" type="hidden" value="{{ redirect_to }}">
-                <select class="form-control" name="language" onchange="this.form.submit()">
+                <a href="#" class="nav-link js-language-select-toggle" title="{% trans "Change language to..." %}">{% svg "icons/earth" %}</a>
+                <select class="form-control language-select hidden" name="language" onchange="this.form.submit()">
                     {% for language in languages %}
                         <option value="{{ language.code }}"
                             {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
-                            {{ language.name_local }}
+                            {{ language.name_local|capfirst }}
                         </option>
                     {% endfor %}
                 </select>
             </form>
+
+            {% if user.is_authenticated %}
+                <a class="nav-item nav-link" href="{% url 'logout' %}">{% svg "icons/exit" %} {% trans "Log out" %}</a>
+            {% endif %}
         </div>
     </div>
 </nav>

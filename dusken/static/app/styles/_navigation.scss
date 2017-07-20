@@ -12,3 +12,17 @@
         }
     }
 }
+.language-select {
+    &.hidden {
+        display: none;
+    }
+}
+.nav-link {
+    svg path {
+        fill: rgba(0, 0, 0, 0.5);
+    }
+    &:hover svg path,
+    &.active svg path {
+        fill: rgba(0, 0, 0, 1);
+    }
+}

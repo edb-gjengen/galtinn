@@ -14,9 +14,9 @@ from dusken.utils import email_exist, phone_number_exist
 class DuskenUserForm(forms.ModelForm):
     first_name = fields.CharField()
     last_name = fields.CharField()
-    email = fields.EmailField()
+    email = fields.EmailField(widget=forms.EmailInput(attrs={'placeholder': _('Email')}))
     phone_number = PhoneNumberField()
-    captcha = ReCaptchaField()
+    captcha = ReCaptchaField(label=_('I\'m not a robot'))
 
     def clean_email(self):
         email = self.cleaned_data['email']
