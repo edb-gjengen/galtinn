@@ -21,7 +21,7 @@
                 <ul class="list-group list-group-flush">
                 {% with user.last_membership as ms %}
                     {% if ms.is_valid %}
-                        {% if ms.less_then_one_month %}
+                        {% if ms.expires_in_less_than_one_month %}
                             <li class="list-group-item list-group-item-warning"><span><span class="lnr lnr-warning"></span> {% trans "Your membership is expiring in less than one month" %} </span></li>
                         {% else %}
                             <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </span></li>
@@ -46,7 +46,7 @@
                     {% endif %}
                 </ul>
                 <div class="card-block">
-                    {% if ms.is_valid and not ms.less_then_one_month %}
+                    {% if ms.is_valid and not ms.expires_in_less_than_one_month %}
                         <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
                     {% else %}
                         <a href="{% url "membership-renew" %}" class="btn btn-outline-primary btn-block">

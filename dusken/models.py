@@ -67,6 +67,11 @@ class DuskenUser(AbstractUser):
         return bool(self.last_membership and self.last_membership.is_valid)
 
     @property
+    def has_lifelong_membership(self):
+        return bool(self.last_membership and
+                    self.last_membership.membership_type.expiry_type == 'never')
+
+    @property
     def last_membership(self):
         return self.memberships.order_by('-start_date').first()
 
@@ -128,7 +133,8 @@ class Membership(AbstractBaseModel):
     def is_valid(self):
         return self.end_date is None or self.end_date >= timezone.now().date()
 
-    def less_then_one_month(self):
+    @property
+    def expires_in_less_than_one_month(self):
         return self.end_date < (timezone.now().date() + timedelta(days=30))
 
     def __str__(self):

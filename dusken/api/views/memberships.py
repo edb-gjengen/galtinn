@@ -13,7 +13,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from dusken.api.serializers.memberships import MembershipSerializer
-from dusken.api.serializers.orders import (StripeOrderChargeSerializer,
+from dusken.api.serializers.orders import (KassaOrderSerializer,
+                                           StripeOrderChargeSerializer,
                                            StripeOrderChargeRenewSerializer)
 from dusken.models import Membership
 from dusken.utils import InlineClass
@@ -42,6 +43,22 @@ class MembershipViewSet(viewsets.ModelViewSet):
         if self.request.user.has_perm('dusken.view_membership'):
             return self.queryset
         return self.queryset.filter(user=self.request.user.pk)
+
+
+class KassaMembershipView(GenericAPIView):
+    queryset = Membership.objects.none()
+    permission_classes = (IsAuthenticated, )  # FIXME TODO HACK
+    serializer_class = KassaOrderSerializer
+
+    def post(self, request):
+        # Validate
+        serializer = self.serializer_class(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # TODO: Do something here?
+
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class MembershipChargeView(GenericAPIView):
@@ -81,7 +98,7 @@ class MembershipChargeView(GenericAPIView):
             return Response({'error': _('Your card has been declined')}, status=400)
 
         # Winning, save new order, with user and stripe customer id :-)
-        order = serializer.save(
+        serializer.save(
             transaction_id=charge.id,
             stripe_customer_id=customer.id,
             user=request.user
