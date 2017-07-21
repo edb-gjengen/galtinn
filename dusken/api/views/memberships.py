@@ -13,8 +13,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from dusken.api.serializers.memberships import MembershipSerializer
-from dusken.api.serializers.orders import (OrderChargeSerializer,
-                                           OrderChargeRenewSerializer)
+from dusken.api.serializers.orders import (StripeOrderChargeSerializer,
+                                           StripeOrderChargeRenewSerializer)
 from dusken.models import Membership
 from dusken.utils import InlineClass
 from django.utils.translation import ugettext_lazy as _
@@ -47,7 +47,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
 class MembershipChargeView(GenericAPIView):
     queryset = Membership.objects.none()
     permission_classes = (IsAuthenticated, )
-    serializer_class = OrderChargeSerializer
+    serializer_class = StripeOrderChargeSerializer
 
     CURRENCY = 'NOK'
     STATUS_CHARGE_SUCCEEDED = 'succeeded'
@@ -141,4 +141,4 @@ class MembershipChargeView(GenericAPIView):
 
 
 class MembershipChargeRenewView(MembershipChargeView):
-    serializer_class = OrderChargeRenewSerializer
+    serializer_class = StripeOrderChargeRenewSerializer
