@@ -14,7 +14,7 @@ from dusken.models import DuskenUser
 class UserRegisterView(FormView):
     template_name = 'dusken/user_register.html'
     form_class = DuskenUserForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('membership-renew')
 
     def form_valid(self, form):
         # FIXME: better way?

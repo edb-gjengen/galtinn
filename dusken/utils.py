@@ -56,9 +56,7 @@ def create_email_key():
 
 
 def email_exist(email):
-    if dusken.models.DuskenUser.objects.filter(email=email).exists():
-        return True
-    return False
+    return dusken.models.DuskenUser.objects.filter(email=email).exists()
 
 
 def validate_email(email):
@@ -75,9 +73,7 @@ def validate_email(email):
 
 
 def phone_number_exist(phone_number):
-    if dusken.models.DuskenUser.objects.filter(phone_number=phone_number).exists():
-        return True
-    return False
+    return dusken.models.DuskenUser.objects.filter(phone_number=phone_number).exists()
 
 
 def validate_phone_number(phone_number):

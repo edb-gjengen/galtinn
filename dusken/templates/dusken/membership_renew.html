@@ -18,7 +18,13 @@
             TODO: Can't renew membership if has existing expiring in more than 1 month
             TODO: Can't renew if existing lifelong
         -->
-        <h4>{% trans "Renew membership" %}</h4>
+        <h4>
+        {% if user.last_membership %}
+            {% trans "Renew membership" %}
+        {% else %}
+            {% trans "Buy membership" %}
+        {% endif %}
+        </h4>
         <form method="post" id="user-form">
             <div class="js-validation-errors"></div>
             {% bootstrap_form form %}

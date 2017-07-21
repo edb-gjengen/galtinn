@@ -128,6 +128,9 @@ class Membership(AbstractBaseModel):
     def is_valid(self):
         return self.end_date is None or self.end_date >= timezone.now().date()
 
+    def less_then_one_month(self):
+        return self.end_date < (timezone.now().date() + timedelta(days=30))
+
     def __str__(self):
         name = self.__class__.__name__
         if self.end_date is None:

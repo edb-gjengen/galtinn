@@ -21,9 +21,19 @@
                 <ul class="list-group list-group-flush">
                 {% with user.last_membership as ms %}
                     {% if ms.is_valid %}
-                        <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </span></li>
+                        {% if ms.less_then_one_month %}
+                            <li class="list-group-item list-group-item-warning"><span><span class="lnr lnr-warning"></span> {% trans "Your membership is expiring in less than one month" %} </span></li>
+                        {% else %}
+                            <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </span></li>
+                        {% endif %}
                     {% else %}
-                        <li class="list-group-item list-group-item-danger"><span><span class="lnr lnr-sad"></span> {% trans "Membership expired." %} </span></li>
+                        <li class="list-group-item list-group-item-danger"><span><span class="lnr lnr-sad"></span>
+                            {% if ms == Null %}
+                                {% trans "You have no membership" %}
+                            {% else %}
+                                {% trans "Membership expired." %}
+                            {% endif %}
+                        </span></li>
                     {% endif %}
 
                     {% if ms.is_valid %}
@@ -36,10 +46,16 @@
                     {% endif %}
                 </ul>
                 <div class="card-block">
-                    {% if ms.is_valid %}
+                    {% if ms.is_valid and not ms.less_then_one_month %}
                         <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
                     {% else %}
-                        <a href="{% url "membership-renew" %}" class="btn btn-outline-primary btn-block">{% trans "Renew membership" %}</a>
+                        <a href="{% url "membership-renew" %}" class="btn btn-outline-primary btn-block">
+                        {% if ms == Null %}
+                            {% trans "Buy membership" %}
+                        {% else %}
+                            {% trans "Renew membership" %}
+                        {% endif %}
+                        </a>
                     {% endif %}
                 </div>
             {% endwith %}
