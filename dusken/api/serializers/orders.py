@@ -16,7 +16,7 @@ class OrderSerializer(serializers.ModelSerializer):
                   'transaction_id', 'phone_number', 'member_card')
 
 
-class OrderChargeSerializer(serializers.ModelSerializer):
+class StripeOrderChargeSerializer(serializers.ModelSerializer):
     membership_type = serializers.SlugRelatedField(
         write_only=True,
         slug_field='slug',
@@ -59,7 +59,7 @@ class OrderChargeSerializer(serializers.ModelSerializer):
         fields = ('user', 'membership_type')
 
 
-class OrderChargeRenewSerializer(OrderChargeSerializer):
+class StripeOrderChargeRenewSerializer(StripeOrderChargeSerializer):
     def validate(self, attrs):
         # TODO: Implement business logic
         # TODO: Can't renew membership if has existing expiring in more than 1 month
