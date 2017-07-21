@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, TemplateView, UpdateView,
 from django.contrib.auth import login
 from django.http import HttpResponseRedirect
 
-from dusken.forms import UserEmailValidateForm, DuskenUserForm
+from dusken.forms import UserEmailValidateForm, DuskenUserForm, DuskenUserUpdateForm
 from dusken.models import DuskenUser
 
 
@@ -42,11 +42,8 @@ class UserDetailMeView(UserDetailView):
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
-    model = DuskenUser
+    form_class = DuskenUserUpdateForm
     template_name = 'dusken/user_update.html'
-    fields = ['first_name', 'last_name', 'date_of_birth', 'email', 'phone_number', 'place_of_study', 'street_address',
-              'street_address_two', 'postal_code', 'city', 'country']
-
 
 class UserUpdateMeView(UserUpdateView):
     def get_object(self, queryset=None):

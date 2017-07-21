@@ -12,10 +12,10 @@ from dusken.utils import email_exist, phone_number_exist
 
 
 class DuskenUserForm(forms.ModelForm):
-    first_name = fields.CharField()
-    last_name = fields.CharField()
-    email = fields.EmailField(widget=forms.EmailInput(attrs={'placeholder': _('Email')}))
-    phone_number = PhoneNumberField()
+    first_name = fields.CharField(label=_('First name'))
+    last_name = fields.CharField(label=_('Last name'))
+    email = fields.EmailField(label=_('Email'), widget=forms.EmailInput(attrs={'placeholder': _('Email')}))
+    phone_number = PhoneNumberField(label=_('Phone number'))
     captcha = ReCaptchaField(label=_('I\'m not a robot'))
 
     def clean_email(self):
@@ -33,6 +33,19 @@ class DuskenUserForm(forms.ModelForm):
     class Meta:
         model = DuskenUser
         fields = ['first_name', 'last_name', 'email', 'phone_number']
+
+
+class DuskenUserUpdateForm(forms.ModelForm):
+    first_name = fields.CharField(label=_('First name'))
+    last_name = fields.CharField(label=_('Last name'))
+    date_of_birth = fields.DateField(label=_('Date of birth'), widget=forms.DateInput(attrs={'type': 'date'}))
+    email = fields.EmailField(label=_('Email'), widget=forms.EmailInput(attrs={'placeholder': _('Email')}))
+    phone_number = PhoneNumberField(label=_('Phone number'))
+
+    class Meta:
+        model = DuskenUser
+        fields = ['first_name', 'last_name', 'date_of_birth', 'email', 'phone_number', 'place_of_study',
+                  'street_address', 'street_address_two', 'postal_code', 'city', 'country']
 
 
 class MembershipActivateForm(forms.Form):
