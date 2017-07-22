@@ -70,9 +70,11 @@ class OrgUnitAdmin(MPTTModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['uuid', 'product', 'show_user_link', 'created', 'payment_method']
+    list_display = ['uuid', 'product', 'show_user_link', 'phone_number', 'show_member_card_link',
+                    'created', 'payment_method']
     list_filter = ['payment_method']
-    search_fields = ['uuid', 'user__username', 'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
+    search_fields = ['uuid', 'phone_number', 'member_card__card_number', 'user__username',
+                     'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
     readonly_fields = ['uuid', 'product', 'price_nok', 'user', 'payment_method', 'transaction_id']
 
     def show_user_link(self, obj):
@@ -81,9 +83,17 @@ class OrderAdmin(admin.ModelAdmin):
 
         url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
-
     show_user_link.allow_tags = True
     show_user_link.short_description = _('User')
+
+    def show_member_card_link(self, obj):
+        if obj.member_card is None:
+            return ''
+
+        url = reverse("admin:dusken_membercard_change", args=[obj.member_card.pk])
+        return format_html("<a href='{url}'>{card}</a>", url=url, card=obj.member_card)
+    show_member_card_link.allow_tags = True
+    show_member_card_link.short_description = _('Member card')
 
 
 class DuskenUserChangeForm(UserChangeForm):
