@@ -48,6 +48,7 @@ class BaseMembershipOrder(object):
                 raise ValidationError(
                     'Cannot renew a membership that expires in more than one month')
 
+
 class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
     membership_type = serializers.SlugRelatedField(
         write_only=True,
@@ -56,6 +57,8 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def validate_membership_type(self, value):
+        if not value or value.slug not in ('standard', 'active'):
+            raise ValidationError('Invalid membership type')
         # FIXME(nikolark): validate membership_type, only active users get active product
         return value
 
@@ -150,4 +153,4 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('user', 'membership_type', 'phone_number', 'member_card')
+        fields = ('user', 'membership_type', 'phone_number', 'member_card', 'transaction_id')
