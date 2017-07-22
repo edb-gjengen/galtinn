@@ -5,7 +5,6 @@ from dusken.api.views import ResendValidationEmailView
 from dusken.api.views.cards import MemberCardViewSet
 from dusken.api.views.memberships import (MembershipViewSet,
                                           MembershipChargeView,
-                                          MembershipChargeRenewView,
                                           KassaMembershipView)
 from dusken.api.views.users import DuskenUserViewSet
 from dusken.api.views.orders import OrderViewSet
@@ -22,8 +21,6 @@ urlpatterns += [
     # Stripe
     url(r'membership/charge/$', MembershipChargeView.as_view(),
         name='membership-charge'),
-    url(r'membership/charge_renew/$', MembershipChargeRenewView.as_view(),
-        name='membership-charge-renew'),
 
     # Kassa
     url(r'kassa/membership/$', KassaMembershipView.as_view(),

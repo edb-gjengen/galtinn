@@ -14,8 +14,7 @@ from rest_framework.response import Response
 
 from dusken.api.serializers.memberships import MembershipSerializer
 from dusken.api.serializers.orders import (KassaOrderSerializer,
-                                           StripeOrderChargeSerializer,
-                                           StripeOrderChargeRenewSerializer)
+                                           StripeOrderSerializer)
 from dusken.models import Membership
 from dusken.utils import InlineClass
 from django.utils.translation import ugettext_lazy as _
@@ -64,7 +63,7 @@ class KassaMembershipView(GenericAPIView):
 class MembershipChargeView(GenericAPIView):
     queryset = Membership.objects.none()
     permission_classes = (IsAuthenticated, )
-    serializer_class = StripeOrderChargeSerializer
+    serializer_class = StripeOrderSerializer
 
     CURRENCY = 'NOK'
     STATUS_CHARGE_SUCCEEDED = 'succeeded'
@@ -105,9 +104,6 @@ class MembershipChargeView(GenericAPIView):
         )
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def _create_order(self, amount, charge, membership_type):
-        return
 
     def _create_stripe_customer(self, stripe_token):
         if settings.TESTING:
@@ -155,7 +151,3 @@ class MembershipChargeView(GenericAPIView):
                 raise APIException(e)
             else:
                 raise APIException('Stripe charge failed with API error.')
-
-
-class MembershipChargeRenewView(MembershipChargeView):
-    serializer_class = StripeOrderChargeRenewSerializer

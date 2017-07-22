@@ -9,7 +9,7 @@
             membership_type: '{{ view.membership_type.slug }}',
             membership_name: '{{ view.membership_type.name }}',
             membership_price: {{ view.membership_type.price }},
-            charge_url: '{% url "membership-charge-renew" %}'
+            charge_url: '{% url "membership-charge" %}'
         };
     </script>
 
