@@ -17,7 +17,7 @@ class RegularUserMembershipTest(APITestCase):
         self.client.force_login(self.user)
         self.membership_type = MembershipType.objects.create(
             name='Cool Club Membership',
-            slug='membership',
+            slug='standard',
             duration=datetime.timedelta(days=365),
             is_default=True)
 
@@ -89,7 +89,7 @@ class SystemUserMembershipTest(APITestCase):
         self.client.force_login(self.user)
         self.membership_type = MembershipType.objects.create(
             name='Cool Club Membership',
-            slug='membership',
+            slug='standard',
             duration=datetime.timedelta(days=365),
             is_default=True)
         self.member_card = MemberCard.objects.create(card_number=123456789)
