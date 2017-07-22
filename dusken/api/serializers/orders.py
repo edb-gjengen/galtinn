@@ -40,6 +40,13 @@ class BaseMembershipOrder(object):
             user=user)
         return membership
 
+    def _validate_user_can_renew(self, user):
+        if user.has_lifelong_membership:
+            raise ValidationError('Cannot renew a lifelong membership')
+        elif user.has_valid_membership:
+            if not user.last_membership.expires_in_less_than_one_month:
+                raise ValidationError(
+                    'Cannot renew a membership that expires in more than one month')
 
 class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
     membership_type = serializers.SlugRelatedField(
@@ -52,11 +59,9 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         # FIXME(nikolark): validate membership_type, only active users get active product
         return value
 
-    def validate(self, attrs):
-        # TODO: Implement business logic
-        # TODO: Can't renew membership if has existing expiring in more than 1 month
-        # TODO: Can't renew if existing lifelong
-        return attrs
+    def validate(self, data):
+        self._validate_user_can_renew(data.get('user'))
+        return data
 
     def create(self, validated_data, **kwargs):
         user = validated_data.get('user')
@@ -100,13 +105,9 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         member_card = data.get('member_card')
         if not user and not (phone_number or member_card):
             raise ValidationError('Need one of user, phone_number or member_card')
-        if user and user.has_lifelong_membership:
-            raise ValidationError('Cannot renew a lifelong membership')
-        elif user and user.last_membership and user.last_membership.is_valid:
-            if not user.last_membership.expires_in_less_than_one_month:
-                raise ValidationError(
-                    'Cannot renew a membership that expires in more than one month')
-        elif not user:
+        if user:
+            self._validate_user_can_renew(user)
+        else:
             last_order = self._get_previous_orders(phone_number, member_card).first()
             if last_order and not last_order.product.expires_in_less_than_one_month:
                 raise ValidationError(
