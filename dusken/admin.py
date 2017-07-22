@@ -72,7 +72,7 @@ class OrgUnitAdmin(MPTTModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['uuid', 'product', 'show_user_link', 'created', 'payment_method']
     list_filter = ['payment_method']
-    search_fields = ['user__username', 'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
+    search_fields = ['uuid', 'user__username', 'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
     readonly_fields = ['uuid', 'product', 'price_nok', 'user', 'payment_method', 'transaction_id']
 
     def show_user_link(self, obj):
