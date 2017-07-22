@@ -136,14 +136,16 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
     def _get_start_date(self, user, phone_number, member_card):
         if user and user.has_valid_membership:
             return user.last_membership.end_date + timezone.timedelta(days=1)
-        last_order = self._get_previous_orders(phone_number, member_card).first()
-        if last_order and last_order.product.is_valid:
-            return last_order.product.end_date + timezone.timedelta(days=1)
+        elif not user:
+            last_order = self._get_previous_orders(phone_number, member_card).first()
+            if last_order and last_order.product.is_valid:
+                return last_order.product.end_date + timezone.timedelta(days=1)
         return timezone.now().date()
 
     def _get_previous_orders(self, phone_number, member_card):
         return Order.objects.filter(
-            Q(phone_number=phone_number) | Q(member_card=member_card)).order_by('-created')
+            Q(phone_number__isnull=False, phone_number=phone_number) |
+            Q(member_card__isnull=False, member_card=member_card)).order_by('-created')
 
     class Meta:
         model = Order
