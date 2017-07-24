@@ -107,11 +107,13 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         phone_number = data.get('phone_number')
         member_card = data.get('member_card')
         if not user and not (phone_number or member_card):
-            raise ValidationError('Need one of user, phone_number or member_card')
+            raise ValidationError('Need user, phone_number or member_card')
+        if member_card and user and member_card.registered and member_card.user != user:
+            raise ValidationError('Member card already registered to a different user')
         if user:
             self._validate_user_can_renew(user)
         else:
-            last_order = self._get_previous_orders(phone_number, member_card).first()
+            last_order = self._get_past_orders(phone_number, member_card).first()
             if last_order and not last_order.product.expires_in_less_than_one_month:
                 raise ValidationError(
                     'Cannot renew a membership that expires in more than one month')
@@ -125,6 +127,8 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         membership_start_date = self._get_start_date(user, phone_number, member_card)
 
         with transaction.atomic():
+            if user and member_card and not user.member_cards.filter(pk=member_card.pk).exists():
+                member_card.register(user=user)
             membership = self._create_membership(
                 user=user,
                 start_date=membership_start_date,
@@ -141,12 +145,12 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         if user and user.has_valid_membership:
             return user.last_membership.end_date + timezone.timedelta(days=1)
         elif not user:
-            last_order = self._get_previous_orders(phone_number, member_card).first()
+            last_order = self._get_past_orders(phone_number, member_card).first()
             if last_order and last_order.product.is_valid:
                 return last_order.product.end_date + timezone.timedelta(days=1)
         return timezone.now().date()
 
-    def _get_previous_orders(self, phone_number, member_card):
+    def _get_past_orders(self, phone_number, member_card):
         return Order.objects.filter(
             Q(phone_number__isnull=False, phone_number=phone_number) |
             Q(member_card__isnull=False, member_card=member_card)).order_by('-created')

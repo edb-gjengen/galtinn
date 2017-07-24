@@ -1,6 +1,6 @@
 from rest_framework import serializers
-
-from dusken.models import MemberCard, Order
+from rest_framework.serializers import ValidationError
+from dusken.models import MemberCard, DuskenUser, Order
 
 
 class MemberCardSerializer(serializers.ModelSerializer):
@@ -12,3 +12,26 @@ class MemberCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = MemberCard
         fields = ('card_number', 'registered', 'is_active', 'user', 'created', 'orders')
+
+
+class KassaMemberCardUpdateSerializer(serializers.Serializer):
+    user = serializers.PrimaryKeyRelatedField(
+        allow_null=True,
+        queryset=DuskenUser.objects.all())
+    order = serializers.SlugRelatedField(
+        allow_null=True,
+        slug_field='uuid',
+        queryset=Order.objects.all())
+    member_card = serializers.SlugRelatedField(
+        slug_field='card_number',
+        queryset=MemberCard.objects.all())
+
+    def validate(self, data):
+        user = data.get('user')
+        order = data.get('order')
+        member_card = data.get('member_card')
+        if member_card.registered:
+            raise ValidationError('Card is already registered')
+        if not (user or order):
+            raise ValidationError('Need user or order')
+        return data

@@ -10,7 +10,8 @@ from rest_framework.test import APITestCase
 from dusken.models import DuskenUser, Membership, MembershipType, MemberCard, Order
 
 
-class RegularUserMembershipTest(APITestCase):
+class MembershipTest(APITestCase):
+    """ Membership/order functionality for regular users. """
     def setUp(self):
         self.user = DuskenUser.objects.create_user(
             'olanord', email='olanord@example.com', password='mypassword')
@@ -81,7 +82,8 @@ class RegularUserMembershipTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.data)
 
 
-class SystemUserMembershipTest(APITestCase):
+class KassaMembershipTest(APITestCase):
+    """ Membership/order functionality for privileged user. """
     def setUp(self):
         self.user = DuskenUser.objects.create_user(
             'apiuser', email='apiuser@example.com', password='mypassword')
@@ -157,7 +159,7 @@ class SystemUserMembershipTest(APITestCase):
             end_date=today + datetime.timedelta(days=10),
             membership_type=self.membership_type)
         Order.objects.create(
-            payment_method=Order.BY_PHYSICAL_CARD,
+            payment_method=Order.BY_SMS,
             product=membership,
             price_nok=0,
             phone_number='+4794430002')
@@ -238,3 +240,57 @@ class SystemUserMembershipTest(APITestCase):
         }
         response = self.client.post(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
+
+    def test_kassa_new_member_card_associates_with_user(self):
+        url = reverse('membership-kassa')
+        payload = {
+            'membership_type': self.membership_type.slug,
+            'user': self.user.pk,
+            'phone_number': None,
+            'member_card': self.member_card.card_number,
+        }
+        response = self.client.post(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        self.assertTrue(MemberCard.objects.get(pk=self.member_card.pk).registered is not None)
+        self.assertTrue(self.user.member_cards.filter(pk=self.member_card.pk).exists())
+
+    def test_kassa_new_member_card_for_user_deactivates_old_cards(self):
+        old_card = MemberCard.objects.create(card_number=222222222)
+        old_card.register(user=self.user)
+        url = reverse('membership-kassa')
+        payload = {
+            'membership_type': self.membership_type.slug,
+            'user': self.user.pk,
+            'phone_number': None,
+            'member_card': self.member_card.card_number,
+        }
+        response = self.client.post(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        self.assertFalse(MemberCard.objects.get(pk=old_card.pk).is_active)
+
+    def test_kassa_cannot_set_new_user_on_member_card(self):
+        other_user = DuskenUser.objects.create_user(
+            'karinord', email='karinord@example.com', password='mypassword')
+        other_card = MemberCard.objects.create(card_number=222222222)
+        other_card.register(user=other_user)
+        url = reverse('membership-kassa')
+        payload = {
+            'membership_type': self.membership_type.slug,
+            'user': self.user.pk,
+            'phone_number': None,
+            'member_card': other_card.card_number,
+        }
+        response = self.client.post(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
+
+    def test_kassa_new_member_card_associates_with_order(self):
+        url = reverse('membership-kassa')
+        payload = {
+            'membership_type': self.membership_type.slug,
+            'user': None,
+            'phone_number': '+4794430002',
+            'member_card': self.member_card.card_number,
+        }
+        response = self.client.post(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        self.assertEqual(Order.objects.filter(member_card=self.member_card).count(), 1)

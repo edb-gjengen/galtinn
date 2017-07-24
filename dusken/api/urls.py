@@ -2,7 +2,8 @@ from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 
 from dusken.api.views import ResendValidationEmailView
-from dusken.api.views.cards import MemberCardViewSet
+from dusken.api.views.cards import (MemberCardViewSet,
+                                    KassaMemberCardUpdateView)
 from dusken.api.views.memberships import (MembershipViewSet,
                                           MembershipChargeView,
                                           KassaMembershipView)
@@ -25,6 +26,8 @@ urlpatterns += [
     # Kassa
     url(r'kassa/membership/$', KassaMembershipView.as_view(),
         name='membership-kassa'),
+    url(r'kassa/card/$', KassaMemberCardUpdateView.as_view(),
+        name='card-update-kassa'),
 
     # Users
     url(r'user/resend_validation_email/$', ResendValidationEmailView.as_view(),

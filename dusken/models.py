@@ -218,6 +218,20 @@ class MemberCard(AbstractBaseModel):
     user = models.ForeignKey(
         'dusken.DuskenUser', verbose_name=_('user'), null=True, blank=True, related_name='member_cards')
 
+    def register(self, user=None, order=None):
+        assert not self.registered
+        assert not (user and order)
+        self.registered = timezone.now()
+        self.is_active = True
+        if user:
+            user.member_cards.filter(is_active=True).update(is_active=False)
+            self.user = user
+        if order:
+            assert not order.member_card
+            order.member_card = self
+            order.save()
+        self.save()
+
     def __str__(self):
         return "{}".format(self.card_number)
 

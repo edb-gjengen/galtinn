@@ -24,7 +24,7 @@ class OrderFilter(FilterSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     """Order API"""
-    queryset = Order.objects.all().order_by('created')
+    queryset = Order.objects.all().order_by('-created')
     serializer_class = OrderSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_class = OrderFilter
