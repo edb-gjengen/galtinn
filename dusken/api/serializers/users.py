@@ -13,7 +13,7 @@ class DuskenUserSerializer(serializers.ModelSerializer):
         model = DuskenUser
         fields = ('id', 'username', 'email', 'first_name', 'last_name', 'phone_number',
                   'date_of_birth', 'legacy_id', 'place_of_study', 'cards',
-                  'has_valid_membership', 'last_membership')
+                  'is_member', 'last_membership')
         read_only_fields = ('id', 'legacy_id', 'username', 'cards',
-                            'has_valid_membership', 'last_membership')
+                            'is_member', 'last_membership')
         write_only_fields = ('password',)

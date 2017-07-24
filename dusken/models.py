@@ -63,7 +63,7 @@ class DuskenUser(AbstractUser):
         return reverse('user-detail', kwargs={'slug': self.uuid})
 
     @property
-    def has_valid_membership(self):
+    def is_member(self):
         return bool(self.last_membership and self.last_membership.is_valid)
 
     @property

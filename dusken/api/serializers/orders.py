@@ -43,7 +43,7 @@ class BaseMembershipOrder(object):
     def _validate_user_can_renew(self, user):
         if user.has_lifelong_membership:
             raise ValidationError('Cannot renew a lifelong membership')
-        elif user.has_valid_membership:
+        elif user.is_member:
             if not user.last_membership.expires_in_less_than_one_month:
                 raise ValidationError(
                     'Cannot renew a membership that expires in more than one month')
@@ -82,7 +82,7 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         return order
 
     def _get_start_date(self, user):
-        if user and user.has_valid_membership:
+        if user and user.is_member:
             return user.last_membership.end_date + timezone.timedelta(days=1)
         return timezone.now().date()
 
@@ -143,7 +143,7 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         return order
 
     def _get_start_date(self, user, phone_number, member_card):
-        if user and user.has_valid_membership:
+        if user and user.is_member:
             return user.last_membership.end_date + timezone.timedelta(days=1)
         elif not user:
             last_order = self._get_past_orders(phone_number, member_card).first()
