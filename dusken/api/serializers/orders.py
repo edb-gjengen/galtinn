@@ -127,8 +127,6 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         membership_start_date = self._get_start_date(user, phone_number, member_card)
 
         with transaction.atomic():
-            if user and member_card and not user.member_cards.filter(pk=member_card.pk).exists():
-                member_card.register(user=user)
             membership = self._create_membership(
                 user=user,
                 start_date=membership_start_date,
@@ -136,8 +134,11 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
             order = self._create_order(
                 membership=membership,
                 phone_number=phone_number if not user else None,
-                member_card=member_card if not user else None,
                 transaction_id=validated_data.get('transaction_id'))
+            if user and member_card and not user.member_cards.filter(pk=member_card.pk).exists():
+                member_card.register(user=user)
+            elif not user and member_card and not member_card.registered:
+                member_card.register(order=order)
 
         return order
 

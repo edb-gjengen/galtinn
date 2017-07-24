@@ -251,8 +251,9 @@ class KassaMembershipTest(APITestCase):
         }
         response = self.client.post(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
-        self.assertTrue(MemberCard.objects.get(pk=self.member_card.pk).registered is not None)
         self.assertTrue(self.user.member_cards.filter(pk=self.member_card.pk).exists())
+        self.assertTrue(MemberCard.objects.get(pk=self.member_card.pk).registered is not None)
+        self.assertTrue(MemberCard.objects.get(pk=self.member_card.pk).is_active)
 
     def test_kassa_new_member_card_for_user_deactivates_old_cards(self):
         old_card = MemberCard.objects.create(card_number=222222222)
@@ -294,3 +295,5 @@ class KassaMembershipTest(APITestCase):
         response = self.client.post(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
         self.assertEqual(Order.objects.filter(member_card=self.member_card).count(), 1)
+        self.assertTrue(MemberCard.objects.get(pk=self.member_card.pk).is_active)
+        self.assertTrue(MemberCard.objects.get(pk=self.member_card.pk).registered is not None)
