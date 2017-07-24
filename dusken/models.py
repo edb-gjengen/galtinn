@@ -63,6 +63,11 @@ class DuskenUser(AbstractUser):
         return reverse('user-detail', kwargs={'slug': self.uuid})
 
     @property
+    def is_volunteer(self):
+        # TODO: do it better
+        return self.groups.filter(name='Aktiv').exists()
+
+    @property
     def is_member(self):
         return bool(self.last_membership and self.last_membership.is_valid)
 
@@ -105,9 +110,6 @@ class DuskenUser(AbstractUser):
                    self.postal_code,
                    self.city,
                    self.country))
-
-    def has_org_unit(self):
-        return DuskenUser.objects.filter(pk=self.pk, groups__member_orgunits__isnull=False).exists()
 
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:
