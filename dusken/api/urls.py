@@ -25,9 +25,9 @@ urlpatterns += [
 
     # Kassa
     url(r'kassa/membership/$', KassaMembershipView.as_view(),
-        name='membership-kassa'),
+        name='kassa-membership'),
     url(r'kassa/card/$', KassaMemberCardUpdateView.as_view(),
-        name='card-update-kassa'),
+        name='kassa-card-update'),
 
     # Users
     url(r'user/resend_validation_email/$', ResendValidationEmailView.as_view(),

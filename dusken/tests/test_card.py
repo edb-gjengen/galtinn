@@ -54,7 +54,7 @@ class KassaCardUpdateTestCase(APITestCase):
     def test_kassa_can_set_blank_card_on_order(self):
         order = Order.objects.create(price_nok=0,
                                      phone_number='+4794430002')
-        url = reverse('card-update-kassa')
+        url = reverse('kassa-card-update')
         payload = {
             'user': None,
             'order': order.uuid,
@@ -69,7 +69,7 @@ class KassaCardUpdateTestCase(APITestCase):
     def test_kassa_cannot_set_card_owned_by_user_on_order(self):
         order = Order.objects.create(price_nok=0,
                                      phone_number='+4794430002')
-        url = reverse('card-update-kassa')
+        url = reverse('kassa-card-update')
         payload = {
             'user': None,
             'order': order.uuid,
@@ -79,7 +79,7 @@ class KassaCardUpdateTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
 
     def test_kassa_can_set_blank_card_on_user(self):
-        url = reverse('card-update-kassa')
+        url = reverse('kassa-card-update')
         payload = {
             'user': self.user.pk,
             'order': None,
@@ -95,7 +95,7 @@ class KassaCardUpdateTestCase(APITestCase):
         Order.objects.create(price_nok=0,
                              phone_number='+4794430002',
                              member_card=self.order_card)
-        url = reverse('card-update-kassa')
+        url = reverse('kassa-card-update')
         payload = {
             'user': self.user.pk,
             'order': None,

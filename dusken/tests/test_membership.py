@@ -73,7 +73,7 @@ class MembershipTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.data)
 
     def test_cannot_use_kassa_endpoint(self):
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': self.user.pk,
@@ -111,7 +111,7 @@ class KassaMembershipTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
 
     def test_kassa_create_for_user(self):
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': self.user.pk,
@@ -124,7 +124,7 @@ class KassaMembershipTest(APITestCase):
         self.assertEqual(Membership.objects.count(), 1)
 
     def test_kassa_create_for_non_user(self):
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': None,
@@ -139,7 +139,7 @@ class KassaMembershipTest(APITestCase):
         self.assertEqual(Membership.objects.count(), 1)
 
     def test_kassa_create_for_non_user_without_card(self):
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': None,
@@ -163,7 +163,7 @@ class KassaMembershipTest(APITestCase):
             product=membership,
             price_nok=0,
             phone_number='+4794430002')
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': None,
@@ -190,7 +190,7 @@ class KassaMembershipTest(APITestCase):
             end_date=None,
             membership_type=lifelong_type,
             user=self.user)
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': self.user.pk,
@@ -204,7 +204,7 @@ class KassaMembershipTest(APITestCase):
             end_date=datetime.date.today() + datetime.timedelta(days=31),
             membership_type=self.membership_type,
             user=self.user)
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': self.user.pk,
@@ -221,7 +221,7 @@ class KassaMembershipTest(APITestCase):
             end_date=old_membership_ends,
             membership_type=self.membership_type,
             user=self.user)
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': self.user.pk,
@@ -231,7 +231,7 @@ class KassaMembershipTest(APITestCase):
         self.assertEqual(self.user.last_membership.start_date, new_membership_starts)
 
     def test_kassa_create_needs_identifier(self):
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': None,
@@ -242,7 +242,7 @@ class KassaMembershipTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
 
     def test_kassa_new_member_card_associates_with_user(self):
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': self.user.pk,
@@ -258,7 +258,7 @@ class KassaMembershipTest(APITestCase):
     def test_kassa_new_member_card_for_user_deactivates_old_cards(self):
         old_card = MemberCard.objects.create(card_number=222222222)
         old_card.register(user=self.user)
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': self.user.pk,
@@ -274,7 +274,7 @@ class KassaMembershipTest(APITestCase):
             'karinord', email='karinord@example.com', password='mypassword')
         other_card = MemberCard.objects.create(card_number=222222222)
         other_card.register(user=other_user)
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': self.user.pk,
@@ -285,7 +285,7 @@ class KassaMembershipTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
 
     def test_kassa_new_member_card_associates_with_order(self):
-        url = reverse('membership-kassa')
+        url = reverse('kassa-membership')
         payload = {
             'membership_type': self.membership_type.slug,
             'user': None,
