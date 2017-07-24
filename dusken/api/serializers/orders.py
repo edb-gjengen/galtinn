@@ -41,7 +41,7 @@ class BaseMembershipOrder(object):
         return membership
 
     def _validate_user_can_renew(self, user):
-        if user.has_lifelong_membership:
+        if user.is_lifelong_member:
             raise ValidationError('Cannot renew a lifelong membership')
         elif user.is_member:
             if not user.last_membership.expires_in_less_than_one_month:

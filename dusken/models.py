@@ -67,7 +67,7 @@ class DuskenUser(AbstractUser):
         return bool(self.last_membership and self.last_membership.is_valid)
 
     @property
-    def has_lifelong_membership(self):
+    def is_lifelong_member(self):
         return bool(self.last_membership and
                     self.last_membership.membership_type.expiry_type == 'never')
 
