@@ -137,7 +137,7 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
                 transaction_id=validated_data.get('transaction_id'))
             if user and member_card and not user.member_cards.filter(pk=member_card.pk).exists():
                 member_card.register(user=user)
-            elif not user and member_card and not member_card.registered:
+            elif not user and member_card:
                 member_card.register(order=order)
 
         return order

@@ -63,6 +63,10 @@ class DuskenUser(AbstractUser):
         return reverse('user-detail', kwargs={'slug': self.uuid})
 
     @property
+    def active_member_card(self):
+        return self.member_cards.filter(is_active=True).first()
+
+    @property
     def is_volunteer(self):
         # TODO: do it better
         return self.groups.filter(name='Aktiv').exists()
@@ -221,10 +225,10 @@ class MemberCard(AbstractBaseModel):
         'dusken.DuskenUser', verbose_name=_('user'), null=True, blank=True, related_name='member_cards')
 
     def register(self, user=None, order=None):
-        assert not self.registered
         assert not (user and order)
-        self.registered = timezone.now()
-        self.is_active = True
+        if user or (order and not self.registered):
+            self.registered = timezone.now()
+            self.is_active = True
         if user:
             user.member_cards.filter(is_active=True).update(is_active=False)
             self.user = user
