@@ -1,0 +1,77 @@
+# Root dn for all user accounts
+dn: ou=People,dc=neuf,dc=no
+objectClass: top
+objectClass: organizationalUnit
+ou: People
+
+# Account test with password "test"
+dn: uid=test,ou=People,dc=neuf,dc=no
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: test
+gecos: test
+loginShell: /bin/bash
+shadowExpire: -1
+shadowFlag: 0
+shadowWarning: 7
+shadowMin: 8
+shadowMax: 999999
+homeDirectory: /home/test
+uidNumber: 1002
+gidNumber: 10005
+displayName: Test Testesen
+cn: Test Testesen
+sn: Testesen
+givenName: Test
+mail: test@example.com
+userPassword: {SSHA}I3aQhofsUZi+TfWdOPhkr70GJ2FwuSv4
+
+# Root dn for all groups
+dn: ou=Groups,dc=neuf,dc=no
+objectClass: top
+objectClass: organizationalUnit
+ou: Groups
+
+# Private group
+dn: cn=test,ou=Groups,dc=neuf,dc=no
+objectClass: posixGroup
+cn: test
+gidNumber: 10005
+
+# Sample groups (matches settings-sample.py)
+dn: cn=dns-alle,ou=Groups,dc=neuf,dc=no
+objectClass: posixGroup
+cn: dns-alle
+gidNumber: 1
+memberUid: test
+
+dn: cn=edb,ou=Groups,dc=neuf,dc=no
+objectClass: posixGroup
+cn: edb
+gidNumber: 2
+memberUid: test
+
+dn: cn=edbadmin,ou=Groups,dc=neuf,dc=no
+objectClass: posixGroup
+cn: edbadmin
+gidNumber: 3
+memberUid: test
+
+dn: cn=dns-aktiv,ou=Groups,dc=neuf,dc=no
+objectClass: posixGroup
+cn: dns-aktiv
+gidNumber: 4
+memberUid: test
+
+# Root dn for all automounts
+dn: ou=Automount,dc=neuf,dc=no
+objectClass: top
+objectClass: organizationalUnit
+ou: Automount
+
+# Automount map for auto.home
+dn: ou=auto.home,ou=Automount,dc=neuf,dc=no
+objectClass: top
+objectClass: automountMap
+ou: auto.home
