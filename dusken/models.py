@@ -141,6 +141,8 @@ class Membership(AbstractBaseModel):
 
     @property
     def expires_in_less_than_one_month(self):
+        if not self.end_date:
+            return False
         return self.end_date < (timezone.now().date() + timedelta(days=30))
 
     def __str__(self):
