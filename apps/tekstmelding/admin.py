@@ -30,9 +30,6 @@ class OutgoingMessageAdmin(admin.ModelAdmin):
     show_incoming_link.short_description = _('Incoming message')
 
 
-admin.site.register(DeliveryReport)
-
-
 class TekstmeldingEventAdmin(admin.ModelAdmin):
     list_display = ['pk', 'action', 'show_link_incoming', 'show_link_outgoing', 'show_link_dlr',
                     'show_link_user', 'timestamp']
@@ -66,6 +63,7 @@ class TekstmeldingEventAdmin(admin.ModelAdmin):
     show_link_user.short_description = _('Inside user')
 
 
+admin.site.register(DeliveryReport)
 admin.site.register(TekstmeldingEvent, TekstmeldingEventAdmin)
 admin.site.register(IncomingMessage, IncomingMessageAdmin)
 admin.site.register(OutgoingMessage, OutgoingMessageAdmin)
