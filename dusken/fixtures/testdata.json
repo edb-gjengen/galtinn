@@ -9,7 +9,8 @@
         "is_default": true,
         "updated": "2015-09-05T17:02:33.350Z",
         "description": "Membership in The Norwegian Student Society for 365 days.",
-        "name": "Membership 1 year"
+        "name": "Membership 1 year",
+        "slug": "standard"
     },
     "model": "dusken.membershiptype"
 },
@@ -23,7 +24,8 @@
         "expiry_type": "duration",
         "updated": "2015-09-05T17:03:37.375Z",
         "description": "Membership, with discount for active members, in The Norwegian Student Society for 365 days.",
-        "name": "Membership 1 year (active)"
+        "name": "Membership 1 year (active)",
+        "slug": "active"
     },
     "model": "dusken.membershiptype"
 }
