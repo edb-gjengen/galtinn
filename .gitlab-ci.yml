@@ -12,11 +12,11 @@ cache:
   key: "$CI_PROJECT_ID"
 
 before_script:
+  - apt update && apt install libsasl2-dev libldap2-dev -y
   - python -V
   - node -v
   - npm install -g bower gulp-cli
   - cd dusken/static; yarn && bower --allow-root install && gulp; cd ../..
-  - apt install libsasl2-dev libldap2-dev -y
   - pip install -r requirements.txt
   - pip install coverage
 
