@@ -13,6 +13,7 @@ from signal_disabler import signal_disabler
 
 from apps.common.utils import log_time
 from apps.inside.models import InsideUser, InsideCard, InsideGroup, Division, InsidePlaceOfStudy
+from apps.neuf_auth.models import AuthProfile
 from dusken.models import (DuskenUser, Membership, MemberCard, MembershipType, Order, UserLogMessage, GroupProfile,
                            OrgUnit, OrgUnitLogMessage, PlaceOfStudy)
 from dusken.zip_to_city import ZIP_TO_CITY_MAP
@@ -119,6 +120,8 @@ class Command(BaseCommand):
             'email': 'email',
             'birthdate': 'date_of_birth',
             'placeofstudy': 'place_of_study',
+            'password': 'password',
+            'ldap_password': 'ldap_password',
 
             'userphonenumber__number': 'phone_number',
             'userphonenumber__validated': 'phone_number_validated',
@@ -134,8 +137,7 @@ class Command(BaseCommand):
             'created': 'date_joined',  # FIXME: Does not work?
         }
         skip_usernames = ['ukjent']
-        more_fields = ['addresstype', 'registration_status', 'source', 'placeofstudy', 'expires', 'created',
-                       'ldap_password', 'username']
+        more_fields = ['addresstype', 'registration_status', 'source', 'expires', 'created', 'username']
         fields = list(user_field_map.keys()) + more_fields
 
         i_users = InsideUser.objects.order_by('pk').reverse().values(*fields)
@@ -359,7 +361,13 @@ class Command(BaseCommand):
 
         # Create users, use legacy_id to reference later
         for u in users:
+            # TODO: User.set_unusuable_password on:
+            # - users not active
+            # - membership expired before 2015-01-01
+            # - not lifelong
+            # - users with MYSQL OLD_PASSWORD's
             memberships = u.pop('memberships')
+            ldap_password = u.pop('ldap_password')
 
             group_ids = [group_map[g] for g in u.pop('legacy_group_ids')]
             groups = Group.objects.filter(pk__in=group_ids)
@@ -371,6 +379,10 @@ class Command(BaseCommand):
                 ou = OrgUnit.objects.get(pk=ou_contact_map[new_user.legacy_id])
                 ou.contact_person = new_user
                 ou.save()
+
+            # Add LDAP password
+            if ldap_password:
+                AuthProfile.objects.create(user=new_user, ldap_password=ldap_password)
 
             message = 'Imported from Inside (user_id={})'.format(new_user.legacy_id)
             UserLogMessage.objects.create(user=new_user, message=message)

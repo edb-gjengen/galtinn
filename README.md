@@ -4,7 +4,7 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
 [![codecov](https://codecov.io/gh/edb-gjengen/dusken/branch/master/graph/badge.svg)](https://codecov.io/gh/edb-gjengen/dusken)
 
 ## Install
-    sudo apt install python3-venv libpq-dev python3-dev libssl-dev
+    sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev libssl-dev ldap-utils
     python3 -m venv venv
     . venv/bin/activate
     pip install -U pip wheel

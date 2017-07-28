@@ -21,6 +21,7 @@ def ldap_validate(raw_password, challenge_password):
 
 
 def set_ldap_password(username, raw_password):
+    # TODO: Allow LDAP to be down
     from .models import LdapUser
     try:
         # Lookup the Ldap user with the identical username (1-to-1).
