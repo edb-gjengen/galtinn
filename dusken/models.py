@@ -84,6 +84,10 @@ class DuskenUser(AbstractUser):
     def last_membership(self):
         return self.memberships.order_by('-start_date').first()
 
+    @property
+    def unclaimed_orders(self):
+        return Order.get_unclaimed_orders(phone_number=self.phone_number)
+
     def save(self, **kwargs):
         # If email has changed, invalidate confirmation state
         if self.pk is not None:
@@ -92,6 +96,14 @@ class DuskenUser(AbstractUser):
                 self.email_confirmed_at = None
                 self.email_key = create_email_key()
                 send_validation_email(self)
+
+        # If phone number is validated, claim orders
+        if self.phone_number_validated:
+            for order in self.unclaimed_orders:
+                order.user = self
+                order.product.user = self
+                order.product.save()
+                order.save()
 
         # FIXME: This does not seem like a good idea
         if self.username is '':
@@ -346,6 +358,13 @@ class Order(AbstractBaseModel):
 
     def price_nok_kr(self):
         return int(self.price_nok / 100)
+
+    @classmethod
+    def get_unclaimed_orders(cls, phone_number=None, member_card=None):
+        return cls.objects.filter(
+            Q(user__isnull=True) & (
+                Q(phone_number__isnull=False, phone_number=phone_number) |
+                Q(member_card__isnull=False, member_card=member_card))).order_by('-created')
 
     def __str__(self):
         return "{}".format(self.uuid)

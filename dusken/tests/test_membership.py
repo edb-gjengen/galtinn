@@ -14,7 +14,8 @@ class MembershipTest(APITestCase):
     """ Membership/order functionality for regular users. """
     def setUp(self):
         self.user = DuskenUser.objects.create_user(
-            'olanord', email='olanord@example.com', password='mypassword')
+            'olanord', email='olanord@example.com', password='mypassword',
+            phone_number='+4794430002')
         self.client.force_login(self.user)
         self.membership_type = MembershipType.objects.create(
             name='Cool Club Membership',
@@ -80,6 +81,25 @@ class MembershipTest(APITestCase):
         }
         response = self.client.post(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.data)
+
+    def test_validating_phone_number_claims_orders(self):
+        today = datetime.datetime.now().date()
+        membership = Membership.objects.create(
+            start_date=today - datetime.timedelta(days=10),
+            end_date=today + datetime.timedelta(days=10),
+            membership_type=self.membership_type)
+        Order.objects.create(
+            payment_method=Order.BY_SMS,
+            product=membership,
+            price_nok=0,
+            phone_number='+4794430002')
+        self.assertFalse(self.user.is_member)
+        self.assertTrue(self.user.unclaimed_orders.exists())
+        self.user.phone_number_validated = True
+        self.user.save()
+        user = DuskenUser.objects.get(pk=self.user.pk)
+        self.assertTrue(user.is_member)
+        self.assertFalse(user.unclaimed_orders.exists())
 
 
 class KassaMembershipTest(APITestCase):
