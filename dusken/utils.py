@@ -1,17 +1,14 @@
 import random
 
+from django.core import validators
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext as _
-
-from django.core import validators
-from django.core.exceptions import ValidationError
 from phonenumber_field.validators import validate_international_phonenumber
-
-import dusken
 
 
 def generate_username(first_name, last_name):
@@ -56,7 +53,8 @@ def create_email_key():
 
 
 def email_exist(email):
-    return dusken.models.DuskenUser.objects.filter(email=email).exists()
+    from dusken.models import DuskenUser
+    return DuskenUser.objects.filter(email=email).exists()
 
 
 def validate_email(email):
@@ -73,7 +71,8 @@ def validate_email(email):
 
 
 def phone_number_exist(phone_number):
-    return dusken.models.DuskenUser.objects.filter(phone_number=phone_number).exists()
+    from dusken.models import DuskenUser
+    return DuskenUser.objects.filter(phone_number=phone_number).exists()
 
 
 def validate_phone_number(phone_number):
