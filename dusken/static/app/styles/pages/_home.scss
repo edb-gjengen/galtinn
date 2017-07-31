@@ -1,18 +1,6 @@
 /* Home */
-.home {
-    &__actions {
-        @include make-col-ready();
-        @include make-col(12);
-
-        &-wrap { @include make-row(); }
-
-        &__list {
-            //@include block-grid(4);
-        }
-
-        .card {
-            margin-bottom: 1rem;
-        }
-
+.home__actions {
+    .card {
+        margin-bottom: 1rem;
     }
 }

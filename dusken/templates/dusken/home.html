@@ -10,9 +10,11 @@
     <div class="home__actions-wrap">
     <section class="home__actions">
         <h6 class="text-muted">{% trans "What do you want to do?" %}</h6>
-        <div class="card-deck-wrapper">
-        <div class="card-deck">
 
+        <!-- First row -->
+        <div class="row">
+
+            <div class="col-sm-4">
             <div class="home__membership-status card">
                 <div class="card-block">
                     <h4 class="card-title">{% svg "icons/license" %} {% trans "Your Membership" %}</h4>
@@ -60,7 +62,9 @@
                 </div>
             {% endwith %}
             </div>
+        </div>
 
+        <div class="col-sm-8">
             <div class="home__quick-profile card">
                 <div class="card-block">
                     <h4 class="card-title"><a href="{% url "user-detail-me" %}">{% svg "icons/user" %} {% trans "Your profile" %}</a></h4>
@@ -89,16 +93,32 @@
                 </div>
             </div>
 
-            <div class="home__actions__change-password card">
-                <div class="card-block">
-                    <h4 class="card-title">{% trans "Password" %}</h4>
-                    <h6 class="card-subtitle text-muted">{% trans "Change it if you want to" %}</h6>
-                </div>
-                <div class="card-block">
-                    <a href="{% url "password_change" %}" class="btn btn-outline-primary btn-block">{% trans "Change password" %}</a>
-                </div>
             </div>
         </div>
+        <!-- Second row -->
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="home__actions__update-email-subscriptions card">
+                    <div class="card-block">
+                        <h4 class="card-title">{% trans "Email subscriptions" %}</h4>
+                    </div>
+                    <div class="card-block">
+                        <a href="{% url "email-subscriptions" %}" class="btn btn-outline-primary btn-block">{% trans "Change subscriptions" %}</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="home__actions__change-password card">
+                    <div class="card-block">
+                        <h4 class="card-title">{% trans "Password" %}</h4>
+                        <h6 class="card-subtitle text-muted">{% trans "Change it if you want to" %}</h6>
+                    </div>
+                    <div class="card-block">
+                        <a href="{% url "password_change" %}" class="btn btn-outline-primary btn-block">{% trans "Change password" %}</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     </div>

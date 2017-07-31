@@ -43,14 +43,13 @@ class MailChimpIncoming(APIView):
         self._validate_list_id()
 
         email = self.request.data.get('data[email]')
-        subscription_id = self.request.data.get("data[id]")
 
         subscriptions = MailChimpSubscription.objects.filter(email=email)
         if subscriptions:
             subscriptions.update(status=self.new_status)
 
         if self._type == 'subscribe':
-            MailChimpSubscription.objects.create(email=email, status=self.new_status, mailchimp_id=subscription_id)
+            MailChimpSubscription.objects.create(email=email, status=self.new_status)
 
         return Response()
 

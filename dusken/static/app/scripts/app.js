@@ -144,7 +144,10 @@ function clearError() {
 }
 
 $(document).ready(function() {
-    if($('.membership-purchase').length) {
+    const $membershipPurchase = $('.membership-purchase');
+    const $mailchimpSub = $('.js-toggle-mailchimp-subscription');
+
+    if( $membershipPurchase ) {
 
         /* Membership purchase */
         urls = {
@@ -183,4 +186,38 @@ $(document).ready(function() {
        }
     });
 
+    if( $mailchimpSub ) {
+        const $subLabel = $('[for=id_mailchimp_subscription]');
+
+        let url = config.mailChimpSubscriptionListURL;
+        let method = 'PUT';
+        const sub = config.mailChimpSubscription;
+        if( sub ) {
+            url = config.mailChimpSubscriptionDetailURL;
+            method = 'PATCH';
+        }
+        $mailchimpSub.on('change', (e) => {
+            const shouldSubscribe = $mailchimpSub.prop('checked');
+            const data = {
+                status: shouldSubscribe ? 'subscribed' : 'unsubscribed',
+                email: config.userEmail
+            };
+            const newLabel = shouldSubscribe ? $subLabel.attr('data-text-unsubscribe') : $subLabel.attr('data-text-subscribe');
+
+             $.ajax( {url: url, data: JSON.stringify(data), method: method, contentType: 'application/json', dataType: 'json'})
+              .done(function() {
+                  $subLabel.find('span').text(newLabel);
+                  if(shouldSubscribe) {
+                      $subLabel.addClass('active');
+                  } else {
+                      $subLabel.removeClass('active')
+                  }
+                  // TODO: Add sucess message
+              })
+              .fail(function() {
+                  $mailchimpSub.prop('checked', !shouldSubscribe);
+                  // TODO: Add failed message
+              })
+        })
+    }
 });

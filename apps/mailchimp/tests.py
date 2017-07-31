@@ -81,7 +81,7 @@ class MailchimpAPI(TestCase):
         }
 
         with requests_mock.mock() as m:
-            m.put(get_list_member_url(list_id, email), json={'status': status, 'id': 'asdf'})
+            m.put(get_list_member_url(list_id, email), json={'status': status})
             res = self.client.post(url, content_type='application/json', data=json.dumps(data), format='json')
 
         self.assertEqual(res.status_code, 201)
@@ -104,7 +104,7 @@ class MailchimpAPI(TestCase):
         self.assertNotEqual(subscription.status, status)
 
         with requests_mock.mock() as m:
-            m.put(get_list_member_url(list_id, email), json={'status': status, 'id': 'asdf'})
+            m.put(get_list_member_url(list_id, email), json={'status': status})
             res = self.client.patch(url, content_type='application/json', data=json.dumps(data), format='json')
 
         self.assertEqual(res.status_code, 200)

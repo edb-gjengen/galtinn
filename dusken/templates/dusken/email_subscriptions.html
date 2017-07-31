@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 {% load i18n svg %}
 {% block body %}
-    {% trans "Newsletter" %}
+    <script>
+    var config = {
+        {% if newsletter_subscription %}
+        mailChimpSubscription: '{{ newsletter_subscription.pk }}',
+        mailChimpSubscriptionDetailURL: '{% url "mailchimp:subscription-detail" newsletter_subscription.pk %}',
+        {% endif %}
+        mailChimpSubscriptionListURL: '{% url "mailchimp:subscription-list" %}',
+        userEmail: '{{ request.user.email }}',
+    };
+    </script>
+    <div class="email-subscriptions">
+        <h2>{% trans "Email subscriptions" %}</h2>
+        <h4>{% trans "Newsletter" %}</h4>
+        <p>{% trans "Newsletter with upcoming events. Maximum one per week" %}</p>
+        <label class="btn btn-primary{% if newsletter_subscription.show_checked %} active{% endif %}" for="id_mailchimp_subscription" data-text-subscribe="{% trans "Subscribe" %}" data-text-unsubscribe="{% trans "Unsubscribe" %}">
+            <input id="id_mailchimp_subscription" type="checkbox"{% if newsletter_subscription.show_checked %} checked{% endif %} class="js-toggle-mailchimp-subscription" autocomplete="off" />
+            <span>{% if newsletter_subscription.show_checked %}{% trans "Unsubscribe" %}{% else %}{% trans "Subscribe" %}{% endif %}</span>
+        </label>
 
+    </div>
 {% endblock %}

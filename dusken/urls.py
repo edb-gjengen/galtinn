@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 
 from dusken.api import urls as api_urls
+from dusken.views.email import EmailSubscriptions
 from dusken.views.general import IndexView, HomeView, OrderDetailView, HomeVolunteerView
 from dusken.views.membership import (MembershipPurchaseView, MembershipListView,
                                      MembershipActivateView, MembershipRenewView)
@@ -38,6 +39,9 @@ urlpatterns = [
     url(r'^volunteer/$', HomeVolunteerView.as_view(), name='home-volunteer'),
     url(r'^orgunits/$', OrgUnitListView.as_view(), name='orgunit-list'),
     url(r'^orgunits/(?P<slug>[0-9a-z-]+)/$', OrgUnitDetailView.as_view(), name='orgunit-detail'),
+
+    # Email
+    url(r'email/subscriptions/$', EmailSubscriptions.as_view(), name='email-subscriptions')
 ]
 
 urlpatterns += [

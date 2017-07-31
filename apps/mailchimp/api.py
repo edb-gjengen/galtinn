@@ -2,7 +2,6 @@ import logging
 import requests
 
 from django.conf import settings
-from urllib.parse import urljoin
 
 from apps.mailchimp.utils import get_list_member_url
 
@@ -25,32 +24,11 @@ def validate_mailchimp_settings(list_id):
         ))
 
 
-def get_last_campaign_archive_url(list_id):
-    if not list_id:
-        list_id = settings.MAILCHIMP_LIST_ID
-
-    validate_mailchimp_settings(list_id)
-
-    url = urljoin(settings.MAILCHIMP_API_URL, '/3.0/campaigns/')
-
-    params = {
-        'list_id': list_id,
-        'status': 'sent',
-        'count': 1
-    }
-
-    res = requests.get(url, params, auth=_get_auth())
-    campaigns = res.json().get('campaigns')
-
-    return campaigns[0].get('archive_url') if campaigns else None
-
-
-def update_list_subscription(email, status, merge_data=None, list_id=None):
+def update_list_subscription(email, status, merge_data=None):
     from apps.mailchimp.models import MailChimpSubscription
     assert status in dict(MailChimpSubscription.STATUS_CHOICES).keys()
 
-    if not list_id:
-        list_id = settings.MAILCHIMP_LIST_ID
+    list_id = settings.MAILCHIMP_LIST_ID
 
     validate_mailchimp_settings(list_id)
 
@@ -66,6 +44,23 @@ def update_list_subscription(email, status, merge_data=None, list_id=None):
 
     # Create or update (with PUT)
     r = requests.put(get_list_member_url(list_id, email), auth=_get_auth(), json=data)
+
+    try:
+        r.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        raise MailchimpAPIException(e)
+
+    return r.json()
+
+
+def get_list_subscription(email):
+    list_id = settings.MAILCHIMP_LIST_ID
+
+    # Get subscription status
+    r = requests.get(get_list_member_url(list_id, email), auth=_get_auth())
+
+    if r.status_code == 404:
+        return None
 
     try:
         r.raise_for_status()
