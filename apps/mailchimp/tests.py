@@ -92,8 +92,8 @@ class MailchimpAPI(TestCase):
         self._user = DuskenUser.objects.create(email=email, username='yolo2')
         self.client.force_login(self._user)
 
-        mc_user = MailChimpSubscription.objects.get(pk=1)
-        url = reverse('mailchimp:subscription-detail', args=[mc_user.pk])
+        subscription = MailChimpSubscription.objects.get(pk=1)
+        url = reverse('mailchimp:subscription-detail', args=[subscription.pk])
         list_id = MAILCHIMP_TEST_LIST_ID
         status = MailChimpSubscription.STATUS_UNSUBSCRIBED
 
@@ -101,7 +101,7 @@ class MailchimpAPI(TestCase):
             'status': status
         }
 
-        self.assertNotEqual(mc_user.status, status)
+        self.assertNotEqual(subscription.status, status)
 
         with requests_mock.mock() as m:
             m.put(get_list_member_url(list_id, email), json={'status': status, 'id': 'asdf'})

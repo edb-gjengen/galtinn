@@ -26,8 +26,7 @@ class MailChimpSubscription(BaseModel):
     def merge_field_data(self):
         # TODO: Add more?
         """
-        Merge fields are configured per Mailchimp list using the create_merge_fields management command
-        or the Mailchimp web ui.
+        Merge fields are configured per Mailchimp list using the Mailchimp web UI.
         Each key in the returned dict should correspond to a merge field tag.
         """
         user = get_user_model().objects.filter(email=self.email).first()
@@ -40,12 +39,12 @@ class MailChimpSubscription(BaseModel):
         }
 
     def sync_to_mailchimp(self):
-        """ Sync all relevant data for MailChimpUser to Mailchimp """
+        """ Sync all relevant data to Mailchimp """
         update_list_subscription.delay(email=self.email, status=self.status, merge_data=self.merge_field_data())
 
     def __str__(self):
         return '{} ({})'.format(self.email, self.status)
 
     class Meta:
-        verbose_name = _('mailchimp user')
-        verbose_name_plural = _('mailchimp users')
+        verbose_name = _('mailchimp subscription')
+        verbose_name_plural = _('mailchimp subscriptions')
