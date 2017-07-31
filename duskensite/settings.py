@@ -198,6 +198,8 @@ FILESERVER_SSH_KEY_PATH = ''  # e.g. '/home/nikolark/.ssh/id_rsa'
 FILESERVER_HOME_PATH = "/tmp/"
 FILESERVER_CREATE_HOMEDIR_SCRIPT = os.path.join(BASE_DIR, 'scripts', 'create_home_directory.sh')
 
+# Celery
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
 
 try:
     from .local_settings import *

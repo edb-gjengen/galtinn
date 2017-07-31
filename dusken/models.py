@@ -43,7 +43,7 @@ class DuskenUser(AbstractUser):
     stripe_customer_id = models.CharField(_('stripe customer id'), max_length=254, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     @property
     def email_is_confirmed(self):

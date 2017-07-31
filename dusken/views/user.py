@@ -1,11 +1,8 @@
-from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, FormView
-from django.contrib.auth import login
-from django.http import HttpResponseRedirect
 
 from dusken.forms import UserEmailValidateForm, DuskenUserForm, DuskenUserUpdateForm
 from dusken.models import DuskenUser
@@ -17,11 +14,13 @@ class UserRegisterView(FormView):
     success_url = reverse_lazy('membership-renew')
 
     def form_valid(self, form):
-        # FIXME: better way?
         self.object = form.save()
-        self.object.backend = 'django.contrib.auth.backends.ModelBackend'  # FIXME: Ninja!
+
+        # Log the user in
+        self.object.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, self.object)
-        return HttpResponseRedirect(self.get_success_url())
+
+        return redirect(self.get_success_url())
 
 
 class UserListView(LoginRequiredMixin, ListView):
