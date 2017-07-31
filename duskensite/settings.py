@@ -40,6 +40,7 @@ INSTALLED_APPS += [
     # 'apps.hooks',
     'apps.neuf_ldap',
     'apps.neuf_auth',
+    'apps.mailchimp',
     # TODO Remove these after import and new integrations are OK
     'apps.inside',
     'apps.kassa',
@@ -200,6 +201,12 @@ FILESERVER_CREATE_HOMEDIR_SCRIPT = os.path.join(BASE_DIR, 'scripts', 'create_hom
 
 # Celery
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+
+# Mailchimp
+MAILCHIMP_LIST_ID = os.getenv('MAILCHIMP_LIST_ID', '')
+MAILCHIMP_WEBHOOK_SECRET = os.getenv('MAILCHIMP_WEBHOOK_SECRET', 'yolo')
+MAILCHIMP_API_KEY = 'dummy-us1'
+MAILCHIMP_API_URL = 'https://us1.api.mailchimp.com'
 
 try:
     from .local_settings import *

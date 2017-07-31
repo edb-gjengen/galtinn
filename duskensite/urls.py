@@ -4,6 +4,8 @@ from django.contrib.auth import urls as auth_urls
 from rest_framework.authtoken.views import obtain_auth_token
 
 from apps.neuf_auth.views import NeufPasswordChangeView, NeufPasswordResetConfirmView
+from apps.mailchimp import urls as mailchimp_urls
+
 from dusken import urls as dusken_urls
 
 admin.autodiscover()
@@ -11,6 +13,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include(dusken_urls)),
+    url(r'^mailchimp/', include(mailchimp_urls, namespace='mailchimp')),
     # Language selection
     url(r'^i18n/', include('django.conf.urls.i18n')),
 ]
