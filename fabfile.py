@@ -20,8 +20,7 @@ def deploy():
         run('git pull')  # Get source
         run('pip install -r requirements.txt')  # install deps in virtualenv
         with cd('dusken/static'):  # install and compile frontend deps
-            run('npm install')
-            run('bower install')
+            run('yarn')
             run('gulp')
         run('python manage.py collectstatic --noinput -i node_modules -i bower_components')  # Collect static
         run('python manage.py migrate')  # Run DB migrations
@@ -32,8 +31,7 @@ def deploy():
 
 def install():
     with lcd('dusken/static/'):
-        local('npm install')
-        local('bower install')
+        local('yarn')
         local('gulp')
 
 
