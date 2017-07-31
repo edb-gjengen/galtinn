@@ -34,8 +34,8 @@ class HomeView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-class HomeActiveView(LoginRequiredMixin, DetailView):
-    template_name = 'dusken/home_active.html'
+class HomeVolunteerView(LoginRequiredMixin, DetailView):
+    template_name = 'dusken/home_volunteer.html'
 
     def get_object(self, queryset=None):
         return self.request.user
