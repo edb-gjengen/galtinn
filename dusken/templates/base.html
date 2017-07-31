@@ -12,7 +12,19 @@
 </head>
 <body class="{% block body-css-classes %}{% endblock %}">
 	{% include "nav.html" %}
-	<section class="content">{% block body %}{% endblock %}</section>
+	<section class="content">
+        <div class="messages">{% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show"{% endif %} role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}</div>
+        {% block body %}{% endblock %}
+    </section>
     <footer class="footer">
         <div class="container">
             <div class="credits"><a href="https://studentersamfundet.no" title="Det Norske Studentersamfund"><img src="{% static 'dist/images/logo.png' %}" width="70" height="70"></a><br>

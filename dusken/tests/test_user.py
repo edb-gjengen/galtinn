@@ -24,7 +24,7 @@ class DuskenUserTest(APITestCase):
 
     def test_user_can_obtain_token(self):
         data = {
-            'username': self.user.username,
+            'username': self.user.email,
             'password': 'mypassword',
         }
         url = reverse('obtain-auth-token')

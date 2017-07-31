@@ -7,3 +7,9 @@ body {
     position: relative;
     top: 2px;
 }
+
+.messages {
+    &:empty {
+        display: none;
+    }
+}
