@@ -3,7 +3,7 @@ from django.conf import settings
 import ldapdb.models
 from ldapdb.models.fields import CharField, ImageField, IntegerField, ListField
 
-from .utils import ldap_create, ldap_validate
+from .utils import ldap_create_password, ldap_validate_password
 
 
 class LdapUser(ldapdb.models.Model):
@@ -58,7 +58,7 @@ class LdapUser(ldapdb.models.Model):
         return delta.days
 
     def set_password(self, raw_password, commit=True):
-        self.password = ldap_create(raw_password)
+        self.password = ldap_create_password(raw_password)
         # Update last changed password date
         self.shadowLastChange = LdapUser._days_since_1970()
 
@@ -66,7 +66,7 @@ class LdapUser(ldapdb.models.Model):
             self.save()
 
     def check_password(self, raw_password):
-        return ldap_validate(raw_password, self.password)
+        return ldap_validate_password(raw_password, self.password)
 
     def __str__(self):
         return self.username

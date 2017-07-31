@@ -1,15 +1,14 @@
 from django.contrib.auth.forms import SetPasswordForm
-from django.core.validators import MinLengthValidator
 
 from apps.neuf_auth.models import AuthProfile
-from apps.neuf_ldap.utils import set_ldap_password, ldap_username_exists, ldap_create
-from apps.neuf_auth.validators import validate_password
+from apps.neuf_ldap.utils import set_ldap_password, ldap_username_exists, ldap_create_password
 
 
-class NeufAuthSetPasswordForm(SetPasswordForm):
-    """ Saves a user password in each of the following services:
-        - Local db (in dusken_duskenuser and neuf_auth_authprofile)
-        - LDAP
+class NeufSetPasswordForm(SetPasswordForm):
+    """ Saves a hashed user password in each of the following places:
+        - Local DB on DuskenUser
+        - Local DB on AuthProfile as LDAP salted SHA1
+        - LDAP (if user exists in LDAP)
     """
 
     def save(self, commit=True):
@@ -27,13 +26,6 @@ class NeufAuthSetPasswordForm(SetPasswordForm):
 
     def _set_ldap_hash(self, raw_password):
         ap, _ = AuthProfile.objects.get_or_create(user=self.user)
-        ap.ldap_password = ldap_create(raw_password)
+        # FIXME: Switch to {CRYPT} and salted SHA-512
+        ap.ldap_password = ldap_create_password(raw_password)
         ap.save()
-
-    def clean_new_password1(self):
-        raw_password = self.cleaned_data.get('new_password1')
-
-        MinLengthValidator(8)(raw_password)
-        validate_password(raw_password)
-
-        return raw_password

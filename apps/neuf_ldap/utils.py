@@ -10,11 +10,11 @@ from passlib.hash import ldap_salted_sha1
 logger = logging.getLogger(__name__)
 
 
-def ldap_create(raw_password):
+def ldap_create_password(raw_password):
     return ldap_salted_sha1.encrypt(raw_password)
 
 
-def ldap_validate(raw_password, challenge_password):
+def ldap_validate_password(raw_password, challenge_password):
     # challenge_password is hash from db
     # raw_password is the cleartext password.
     return ldap_salted_sha1.validate(raw_password, challenge_password)
@@ -29,7 +29,6 @@ def set_ldap_password(username, raw_password):
         user.set_password(raw_password)
     except LdapUser.DoesNotExist:
         logger.warning('Could not set password in LDAP for user with username {}'.format(username))
-        pass
 
 
 def ldap_user_group_exists(username):

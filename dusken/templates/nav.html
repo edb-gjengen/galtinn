@@ -21,7 +21,6 @@
             {% get_available_languages as LANGUAGES %}
             {% get_language_info_list for LANGUAGES as languages %}
             <form class="form-inline" action="{% url "set_language" %}" method="post">{% csrf_token %}
-                <a href="#" class="nav-link js-language-select-toggle" title="{% trans "Change language to..." %}">{% svg "icons/earth" %}</a>
                 <select class="form-control language-select hidden" name="language" onchange="this.form.submit()">
                     {% for language in languages %}
                         <option value="{{ language.code }}"
@@ -30,6 +29,7 @@
                         </option>
                     {% endfor %}
                 </select>
+                <a href="#" class="nav-link js-language-select-toggle" title="{% trans "Change language to..." %}">{% svg "icons/earth" %}</a>
             </form>
 
             {% if user.is_authenticated %}

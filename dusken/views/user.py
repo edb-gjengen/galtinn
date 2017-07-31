@@ -45,6 +45,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = DuskenUserUpdateForm
     template_name = 'dusken/user_update.html'
 
+
 class UserUpdateMeView(UserUpdateView):
     def get_object(self, queryset=None):
         return self.request.user
@@ -76,6 +77,3 @@ class UserEmailValidateView(TemplateView):
 class UserEmailValidateSuccessView(TemplateView):
     template_name = 'dusken/user_email_confirm_success.html'
 
-
-class MyPasswordChangeView(PasswordChangeView):
-    form_class = SetPasswordForm
