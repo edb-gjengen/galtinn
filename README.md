@@ -15,8 +15,8 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     python manage.py runserver
     
     # Frontend
-    npm install -g gulp-cli bower
-    fab install  # cd dusken/static && npm install && bower install && gulp build
+    npm install -g gulp-cli
+    fab install  # cd dusken/static && yarn && gulp build
     fab serve
     
     # Add Stripe keys in duskensite/local_settings.py

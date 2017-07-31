@@ -7,5 +7,4 @@ duskensite/local_settings.py
 docs/_build
 staticfiles
 node_modules
-bower_components
 /insidedocs

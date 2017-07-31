@@ -22,7 +22,7 @@ def deploy():
         with cd('dusken/static'):  # install and compile frontend deps
             run('yarn')
             run('gulp')
-        run('python manage.py collectstatic --noinput -i node_modules -i bower_components')  # Collect static
+        run('python manage.py collectstatic --noinput -i node_modules')  # Collect static
         run('python manage.py migrate')  # Run DB migrations
 
     # Reload gunicorn
