@@ -27,6 +27,8 @@ def deploy():
 
     # Reload gunicorn
     sudo('/usr/bin/supervisorctl pid dusken.neuf.no | xargs kill -HUP', shell=False)
+    # Reload celery
+    sudo('/usr/bin/supervisorctl pid dusken.neuf.no-celery | xargs kill -HUP', shell=False)
 
 
 def install():
