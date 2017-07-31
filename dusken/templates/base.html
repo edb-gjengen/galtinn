@@ -16,9 +16,7 @@
         <div class="messages">{% if messages %}
             {% for message in messages %}
                 <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show"{% endif %} role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     {{ message }}
                 </div>
             {% endfor %}
@@ -28,7 +26,7 @@
     <footer class="footer">
         <div class="container">
             <div class="credits"><a href="https://studentersamfundet.no" title="Det Norske Studentersamfund"><img src="{% static 'dist/images/logo.png' %}" width="70" height="70"></a><br>
-            Laget med <span class="love" title="kærlighed">♥</span> av <a href="http://kak.studentersamfundet.no/" title="Kommunikasjonsavdelingen">KAK</a></div>
+            {% trans "Created with" %} <span class="love" title="kærlighed">♥</span> {% trans "by" %} <a href="http://edb.technology/" title="EDB-gjengen">EDB-gjengen</a></div>
         </div>
     </footer>
     <script type="text/javascript" src="{% static 'dist/scripts/app.js' %}"></script>

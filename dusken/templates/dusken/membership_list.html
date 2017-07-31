@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n svg %}
 {% block body %}
     <h2>{% trans "Memberships" %}</h2>
 
@@ -15,14 +15,14 @@
     {% for ms in membership_list %}
         <section class="membership-item card">
             <div class="card-block">
-                <h4 class="card-title"><span class="lnr lnr-license"></span> {{ ms.membership_type }}</h4>
+                <h4 class="card-title">{% svg "icons/license" %} {{ ms.membership_type }}</h4>
                 <h6 class="card-subtitle text-muted">{% trans "Validity period" %}: {{ ms.start_date }} - {% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</h6>
             </div>
             <ul class="list-group list-group-flush">
                 {% if ms.is_valid %}
                     <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "Validity" %}: {% trans "Valid" %}</span></li>
                 {% else %}
-                    <li class="list-group-item list-group-item-warning"><span><span class="lnr lnr-sad"></span> {% trans "Validity" %}: {% trans "Expired" %}</span></li>
+                    <li class="list-group-item list-group-item-warning"><span>{% svg "icons/sad" %} {% trans "Validity" %}: {% trans "Expired" %}</span></li>
                 {% endif %}
                     <li class="list-group-item">{% trans "Purchased" %}<span>{{ ms.order.created }} {% trans "by" %} {{ ms.order.get_payment_method_display }}</span></li>
             </ul>

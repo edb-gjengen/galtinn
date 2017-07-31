@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n svg %}
 {% block body %}
-    <h2><span class="lnr lnr-apartment"></span> {% trans "Volunteer" %}</h2>
+    <h2>{% svg "icons/apartment" %} {% trans "Volunteer" %}</h2>
     <div class="home-volunteer__actions-wrap">
     <ul>
         <li><a href="{% url "orgunit-list" %}">{% trans "List of organizational units" %}</a></li>
