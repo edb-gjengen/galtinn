@@ -16,7 +16,7 @@
         <h6 class="text-muted">{% trans "Note: We have registered your email as" %} {{ request.user.email }}</h6>
         {% if not user.email_is_confirmed %}
             <div class="alert alert-info">{% trans "You need to confirm your email address before you can change your subscriptions" %}</div>
-            <a href="{% url "home" %}" class="btn btn-outline-primary">{% trans "Go confirm my email" %}</a>
+            <a href="{% url "user-detail-me" %}" class="btn btn-outline-primary">{% trans "Go confirm my email" %}</a>
         {% else %}
         <br>
         <h4>{% trans "Newsletter" %}</h4>
