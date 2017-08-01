@@ -41,6 +41,7 @@ INSTALLED_APPS += [
     'apps.neuf_ldap',
     'apps.neuf_auth',
     'apps.mailchimp',
+    'apps.mailman',
     # TODO Remove these after import and new integrations are OK
     'apps.inside',
     'apps.kassa',
