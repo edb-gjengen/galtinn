@@ -35,12 +35,21 @@
 }
 
 /* Email subscriptions / Mailing lists */
+.newsletter-btn {
+    margin-left: 16px;
+}
 .mailing-list-table {
     max-width: 350px;
+
 
     label {
         margin-bottom: 0;
     }
+
+    &__status {
+        text-align: center;
+    }
+
     &__actions {
         text-align: right;
     }

@@ -20,7 +20,7 @@ class MailmanMembership(APIView):
     def put(self, request, list_name, address):
         full_name = self.request.query_params.get('full_name')
         if not full_name:
-            raise ValidationError(_('Missing param full_name'))
+            full_name = self.request.user.get_full_name()
 
         try:
             ret = subscribe(list_name, address, full_name)

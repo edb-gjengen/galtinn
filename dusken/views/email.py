@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.views.generic import TemplateView
 
 from apps.mailchimp.api import get_list_subscription
@@ -27,7 +28,10 @@ class EmailSubscriptions(TemplateView):
         mailman_lists = get_lists_by_email(email)
         visible_lists_with_status = {}
         for mlist in visible_lists:
-            visible_lists_with_status[mlist] = mlist in mailman_lists
+            visible_lists_with_status[mlist] = {
+                'is_member': mlist in mailman_lists,
+                'url': reverse('mailman:memberships', args=[mlist, email])
+            }
 
         return visible_lists_with_status
 
