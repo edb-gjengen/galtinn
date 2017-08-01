@@ -7,7 +7,7 @@ from apps.mailman.api import get_lists_by_email
 
 
 class EmailSubscriptions(TemplateView):
-    MAILMAN_LISTS = ['medlemmer', 'ninjatest']  # TODO: Make these database objects
+    MAILMAN_LISTS = ['medlemmer']  # TODO: Make these database objects
     template_name = 'dusken/email_subscriptions.html'
 
     def get_context_data(self, **kwargs):
@@ -23,7 +23,7 @@ class EmailSubscriptions(TemplateView):
     def _get_mailinglists(self, email):
         visible_lists = self.MAILMAN_LISTS
         if self.request.user.is_volunteer:
-            visible_lists.append('aktive')
+            visible_lists.append('aktive')  # FIXME: Hardcoded for now
 
         mailman_lists = get_lists_by_email(email)
         visible_lists_with_status = {}
