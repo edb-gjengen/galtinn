@@ -32,7 +32,7 @@
                         {% if user.unclaimed_orders %}
                             <li class="list-group-item list-group-item-warning"><span>{% svg "icons/warning" %}
                                 {% trans "There is a membership connected to your phone number." %}<br>
-                                <a href="{% url "user-phone-validate" %}">Valdate phone number</a>
+                                <a href="{% url "user-phone-validate" %}">{% trans "Validate phone number" %}</a>
                             </span></li>
                         {% else %}
                             <li class="list-group-item list-group-item-danger"><span>{% svg "icons/sad" %}
@@ -50,7 +50,7 @@
                             {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</strong>
                         </span></li>
                         <li class="list-group-item payment"><span>
-                        {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.payment_method }}</strong>
+                        {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.get_payment_method_display }}</strong>
                         </span></li>
                     {% endif %}
                 </ul>
