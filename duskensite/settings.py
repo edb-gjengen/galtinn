@@ -161,6 +161,9 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 PHONENUMBER_DB_FORMAT = 'E164'
 PHONENUMBER_DEFAULT_REGION = 'NO'
 
+TEKSTMELDING_API_URL = 'https://tekstmelding.neuf.no/'
+TEKSTMELDING_API_KEY = ''
+
 NOCAPTCHA = True
 
 SVG_DIRS = [

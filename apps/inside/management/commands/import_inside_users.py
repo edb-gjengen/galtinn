@@ -133,7 +133,7 @@ class Command(BaseCommand):
             'ldap_password': 'ldap_password',
 
             'userphonenumber__number': 'phone_number',
-            'userphonenumber__validated': 'phone_number_validated',
+            'userphonenumber__validated': 'phone_number_confirmed',
 
             'useraddressno__street': 'street_address',
             'useraddressno__zipcode': 'postal_code',
@@ -211,7 +211,7 @@ class Command(BaseCommand):
                 if dst_field in ['email', 'username']:
                     new_val = new_val.lower()
 
-                if dst_field == 'phone_number_validated':
+                if dst_field == 'phone_number_confirmed':
                     new_val = bool(new_val)
 
                 new_user[dst_field] = new_val

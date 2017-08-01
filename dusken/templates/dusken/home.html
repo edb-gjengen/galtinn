@@ -22,20 +22,27 @@
                 </div>
                 <ul class="list-group list-group-flush">
                 {% with user.last_membership as ms %}
-                    {% if ms.is_valid %}
+                    {% if ms != null and ms.is_valid %}
                         {% if ms.expires_in_less_than_one_month %}
                             <li class="list-group-item list-group-item-warning"><span>{% svg "icons/warning" %} {% trans "Your membership is expiring in less than one month" %} </span></li>
                         {% else %}
                             <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </span></li>
                         {% endif %}
                     {% else %}
-                        <li class="list-group-item list-group-item-danger"><span>{% svg "icons/sad" %}
-                            {% if ms == Null %}
-                                {% trans "You have no membership" %}
-                            {% else %}
-                                {% trans "Membership expired." %}
-                            {% endif %}
-                        </span></li>
+                        {% if user.unclaimed_orders %}
+                            <li class="list-group-item list-group-item-warning"><span>{% svg "icons/warning" %}
+                                {% trans "There is a membership connected to your phone number." %}<br>
+                                <a href="{% url "user-phone-validate" %}">Valdate phone number</a>
+                            </span></li>
+                        {% else %}
+                            <li class="list-group-item list-group-item-danger"><span>{% svg "icons/sad" %}
+                                {% if ms == null %}
+                                    {% trans "You have no membership" %}
+                                {% else %}
+                                    {% trans "Membership expired." %}
+                                {% endif %}
+                            </span></li>
+                        {% endif %}
                     {% endif %}
 
                     {% if ms.is_valid %}
@@ -86,7 +93,15 @@
                             <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
                         {% endif %}
                     </li>
-                    <li class="list-group-item"><span>{% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span></li>
+                    <li class="list-group-item justify-content-between">
+                        <span>{% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
+                        {% if user.phone_number_confirmed %}
+                            <span class="badge badge-success">{% trans "Validated" %}</span>
+                        {% else %}
+                            <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                            <a href="{% url "user-phone-validate" %}" class="btn btn-outline-primary btn-sm">{% trans "Validate phone number" %}</a>
+                        {% endif %}
+                    </li>
                 </ul>
                 <div class="card-block">
                     <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit your profile" %}</a>

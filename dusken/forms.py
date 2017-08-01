@@ -79,3 +79,20 @@ class UserEmailValidateForm(forms.Form):
             raise ValidationError(_('Email already confirmed'))
 
         self.cleaned_data['user'] = user
+
+
+class UserPhoneValidateForm(forms.Form):
+    phone_key = forms.CharField(label=_('Code'), required=True,
+                                widget=forms.NumberInput(attrs={'autofocus': True}))
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(UserPhoneValidateForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        if self.user.phone_number_confirmed:
+            raise ValidationError(_('Phone number already confirmed'))
+
+    def clean_phone_key(self):
+        if self.user.phone_number_key != self.cleaned_data.get('phone_key'):
+            raise ValidationError(_('Invalid code'))

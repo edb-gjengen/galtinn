@@ -17,7 +17,7 @@ from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
-from dusken.utils import create_email_key, send_validation_email, generate_username
+from dusken.utils import create_email_key, send_validation_email, create_phone_key, generate_username
 
 
 class DuskenUser(AbstractUser):
@@ -27,7 +27,9 @@ class DuskenUser(AbstractUser):
     email_confirmed_at = models.DateTimeField(blank=True, null=True)
     email_key = models.CharField(max_length=40, default=create_email_key)
     phone_number = PhoneNumberField(_('phone number'), blank=True, default='')
-    phone_number_validated = models.BooleanField(default=False)
+    phone_number_key = models.CharField(max_length=40, blank=True, null=True)
+    phone_number_confirmed = models.BooleanField(default=False)
+    phone_number_confirmed_at = models.DateTimeField(blank=True, null=True)
     date_of_birth = models.DateField(_('date of birth'), null=True, blank=True)
 
     # Address
@@ -52,6 +54,13 @@ class DuskenUser(AbstractUser):
     def confirm_email(self, save=True):
         if not self.email_is_confirmed:
             self.email_confirmed_at = timezone.now()
+            if save:
+                self.save()
+
+    def confirm_phone_number(self, save=True):
+        if not self.phone_number_confirmed:
+            self.phone_number_confirmed = True
+            self.phone_number_confirmed_at = timezone.now()
             if save:
                 self.save()
 
@@ -83,16 +92,20 @@ class DuskenUser(AbstractUser):
         return Order.get_unclaimed_orders(phone_number=self.phone_number)
 
     def save(self, **kwargs):
-        # If email has changed, invalidate confirmation state
+        # If email or phone number has changed, invalidate confirmation state
         if self.pk is not None:
             orig = DuskenUser.objects.get(pk=self.pk)
             if orig.email != self.email:
                 self.email_confirmed_at = None
                 self.email_key = create_email_key()
                 send_validation_email(self)
+            if orig.phone_number != self.phone_number:
+                self.phone_number_confirmed = False
+                self.phone_number_confirmed_at = None
+                self.phone_number_key = create_phone_key()
 
-        # If phone number is validated, claim orders
-        if self.phone_number_validated:
+        # If phone number is confirmed, claim orders
+        if self.phone_number_confirmed:
             for order in self.unclaimed_orders:
                 order.user = self
                 order.product.user = self

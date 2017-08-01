@@ -6,8 +6,10 @@ from dusken.views.general import IndexView, HomeView, OrderDetailView, HomeVolun
 from dusken.views.membership import (MembershipPurchaseView, MembershipListView,
                                      MembershipActivateView, MembershipRenewView)
 from dusken.views.orgunit import OrgUnitListView, OrgUnitDetailView
-from dusken.views.user import (UserRegisterView, UserDetailView, UserDetailMeView, UserListView, UserUpdateView,
-                               UserUpdateMeView, UserEmailValidateView, UserEmailValidateSuccessView)
+from dusken.views.user import (UserRegisterView, UserDetailView, UserDetailMeView, UserListView,
+                               UserUpdateView, UserUpdateMeView,
+                               UserEmailValidateView, UserEmailValidateSuccessView,
+                               UserPhoneValidateView, UserPhoneValidateSuccessView)
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
@@ -26,6 +28,9 @@ urlpatterns = [
         UserEmailValidateView.as_view(),
         name='user-email-validate'),
     url(r'^users/validate_email_success/$', UserEmailValidateSuccessView.as_view(), name='user-email-validate-success'),
+    url(r'^me/validate_phone/$', UserPhoneValidateView.as_view(), name='user-phone-validate'),
+    url(r'^me/validate_phone_success/$', UserPhoneValidateSuccessView.as_view(),
+        name='user-phone-validate-success'),
 
     # Membership
     url(r'^memberships/$', MembershipListView.as_view(), name='membership-list'),

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n bootstrap4 %}
+{% block body %}
+
+{% if user.phone_number_confirmed %}
+    <h1>{% trans "Your phone number is already confirmed" %}</h1>
+    <a href="{% url "home" %}" class="btn btn-primary btn-block">{% trans "Go home" %}</a>
+{% else %}
+    <section class="user-phone-validate">
+        <h4>{% trans "Confirm your phone number" %}</h4>
+        <p>
+            {% if code_sent %}
+                {% blocktrans with phone_number=user.phone_number %}A code was just sent to <strong>{{ phone_number }}</strong>.{% endblocktrans %}
+            {% else %}
+                {% blocktrans with phone_number=user.phone_number %}We have previously sent a code to <strong>{{ phone_number }}</strong>.{% endblocktrans %}
+            {% endif %}
+            {% trans "Enter it below." %}
+        </p>
+        <form method="post" id="user-phone-validate-form">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button id="phone-confirm-button" class="btn btn-primary btn-lg btn-block">{% trans "Confirm" %}</button>
+        </form>
+    </section>
+{% endif %}
+
+{% endblock %}
