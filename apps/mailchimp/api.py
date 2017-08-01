@@ -29,7 +29,6 @@ def update_list_subscription(email, status, merge_data=None):
     assert status in dict(MailChimpSubscription.STATUS_CHOICES).keys()
 
     list_id = settings.MAILCHIMP_LIST_ID
-
     validate_mailchimp_settings(list_id)
 
     data = {
@@ -55,6 +54,7 @@ def update_list_subscription(email, status, merge_data=None):
 
 def get_list_subscription(email):
     list_id = settings.MAILCHIMP_LIST_ID
+    validate_mailchimp_settings(list_id)
 
     # Get subscription status
     r = requests.get(get_list_member_url(list_id, email), auth=_get_auth())
