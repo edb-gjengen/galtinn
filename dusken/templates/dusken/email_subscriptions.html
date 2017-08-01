@@ -14,6 +14,10 @@
     <div class="email-subscriptions">
         <h2>{% trans "Email subscriptions" %}</h2>
         <h6 class="text-muted">{% trans "Note: We have registered your email as" %} {{ request.user.email }}</h6>
+        {% if not user.email_is_confirmed %}
+            <div class="alert alert-info">{% trans "You need to confirm your email address before you can change your subscriptions" %}</div>
+            <a href="{% url "home" %}" class="btn btn-outline-primary">{% trans "Go confirm my email" %}</a>
+        {% else %}
         <br>
         <h4>{% trans "Newsletter" %}</h4>
         <p>{% trans "Upcoming events and announcements. Maximum one email per week." %}</p>
@@ -57,6 +61,8 @@
         {% endfor %}
         </tbody>
         </table>
+
+        {% endif %}
 
     </div>
 {% endblock %}
