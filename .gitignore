@@ -3,6 +3,7 @@
 .idea/
 venv/
 db.sqlite3
+duskensite/settings/local.py
 duskensite/local_settings.py
 docs/_build
 staticfiles

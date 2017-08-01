@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block body %}
+    <h1>{% trans "404 Not Found" %}</h1>
+    <p>
+        {% trans "The page does not exist" %}<br>
+        <a href="{% url "index" %}" class="btn btn-outline-primary">{% trans "Go to frontpage" %}</a>
+    </p>
+{% endblock %}

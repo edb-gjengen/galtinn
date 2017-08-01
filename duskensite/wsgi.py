@@ -1,9 +1,8 @@
 import os
 from django.core.wsgi import get_wsgi_application
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "duskensite.settings")
+from raven.contrib.django.middleware.wsgi import Sentry
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "duskensite.settings.prod")
 
 application = get_wsgi_application()
-
-# Apply WSGI middleware here.
-# from helloworld.wsgi import HelloWorldApplication
-# application = HelloWorldApplication(application)
+application = Sentry(application)

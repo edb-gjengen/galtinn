@@ -1,4 +1,4 @@
-{% load staticfiles i18n %}
+{% load staticfiles i18n raven %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,6 +29,8 @@
             {% trans "Created with" %} <span class="love" title="kærlighed">♥</span> {% trans "by" %} <a href="http://edb.technology/" title="EDB-gjengen">EDB-gjengen</a></div>
         </div>
     </footer>
+    <script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
+    <script>Raven.config('{% sentry_public_dsn 'https' %}').install()</script>
     <script type="text/javascript" src="{% static 'dist/scripts/app.js' %}"></script>
 </body>
 </html>

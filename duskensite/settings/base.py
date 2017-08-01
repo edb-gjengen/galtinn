@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    'raven.contrib.django.raven_compat',
     'rest_framework',
     'rest_framework.authtoken',
     'mptt',
@@ -89,7 +90,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-# LDAP, Inside, Kassa and tekstmelding dbs
+# LDAP, Inside, Kassa and tekstmelding DB's
 DATABASE_ROUTERS = ['duskensite.router.Router']
 
 # Internationalization
@@ -163,7 +164,7 @@ PHONENUMBER_DB_FORMAT = 'E164'
 PHONENUMBER_DEFAULT_REGION = 'NO'
 
 TEKSTMELDING_API_URL = 'https://tekstmelding.neuf.no/'
-TEKSTMELDING_API_KEY = ''
+TEKSTMELDING_API_KEY = os.getenv('TEKSTMELDING_API_KEY', '')
 
 NOCAPTCHA = True
 
@@ -216,8 +217,3 @@ MAILCHIMP_API_URL = os.getenv('MAILCHIMP_API_URL', 'https://us1.api.mailchimp.co
 MAILMAN_API_URL = os.getenv('MAILMAN_API_URL', 'https://mailman-api.neuf.no')
 MAILMAN_API_USERNAME = os.getenv('MAILMAN_API_USERNAME', '')
 MAILMAN_API_PASSWORD = os.getenv('MAILMAN_API_PASSWORD', '')
-
-try:
-    from .local_settings import *
-except ImportError:
-    pass
