@@ -23,7 +23,7 @@ RAVEN_CONFIG = {
     'dsn': os.getenv('SENTRY_DSN'),
     'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
     'CELERY_LOGLEVEL': logging.WARNING,
-    'environment': os.getenv('environment', 'production')
+    'environment': os.getenv('SENTRY_ENVIRONMENT', 'production')
 }
 
 MIDDLEWARE.insert(0, 'raven.contrib.django.middleware.SentryResponseErrorIdMiddleware')
