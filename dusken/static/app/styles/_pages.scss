@@ -33,3 +33,15 @@
         margin: 0 auto;
     }
 }
+
+/* Email subscriptions / Mailing lists */
+.mailing-list-table {
+    max-width: 350px;
+
+    label {
+        margin-bottom: 0;
+    }
+    &__actions {
+        text-align: right;
+    }
+}

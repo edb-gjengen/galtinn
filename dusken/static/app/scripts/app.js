@@ -146,8 +146,9 @@ function clearError() {
 $(document).ready(function() {
     const $membershipPurchase = $('.membership-purchase');
     const $mailchimpSub = $('.js-toggle-mailchimp-subscription');
+    const $mailmanSub = $('.js-toggle-mailman-subscription');
 
-    if( $membershipPurchase ) {
+    if( $membershipPurchase.length ) {
 
         /* Membership purchase */
         urls = {
@@ -186,11 +187,12 @@ $(document).ready(function() {
        }
     });
 
-    if( $mailchimpSub ) {
+    /* Page: Newsletter and mailing list */
+    if( $mailchimpSub.length ) {
         const $subLabel = $('[for=id_mailchimp_subscription]');
 
         let url = config.mailChimpSubscriptionListURL;
-        let method = 'PUT';
+        let method = 'POST';
         const sub = config.mailChimpSubscription;
         if( sub ) {
             url = config.mailChimpSubscriptionDetailURL;
@@ -220,4 +222,9 @@ $(document).ready(function() {
               })
         })
     }
+
+    if( $mailmanSub.length ) {
+        // TODO: Add toggle subscritions
+    }
+
 });

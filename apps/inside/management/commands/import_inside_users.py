@@ -381,9 +381,7 @@ class Command(BaseCommand):
         # Create users, use legacy_id to reference later
         for u in users:
             # TODO: User.set_unusuable_password on:
-            # - users not active
-            # - membership expired before 2015-01-01
-            # - not lifelong
+            # - users not active and membership expired before 2015-01-01 or not lifelong
             memberships = u.pop('memberships')
             ldap_password = u.pop('ldap_password')
 

@@ -208,8 +208,13 @@ CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
 # Mailchimp
 MAILCHIMP_LIST_ID = os.getenv('MAILCHIMP_LIST_ID', '')
 MAILCHIMP_WEBHOOK_SECRET = os.getenv('MAILCHIMP_WEBHOOK_SECRET', 'yolo')
-MAILCHIMP_API_KEY = 'dummy-us1'
-MAILCHIMP_API_URL = 'https://us1.api.mailchimp.com'
+MAILCHIMP_API_KEY = os.getenv('MAILCHIMP_API_KEY', 'dummy-us1')
+MAILCHIMP_API_URL = os.getenv('MAILCHIMP_API_URL', 'https://us1.api.mailchimp.com')
+
+# Mailman API
+MAILMAN_API_URL = os.getenv('MAILMAN_API_URL', 'https://mailman-api.neuf.no')
+MAILMAN_API_USERNAME = os.getenv('MAILMAN_API_USERNAME', '')
+MAILMAN_API_PASSWORD = os.getenv('MAILMAN_API_PASSWORD', '')
 
 try:
     from .local_settings import *

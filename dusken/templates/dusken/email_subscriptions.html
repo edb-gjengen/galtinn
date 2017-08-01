@@ -13,12 +13,38 @@
     </script>
     <div class="email-subscriptions">
         <h2>{% trans "Email subscriptions" %}</h2>
+        <h6 class="text-muted">{% trans "Note: We have registered your email as" %} {{ request.user.email }}</h6>
+        <br>
         <h4>{% trans "Newsletter" %}</h4>
-        <p>{% trans "Newsletter with upcoming events. Maximum one per week" %}</p>
+        <p>{% trans "Upcoming events and announcements. Maximum one email per week." %}</p>
         <label class="btn btn-primary{% if newsletter_subscription.show_checked %} active{% endif %}" for="id_mailchimp_subscription" data-text-subscribe="{% trans "Subscribe" %}" data-text-unsubscribe="{% trans "Unsubscribe" %}">
             <input id="id_mailchimp_subscription" type="checkbox"{% if newsletter_subscription.show_checked %} checked{% endif %} class="js-toggle-mailchimp-subscription" autocomplete="off" />
             <span>{% if newsletter_subscription.show_checked %}{% trans "Unsubscribe" %}{% else %}{% trans "Subscribe" %}{% endif %}</span>
         </label>
+        <br>
+        <br>
+        <h4>{% trans "Mailing lists" %}</h4>
+        <p>{% trans "For keeping up with what is happening internally at Chateau Neuf. Usually one email per month on average." %}</p>
+        <table class="table table-striped mailing-list-table">
+            <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th class="mailing-list-table__actions">{% trans "Subscription" %}</th>
+                </tr>
+            </thead>
+        <tbody>
+        {% for list_name,is_subscribed in mailing_lists.items %}
+            <tr><td>{{ list_name|capfirst }}</td>
+            <td class="mailing-list-table__actions">
+                <label class="btn btn-primary{% if is_subscribed %} active{% endif %}" for="id_mailman_{{ list_name }}" data-text-subscribe="{% trans "Subscribe" %}" data-text-unsubscribe="{% trans "Unsubscribe" %}">
+                    <input id="id_mailman_{{ list_name }}" type="checkbox"{% if is_subscribed %} checked{% endif %} class="js-toggle-mailman-subscription" autocomplete="off" />
+                    <span>{% if is_subscribed %}{% trans "Unsubscribe" %}{% else %}{% trans "Subscribe" %}{% endif %}</span>
+                </label>
+            </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
 
     </div>
 {% endblock %}
