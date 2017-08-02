@@ -1,21 +1,21 @@
 {% extends "base.html" %}
-{% load i18n user %}
+{% load i18n user svg %}
 {% block body %}
-    <h4 class="card-title"><span class="lnr lnr-users"></span> {{ orgunit.name }}</h4>
+    <h4 class="card-title">{% svg "icons/users" %} {{ orgunit.name }}</h4>
     {% if user|has_group:orgunit.admin_group %}
         <p><a href="{% url "orgunit-edit" orgunit.slug %}">{%  trans "Edit" %}</a></p>
     {% endif %}
     <ul class="list-group">
         {% if orgunit.email %}
-        <li class="list-group-item"><span><span class="lnr lnr-envelope"></span> {% trans "Email" %}:
+        <li class="list-group-item"><span>{% svg "icons/envelope" %} {% trans "Email" %}:
             <strong><a href="mailto:{{ orgunit.email }}">{{ orgunit.email }}</a></strong></span></li>
         {% endif %}
         {% if orgunit.phone_number %}
-        <li class="list-group-item"><span><span class="lnr lnr-phone"></span> {% trans "Phone number" %}:
+        <li class="list-group-item"><span>{% svg "icons/phone" %} {% trans "Phone number" %}:
             <strong>{{ orgunit.phone_number }}</strong></span></li>
         {% endif %}
         {% if orgunit.website %}
-        <li class="list-group-item"><span><span class="lnr lnr-earth"></span> {% trans "Website" %}:
+        <li class="list-group-item"><span>{% svg "icons/earth" %} {% trans "Website" %}:
             <strong><a href="{{ orgunit.website }}">{{ orgunit.website }}</a></strong></span></li>
         {% endif %}
     </ul>
@@ -28,9 +28,9 @@
     {% for user in orgunit.group.user_set.all %}
         <li class="list-group-item"><span>
             {% if user|has_group:orgunit.admin_group %}
-                <span class="lnr lnr-star"></span>
+                {% svg "icons/star" %}
             {% else %}
-                <span class="lnr lnr-user"></span>
+                {% svg "icons/user" %}
             {% endif %}
             {{ user.get_full_name }} - <a href="mailto:{{ user.email }}">{{ user.email }}</a>
             {% if user|has_group:orgunit.admin_group %}

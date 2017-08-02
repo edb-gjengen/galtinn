@@ -9,7 +9,7 @@
         <li>{% trans "Remove volunteer from my orgunit" %}</li>
     </ul>
         {% if user.groups %}
-            <h4><span class="lnr lnr-users"></span> {% trans "Your organizations" %}</h4>
+            <h4>{% svg "icons/users" %} {% trans "Your organizations" %}</h4>
             <ul class="list-group">
             {% for group in user.groups.all %}
                 {% for org in group.member_orgunits.all %}
