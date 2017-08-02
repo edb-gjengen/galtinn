@@ -29,3 +29,8 @@ urlpatterns += [
     # API auth
     url(r'^auth/obtain-token/', obtain_auth_token, name='obtain-auth-token'),
 ]
+
+# Flatpages
+urlpatterns += [
+    url(r'^pages/', include('django.contrib.flatpages.urls')),
+]

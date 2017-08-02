@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ flatpage.title }}{% endblock %}
+{% block body-css-classes %}page-flatpage{% endblock %}
+{% block body %}
+    <div class="flatpage">
+        <h1>{{ flatpage.title }}</h1>
+        {{ flatpage.content }}
+    </div>
+{% endblock %}
