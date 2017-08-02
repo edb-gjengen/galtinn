@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-{% load i18n svg %}
+{% load i18n svg humanize %}
+{% block nav %}
+    {% if userobj == user %}
+        {% include "nav.html" with active="user-detail-me" %}
+    {% endif %}
+{% endblock %}
 {% block body %}
     <script>
     var config = {
@@ -16,20 +21,31 @@
     <ul class="list-group">
         <li class="list-group-item"><span>{% trans "Full name" %}: <strong>{{ userobj.get_full_name }}</strong></span></li>
         <li class="list-group-item"><span>{% trans "Username" %}: <strong>{{ userobj.username }}</strong></span></li>
-        <li class="list-group-item justify-content-between"><span>
-            {% svg "icons/envelope" %} {% trans "Email" %}:
-            <strong>{{ userobj.email }}</strong></span>
-            {% if userobj == user %}
+        <li class="list-group-item justify-content-between">
+            <span>
+                {% svg "icons/envelope" %} {% trans "Email" %}: <strong>{{ userobj.email }}</strong>
                 {% if userobj.email_is_confirmed %}
                     <span class="badge badge-success">{% trans "Validated" %}</span>
                 {% else %}
                     <span class="badge badge-warning">{% trans "Not validated" %}</span>
-                    <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
                 {% endif %}
+            </span>
+            {% if userobj == user and not userobj.email_is_confirmed %}
+                <a href="#" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</a>
             {% endif %}
         </li>
-        <li class="list-group-item">
-            <span>{% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ userobj.phone_number }}</strong></span>
+        <li class="list-group-item justify-content-between">
+            <span>
+                {% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ userobj.phone_number }}</strong>
+                {% if userobj.phone_number_confirmed %}
+                    <span class="badge badge-success">{% trans "Validated" %}</span>
+                {% else %}
+                    <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                {% endif %}
+            </span>
+            {% if userobj == user and not userobj.phone_number_confirmed %}
+                <a href="{% url "user-phone-validate" %}" class="btn btn-outline-primary btn-sm">{% trans "Validate phone number" %}</a>
+            {% endif %}
         </li>
         {% if userobj.have_address %}
             <li class="list-group-item">
@@ -44,8 +60,8 @@
     </ul>
     <br>
     <ul class="list-group">
-        <li class="list-group-item"><em><span>{% trans "Registered" %}: <strong>{{ userobj.created}}</strong></span></em></li>
-        <li class="list-group-item"><em><span>{% trans "Last updated" %}: <strong>{{ userobj.updated }}</strong></span></em></li>
+        <li class="list-group-item"><em><span>{% trans "Registered" %}: <strong>{{ userobj.date_joined|date }}</strong></span></em></li>
+        <li class="list-group-item"><em><span>{% trans "Last updated" %}: <strong title="{{ userobj.updated }}">{{ userobj.updated|naturaltime }}</strong></span></em></li>
     </ul>
     <br>
     {% if userobj == user %}

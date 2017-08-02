@@ -11,7 +11,7 @@
 
 </head>
 <body class="{% block body-css-classes %}{% endblock %}">
-	{% include "nav.html" %}
+	{% block nav %}{% include "nav.html" %}{% endblock %}
 	<section class="content">
         <div class="messages">{% if messages %}
             {% for message in messages %}

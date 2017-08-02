@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n svg %}
+{% block nav %}{% include "nav.html" with active='home' %}{% endblock %}
 {% block body %}
     <script>
     var config = {
@@ -84,21 +85,28 @@
                         {% endif %}
                     </strong></span></li>
                     <li class="list-group-item justify-content-between">
-
-                        <span>{% svg "icons/envelope" %} {% trans "Email" %}: <strong>{{ user.email }}</strong></span>
-                        {% if user.email_is_confirmed %}
-                            <span class="badge badge-success">{% trans "Validated" %}</span>
-                        {% else %}
-                            <span class="badge badge-warning">{% trans "Not validated" %}</span>
-                            <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
+                        <span>
+                            {% svg "icons/envelope" %} {% trans "Email" %}: <strong>{{ user.email }}</strong>
+                            {% if user.email_is_confirmed %}
+                                <span class="badge badge-success">{% trans "Validated" %}</span>
+                            {% else %}
+                                <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                            {% endif %}
+                        </span>
+                        {% if not user.email_is_confirmed %}
+                            <a href="#" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</a>
                         {% endif %}
                     </li>
                     <li class="list-group-item justify-content-between">
-                        <span>{% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
-                        {% if user.phone_number_confirmed %}
-                            <span class="badge badge-success">{% trans "Validated" %}</span>
-                        {% else %}
-                            <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                        <span>
+                            {% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong>
+                            {% if user.phone_number_confirmed %}
+                                <span class="badge badge-success">{% trans "Validated" %}</span>
+                            {% else %}
+                                <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                            {% endif %}
+                        </span>
+                        {% if not user.phone_number_confirmed %}
                             <a href="{% url "user-phone-validate" %}" class="btn btn-outline-primary btn-sm">{% trans "Validate phone number" %}</a>
                         {% endif %}
                     </li>

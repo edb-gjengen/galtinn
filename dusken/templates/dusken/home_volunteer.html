@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block nav %}{% include "nav.html" with active='home-volunteer' %}{% endblock %}
 {% load i18n user svg %}
 {% block body %}
     <h2 class="card-title">{% svg "icons/apartment" %} {% trans "Volunteer" %}</h2>
