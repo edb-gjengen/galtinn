@@ -34,6 +34,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     model = DuskenUser
     template_name = 'dusken/user_detail.html'
     slug_field = 'uuid'
+    context_object_name = 'userobj'
 
 
 class UserDetailMeView(UserDetailView):

@@ -8,37 +8,41 @@
     </script>
     <h4 class="card-title">{% svg "icons/user" %} {% trans "Your profile" %}</h4>
     <ul class="list-group">
-        <li class="list-group-item"><span>{% trans "Full name" %}: <strong>{{ user.get_full_name }}</strong></span></li>
-        <li class="list-group-item"><span>{% trans "Username" %}: <strong>{{ user.username }}</strong></span></li>
+        <li class="list-group-item"><span>{% trans "Full name" %}: <strong>{{ userobj.get_full_name }}</strong></span></li>
+        <li class="list-group-item"><span>{% trans "Username" %}: <strong>{{ userobj.username }}</strong></span></li>
         <li class="list-group-item justify-content-between"><span>
             {% svg "icons/envelope" %} {% trans "Email" %}:
-            <strong>{{ user.email }}</strong></span>
-            {% if user.email_is_confirmed %}
-                <span class="badge badge-success">{% trans "Validated" %}</span>
-            {% else %}
-                <span class="badge badge-warning">{% trans "Not validated" %}</span>
-                <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
+            <strong>{{ userobj.email }}</strong></span>
+            {% if userobj == user %}
+                {% if userobj.email_is_confirmed %}
+                    <span class="badge badge-success">{% trans "Validated" %}</span>
+                {% else %}
+                    <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                    <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
+                {% endif %}
             {% endif %}
         </li>
         <li class="list-group-item">
-            <span>{% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
+            <span>{% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ userobj.phone_number }}</strong></span>
         </li>
-        {% if user.have_address %}
+        {% if userobj.have_address %}
             <li class="list-group-item">
-                <span><span class="lnr lnr-map-marker"></span> {% trans "Address" %}: <strong>{{ user.get_full_address }}</strong></span>
+                <span><span class="lnr lnr-map-marker"></span> {% trans "Address" %}: <strong>{{ userobj.get_full_address }}</strong></span>
             </li>
         {% endif %}
-        {% if user.place_of_study.all %}
+        {% if userobj.place_of_study.all %}
             <li class="list-group-item">
-                <span><span class="lnr lnr-graduation-hat"></span> {% trans "Place of study" %}: <strong>{{ user.place_of_study.all | join:", " }}</strong></span>
+                <span><span class="lnr lnr-graduation-hat"></span> {% trans "Place of study" %}: <strong>{{ userobj.place_of_study.all | join:", " }}</strong></span>
             </li>
         {% endif %}
     </ul>
     <br>
     <ul class="list-group">
-        <li class="list-group-item"><em><span>{% trans "Registered" %}: <strong>{{ user.created}}</strong></span></em></li>
-        <li class="list-group-item"><em><span>{% trans "Last updated" %}: <strong>{{ user.updated }}</strong></span></em></li>
+        <li class="list-group-item"><em><span>{% trans "Registered" %}: <strong>{{ userobj.created}}</strong></span></em></li>
+        <li class="list-group-item"><em><span>{% trans "Last updated" %}: <strong>{{ userobj.updated }}</strong></span></em></li>
     </ul>
     <br>
-    <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit your profile" %}</a>
+    {% if userobj == user %}
+        <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit your profile" %}</a>
+    {% endif %}
 {% endblock %}
