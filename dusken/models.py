@@ -124,13 +124,14 @@ class DuskenUser(AbstractUser):
         super().save(**kwargs)
 
     def get_full_address(self):
-        return '{address} {address_two} {code} {city} {country}'.format(
-            address=self.street_address,
-            address_two=self.street_address_two,
-            code=self.postal_code,
-            city=self.city,
-            country=self.country
-        )
+        elements = [
+            self.street_address.__str__(),
+            self.street_address_two.__str__(),
+            self.postal_code.__str__(),
+            self.city.__str__(),
+            self.country.__str__()
+        ]
+        return ' '.join(x for x in elements if not x == 'None')
 
     def have_address(self):
         return any((self.street_address,
