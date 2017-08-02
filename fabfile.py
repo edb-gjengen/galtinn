@@ -1,5 +1,6 @@
 from contextlib import contextmanager as _contextmanager
 from fabric.api import run, sudo, env, cd, prefix, lcd, local
+from fabric.context_managers import shell_env
 
 env.use_ssh_config = True
 env.hosts = ['dreamcast.neuf.no']
@@ -20,20 +21,21 @@ def deploy():
         run('git pull')  # Get source
         run('pip install -r requirements.txt')  # install deps in virtualenv
         with cd('dusken/static'):  # install and compile frontend deps
-            run('npm install')
-            run('bower install')
+            run('yarn')
             run('gulp')
-        run('python manage.py collectstatic --noinput -i node_modules -i bower_components')  # Collect static
-        run('python manage.py migrate')  # Run DB migrations
+        with shell_env(DJANGO_SETTINGS_MODULE='duskensite.settings.prod'):
+            run('python manage.py collectstatic --noinput -i node_modules')  # Collect static
+            run('python manage.py migrate')  # Run DB migrations
 
     # Reload gunicorn
     sudo('/usr/bin/supervisorctl pid dusken.neuf.no | xargs kill -HUP', shell=False)
+    # Reload celery
+    sudo('/usr/bin/supervisorctl pid dusken.neuf.no-celery | xargs kill -HUP', shell=False)
 
 
 def install():
     with lcd('dusken/static/'):
-        local('npm install')
-        local('bower install')
+        local('yarn')
         local('gulp')
 
 

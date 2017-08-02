@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% load i18n user %}
+{% load i18n user svg %}
 {% block body %}
-    <h2 class="card-title"><span class="lnr lnr-apartment"></span> {% trans "Active member" %}</h2>
+    <h2 class="card-title">{% svg "icons/apartment" %} {% trans "Volunteer" %}</h2>
     <div class="home-active__actions-wrap">
     <ul>
         <li><a href="{% url "orgunit-list" %}">{% trans "List of organizational units" %}</a></li>
-        <li>{% trans "Add member as active to my orgunit" %}</li>
-        <li>{% trans "Remove member from my orgunit" %}</li>
+        <li>{% trans "Add new volunteer to my orgunit" %}</li>
+        <li>{% trans "Remove volunteer from my orgunit" %}</li>
     </ul>
         {% if user.groups %}
             <h4><span class="lnr lnr-users"></span> {% trans "Your organizations" %}</h4>
@@ -23,12 +23,13 @@
             {% endfor %}
             </ul>
         {% endif %}
-    <!--<section class="home-active__actions">
+
+    <!--<section class="home-volunteer__actions">
         <h6 class="text-muted">{% trans "What do you want to do?" %}</h6>
         <div class="card-deck-wrapper">
         <div class="card-deck">
 
-            <div class="home-active__TODO card">
+            <div class="home-volunteer__TODO card">
                 <div class="card-block">
                     <h4 class="card-title">{% trans "A" %}</h4>
                     <h6 class="card-subtitle text-muted">{% trans "Subtitle" %}</h6>

@@ -1,14 +1,12 @@
-from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordChangeView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, FormView
-from django.contrib.auth import login
-from django.http import HttpResponseRedirect
 
-from dusken.forms import UserEmailValidateForm, DuskenUserForm, DuskenUserUpdateForm
+from dusken.forms import UserEmailValidateForm, UserPhoneValidateForm, DuskenUserForm, DuskenUserUpdateForm
 from dusken.models import DuskenUser
+from dusken.utils import send_validation_sms
 
 
 class UserRegisterView(FormView):
@@ -17,11 +15,13 @@ class UserRegisterView(FormView):
     success_url = reverse_lazy('membership-renew')
 
     def form_valid(self, form):
-        # FIXME: better way?
         self.object = form.save()
-        self.object.backend = 'django.contrib.auth.backends.ModelBackend'  # FIXME: Ninja!
+
+        # Log the user in
+        self.object.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, self.object)
-        return HttpResponseRedirect(self.get_success_url())
+
+        return redirect(self.get_success_url())
 
 
 class UserListView(LoginRequiredMixin, ListView):
@@ -78,5 +78,38 @@ class UserEmailValidateSuccessView(TemplateView):
     template_name = 'dusken/user_email_confirm_success.html'
 
 
-class MyPasswordChangeView(PasswordChangeView):
-    form_class = SetPasswordForm
+class UserPhoneValidateView(LoginRequiredMixin, TemplateView):
+    form_class = UserPhoneValidateForm
+    template_name = 'dusken/user_phone_confirm.html'
+    success_url = reverse_lazy('user-phone-validate-success')
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        code_sent = False
+        if user.phone_number and not user.phone_number_confirmed and not user.phone_number_key:
+            send_validation_sms(user)
+            code_sent = True
+        context = {
+            'form': self.form_class(),
+            'user': user,
+            'code_sent': code_sent
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, user=request.user)
+        if form.is_valid():
+            self.form_valid(request)
+            return redirect(self.success_url)
+
+        context = self.get_context_data()
+        context['form'] = form
+        return render(request, self.template_name, context)
+
+    def form_valid(self, request):
+        request.user.confirm_phone_number()
+        return redirect(self.success_url)
+
+
+class UserPhoneValidateSuccessView(LoginRequiredMixin, TemplateView):
+    template_name = 'dusken/user_phone_confirm_success.html'

@@ -1,17 +1,18 @@
 import random
+import requests
+import logging
 
+from django.core import validators
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext as _
-
-from django.core import validators
-from django.core.exceptions import ValidationError
 from phonenumber_field.validators import validate_international_phonenumber
 
-import dusken
+logger = logging.getLogger(__name__)
 
 
 def generate_username(first_name, last_name):
@@ -55,8 +56,48 @@ def create_email_key():
     return get_random_string()
 
 
+def send_sms(to, message):
+    if settings.TESTING:
+        return True
+    url = '{}send'.format(settings.TEKSTMELDING_API_URL)
+    payload = {
+        'to': str(to),
+        'message': message
+    }
+    headers = {
+        'Authorization': 'Token ' + settings.TEKSTMELDING_API_KEY
+    }
+    response = requests.post(url, json=payload, headers=headers)
+    if response.status_code != 200:
+        logger.warn('Failed to send SMS, status_code={} payload={}'.format(
+            response.status_code, payload))
+        return
+    return response.json().get('outgoing_id')
+
+
+def send_validation_sms(user):
+    if user.phone_number_confirmed:
+        # Bail
+        return
+
+    # Create a key if needed
+    if not user.phone_number_key:
+        user.phone_number_key = create_phone_key()
+        user.save()
+
+    message = _('Confirm your phone number at Chateau Neuf with this code:')
+    message = message + ' ' + user.phone_number_key
+
+    return send_sms(to=user.phone_number, message=message)
+
+
+def create_phone_key():
+    return ''.join([random.choice('0123456789') for i in range(6)])
+
+
 def email_exist(email):
-    return dusken.models.DuskenUser.objects.filter(email=email).exists()
+    from dusken.models import DuskenUser
+    return DuskenUser.objects.filter(email=email).exists()
 
 
 def validate_email(email):
@@ -73,7 +114,8 @@ def validate_email(email):
 
 
 def phone_number_exist(phone_number):
-    return dusken.models.DuskenUser.objects.filter(phone_number=phone_number).exists()
+    from dusken.models import DuskenUser
+    return DuskenUser.objects.filter(phone_number=phone_number).exists()
 
 
 def validate_phone_number(phone_number):

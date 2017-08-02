@@ -3,10 +3,12 @@ from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
+from django.test import TestCase
+
 from dusken.models import DuskenUser
 
 
-class DuskenUserTest(APITestCase):
+class DuskenUserAPITestCase(APITestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user(
             'olanord', email='olanord@example.com', password='mypassword')
@@ -24,7 +26,7 @@ class DuskenUserTest(APITestCase):
 
     def test_user_can_obtain_token(self):
         data = {
-            'username': self.user.username,
+            'username': self.user.email,
             'password': 'mypassword',
         }
         url = reverse('obtain-auth-token')
@@ -46,3 +48,36 @@ class DuskenUserTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], self.user.pk)
+
+
+class DuskenUserPhoneValidationTestCase(TestCase):
+    def setUp(self):
+        self.user = DuskenUser.objects.create_user(
+            'olanord', email='olanord@example.com', password='mypassword',
+            phone_number='+4794430002')
+        self.user.save()
+        from dusken.utils import send_validation_sms
+        send_validation_sms(self.user)
+
+    def test_user_phone_number_confirmation_valid_key(self):
+        self.client.force_login(self.user)
+        self.assertFalse(self.user.phone_number_confirmed)
+        self.assertTrue(self.user.phone_number_key.isdigit())
+        url = reverse('user-phone-validate')
+        data = {
+            'phone_key': self.user.phone_number_key
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.url, reverse('user-phone-validate-success'))
+        self.assertTrue(DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed)
+
+    def test_user_phone_number_confirmation_invalid_key(self):
+        self.client.force_login(self.user)
+        url = reverse('user-phone-validate')
+        data = {
+            'phone_key': 'hello'
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed)

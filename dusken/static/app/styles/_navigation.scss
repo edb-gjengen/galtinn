@@ -1,3 +1,11 @@
+.nav-wrap {
+    .navbar {
+        max-width: $grid-max-width;
+        margin: 0 auto;
+    }
+
+}
+
 .user-menu {
     .dropdown-menu {
         right: 0;

@@ -143,9 +143,20 @@ function clearError() {
     $('#id_phone_number').parent().removeClass('has-danger');
 }
 
-$(document).ready(function() {
-    if($('.membership-purchase').length) {
+function formatMessage(message, alert) {
+    return '<div class="alert alert-' + alert + ' alert-dismissible fade show" role="alert">'+
+       '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        message +
+        '</div>';
+}
 
+$(document).ready(function() {
+    const $membershipPurchase = $('.membership-purchase');
+    const $mailchimpSub = $('.js-toggle-mailchimp-subscription');
+    const $mailmanSub = $('.js-toggle-mailman-subscription');
+    const $messages = $('.messages');
+
+    if( $membershipPurchase.length ) {
         /* Membership purchase */
         urls = {
             charge: config.charge_url,
@@ -164,7 +175,7 @@ $(document).ready(function() {
 
     }
     /* Send validation email */
-    var $validationEmailBtn = $('.js-send-validation-email');
+    const $validationEmailBtn = $('.js-send-validation-email');
     $validationEmailBtn.on('click', function (e) {
         e.preventDefault();
         $.post(config.validateEmail, function(data) {
@@ -182,5 +193,87 @@ $(document).ready(function() {
            $languageSelect.focus();
        }
     });
+
+    /* Page: Newsletter and mailing lists */
+    if( $mailchimpSub.length ) {
+        const $subStatus = $('.js-mailchimp-status');
+
+        let url = config.mailChimpSubscriptionListURL;
+        let method = 'POST';
+        const sub = config.mailChimpSubscription;
+        if( sub ) {
+            url = config.mailChimpSubscriptionDetailURL;
+            method = 'PATCH';
+        }
+        $mailchimpSub.on('click', (e) => {
+            e.preventDefault();
+
+            const shouldSubscribe = !$mailchimpSub.hasClass('active');
+            const data = {
+                status: shouldSubscribe ? 'subscribed' : 'unsubscribed',
+                email: config.userEmail
+            };
+            const newButtonText = shouldSubscribe ? $mailchimpSub.attr('data-text-unsubscribe') : $mailchimpSub.attr('data-text-subscribe');
+            const newStatusText = shouldSubscribe ? $subStatus.attr('data-text-subscribed') + ' ✅' : $subStatus.attr('data-text-unsubscribed') + ' ❌';
+
+             $.ajax({
+                 url: url,
+                 data: JSON.stringify(data),
+                 method: method,
+                 contentType: 'application/json',
+                 dataType: 'json'
+             })
+             .done(function() {
+                 $mailchimpSub.text(newButtonText);
+                 $subStatus.text(newStatusText);
+
+                 if(shouldSubscribe) {
+                     $mailchimpSub.addClass('active');
+                 } else {
+                     $mailchimpSub.removeClass('active');
+                 }
+             })
+             .fail(function() {
+                 $messages.html(formatMessage('Could not change newsletter subscription status, please try again later...', 'danger'));
+             });
+        });
+    }
+
+    if( $mailmanSub.length ) {
+
+        $mailmanSub.on('click', (e) => {
+            e.preventDefault();
+            const $thisList = $(e.target);
+            const $thisStatus = $('.js-mailman-status[data-list-name="'+ $thisList.attr('data-list-name') +'"]');
+
+            const shouldSubscribe = !$thisList.hasClass('active');
+            const url = $thisList.attr('data-url');
+            const method = shouldSubscribe ? 'PUT' : 'DELETE';
+
+            const newButtonText = shouldSubscribe ? $thisList.attr('data-text-unsubscribe') : $thisList.attr('data-text-subscribe');
+            const newStatusText = shouldSubscribe ? '✅' : '❌';
+
+             $.ajax({
+                 url: url,
+                 method: method,
+                 contentType: 'application/json',
+                 dataType: 'json'
+             })
+             .done(function() {
+                 $thisList.text(newButtonText);
+                 $thisStatus.text(newStatusText);
+
+                  if(shouldSubscribe) {
+                     $thisList.addClass('active');
+                  } else {
+                      $thisList.removeClass('active');
+                  }
+             })
+             .fail(function() {
+                 $thisList.prop('checked', !shouldSubscribe);
+                 $messages.html(formatMessage('Could not change subscription status, please try again later...', 'danger'));
+             });
+        })
+    }
 
 });

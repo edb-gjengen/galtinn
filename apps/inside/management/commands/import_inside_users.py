@@ -5,6 +5,7 @@ import re
 from datetime import timedelta, datetime
 from pprint import pprint
 
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -13,6 +14,8 @@ from signal_disabler import signal_disabler
 
 from apps.common.utils import log_time
 from apps.inside.models import InsideUser, InsideCard, InsideGroup, Division, InsidePlaceOfStudy
+from apps.neuf_auth.models import AuthProfile
+from dusken.hashers import Argon2WrappedMySQL41PasswordHasher
 from dusken.models import (DuskenUser, Membership, MemberCard, MembershipType, Order, UserLogMessage, GroupProfile,
                            OrgUnit, OrgUnitLogMessage, PlaceOfStudy)
 from dusken.zip_to_city import ZIP_TO_CITY_MAP
@@ -20,17 +23,15 @@ from dusken.zip_to_city import ZIP_TO_CITY_MAP
 
 class Command(BaseCommand):
     """ Imports users from Inside (in a one off ninja-style way)
-        (1)
-        * Grupper
-        * Foreninger
-        (2)
-        * Brukere
-        * Medlemskap (siste gyldige)
-        * Gruppemedlemskap
-        * Kort
-        * Studiested
-        * Brukerlogg
+        - Group
+        - OrgUnit
+        - User
+        - Membership
+        - Group membership
+        - Physical cards / Membership cards
+        - Place of study
     """
+    # TODO: User update log
     def __init__(self):
         super().__init__()
         # No email notifications
@@ -109,6 +110,15 @@ class Command(BaseCommand):
         random_username = '{}{}{}'.format(firstname, lastname, rand).encode('ascii', 'ignore').decode('utf-8')
         return random_username
 
+    def _hash_password(self, sha1sha1_hash):
+        hasher = Argon2WrappedMySQL41PasswordHasher()
+        salt = hasher.salt()
+        password = hasher.encode_sha1_sha1_hash(sha1sha1_hash, salt)
+        return password
+
+    def _get_unusable_password(self):
+        return make_password(None)  # Same as User.set_unusable_password()
+
     @log_time('Fetching user data...')
     def get_user_data(self):
         user_field_map = {
@@ -119,9 +129,11 @@ class Command(BaseCommand):
             'email': 'email',
             'birthdate': 'date_of_birth',
             'placeofstudy': 'place_of_study',
+            'password': 'password',
+            'ldap_password': 'ldap_password',
 
             'userphonenumber__number': 'phone_number',
-            'userphonenumber__validated': 'phone_number_validated',
+            'userphonenumber__validated': 'phone_number_confirmed',
 
             'useraddressno__street': 'street_address',
             'useraddressno__zipcode': 'postal_code',
@@ -134,8 +146,7 @@ class Command(BaseCommand):
             'created': 'date_joined',  # FIXME: Does not work?
         }
         skip_usernames = ['ukjent']
-        more_fields = ['addresstype', 'registration_status', 'source', 'placeofstudy', 'expires', 'created',
-                       'ldap_password', 'username']
+        more_fields = ['addresstype', 'registration_status', 'source', 'expires', 'created', 'username']
         fields = list(user_field_map.keys()) + more_fields
 
         i_users = InsideUser.objects.order_by('pk').reverse().values(*fields)
@@ -175,7 +186,8 @@ class Command(BaseCommand):
                     new_val = self._generate_username(u.get('first_name'), u.get('last_name'))
 
                 if dst_field == 'date_joined':
-                    new_val = timezone.now()
+                    if new_val is None:
+                        new_val = timezone.now()
 
                 if dst_field == 'place_of_study':
                     pos_id = self.pos_map.get(new_val)
@@ -186,11 +198,20 @@ class Command(BaseCommand):
                 if dst_field == 'phone_number' and (new_val is None or new_val == '-'):
                     new_val = ''
 
+                if dst_field == 'password':
+                    # Note: All mysql PASSWORD() hashes are 41 chars
+                    if len(new_val) != 41:
+                        new_val = self._hash_password(new_val)
+                    else:
+                        # Also remove ldap_password
+                        new_val = self._get_unusable_password()
+                        new_user['ldap_password'] = ''
+
                 # Clean
                 if dst_field in ['email', 'username']:
                     new_val = new_val.lower()
 
-                if dst_field == 'phone_number_validated':
+                if dst_field == 'phone_number_confirmed':
                     new_val = bool(new_val)
 
                 new_user[dst_field] = new_val
@@ -359,7 +380,10 @@ class Command(BaseCommand):
 
         # Create users, use legacy_id to reference later
         for u in users:
+            # TODO: User.set_unusuable_password on:
+            # - users not active and membership expired before 2015-01-01 or not lifelong
             memberships = u.pop('memberships')
+            ldap_password = u.pop('ldap_password')
 
             group_ids = [group_map[g] for g in u.pop('legacy_group_ids')]
             groups = Group.objects.filter(pk__in=group_ids)
@@ -371,6 +395,10 @@ class Command(BaseCommand):
                 ou = OrgUnit.objects.get(pk=ou_contact_map[new_user.legacy_id])
                 ou.contact_person = new_user
                 ou.save()
+
+            # Add LDAP password
+            if ldap_password:
+                AuthProfile.objects.create(user=new_user, ldap_password=ldap_password)
 
             message = 'Imported from Inside (user_id={})'.format(new_user.legacy_id)
             UserLogMessage.objects.create(user=new_user, message=message)

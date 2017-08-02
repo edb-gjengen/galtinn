@@ -1,39 +1,48 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n svg %}
 {% block body %}
     <script>
     var config = {
         validateEmail: '{% url "resend-validation-email" %}'
     };
     </script>
-    <h2><span class="lnr lnr-home"></span> {% trans "Home" %}</h2>
+    <h2>{% svg "icons/home" %} {% trans "Home" %}</h2>
     <div class="home__actions-wrap">
     <section class="home__actions">
         <h6 class="text-muted">{% trans "What do you want to do?" %}</h6>
-        <div class="card-deck-wrapper">
-        <div class="card-deck">
 
+        <!-- First row -->
+        <div class="row">
+
+            <div class="col-sm-4">
             <div class="home__membership-status card">
                 <div class="card-block">
-                    <h4 class="card-title"><span class="lnr lnr-license"></span> {% trans "Your Membership" %}</h4>
+                    <h4 class="card-title">{% svg "icons/license" %} {% trans "Your Membership" %}</h4>
                     <h6 class="card-subtitle text-muted">{% trans "See your membership status" %}</h6>
                 </div>
                 <ul class="list-group list-group-flush">
                 {% with user.last_membership as ms %}
-                    {% if ms.is_valid %}
+                    {% if ms != null and ms.is_valid %}
                         {% if ms.expires_in_less_than_one_month %}
-                            <li class="list-group-item list-group-item-warning"><span><span class="lnr lnr-warning"></span> {% trans "Your membership is expiring in less than one month" %} </span></li>
+                            <li class="list-group-item list-group-item-warning"><span>{% svg "icons/warning" %} {% trans "Your membership is expiring in less than one month" %} </span></li>
                         {% else %}
                             <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </span></li>
                         {% endif %}
                     {% else %}
-                        <li class="list-group-item list-group-item-danger"><span><span class="lnr lnr-sad"></span>
-                            {% if ms == Null %}
-                                {% trans "You have no membership" %}
-                            {% else %}
-                                {% trans "Membership expired." %}
-                            {% endif %}
-                        </span></li>
+                        {% if user.unclaimed_orders %}
+                            <li class="list-group-item list-group-item-warning"><span>{% svg "icons/warning" %}
+                                {% trans "There is a membership connected to your phone number." %}<br>
+                                <a href="{% url "user-phone-validate" %}">{% trans "Validate phone number" %}</a>
+                            </span></li>
+                        {% else %}
+                            <li class="list-group-item list-group-item-danger"><span>{% svg "icons/sad" %}
+                                {% if ms == null %}
+                                    {% trans "You have no membership" %}
+                                {% else %}
+                                    {% trans "Membership expired." %}
+                                {% endif %}
+                            </span></li>
+                        {% endif %}
                     {% endif %}
 
                     {% if ms.is_valid %}
@@ -41,7 +50,7 @@
                             {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</strong>
                         </span></li>
                         <li class="list-group-item payment"><span>
-                        {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.payment_method }}</strong>
+                        {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.get_payment_method_display }}</strong>
                         </span></li>
                     {% endif %}
                 </ul>
@@ -60,10 +69,12 @@
                 </div>
             {% endwith %}
             </div>
+        </div>
 
+        <div class="col-sm-8">
             <div class="home__quick-profile card">
                 <div class="card-block">
-                    <h4 class="card-title"><a href="{% url "user-detail-me" %}"><span class="lnr lnr-user"></span> {% trans "Your profile" %}</a></h4>
+                    <h4 class="card-title"><a href="{% url "user-detail-me" %}">{% svg "icons/user" %} {% trans "Your profile" %}</a></h4>
                     <h6 class="card-subtitle text-muted">{% trans "Quick view of your profile details" %}</h6>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -74,7 +85,7 @@
                     </strong></span></li>
                     <li class="list-group-item justify-content-between">
 
-                        <span><span class="lnr lnr-envelope"></span> {% trans "Email" %}: <strong>{{ user.email }}</strong></span>
+                        <span>{% svg "icons/envelope" %} {% trans "Email" %}: <strong>{{ user.email }}</strong></span>
                         {% if user.email_is_confirmed %}
                             <span class="badge badge-success">{% trans "Validated" %}</span>
                         {% else %}
@@ -82,23 +93,48 @@
                             <button type="button" class="btn btn-outline-primary btn-sm js-send-validation-email">{% trans "Resend validation email" %}</button>
                         {% endif %}
                     </li>
-                    <li class="list-group-item"><span><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span></li>
+                    <li class="list-group-item justify-content-between">
+                        <span>{% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
+                        {% if user.phone_number_confirmed %}
+                            <span class="badge badge-success">{% trans "Validated" %}</span>
+                        {% else %}
+                            <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                            <a href="{% url "user-phone-validate" %}" class="btn btn-outline-primary btn-sm">{% trans "Validate phone number" %}</a>
+                        {% endif %}
+                    </li>
                 </ul>
                 <div class="card-block">
-                    <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
+                    <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit your profile" %}</a>
                 </div>
             </div>
 
-            <div class="home__actions__change-password card">
-                <div class="card-block">
-                    <h4 class="card-title">{% trans "Password" %}</h4>
-                    <h6 class="card-subtitle text-muted">{% trans "Change it if you want to" %}</h6>
-                </div>
-                <div class="card-block">
-                    <a href="{% url "password_change" %}" class="btn btn-outline-primary btn-block">{% trans "Change password" %}</a>
-                </div>
             </div>
         </div>
+        <!-- Second row -->
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="home__actions__update-email-subscriptions card">
+                    <div class="card-block">
+                        <h4 class="card-title">{% trans "Email subscriptions" %}</h4>
+                        <h6 class="card-subtitle text-muted">{% trans "Newsletter and mailing lists" %}</h6>
+                    </div>
+                    <div class="card-block">
+                        <a href="{% url "email-subscriptions" %}" class="btn btn-outline-primary btn-block">{% trans "Change subscriptions" %}</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="home__actions__change-password card">
+                    <div class="card-block">
+                        <h4 class="card-title">{% trans "Password" %}</h4>
+                        <h6 class="card-subtitle text-muted">{% trans "Change it if you want to" %}</h6>
+                    </div>
+                    <div class="card-block">
+                        <a href="{% url "password_change" %}" class="btn btn-outline-primary btn-block">{% trans "Change password" %}</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     </div>

@@ -1,8 +1,8 @@
 from django.db import models
-from dusken.models import AbstractBaseModel
+from dusken.models import BaseModel
 
 
-class ServiceHook(AbstractBaseModel):
+class ServiceHook(BaseModel):
     """
     Events with callback_urls
     """

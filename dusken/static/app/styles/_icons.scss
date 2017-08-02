@@ -1,0 +1,47 @@
+/* Icons */
+.linearicon {
+    height: 16px;
+    width: 16px;
+    position: relative;
+    top: 2px;
+}
+
+a {
+    .linearicon {
+        fill: $brand-primary;
+        transition: fill 0.2s;
+    }
+    &:hover .linearicon {
+        fill: darken($brand-primary, 15%);
+    }
+
+    &.btn-outline-primary {
+        .linearicon{
+            transition: fill 0.2s;
+        }
+        &:hover .linearicon{
+            fill: white;
+        }
+    }
+
+}
+
+h1 .linearicon {
+    height: 16px;
+    width: 16px;
+}
+
+h2 .linearicon {
+    height: 32px;
+    width: 32px;
+}
+
+h3 .linearicon {
+    height: 16px;
+    width: 16px;
+}
+
+h4 .linearicon {
+    height: 24px;
+    width: 24px;
+}

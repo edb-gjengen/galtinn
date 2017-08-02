@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    'raven.contrib.django.raven_compat',
     'rest_framework',
     'rest_framework.authtoken',
     'mptt',
@@ -38,22 +39,26 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     'dusken',
     # 'apps.hooks',
+    'apps.neuf_ldap',
+    'apps.neuf_auth',
+    'apps.mailchimp',
+    'apps.mailman',
     # TODO Remove these after import and new integrations are OK
     'apps.inside',
     'apps.kassa',
     'apps.tekstmelding',
 ]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-)
+]
 
 ROOT_URLCONF = 'duskensite.urls'
 
@@ -85,7 +90,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-# FIXME: For Inside DB (legacy)
+# LDAP, Inside, Kassa and tekstmelding DB's
 DATABASE_ROUTERS = ['duskensite.router.Router']
 
 # Internationalization
@@ -113,10 +118,24 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTH_USER_MODEL = 'dusken.DuskenUser'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'dusken.authentication.UsernameModelBackend',
+]
+
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = reverse_lazy('index')
 LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'dusken.hashers.Argon2WrappedMySQL41PasswordHasher',
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -144,13 +163,57 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 PHONENUMBER_DB_FORMAT = 'E164'
 PHONENUMBER_DEFAULT_REGION = 'NO'
 
+TEKSTMELDING_API_URL = 'https://tekstmelding.neuf.no/'
+TEKSTMELDING_API_KEY = os.getenv('TEKSTMELDING_API_KEY', '')
+
 NOCAPTCHA = True
 
 SVG_DIRS = [
     os.path.join(BASE_DIR, 'dusken/static/dist/images')
 ]
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+# neuf_auth
+
+# LDAP
+LDAP_BASE_DN = "dc=neuf,dc=no"
+LDAP_USER_DN = "ou=People,{}".format(LDAP_BASE_DN)
+LDAP_GROUP_DN = "ou=Groups,{}".format(LDAP_BASE_DN)
+LDAP_AUTOMOUNT_DN = "ou=Automount,{}".format(LDAP_BASE_DN)
+
+LDAP_UID_MIN = 10000
+LDAP_UID_MAX = 100000
+LDAP_GID_MIN = 9000
+LDAP_GID_MAX = 9999
+LDAP_USER_GID_MIN = 10000
+LDAP_USER_GID_MAX = 100000
+
+LDAP_LOGIN_SHELL = '/bin/bash'
+LDAP_HOME_DIRECTORY_PREFIX = '/home'
+# Ref: http://tille.garrels.be/training/ldap/ch02s02.html
+LDAP_SHADOW_LAST_CHANGE = 0  # Days since password last change
+LDAP_SHADOW_MIN = 8  #
+LDAP_SHADOW_MAX = 999999
+LDAP_SHADOW_WARNING = 7  #
+LDAP_SHADOW_EXPIRE = -1  #
+LDAP_SHADOW_FLAG = 0
+
+# Home dir
+FILESERVER_HOST = "localhost"
+FILESERVER_SSH_USER = 'nikolark'  # change this to your own user for development
+FILESERVER_SSH_KEY_PATH = ''  # e.g. '/home/nikolark/.ssh/id_rsa'
+FILESERVER_HOME_PATH = "/tmp/"
+FILESERVER_CREATE_HOMEDIR_SCRIPT = os.path.join(BASE_DIR, 'scripts', 'create_home_directory.sh')
+
+# Celery
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+
+# Mailchimp
+MAILCHIMP_LIST_ID = os.getenv('MAILCHIMP_LIST_ID', '')
+MAILCHIMP_WEBHOOK_SECRET = os.getenv('MAILCHIMP_WEBHOOK_SECRET', 'yolo')
+MAILCHIMP_API_KEY = os.getenv('MAILCHIMP_API_KEY', 'dummy-us1')
+MAILCHIMP_API_URL = os.getenv('MAILCHIMP_API_URL', 'https://us1.api.mailchimp.com')
+
+# Mailman API
+MAILMAN_API_URL = os.getenv('MAILMAN_API_URL', 'https://mailman-api.neuf.no')
+MAILMAN_API_USERNAME = os.getenv('MAILMAN_API_USERNAME', '')
+MAILMAN_API_PASSWORD = os.getenv('MAILMAN_API_PASSWORD', '')

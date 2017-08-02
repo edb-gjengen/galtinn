@@ -1,8 +1,8 @@
 $icon-font-path: '../fonts/';
 
-// bower:scss
-@import "bootstrap.scss";
-// endbower
+@import "bootstrap";
+
+$grid-max-width: 1140px;
 
 @import "mixins";
 @import "general";
@@ -11,7 +11,8 @@ $icon-font-path: '../fonts/';
 @import "forms";
 @import "navigation";
 @import "footer";
+@import "icons";
 
 /* Pages */
 @import "pages";
-@import "page_home";
+@import "pages/home";

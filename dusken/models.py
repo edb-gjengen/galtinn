@@ -7,34 +7,29 @@ from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Q
 from django.contrib.auth.models import Group as DjangoGroup
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
-from jsonfield import JSONField
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
-from dusken.utils import create_email_key, send_validation_email, generate_username
-
-
-class AbstractBaseModel(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
+from apps.common.mixins import BaseModel
+from dusken.utils import create_email_key, send_validation_email, create_phone_key, generate_username
 
 
 class DuskenUser(AbstractUser):
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
+    email = models.EmailField(_('email address'), unique=True)
     email_confirmed_at = models.DateTimeField(blank=True, null=True)
     email_key = models.CharField(max_length=40, default=create_email_key)
     phone_number = PhoneNumberField(_('phone number'), blank=True, default='')
-    phone_number_validated = models.BooleanField(default=False)
+    phone_number_key = models.CharField(max_length=40, blank=True, null=True)
+    phone_number_confirmed = models.BooleanField(default=False)
+    phone_number_confirmed_at = models.DateTimeField(blank=True, null=True)
     date_of_birth = models.DateField(_('date of birth'), null=True, blank=True)
 
     # Address
@@ -49,6 +44,9 @@ class DuskenUser(AbstractUser):
 
     stripe_customer_id = models.CharField(_('stripe customer id'), max_length=254, null=True, blank=True)
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
     @property
     def email_is_confirmed(self):
         return self.email_confirmed_at is not None
@@ -56,6 +54,13 @@ class DuskenUser(AbstractUser):
     def confirm_email(self, save=True):
         if not self.email_is_confirmed:
             self.email_confirmed_at = timezone.now()
+            if save:
+                self.save()
+
+    def confirm_phone_number(self, save=True):
+        if not self.phone_number_confirmed:
+            self.phone_number_confirmed = True
+            self.phone_number_confirmed_at = timezone.now()
             if save:
                 self.save()
 
@@ -68,8 +73,7 @@ class DuskenUser(AbstractUser):
 
     @property
     def is_volunteer(self):
-        # TODO: do it better
-        return self.groups.filter(name='Aktiv').exists()
+        return self.groups.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).exists()
 
     @property
     def is_member(self):
@@ -77,8 +81,7 @@ class DuskenUser(AbstractUser):
 
     @property
     def is_lifelong_member(self):
-        return bool(self.last_membership and
-                    self.last_membership.membership_type.expiry_type == 'never')
+        return bool(self.last_membership and self.last_membership.membership_type.expiry_type == 'never')
 
     def has_group(self, group):
         if type(group) is not Group:
@@ -94,16 +97,20 @@ class DuskenUser(AbstractUser):
         return Order.get_unclaimed_orders(phone_number=self.phone_number)
 
     def save(self, **kwargs):
-        # If email has changed, invalidate confirmation state
+        # If email or phone number has changed, invalidate confirmation state
         if self.pk is not None:
             orig = DuskenUser.objects.get(pk=self.pk)
             if orig.email != self.email:
                 self.email_confirmed_at = None
                 self.email_key = create_email_key()
                 send_validation_email(self)
+            if orig.phone_number != self.phone_number:
+                self.phone_number_confirmed = False
+                self.phone_number_confirmed_at = None
+                self.phone_number_key = create_phone_key()
 
-        # If phone number is validated, claim orders
-        if self.phone_number_validated:
+        # If phone number is confirmed, claim orders
+        if self.phone_number_confirmed:
             for order in self.unclaimed_orders:
                 order.user = self
                 order.product.user = self
@@ -146,7 +153,7 @@ class DuskenUser(AbstractUser):
         default_permissions = ('add', 'change', 'delete', 'view')
 
 
-class Membership(AbstractBaseModel):
+class Membership(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     membership_type = models.ForeignKey('dusken.MembershipType')
@@ -175,7 +182,7 @@ class Membership(AbstractBaseModel):
         default_permissions = ('add', 'change', 'delete', 'view')
 
 
-class MembershipType(AbstractBaseModel):
+class MembershipType(BaseModel):
     """ Type of membership
 
     A membership expires in different ways
@@ -236,7 +243,7 @@ class MembershipType(AbstractBaseModel):
         verbose_name = _('Membership type')
 
 
-class MemberCard(AbstractBaseModel):
+class MemberCard(BaseModel):
     card_number = models.IntegerField(_('card number'), unique=True)
     registered = models.DateTimeField(_('registered'), null=True, blank=True)
     is_active = models.BooleanField(_('is active'), default=True)
@@ -265,19 +272,34 @@ class MemberCard(AbstractBaseModel):
         default_permissions = ('add', 'change', 'delete', 'view')
 
 
-class GroupProfile(AbstractBaseModel):
+class GroupProfile(BaseModel):
     """
     django.contrib.auth.model.Group extended with additional fields.
     """
+    TYPE_VOLUNTEERS = 'volunteers'
+    TYPE_STANDARD = ''
+
+    TYPES = (
+        (TYPE_VOLUNTEERS, _('Volunteers')),
+        (TYPE_STANDARD, _('Standard'))
+    )
+    type = models.CharField(max_length=255, choices=TYPES, default=TYPE_STANDARD, blank=True)
 
     posix_name = models.CharField(max_length=255, blank=True, default='')
     description = models.TextField(blank=True, default='')
-    group = models.OneToOneField(DjangoGroup)
+    group = models.OneToOneField(DjangoGroup, related_name='profile')
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
         if self.posix_name != '' and self.__class__.objects.filter(posix_name=self.posix_name).exists():
             raise ValidationError(_('Posix name must be unique or empty'))
+
+    def save(self, **kwargs):
+        # Only one can be the volunteer group
+        if self.type == self.TYPE_VOLUNTEERS:
+            GroupProfile.objects.all().update(type=self.TYPE_STANDARD)
+
+        super().save(**kwargs)
 
     def __str__(self):
         return "{}".format(self.posix_name)
@@ -286,7 +308,7 @@ class GroupProfile(AbstractBaseModel):
         verbose_name = _('Group profile')
 
 
-class OrgUnit(MPTTModel, AbstractBaseModel):
+class OrgUnit(MPTTModel, BaseModel):
     """
     Association, comittee or similar
     """
@@ -328,7 +350,7 @@ class OrgUnit(MPTTModel, AbstractBaseModel):
         verbose_name_plural = _('Org units')
 
 
-class Order(AbstractBaseModel):
+class Order(BaseModel):
     """ Simple order model which only supports one product per order """
     BY_CARD = 'card'
     BY_SMS = 'sms'
@@ -380,7 +402,7 @@ class Order(AbstractBaseModel):
         default_permissions = ('add', 'change', 'delete', 'view')
 
 
-class PlaceOfStudy(AbstractBaseModel):
+class PlaceOfStudy(BaseModel):
     name = models.CharField(_('name'), max_length=255)
     short_name = models.CharField(_('short name'), max_length=16)
 
@@ -392,7 +414,7 @@ class PlaceOfStudy(AbstractBaseModel):
         verbose_name_plural = _('Places of study')
 
 
-class UserLogMessage(AbstractBaseModel):
+class UserLogMessage(BaseModel):
     user = models.ForeignKey('dusken.DuskenUser', related_name='log_messages')
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
@@ -406,7 +428,7 @@ class UserLogMessage(AbstractBaseModel):
         verbose_name_plural = _('User log messages')
 
 
-class OrgUnitLogMessage(AbstractBaseModel):
+class OrgUnitLogMessage(BaseModel):
     org_unit = models.ForeignKey('dusken.OrgUnit', related_name='log_messages')
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(

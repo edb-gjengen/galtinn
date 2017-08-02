@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n svg %}
 {% block body %}
     <script>
     var config = {
         validateEmail: '{% url "resend-validation-email" %}'
     };
     </script>
-    <h4 class="card-title"><span class="lnr lnr-user"></span> {% trans "Your profile" %}</h4>
+    <h4 class="card-title">{% svg "icons/user" %} {% trans "Your profile" %}</h4>
     <ul class="list-group">
         <li class="list-group-item"><span>{% trans "Full name" %}: <strong>{{ user.get_full_name }}</strong></span></li>
         <li class="list-group-item"><span>{% trans "Username" %}: <strong>{{ user.username }}</strong></span></li>
         <li class="list-group-item justify-content-between"><span>
-            <span class="lnr lnr-envelope"></span> {% trans "Email" %}:
+            {% svg "icons/envelope" %} {% trans "Email" %}:
             <strong>{{ user.email }}</strong></span>
             {% if user.email_is_confirmed %}
                 <span class="badge badge-success">{% trans "Validated" %}</span>
@@ -21,7 +21,7 @@
             {% endif %}
         </li>
         <li class="list-group-item">
-            <span><span class="lnr lnr-phone"></span> {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
+            <span>{% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong></span>
         </li>
         {% if user.have_address %}
             <li class="list-group-item">
@@ -40,5 +40,5 @@
         <li class="list-group-item"><em><span>{% trans "Last updated" %}: <strong>{{ user.updated }}</strong></span></em></li>
     </ul>
     <br>
-    <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block"><span class="lnr lnr-pencil"></span> {% trans "Edit your profile" %}</a>
+    <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit your profile" %}</a>
 {% endblock %}
