@@ -1,13 +1,28 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n user %}
 {% block body %}
-    <h2><span class="lnr lnr-apartment"></span> {% trans "Active member" %}</h2>
+    <h2 class="card-title"><span class="lnr lnr-apartment"></span> {% trans "Active member" %}</h2>
     <div class="home-active__actions-wrap">
     <ul>
         <li><a href="{% url "orgunit-list" %}">{% trans "List of organizational units" %}</a></li>
         <li>{% trans "Add member as active to my orgunit" %}</li>
         <li>{% trans "Remove member from my orgunit" %}</li>
     </ul>
+        {% if user.groups %}
+            <h4><span class="lnr lnr-users"></span> {% trans "Your organizations" %}</h4>
+            <ul class="list-group">
+            {% for group in user.groups.all %}
+                {% for org in group.member_orgunits.all %}
+                    <li class="list-group-item justify-content-between">
+                        <span><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a></span>
+                        {% if user|has_group:org.admin_group %}
+                            <span><a href="{% url "orgunit-edit" org.slug %}">{%  trans "Edit" %}</a></span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+        {% endif %}
     <!--<section class="home-active__actions">
         <h6 class="text-muted">{% trans "What do you want to do?" %}</h6>
         <div class="card-deck-wrapper">

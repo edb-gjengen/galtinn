@@ -1,23 +1,44 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n user %}
 {% block body %}
-    <h1>{{ orgunit.name }}</h1>
-    <h4>{% trans "Members" %}</h4>
-    {% if orgunit.group %}
-        <h5>{{ orgunit.group.name }}</h5>
-        <ul>
-        {% for user in orgunit.group.user_set.all %}
-            <li>{{ user }}</li>
-        {% endfor %}
-        </ul>
+    <h4 class="card-title"><span class="lnr lnr-users"></span> {{ orgunit.name }}</h4>
+    {% if user|has_group:orgunit.admin_group %}
+        <p><a href="{% url "orgunit-edit" orgunit.slug %}">{%  trans "Edit" %}</a></p>
     {% endif %}
-    <h4>{% trans "Admins" %}</h4>
-    {% if orgunit.admin_group %}
-        <h5>{{ orgunit.admin_group.name }}</h5>
-        <ul>
-        {% for user in orgunit.admin_group.user_set.all %}
-            <li>{{ user }}</li>
-        {% endfor %}
-        </ul>
+    <ul class="list-group">
+        {% if orgunit.email %}
+        <li class="list-group-item"><span><span class="lnr lnr-envelope"></span> {% trans "Email" %}:
+            <strong><a href="mailto:{{ orgunit.email }}">{{ orgunit.email }}</a></strong></span></li>
+        {% endif %}
+        {% if orgunit.phone_number %}
+        <li class="list-group-item"><span><span class="lnr lnr-phone"></span> {% trans "Phone number" %}:
+            <strong>{{ orgunit.phone_number }}</strong></span></li>
+        {% endif %}
+        {% if orgunit.website %}
+        <li class="list-group-item"><span><span class="lnr lnr-earth"></span> {% trans "Website" %}:
+            <strong><a href="{{ orgunit.website }}">{{ orgunit.website }}</a></strong></span></li>
+        {% endif %}
+    </ul>
+    {% if orgunit.description %}
+        <br><h5>{% trans "Description:" %}</h5>
+        <p>{{ orgunit.description }}</p>
     {% endif %}
+    <h5>{% trans "Members" %}</h5>
+    <ul class="list-group">
+    {% for user in orgunit.group.user_set.all %}
+        <li class="list-group-item"><span>
+            {% if user|has_group:orgunit.admin_group %}
+                <span class="lnr lnr-star"></span>
+            {% else %}
+                <span class="lnr lnr-user"></span>
+            {% endif %}
+            {{ user.get_full_name }} - <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+            {% if user|has_group:orgunit.admin_group %}
+                ({% trans "Admin" %})
+            {% endif %}
+        </span></li>
+    {% empty %}
+        {% trans "No members" %}
+    {% endfor %}
+    </ul>
 {% endblock %}

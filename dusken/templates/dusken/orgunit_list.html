@@ -1,10 +1,14 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n user %}
 {% block body %}
-    <h1>{% trans "Organizational Units" %}</h1>
-    <ul>
+    <h4 class="card-title"><span class="lnr lnr-apartment"></span> {% trans "Organizational Units" %}</h4>
+    <ul class="list-group">
     {% for org in orgunits %}
-        <li><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a><!-- {% trans "Edit" %} --></li>
+        <li class="list-group-item justify-content-between"><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a>
+            {% if user|has_group:org.admin_group %}
+                <span><a href="{% url "orgunit-edit" org.slug %}">{%  trans "Edit" %}</a></span>
+            {% endif %}
+        </li>
     {% endfor %}
     </ul>
 {% endblock %}

@@ -45,6 +45,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = DuskenUserUpdateForm
     template_name = 'dusken/user_update.html'
 
+
 class UserUpdateMeView(UserUpdateView):
     def get_object(self, queryset=None):
         return self.request.user

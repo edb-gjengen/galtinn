@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n bootstrap4 user %}
+{% block body %}
+<h4 class="card-title"><span><span class="lnr lnr-users"></span> {{ orgunit.name }}</span></h4>
+{% if user|has_group:orgunit.admin_group %}
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
+    </form>
+{% else %}
+    {% trans "You have no right to edit this organisation" %}
+{% endif %}
+{% endblock %}

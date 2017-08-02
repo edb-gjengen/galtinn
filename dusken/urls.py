@@ -5,7 +5,7 @@ from dusken.api.views.validate import validate
 from dusken.views.general import IndexView, HomeView, OrderDetailView, HomeActiveView
 from dusken.views.membership import (MembershipPurchaseView, MembershipListView,
                                      MembershipActivateView, MembershipRenewView)
-from dusken.views.orgunit import OrgUnitListView, OrgUnitDetailView
+from dusken.views.orgunit import OrgUnitListView, OrgUnitDetailView, OrgUnitEditView
 from dusken.views.user import (UserRegisterView, UserDetailView, UserDetailMeView, UserListView, UserUpdateView,
                                UserUpdateMeView, UserEmailValidateView, UserEmailValidateSuccessView)
 
@@ -37,7 +37,7 @@ urlpatterns = [
 
     url(r'^orgunits/$', OrgUnitListView.as_view(), name='orgunit-list'),
     url(r'^orgunit/(?P<slug>[0-9a-z-]+)/$', OrgUnitDetailView.as_view(), name='orgunit-detail'),
-
+    url(r'^orgunit/edit/(?P<slug>[0-9a-z-]+)/$', OrgUnitEditView.as_view(), name='orgunit-edit'),
 
     # "Active member" home view - a user which is registered with at least one orgunit
     url(r'^home/active/$', HomeActiveView.as_view(), name='home-active'),  # FIXME: Move to own app?

@@ -3,7 +3,7 @@ import uuid
 from datetime import timedelta
 
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -79,6 +79,11 @@ class DuskenUser(AbstractUser):
     def is_lifelong_member(self):
         return bool(self.last_membership and
                     self.last_membership.membership_type.expiry_type == 'never')
+
+    def has_group(self, group):
+        if type(group) is not Group:
+            raise TypeError("Must of type Group")
+        return self.groups.filter(id=group.id).exists()
 
     @property
     def last_membership(self):
