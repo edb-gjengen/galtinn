@@ -3,7 +3,7 @@
 {% block body %}
     <h4 class="card-title">{% svg "icons/users" %} {{ orgunit.name }}</h4>
     {% if user|has_group:orgunit.admin_group %}
-        <p><a href="{% url "orgunit-edit" orgunit.slug %}">{%  trans "Edit" %}</a></p>
+        <p><a class="btn btn-outline-primary btn-block" href="{% url "orgunit-edit" orgunit.slug %}">{%  trans "Edit" %}</a></p>
     {% endif %}
     <ul class="list-group">
         {% if orgunit.email %}

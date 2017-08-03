@@ -20,9 +20,9 @@
             {% for group in user.groups.all %}
                 {% for org in group.member_orgunits.all %}
                     <li class="list-group-item justify-content-between">
-                        <span><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a></span>
+                        <span class="pt-1 pb-1"><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a></span>
                         {% if user|has_group:org.admin_group %}
-                            <span><a href="{% url "orgunit-edit" org.slug %}">{%  trans "Edit" %}</a></span>
+                            <span><a class="btn btn-outline-primary btn-block pt-1 pb-1" href="{% url "orgunit-edit" org.slug %}">{%  trans "Edit" %}</a></span>
                         {% endif %}
                     </li>
                 {% endfor %}

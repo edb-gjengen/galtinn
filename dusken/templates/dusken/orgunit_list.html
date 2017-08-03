@@ -1,13 +1,31 @@
 {% extends "base.html" %}
 {% load i18n user svg %}
 {% block body %}
-    <h4 class="card-title">{% svg "icons/apartment" %} {% trans "Organizational Units" %}</h4>
+    <h4 class="card-title pb-3">{% svg "icons/apartment" %} {% trans "Organizational Units" %}</h4>
     <ul class="list-group">
+    <li class="row list-group-item hidden-sm-down">
+        <div class="col-md">Name</div>
+        <div class="col-md">Phone Number</div>
+        <div class="col-md">Email</div>
+        <div class="col-md">Contact Person</div>
+        <div class="col-md"></div>
+    </li>
     {% for org in orgunits %}
-        <li class="list-group-item justify-content-between"><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a>
-            {% if user|has_group:org.admin_group %}
-                <span><a href="{% url "orgunit-edit" org.slug %}">{%  trans "Edit" %}</a></span>
-            {% endif %}
+        <li class="row list-group-item">
+            <div class="col-md pt-1 pb-1"><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a></div>
+            <div class="col-md">{{ org.phone_number }}</div>
+            <div class="col-md">{{ org.email }}</div>
+            <div class="col-md">
+                {% if org.contact_person %}
+                    <a href="{% url "user-detail" org.contact_person.uuid %}">
+                        {{ org.contact_person.get_full_name }}</a>
+                {% endif %}
+            </div>
+            <div class="col-sm">
+                {% if user|has_group:org.admin_group %}
+                    <a  class="btn btn-outline-primary btn-block mt-2 mt-md-0 p-1" href="{% url "orgunit-edit" org.slug %}">{%  trans "Edit" %}</a>
+                {% endif %}
+            </div>
         </li>
     {% endfor %}
     </ul>
