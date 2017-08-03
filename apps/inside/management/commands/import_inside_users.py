@@ -13,7 +13,7 @@ from django.utils import timezone
 from signal_disabler import signal_disabler
 
 from apps.common.utils import log_time
-from apps.inside.models import InsideUser, InsideCard, InsideGroup, Division, InsidePlaceOfStudy
+from apps.inside.models import InsideUser, InsideCard, InsideGroup, Division, InsidePlaceOfStudy, UserUpdate
 from apps.neuf_auth.models import AuthProfile
 from dusken.hashers import Argon2WrappedMySQL41PasswordHasher
 from dusken.models import (DuskenUser, Membership, MemberCard, MembershipType, Order, UserLogMessage, GroupProfile,
@@ -119,6 +119,22 @@ class Command(BaseCommand):
     def _get_unusable_password(self):
         return make_password(None)  # Same as User.set_unusable_password()
 
+    @log_time('Fetching user log data...')
+    def get_user_update_log(self):
+        field_mapping = {
+            'date': 'created',
+            'comment': 'message',
+            'user_updated_by': 'legacy_changed_by',
+            'user_updated': 'legacy_user',
+        }
+        updates = dict(UserUpdate.objects.all().values(field_mapping.keys()))
+        user_log = {}
+        for update in updates:
+            for src, dst in field_mapping.items():
+                user_log[dst] = update[src]
+
+        return user_log
+
     @log_time('Fetching user data...')
     def get_user_data(self):
         user_field_map = {
@@ -143,10 +159,10 @@ class Command(BaseCommand):
             'useraddressint__country': 'country',
             'useraddressint__city': 'city',
 
-            'created': 'date_joined',  # FIXME: Does not work?
+            'created': 'date_joined',
         }
         skip_usernames = ['ukjent']
-        more_fields = ['addresstype', 'registration_status', 'source', 'expires', 'created', 'username']
+        more_fields = ['addresstype', 'registration_status', 'source', 'expires', 'username']
         fields = list(user_field_map.keys()) + more_fields
 
         i_users = InsideUser.objects.order_by('pk').reverse().values(*fields)
@@ -338,7 +354,7 @@ class Command(BaseCommand):
         return ret
 
     @log_time('Creating database...')
-    def create_database(self, users, member_cards_data, org_unit_data, group_data):
+    def create_database(self, users, member_cards_data, org_unit_data, group_data, user_log_messages):
         # Maps of old ID's to new
         group_map = {}
         ou_map = {}
@@ -411,12 +427,14 @@ class Command(BaseCommand):
                 # TODO: Payment method
                 Order.objects.create(product=m, user=new_user, price_nok=0)
 
+        # Create membercards and relate to users
         for c in member_cards_data['cards']:
             legacy_user_id = c.pop('legacy_user_id')
             if legacy_user_id is not None:
                 c['user'] = DuskenUser.objects.get(legacy_id=legacy_user_id)
             MemberCard.objects.create(**c)
 
+        # Create memberships and orders
         for m in member_cards_data['memberships']:
             order_data = {
                 'phone_number': m.pop('phone_number'),
@@ -428,13 +446,23 @@ class Command(BaseCommand):
             m = Membership.objects.create(**m)
             Order.objects.create(product=m, member_card=card, **order_data)
 
+        # Create user log messages
+        for m in user_log_messages:
+            legacy_user = m.pop('legacy_user')
+            legacy_changed_by = m.pop('legacy_changed_by')
+            m['user'] = DuskenUser.objects.get(legacy_id=legacy_user)
+            if legacy_changed_by is not None:
+                m['changed_by'] = DuskenUser.objects.get(legacy_id=legacy_changed_by)
+            UserLogMessage.objects.create(**m)
+
     def handle(self, *args, **options):
         # Get data
         org_units_data = self.get_org_units_data()
         group_data = self.get_group_data()
         users = self.get_user_data()
         member_cards_data = self.get_member_card_data()
+        user_log_messages = self.get_user_update_log()
 
         # Create database
         with transaction.atomic():
-            self.create_database(users, member_cards_data, org_units_data, group_data)
+            self.create_database(users, member_cards_data, org_units_data, group_data, user_log_messages)
