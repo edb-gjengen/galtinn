@@ -1,5 +1,4 @@
 import django_filters
-from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets, filters
@@ -24,7 +23,7 @@ class DuskenUserViewSet(viewsets.ModelViewSet):
     serializer_class = DuskenUserSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, )
     filter_class = DuskenUserFilter
-    search_fields = ('first_name', 'last_name', 'email', 'member_cards__card_number')
+    search_fields = ('first_name', 'last_name', 'email', 'member_cards__card_number', 'phone_number')
     lookup_field = 'id'
 
     def get_queryset(self):

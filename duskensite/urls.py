@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import urls as auth_urls
+from django.contrib.flatpages.views import flatpage
 from rest_framework.authtoken.views import obtain_auth_token
 
 from apps.neuf_auth.views import NeufPasswordChangeView, NeufPasswordResetConfirmView
@@ -32,5 +33,5 @@ urlpatterns += [
 
 # Flatpages
 urlpatterns += [
-    url(r'^pages/', include('django.contrib.flatpages.urls')),
+    url(r'^(?P<url>.*/)$', flatpage),
 ]

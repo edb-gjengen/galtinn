@@ -2,13 +2,18 @@
 {% block nav %}{% include "nav.html" with active='home-volunteer' %}{% endblock %}
 {% load i18n user svg %}
 {% block body %}
+    <div class="home-volunteer">
     <h2 class="card-title">{% svg "icons/apartment" %} {% trans "Volunteer" %}</h2>
-    <div class="home-active__actions-wrap">
-    <ul>
-        <li><a href="{% url "orgunit-list" %}">{% trans "List of organizational units" %}</a></li>
-        <li>{% trans "Add new volunteer to my orgunit" %}</li>
-        <li>{% trans "Remove volunteer from my orgunit" %}</li>
-    </ul>
+    {% if not user.is_volunteer %}
+        <p>{% trans "Active volunteers form the The Norwegian Student Society, want do become a part of it?" %}</p>
+        {% get_current_language as LANGUAGE_CODE %}
+        <a class="btn btn-primary" href="{% if LANGUAGE_CODE == 'nb' %}https://studentersamfundet.no/bli-aktiv/{% else %}https://studentersamfundet.no/bli-aktiv/become-a-volunteer/{% endif %}">{% trans "Read more" %}</a>
+    {% else %}
+        <ul>
+            <li><a href="{% url "orgunit-list" %}">{% trans "List of organizational units" %}</a></li>
+            <li>{% trans "Add new volunteer to my orgunit" %}</li>
+            <li>{% trans "Remove volunteer from my orgunit" %}</li>
+        </ul>
         {% if user.groups %}
             <h4>{% svg "icons/users" %} {% trans "Your organizations" %}</h4>
             <ul class="list-group">
@@ -24,27 +29,6 @@
             {% endfor %}
             </ul>
         {% endif %}
-
-    <!--<section class="home-volunteer__actions">
-        <h6 class="text-muted">{% trans "What do you want to do?" %}</h6>
-        <div class="card-deck-wrapper">
-        <div class="card-deck">
-
-            <div class="home-volunteer__TODO card">
-                <div class="card-block">
-                    <h4 class="card-title">{% trans "A" %}</h4>
-                    <h6 class="card-subtitle text-muted">{% trans "Subtitle" %}</h6>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item list-group-item-success">{% trans "B" %} </li>
-                    <li class="list-group-item">C</li>
-                </ul>
-                <div class="card-block">
-                    <a href="#" class="btn btn-outline-primary btn-block">{% trans "C" %}</a>
-                </div>
-            </div>
-        </div>
-        </div>
-    </section>-->
+    {% endif %}
     </div>
 {% endblock %}

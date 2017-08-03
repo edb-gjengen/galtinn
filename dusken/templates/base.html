@@ -1,4 +1,4 @@
-{% load staticfiles i18n raven flatpages %}
+{% load static i18n raven flatpages %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +11,7 @@
 
 </head>
 <body class="{% block body-css-classes %}{% endblock %}">
+    <div class="page-wrap">
 	{% block nav %}{% include "nav.html" %}{% endblock %}
 	<section class="content">
         <div class="messages">{% if messages %}
@@ -23,24 +24,10 @@
         {% endif %}</div>
         {% block body %}{% endblock %}
     </section>
-    <footer class="footer">
-        <div class="container">
-            <div class="footer__pages">
-                {# TODO: Limit pages to current locale (namespaced with language code) #}
-                {# TODO: Style footer #}
-                {% get_flatpages as flatpages %}
-                <ul>
-                    {% for page in flatpages %}
-                        <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="credits">
-                <a href="https://studentersamfundet.no" title="Det Norske Studentersamfund"><img src="{% static 'dist/images/logo.png' %}" width="70" height="70"></a><br>
-                {% trans "Created with" %} <span class="love" title="kærlighed">♥</span> {% trans "by" %} <a href="http://edb.technology/" title="EDB-gjengen">EDB-gjengen</a>
-            </div>
-        </div>
-    </footer>
+    </div>
+
+    {% include "footer.html" %}
+
     <script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
     <script>Raven.config('{% sentry_public_dsn 'https' %}').install()</script>
     <script type="text/javascript" src="{% static 'dist/scripts/app.js' %}"></script>

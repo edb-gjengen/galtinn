@@ -217,6 +217,8 @@ class Command(BaseCommand):
                 new_user[dst_field] = new_val
 
             # Last valid membership
+            # TODO: Drop this and get all from KassaEvent and TekstmeldingEvent outside of user context
+            # TODO: Add only lifelong memberships
             last_valid_membership = self._get_last_valid_membership(u)
 
             new_user['memberships'] = []

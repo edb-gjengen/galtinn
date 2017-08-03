@@ -1,5 +1,26 @@
+html, body {
+  height: 100%;
+}
 .content {
     @include make-container();
     margin: 2rem auto;
     max-width: $grid-max-width;
+}
+
+@include media-breakpoint-up(md) {
+    .page-wrap {
+        min-height: 100%;
+        /* equal to footer height */
+        margin-bottom: -$footer-height;
+
+        &:after {
+            content: "";
+            display: block;
+        }
+    }
+
+    .site-footer,
+    .page-wrap:after {
+        height: $footer-height;
+    }
 }

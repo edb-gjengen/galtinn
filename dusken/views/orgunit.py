@@ -3,22 +3,23 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, UpdateView
 
 from dusken.models import OrgUnit
+from dusken.views.mixins import VolunteerRequiredMixin
 
 
-class OrgUnitListView(LoginRequiredMixin, ListView):
+class OrgUnitListView(VolunteerRequiredMixin, ListView):
     model = OrgUnit
     template_name = 'dusken/orgunit_list.html'
     context_object_name = 'orgunits'
     queryset = OrgUnit.objects.filter(is_active=True)
 
 
-class OrgUnitDetailView(LoginRequiredMixin, DetailView):
+class OrgUnitDetailView(VolunteerRequiredMixin, DetailView):
     model = OrgUnit
     template_name = 'dusken/orgunit_detail.html'
     context_object_name = 'orgunit'
 
 
-class OrgUnitEditView(LoginRequiredMixin, UpdateView):
+class OrgUnitEditView(VolunteerRequiredMixin, UpdateView):
     model = OrgUnit
     template_name = 'dusken/orgunit_edit.html'
     context_object_name = 'orgunit'

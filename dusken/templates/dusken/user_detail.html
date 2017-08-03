@@ -3,6 +3,8 @@
 {% block nav %}
     {% if userobj == user %}
         {% include "nav.html" with active="user-detail-me" %}
+    {% else %}
+        {% include "nav.html" %}
     {% endif %}
 {% endblock %}
 {% block body %}

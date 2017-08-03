@@ -1,0 +1,24 @@
+{% load static flatpages i18n pages %}
+<footer class="site-footer bg-faded">
+    <div class="container">
+        <div class="row">
+            <div class="footer__pages col-md-6">
+            {# Note: To get pages to show up here the path needs to start with /nb/ or /en/ #}
+            {% get_language_page_prefix as language_prefix %}
+            {% get_flatpages language_prefix as flatpages %}
+            {% for page in flatpages %}
+                <a href="{{ page.url }}" class="footer__pages__link">{{ page.title }}</a>
+            {% endfor %}
+            </div>
+
+            <div class="footer__logo col-md-6">
+                <a href="https://studentersamfundet.no" title="Det Norske Studentersamfund"><img src="{% static 'dist/images/logo.png' %}" width="70" height="70"></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 footer__credits">
+                {% trans "Created with" %} <span class="love" title="kærlighed">♥</span> {% trans "by" %} <a href="http://edb.technology/" title="EDB-gjengen">EDB-gjengen</a>
+            </div>
+        </div>
+    </div>
+</footer>

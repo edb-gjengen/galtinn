@@ -1,9 +1,36 @@
-.credits {
-  margin-top: 25px;
-  margin-bottom: 25px;
-  text-align: center;
-  color: #666;
-  font-size: 12px;
+.site-footer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.footer {
+    &__pages {
+        text-align: center;
+        margin-bottom: 20px;
+
+        @include media-breakpoint-up(md) {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        &__link {
+            padding: 8px 16px;
+        }
+    }
+    &__logo {
+        font-size: 12px;
+        text-align: center;
+
+        @include media-breakpoint-up(md) {
+            text-align: right;
+        }
+    }
+
+    &__credits {
+        padding-top: 10px;
+        text-align: center;
+        color: #666;
+        font-size: 12px;
+    }
 }
 
 .love {

@@ -8,3 +8,7 @@ body {
         display: none;
     }
 }
+
+.alert-error {
+    @extend .alert-danger;
+}
