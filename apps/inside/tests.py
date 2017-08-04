@@ -24,7 +24,7 @@ class NoDbTestRunner(DiscoverRunner):
 
 
 class ImportTestCase(TestCase):
-    # @skip('Uncomment this if you want to test the import script')
+    @skip('Uncomment this if you want to test the import script')
     def test_import_inside_users(self):
         self.assertEqual(DuskenUser.objects.all().with_valid_membership().count(), 0)
         query = Q(expires__gte=timezone.now().date()) | Q(expires=None)

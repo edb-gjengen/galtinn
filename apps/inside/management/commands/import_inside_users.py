@@ -658,7 +658,7 @@ class Command(BaseCommand):
             inside_membership_valid = membership['end_date'] >= now
             if inside_membership_valid and not user.is_member:
                 # Should have a valid membership, but no
-                print("Missing valid membership")
+                print("Missing valid membership", user.legacy_id)
                 pass
             elif not user.memberships.exists():
                 # No memberships registered, create the last one
