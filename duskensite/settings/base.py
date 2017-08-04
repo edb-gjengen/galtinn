@@ -129,7 +129,6 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = reverse_lazy('index')
 LOGIN_URL = reverse_lazy('login')
-LOGOUT_URL = reverse_lazy('logout')
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',

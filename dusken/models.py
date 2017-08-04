@@ -17,12 +17,15 @@ from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
-from dusken.utils import create_email_key, send_validation_email, create_phone_key, generate_username
+from dusken.managers import DuskenUserManager
+from dusken.utils import create_email_key, send_validation_email, create_phone_key
 
 
 class DuskenUser(AbstractUser):
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
+    first_name = models.CharField(_('first name'), max_length=254, blank=True)
+    last_name = models.CharField(_('last name'), max_length=254, blank=True)
     email = models.EmailField(_('email address'), unique=True)
     email_confirmed_at = models.DateTimeField(blank=True, null=True)
     email_key = models.CharField(max_length=40, default=create_email_key)
@@ -46,6 +49,8 @@ class DuskenUser(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    objects = DuskenUserManager()
 
     @property
     def email_is_confirmed(self):
@@ -98,18 +103,28 @@ class DuskenUser(AbstractUser):
 
     def save(self, **kwargs):
         # If email or phone number has changed, invalidate confirmation state
+        self.invalidate_confirmation_state()
+
+        # If phone number is confirmed, claim orders
+        self.claim_orders()
+
+        super().save(**kwargs)
+
+    def invalidate_confirmation_state(self):
         if self.pk is not None:
             orig = DuskenUser.objects.get(pk=self.pk)
+
             if orig.email != self.email:
                 self.email_confirmed_at = None
                 self.email_key = create_email_key()
                 send_validation_email(self)
+
             if orig.phone_number != self.phone_number:
                 self.phone_number_confirmed = False
                 self.phone_number_confirmed_at = None
                 self.phone_number_key = create_phone_key()
 
-        # If phone number is confirmed, claim orders
+    def claim_orders(self):
         if self.phone_number_confirmed:
             for order in self.unclaimed_orders:
                 order.user = self
@@ -117,11 +132,9 @@ class DuskenUser(AbstractUser):
                 order.product.save()
                 order.save()
 
-        # FIXME: This does not seem like a good idea
-        if self.username is '':
-            self.username = generate_username(self.first_name, self.last_name)
-
-        super().save(**kwargs)
+                if order.member_card:
+                    order.member_card.user = self
+                    order.member_card.save()
 
     def get_full_address(self):
         elements = [
@@ -162,7 +175,9 @@ class Membership(BaseModel):
 
     @property
     def is_valid(self):
-        return self.end_date is None or self.end_date >= timezone.now().date()
+        # FIXME: update for trial membership and life long memberships
+        is_lifelong = self.membership_type.expiry_type = MembershipType.EXPIRY_NEVER and self.end_date is None
+        return is_lifelong or self.end_date >= timezone.now().date()
 
     @property
     def expires_in_less_than_one_month(self):
@@ -356,13 +371,13 @@ class Order(BaseModel):
     BY_CARD = 'card'
     BY_SMS = 'sms'
     BY_APP = 'app'
-    BY_PHYSICAL_CARD = 'physical_card'
+    BY_CASH_REGISTER = 'cash_register'
     PAYMENT_METHOD_OTHER = 'other'
     PAYMENT_METHODS = (
         (BY_APP, _('Mobile app')),
         (BY_SMS, _('SMS')),
         (BY_CARD, _('Credit card')),
-        (BY_PHYSICAL_CARD, _('Physical card')),
+        (BY_CASH_REGISTER, _('Cash register')),
         (PAYMENT_METHOD_OTHER, _('Other')),
     )
 

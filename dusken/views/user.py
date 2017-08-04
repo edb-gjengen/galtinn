@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView, TemplateView, UpdateView,
 
 from dusken.forms import UserEmailValidateForm, UserPhoneValidateForm, DuskenUserForm, DuskenUserUpdateForm
 from dusken.models import DuskenUser
-from dusken.utils import send_validation_sms
+from dusken.utils import send_validation_sms, generate_username
 
 
 class UserRegisterView(FormView):
@@ -15,7 +15,9 @@ class UserRegisterView(FormView):
     success_url = reverse_lazy('membership-renew')
 
     def form_valid(self, form):
-        self.object = form.save()
+        self.object = form.save(commit=False)
+        self.object.username = generate_username(self.object.first_name, self.object.last_name)
+        self.object.save()
 
         # Log the user in
         self.object.backend = 'django.contrib.auth.backends.ModelBackend'

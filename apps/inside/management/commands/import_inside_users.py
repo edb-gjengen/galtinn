@@ -2,19 +2,23 @@
 import html
 import random
 import re
-from datetime import timedelta, datetime
+from collections import defaultdict
+from datetime import timedelta, date
 from pprint import pprint
 
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from django.db.models import Q
 from django.utils import timezone
 from signal_disabler import signal_disabler
 
 from apps.common.utils import log_time
 from apps.inside.models import InsideUser, InsideCard, InsideGroup, Division, InsidePlaceOfStudy, UserUpdate
+from apps.kassa.models import KassaEvent
 from apps.neuf_auth.models import AuthProfile
+from apps.tekstmelding.models import TekstmeldingEvent
 from dusken.hashers import Argon2WrappedMySQL41PasswordHasher
 from dusken.models import (DuskenUser, Membership, MemberCard, MembershipType, Order, UserLogMessage, GroupProfile,
                            OrgUnit, OrgUnitLogMessage, PlaceOfStudy)
@@ -31,26 +35,35 @@ class Command(BaseCommand):
         - Physical cards / Membership cards
         - Place of study
     """
-    # TODO: User update log
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--dry-run',
+            action='store_true',
+            dest='dry_run',
+            default=False,
+            help='Dry run importing, does not save anything.')
+
     def __init__(self):
         super().__init__()
-        # No email notifications
+        # No email notifications or any post_save or pre_save signals
         signal_disabler.disable().disconnect_all()
 
         self.zip_to_city_map = ZIP_TO_CITY_MAP
         self.life_long_users = InsideUser.objects.filter(expires=None).values_list('pk', flat=True)
 
         m1, c = MembershipType.objects.get_or_create(pk=1,
-                                                     defaults={'name': 'Membership',
-                                                               'slug': 'standard'})
+                                                     slug='standard',
+                                                     is_default=True,
+                                                     defaults={'name': 'Membership'})
         m2, c = MembershipType.objects.get_or_create(pk=2,
+                                                     slug='lifelong',
                                                      expiry_type=MembershipType.EXPIRY_NEVER,
-                                                     defaults={'name': 'Life long',
-                                                               'slug': 'lifelong'})
+                                                     defaults={'name': 'Life long'})
         m3, c = MembershipType.objects.get_or_create(pk=3,
+                                                     slug='trial',
                                                      expiry_type=MembershipType.EXPIRY_END_OF_YEAR,
-                                                     defaults={'name': 'Trial membership',
-                                                               'slug': 'trial'})
+                                                     defaults={'name': 'Trial membership'})
         self.membership_types = {
             'standard': m1,
             'life_long': m2,
@@ -62,6 +75,13 @@ class Command(BaseCommand):
         for ipos in InsidePlaceOfStudy.objects.all():
             pos, _ = PlaceOfStudy.objects.get_or_create(name=ipos.navn)
             self.pos_map[ipos.pk] = pos.pk
+
+        # User id to groups
+        self.group_rel_map = defaultdict(list)
+        rels = InsideGroup.objects.all().values_list('user_rels__user__pk', 'pk')
+        for user, group in rels:
+            if user is not None:
+                self.group_rel_map[user].append(group)
 
     def _get_city_from_postal_code(self, postal_code):
         return self.zip_to_city_map.get(postal_code)
@@ -127,13 +147,66 @@ class Command(BaseCommand):
             'user_updated_by': 'legacy_changed_by',
             'user_updated': 'legacy_user',
         }
-        updates = dict(UserUpdate.objects.all().values(field_mapping.keys()))
-        user_log = {}
+        updates = UserUpdate.objects.all().values(*field_mapping.keys())
+        user_log = []
         for update in updates:
+            message = {}
             for src, dst in field_mapping.items():
-                user_log[dst] = update[src]
+                message[dst] = update[src]
+            user_log.append(message)
 
         return user_log
+
+    def _format_int_country(self, country):
+        country = country.strip()
+        if len(country) == 2 or len(country) == 0:
+            return country
+
+        country = country.lower()
+        maps = {
+            'norway': 'NO', 'norge': 'NO',
+            'usa': 'US', 'united states': 'US',
+            'sverige': 'SE', 'sweden': 'SE',
+            'danmark': 'DK', 'denmark': 'DK',
+            'france': 'FR', 'frankrike': 'FR',
+            'canada': 'CA',
+            'tyskland': 'DE',
+            'england': 'GB', 'storbritannia': 'GB',
+            'spain': 'ES',
+            'españa': 'ES',
+            'finland': 'FI',
+            'italy': 'IT', 'italia': 'IT',
+            'belgia': 'BE', 'belgium': 'BE', 'belgique': 'BE',
+            'australia': 'AU',
+            'the netherlands': 'NL', 'holland': 'NL',
+            'island': 'IS', 'ísland': 'IS',
+            'irland': 'IE',
+            'india': 'IN',
+            'czech republic': 'CZ',
+            'sveits': 'CH',
+            'brazil': 'BR',
+            'argentina': 'AR',
+            'estland': 'EE',
+            'korea, republikken': 'KR'
+        }
+
+        if country in maps:
+            return maps[country]
+
+        return ''  # bail
+
+    def _is_spam_user(self, u):
+        if u.get('expires') is not None:
+            return False
+
+        if u.get('password') == '*6646454122E5FB2D3FC7F699120332D623083A57':
+            return True
+        if u.get('email').endswith('@163.com'):
+            return True
+        if u.get('last_name') in ['OLIVIER', 'Holland', 'ken', 'vigorda']:
+            return True
+
+        return False
 
     @log_time('Fetching user data...')
     def get_user_data(self):
@@ -171,11 +244,17 @@ class Command(BaseCommand):
             if u['username'] in skip_usernames:
                 continue
 
+            if self._is_spam_user(u):
+                continue
+
             new_user = {}
             for src_field, dst_field in user_field_map.items():
                 # Address
                 if u.get('addresstype') == 'no' and dst_field == 'country':
                     new_user[dst_field] = 'NO'
+                    continue
+                if u.get('addresstype') == 'int' and dst_field == 'country':
+                    new_user[dst_field] = self._format_int_country(u.get(src_field))
                     continue
 
                 if u.get('addresstype') == 'no' and src_field.startswith('useraddressint'):
@@ -206,10 +285,10 @@ class Command(BaseCommand):
                         new_val = timezone.now()
 
                 if dst_field == 'place_of_study':
-                    pos_id = self.pos_map.get(new_val)
-                    if pos_id is None:
+                    new_val = self.pos_map.get(new_val)
+                    if new_val is None:
                         continue
-                    new_val = PlaceOfStudy.objects.get(pk=pos_id)
+                    new_val = PlaceOfStudy.objects.get(pk=new_val)
 
                 if dst_field == 'phone_number' and (new_val is None or new_val == '-'):
                     new_val = ''
@@ -225,16 +304,21 @@ class Command(BaseCommand):
 
                 # Clean
                 if dst_field in ['email', 'username']:
-                    new_val = new_val.lower()
+                    new_val = new_val.lower().strip()
 
                 if dst_field == 'phone_number_confirmed':
                     new_val = bool(new_val)
 
+                if dst_field == 'street_address':
+                    if new_val is None or new_val == '-':
+                        new_val = ''
+
+                    new_val = new_val.replace('\r\n', '\n').strip()
+                    new_val = new_val.replace('\n', ' ')
+
                 new_user[dst_field] = new_val
 
-            # Last valid membership
-            # TODO: Drop this and get all from KassaEvent and TekstmeldingEvent outside of user context
-            # TODO: Add only lifelong memberships
+            # Last valid membership (lifelong are added right away, the others are cross referencing kassa stuff later)
             last_valid_membership = self._get_last_valid_membership(u)
 
             new_user['memberships'] = []
@@ -242,8 +326,7 @@ class Command(BaseCommand):
                 new_user['memberships'] = [last_valid_membership]
 
             # Groups
-            group_ids = list(InsideGroup.objects.filter(user_rels__user=u['pk']).values_list('pk', flat=True))
-            new_user['legacy_group_ids'] = group_ids
+            new_user['legacy_group_ids'] = self.group_rel_map[u['pk']]
 
             d_users.append(new_user)
 
@@ -311,56 +394,129 @@ class Command(BaseCommand):
 
     def _get_card_end_date(self, card):
         if not card['owner_membership_trial']:
-            return card['registered'] + timedelta(days=365)
+            return card['registered'].date() + timedelta(days=365)
 
-        return datetime(year=card['registered'].year + 1, month=1, day=1)
+        return date(year=card['registered'].year + 1, month=1, day=1)
 
     @log_time('Fetching member card data...')
     def get_member_card_data(self):
-        cards_fields = ['registered', 'is_active', 'user', 'created', 'card_number']
-        fields = ['owner_membership_trial', 'owner_phone_number'] + cards_fields
+        fields = ['registered', 'is_active', 'user', 'created', 'card_number']
         cards = list(InsideCard.objects.values(*fields))
-        ret = {
-            'cards': [],
-            'memberships': []
-        }
+        all_card_data = []
 
         # Cards
         for c in cards:
-            _c = {}
-            for f in cards_fields:
-                if f == 'user':
-                    _c['legacy_user_id'] = c[f]
+            card_data = {}
+            for field in fields:
+                if field == 'user':
+                    card_data['legacy_user'] = c[field]
                 else:
-                    _c[f] = c[f]
-            ret['cards'].append(_c)
+                    card_data[field] = c[field]
+            all_card_data.append(card_data)
 
-            # Memberships (only handle those without users)
-            if c['owner_phone_number'] and c['user'] is None:
-                is_trial = c['owner_membership_trial']
-                _type = 'standard' if not is_trial else 'trial'
-                m = {
-                    'start_date': c['registered'],
-                    'end_date': self._get_card_end_date(c),
-                    'payment_method': Order.BY_PHYSICAL_CARD,
-                    'phone_number': c['owner_phone_number'],
-                    'card_number': c['card_number'],
-                    'membership_type': self.membership_types[_type],
-                    'price_nok': 25000 if not is_trial else 0
+        return all_card_data
 
-                }
-                ret['memberships'].append(m)
+    @log_time('Fetching SMS membership data...')
+    def get_sms_memberships(self):
+        memberships = []
 
-        return ret
+        query = Q(action=TekstmeldingEvent.NEW_MEMBERSHIP_DELIVERED) \
+            | Q(action=TekstmeldingEvent.RENEW_MEMBERSHIP_DELIVERED)
 
-    @log_time('Creating database...')
-    def create_database(self, users, member_cards_data, org_unit_data, group_data, user_log_messages):
+        # New and renewal memberships
+        fields = ['pk', 'action', 'timestamp', 'incoming', 'incoming__msisdn']
+        charged_memberships = TekstmeldingEvent.objects.filter(query).values(*fields)
+        for m in charged_memberships:
+            action = TekstmeldingEvent.NEW_MEMBERSHIP
+            if m['action'] == TekstmeldingEvent.RENEW_MEMBERSHIP_DELIVERED:
+                action = TekstmeldingEvent.RENEW_MEMBERSHIP
+            try:
+                charge_message = TekstmeldingEvent.objects.get(action=action, incoming=m['incoming'])
+            except TekstmeldingEvent.DoesNotExist:
+                continue  # Note: This happens with only two memberships, which have been refunded
+
+            msisdn = str(m['incoming__msisdn'])[:-2]
+            m_data = {
+                'start_date': m['timestamp'].date(),
+                'end_date': m['timestamp'].date() + timedelta(days=365),
+                'payment_method': Order.BY_SMS,
+                'phone_number': '+{}'.format(msisdn),
+                'membership_type': self.membership_types['standard'],
+                'price_nok': charge_message.outgoing.pricegroup,
+            }
+            if charge_message.action == TekstmeldingEvent.RENEW_MEMBERSHIP:
+                m_data['legacy_user'] = charge_message.user.pk
+            else:
+                # Look for new membercard events with an outgoing message to the same number
+                # and within the not expired range
+                member_card = TekstmeldingEvent.objects.filter(
+                    action=TekstmeldingEvent.NEW_MEMBERSHIP_CARD,
+                    outgoing__destination=msisdn,
+                    timestamp__lte=m['timestamp'] + timedelta(days=365)).first()
+                if member_card:
+                    m_data['card_number'] = member_card.activation_code
+
+            memberships.append(m_data)
+
+        return memberships
+
+    @log_time('Fetching Kassa membership data...')
+    def get_kassa_memberships(self, users):
+        memberships = []
+
+        # Prepare user lookup
+        users_by_legacy_id = {}
+        for u in users:
+            users_by_legacy_id[u['legacy_id']] = u
+
+        fields = ['user_inside_id', 'event', 'card_number', 'user_phone_number', 'created']
+        query = (Q(event=KassaEvent.ADD_OR_RENEW) | Q(event=KassaEvent.NEW_CARD_MEMBERSHIP)
+                 | Q(event=KassaEvent.RENEW_ONLY) | Q(event=KassaEvent.MEMBERSHIP_TRIAL))
+        purchase_events = KassaEvent.objects.filter(query).values(*fields)
+
+        for m in purchase_events:
+            end_date = m['created'].date() + timedelta(days=365)
+            if m['event'] == KassaEvent.MEMBERSHIP_TRIAL:
+                end_date = date(year=m['created'].year + 1, month=1, day=1)
+
+            mtype = 'standard' if m['event'] != KassaEvent.MEMBERSHIP_TRIAL else 'trial'
+            m_data = {
+                'start_date': m['created'].date(),
+                'end_date': end_date,
+                'payment_method': Order.BY_CASH_REGISTER,
+                'membership_type': self.membership_types[mtype],
+                'phone_number': m['user_phone_number'],
+                'price_nok': 25000,
+                'legacy_user': m['user_inside_id']
+            }
+
+            # Is it tied to a user and does the end date differ from latest set din_user.expires?
+            if m_data.get('legacy_user'):
+                user = users_by_legacy_id[m_data['legacy_user']]
+                user_end_date = user['memberships'][0]['end_date']
+                if user_end_date is not None and m_data['end_date'] != user_end_date:
+                    diff_days = (user_end_date - m_data['end_date']).days
+                    if 363 > diff_days > 1:
+                        # Replace our dates
+                        m_data['end_date'] = user_end_date
+                        m_data['start_date'] = user_end_date - timedelta(days=365)
+
+            memberships.append(m_data)
+
+        return memberships
+
+    @log_time('Creating database...\n')
+    def create_database(self, users, member_cards_data, org_unit_data, group_data, user_log_messages, sms_memberships,
+                        kassa_memberships):
         # Maps of old ID's to new
         group_map = {}
         ou_map = {}
         ou_contact_map = {}  # From legacy user contact id to org unit id
 
+        unhandled_memberships = []
+
         # Create org units
+        print("\tCreating org units...")
         for ou in org_unit_data:
             ou_legacy_id = ou.pop('legacy_id')
             ou_contact_id = ou.pop('legacy_contact_id')
@@ -373,6 +529,7 @@ class Command(BaseCommand):
                 ou_contact_map[ou_contact_id] = o.pk
 
         # Create groups
+        print("\tCreating groups...")
         for g in group_data:
             gp_data = {
                 'description': g.pop('description'),
@@ -389,7 +546,7 @@ class Command(BaseCommand):
             # Add ou admin group or member group
             if legacy_division_id:
                 _ou = OrgUnit.objects.get(pk=ou_map[legacy_division_id])
-                # Note: This ovewrites when there are multiple groups tied to same division
+                # Note: This overwrites when there are multiple groups tied to same division
                 if is_admin_group:
                     _ou.admin_group = g
                 else:
@@ -397,6 +554,8 @@ class Command(BaseCommand):
                 _ou.save()
 
         # Create users, use legacy_id to reference later
+        print("\tCreating users...")
+        _legacy_users_map = {}
         for u in users:
             # TODO: User.set_unusuable_password on:
             # - users not active and membership expired before 2015-01-01 or not lifelong
@@ -406,6 +565,7 @@ class Command(BaseCommand):
             group_ids = [group_map[g] for g in u.pop('legacy_group_ids')]
             groups = Group.objects.filter(pk__in=group_ids)
             new_user = DuskenUser.objects.create(**u)
+            _legacy_users_map[new_user.legacy_id] = new_user.pk
             new_user.groups.add(*groups)
 
             # Add org unit contact
@@ -421,48 +581,108 @@ class Command(BaseCommand):
             message = 'Imported from Inside (user_id={})'.format(new_user.legacy_id)
             UserLogMessage.objects.create(user=new_user, message=message)
             for m_data in memberships:
-                m_data['user_id'] = new_user.pk
-                m = Membership.objects.create(**m_data)
-                # TODO: Price
-                # TODO: Payment method
-                Order.objects.create(product=m, user=new_user, price_nok=0)
+                # Only add life long memberships here
+                if m_data['membership_type'].expiry_type == MembershipType.EXPIRY_NEVER:
+                    m_data['user_id'] = new_user.pk
+                    Membership.objects.create(**m_data)
+                else:
+                    unhandled_memberships.append([new_user, m_data])
+
+        # Create user log messages
+        print("\tCreating user log messages...")
+        for m in user_log_messages:
+            legacy_user = m.pop('legacy_user')
+            legacy_changed_by = m.pop('legacy_changed_by')
+            if legacy_user not in _legacy_users_map:
+                continue  # Spam users
+
+            m['user_id'] = _legacy_users_map[legacy_user]
+            if legacy_changed_by is not None:
+                m['changed_by_id'] = _legacy_users_map[legacy_changed_by]
+            UserLogMessage.objects.create(**m)
 
         # Create membercards and relate to users
-        for c in member_cards_data['cards']:
-            legacy_user_id = c.pop('legacy_user_id')
-            if legacy_user_id is not None:
-                c['user'] = DuskenUser.objects.get(legacy_id=legacy_user_id)
+        print("\tCreating member cards...")
+        for c in member_cards_data:
+            legacy_user = c.pop('legacy_user')
+            if legacy_user is not None:
+                c['user_id'] = _legacy_users_map[legacy_user]
             MemberCard.objects.create(**c)
 
-        # Create memberships and orders
-        for m in member_cards_data['memberships']:
+        # Create memberships and orders from kassa data
+        print("\tCreating kassa memberships...")
+        for m in kassa_memberships:
             order_data = {
                 'phone_number': m.pop('phone_number'),
                 'payment_method': m.pop('payment_method'),
                 'price_nok': m.pop('price_nok')
             }
-            card_number = m.pop('card_number')
-            card = MemberCard.objects.get(card_number=card_number)
-            m = Membership.objects.create(**m)
-            Order.objects.create(product=m, member_card=card, **order_data)
 
-        # Create user log messages
-        for m in user_log_messages:
             legacy_user = m.pop('legacy_user')
-            legacy_changed_by = m.pop('legacy_changed_by')
-            m['user'] = DuskenUser.objects.get(legacy_id=legacy_user)
-            if legacy_changed_by is not None:
-                m['changed_by'] = DuskenUser.objects.get(legacy_id=legacy_changed_by)
-            UserLogMessage.objects.create(**m)
+            if legacy_user:
+                _user_id = _legacy_users_map[legacy_user]
+                order_data['user_id'] = _user_id
+                m['user_id'] = _user_id
+
+            m = Membership.objects.create(**m)
+            Order.objects.create(product=m, **order_data)
+
+        # Create SMS memberships
+        print("\tCreating SMS memberships...")
+        for m in sms_memberships:
+            order_data = {
+                'phone_number': m.pop('phone_number'),
+                'payment_method': m.pop('payment_method'),
+                'price_nok': m.pop('price_nok'),
+            }
+
+            legacy_user = None
+            if 'legacy_user' in m:
+                legacy_user = m.pop('legacy_user')
+                m['user'] = DuskenUser.objects.get(pk=_legacy_users_map[legacy_user])
+            elif 'card_number' in m:
+                order_data['member_card'] = MemberCard.objects.get(card_number=m.pop('card_number'))
+
+            membership = Membership.objects.create(**m)
+            Order.objects.create(product=membership, **order_data)
+
+            if legacy_user:
+                membership.user.claim_orders()  # ninja in orders after creation!
+
+        # Create unhandled memberships if none exists or
+        print("\tCreating unhandled memberships")
+        # TODO: Create memberships for users with a membership that is not expired and try to guess source
+        for user, membership in unhandled_memberships:
+            user.refresh_from_db()
+            now = timezone.now().date()
+            inside_membership_valid = membership['end_date'] >= now
+            if inside_membership_valid and not user.is_member:
+                # Should have a valid membership, but no
+                print("Missing valid membership")
+                pass
+            elif not user.memberships.exists():
+                # No memberships registered, create the last one
+                pass
+
+    def _guess_order_payment_method(self, user):
+        # TODO: look in din_user.source and UserLogMessage
+        pass
 
     def handle(self, *args, **options):
         # Get data
         org_units_data = self.get_org_units_data()
         group_data = self.get_group_data()
         users = self.get_user_data()
-        member_cards_data = self.get_member_card_data()
         user_log_messages = self.get_user_update_log()
+        member_cards_data = self.get_member_card_data()
 
-        # Create database
-        with transaction.atomic():
-            self.create_database(users, member_cards_data, org_units_data, group_data, user_log_messages)
+        # Get membership data
+        kassa_memberships = self.get_kassa_memberships(users)
+        sms_memberships = self.get_sms_memberships()
+
+        if not options['dry_run']:
+            # Create database
+            with transaction.atomic():
+                self.create_database(
+                    users, member_cards_data, org_units_data, group_data, user_log_messages, sms_memberships,
+                    kassa_memberships)

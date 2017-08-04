@@ -56,7 +56,7 @@ class TekstmeldingEvent(models.Model):
 
     timestamp = models.DateTimeField()
     incoming = models.ForeignKey('tekstmelding.IncomingMessage', blank=True, null=True)
-    outgoing = models.ForeignKey('tekstmelding.OutgoingMessage', blank=True, null=True)
+    outgoing = models.ForeignKey('tekstmelding.OutgoingMessage', blank=True, null=True, related_name='events')
     dlr = models.ForeignKey('tekstmelding.DeliveryReport', blank=True, null=True)
     action = models.TextField(choices=ACTION_CHOICES, blank=True, null=True)
     user = models.ForeignKey('inside.InsideUser', blank=True, null=True)

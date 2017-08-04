@@ -23,7 +23,7 @@ class OrderSerializer(serializers.ModelSerializer):
 class BaseMembershipOrder(object):
     def _create_order(self, membership, transaction_id, phone_number=None, member_card=None):
         order = Order.objects.create(
-            payment_method=Order.BY_PHYSICAL_CARD,
+            payment_method=Order.BY_CASH_REGISTER,
             transaction_id=transaction_id,
             price_nok=membership.membership_type.price,
             product=membership,

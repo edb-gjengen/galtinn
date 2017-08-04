@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
@@ -5,7 +8,7 @@ from rest_framework.test import APITestCase
 
 from django.test import TestCase
 
-from dusken.models import DuskenUser
+from dusken.models import DuskenUser, Membership, MembershipType
 
 
 class DuskenUserAPITestCase(APITestCase):
@@ -81,3 +84,26 @@ class DuskenUserPhoneValidationTestCase(TestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed)
+
+
+class DuskenUserMembershipTestCase(TestCase):
+    def setUp(self):
+        self.user = DuskenUser.objects.create_user('olanord', email='olanord@example.com')
+        self.now = timezone.now().date()
+
+    def test_has_membership(self):
+        self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 0)
+        self.assertFalse(self.user.is_member)
+
+        m = Membership.objects.create(
+            user=self.user, start_date=self.now, end_date=self.now + timedelta(days=365),
+            membership_type=MembershipType.objects.first())
+        self.assertTrue(self.user.is_member)
+        self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 1)
+
+        m.end_date = None
+        m.save()
+        self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 1)
+
+        m.delete()
+        self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 0)
