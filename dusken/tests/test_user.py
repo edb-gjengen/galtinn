@@ -90,6 +90,11 @@ class DuskenUserMembershipTestCase(TestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user('olanord', email='olanord@example.com')
         self.now = timezone.now().date()
+        self.membership_type = MembershipType.objects.create(
+            name='Cool Club Membership',
+            slug='standard',
+            duration=timedelta(days=365),
+            is_default=True)
 
     def test_has_membership(self):
         self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 0)
