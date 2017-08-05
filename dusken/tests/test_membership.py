@@ -36,6 +36,7 @@ class MembershipTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
         self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(Order.objects.first().payment_method, Order.BY_CARD)
         self.assertEqual(Membership.objects.count(), 1)
 
     def test_stripe_renewing_valid_membership_gives_proper_start_date(self):
@@ -141,6 +142,7 @@ class KassaMembershipTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
         self.assertEqual(response.data.get('user'), self.user.pk)
         self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(Order.objects.first().payment_method, Order.BY_CASH_REGISTER)
         self.assertEqual(Membership.objects.count(), 1)
 
     def test_kassa_create_for_non_user(self):

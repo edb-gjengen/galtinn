@@ -21,9 +21,9 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class BaseMembershipOrder(object):
-    def _create_order(self, membership, transaction_id, phone_number=None, member_card=None):
+    def _create_order(self, membership, transaction_id, payment_method, phone_number=None, member_card=None):
         order = Order.objects.create(
-            payment_method=Order.BY_CASH_REGISTER,
+            payment_method=payment_method,
             transaction_id=transaction_id,
             price_nok=membership.membership_type.price,
             product=membership,
@@ -77,6 +77,7 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
                 membership_type=validated_data.get('membership_type'))
             order = self._create_order(
                 membership=membership,
+                payment_method=Order.BY_CARD,
                 transaction_id=validated_data.get('transaction_id'))
 
         return order
@@ -133,6 +134,7 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
                 membership_type=validated_data.get('membership_type'))
             order = self._create_order(
                 membership=membership,
+                payment_method=Order.BY_CASH_REGISTER,
                 phone_number=phone_number if not user else None,
                 transaction_id=validated_data.get('transaction_id'))
             if user and member_card and not user.member_cards.filter(pk=member_card.pk).exists():
