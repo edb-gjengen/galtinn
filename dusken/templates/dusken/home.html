@@ -50,14 +50,18 @@
                         <li class="list-group-item membership"><span>
                             {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</strong>
                         </span></li>
-                        <li class="list-group-item payment"><span>
-                        {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.get_payment_method_display }}</strong>
-                        </span></li>
+                        {% if ms.order %}
+                            <li class="list-group-item payment"><span>
+                            {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.get_payment_method_display }}</strong>
+                            </span></li>
+                        {% endif %}
                     {% endif %}
                 </ul>
                 <div class="card-block">
                     {% if ms.is_valid and not ms.expires_in_less_than_one_month %}
-                        <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
+                        {% if ms.order %}
+                            <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
+                        {% endif %}
                     {% else %}
                         <a href="{% url "membership-renew" %}" class="btn btn-outline-primary btn-block">
                         {% if ms == Null %}
