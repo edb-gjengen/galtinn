@@ -307,7 +307,8 @@ class GroupProfile(BaseModel):
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if self.posix_name != '' and self.__class__.objects.filter(posix_name=self.posix_name).exists():
+        if self.posix_name != '' and self.__class__.objects.filter(
+                posix_name=self.posix_name).exclude(id=self.id).exists():
             raise ValidationError(_('Posix name must be unique or empty'))
 
     def save(self, **kwargs):
