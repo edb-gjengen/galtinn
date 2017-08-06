@@ -1,7 +1,11 @@
+import dj_database_url
 import os
 import logging
 import raven
+
 from .base import *
+
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
