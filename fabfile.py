@@ -28,9 +28,9 @@ def deploy():
             run('python manage.py migrate')  # Run DB migrations
 
     # Reload gunicorn
-    sudo('/usr/bin/supervisorctl pid dusken.neuf.no | xargs kill -HUP', shell=False)
+    sudo('/usr/bin/supervisorctl pid galtinn.neuf.no | xargs kill -HUP', shell=False)
     # Reload celery
-    sudo('/usr/bin/supervisorctl pid dusken.neuf.no-celery | xargs kill -HUP', shell=False)
+    sudo('/usr/bin/supervisorctl pid galtinn.neuf.no-celery | xargs kill -HUP', shell=False)
 
 
 def install():
