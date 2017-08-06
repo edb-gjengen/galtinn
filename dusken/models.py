@@ -122,7 +122,6 @@ class DuskenUser(AbstractUser):
             if orig.phone_number != self.phone_number:
                 self.phone_number_confirmed = False
                 self.phone_number_confirmed_at = None
-                self.phone_number_key = create_phone_key()
 
     def claim_orders(self):
         if self.phone_number_confirmed:
