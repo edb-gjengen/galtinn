@@ -1,7 +1,8 @@
 import django_filters
 from phonenumber_field.modelfields import PhoneNumberField
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-from rest_framework import viewsets, filters
+from rest_framework import views, viewsets, filters, permissions
+from rest_framework.response import Response
 from dusken.api.serializers.users import DuskenUserSerializer
 from dusken.models import DuskenUser
 
@@ -30,3 +31,11 @@ class DuskenUserViewSet(viewsets.ModelViewSet):
         if self.request.user.has_perm('dusken.view_duskenuser'):
             return self.queryset
         return self.queryset.filter(pk=self.request.user.pk)
+
+
+class CurrentUserView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get(self, request):
+        serializer = DuskenUserSerializer(request.user)
+        return Response(serializer.data)

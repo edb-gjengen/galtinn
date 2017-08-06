@@ -7,7 +7,7 @@ from dusken.api.views.cards import (MemberCardViewSet,
 from dusken.api.views.memberships import (MembershipViewSet,
                                           MembershipChargeView,
                                           KassaMembershipView)
-from dusken.api.views.users import DuskenUserViewSet
+from dusken.api.views.users import DuskenUserViewSet, CurrentUserView
 from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.validate import validate
 
@@ -19,6 +19,9 @@ router.register(r'orders', OrderViewSet, base_name='order-api')
 urlpatterns = router.urls
 
 urlpatterns += [
+    # Current user
+    url(r'me/$', CurrentUserView.as_view(), name='user-current'),
+
     # Stripe
     url(r'membership/charge/$', MembershipChargeView.as_view(),
         name='membership-charge'),
