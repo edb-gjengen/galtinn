@@ -24,6 +24,9 @@
         <p>{{ orgunit.description }}</p>
     {% endif %}
     <h5>{% trans "Members" %}</h5>
+    {% if user|has_group:orgunit.admin_group %}
+        <p><a class="btn btn-outline-primary btn-block" href="{% url "orgunit-edit-users" orgunit.slug %}">{%  trans "Manage members" %}</a></p>
+    {% endif %}
     <ul class="list-group">
     {% for user in orgunit.group.user_set.all %}
         <li class="list-group-item"><span>

@@ -28,3 +28,9 @@ class OrgUnitEditView(VolunteerRequiredMixin, UpdateView):
     def get_success_url(self):
         slug = self.kwargs['slug']
         return reverse('orgunit-detail', args=[slug])
+
+
+class OrgUnitEditUsersView(VolunteerRequiredMixin, DetailView):
+    model = OrgUnit
+    template_name = 'dusken/orgunit_edit_users.html'
+    context_object_name = 'orgunit'

@@ -5,7 +5,8 @@ from dusken.views.email import EmailSubscriptions
 from dusken.views.general import IndexView, HomeView, OrderDetailView, HomeVolunteerView
 from dusken.views.membership import (MembershipPurchaseView, MembershipListView,
                                      MembershipRenewView)
-from dusken.views.orgunit import OrgUnitListView, OrgUnitDetailView, OrgUnitEditView
+from dusken.views.orgunit import (OrgUnitListView, OrgUnitDetailView, OrgUnitEditView,
+                                  OrgUnitEditUsersView)
 from dusken.views.user import (UserRegisterView, UserActivateView,
                                UserDetailView, UserDetailMeView, UserListView,
                                UserUpdateView, UserUpdateMeView,
@@ -46,6 +47,7 @@ urlpatterns = [
     url(r'^orgunits/$', OrgUnitListView.as_view(), name='orgunit-list'),
     url(r'^orgunit/(?P<slug>[0-9a-z-]+)/$', OrgUnitDetailView.as_view(), name='orgunit-detail'),
     url(r'^orgunit/edit/(?P<slug>[0-9a-z-]+)/$', OrgUnitEditView.as_view(), name='orgunit-edit'),
+    url(r'^orgunit/edit/users/(?P<slug>[0-9a-z-]+)/$', OrgUnitEditUsersView.as_view(), name='orgunit-edit-users'),
     url(r'^orgunits/(?P<slug>[0-9a-z-]+)/$', OrgUnitDetailView.as_view(), name='orgunit-detail'),
 
     # Email

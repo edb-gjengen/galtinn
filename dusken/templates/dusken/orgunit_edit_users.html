@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n bootstrap4 user svg %}
+{% block body %}
+<h4 class="card-title"><span>{% svg "icons/users" %} {{ orgunit.name }}</span></h4>
+{% if user|has_group:orgunit.admin_group %}
+    {% for user in orgunit.group.user_set.all %}
+        <li class="list-group-item justify-content-between"><span>
+            {% if user|has_group:orgunit.admin_group %}
+                {% svg "icons/star" %}
+            {% else %}
+                {% svg "icons/user" %}
+            {% endif %}
+            <a href="{% url "user-detail" user.uuid %}"> {{ user.get_full_name }}</a> - <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+            {% if user|has_group:orgunit.admin_group %}
+                ({% trans "Admin" %})
+            {% endif %}
+        </span><span>
+            <a  class="btn btn-outline-primary btn-block mt-2 mt-md-0 p-1" href="#">{%  trans "Remove" %}</a>
+        </span></li>
+    {% empty %}
+        {% trans "No members" %}
+    {% endfor %}
+{% else %}
+    {% trans "You have no right to edit this organisation" %}
+{% endif %}
+{% endblock %}
