@@ -123,8 +123,8 @@ class DuskenUser(AbstractUser):
                 self.phone_number_confirmed = False
                 self.phone_number_confirmed_at = None
 
-    def claim_orders(self):
-        if self.phone_number_confirmed:
+    def claim_orders(self, ignore_confirmed_state=False):
+        if self.phone_number_confirmed or (ignore_confirmed_state and self.phone_number):
             for order in self.unclaimed_orders:
                 order.user = self
                 order.product.user = self
@@ -404,6 +404,7 @@ class Order(BaseModel):
 
     @classmethod
     def get_unclaimed_orders(cls, phone_number=None, member_card=None):
+        # FIXME: Move this to a method on OrderManager (django way)
         return cls.objects.filter(
             Q(user__isnull=True) & (
                 Q(phone_number__isnull=False, phone_number=phone_number) |
