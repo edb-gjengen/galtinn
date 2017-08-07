@@ -1,3 +1,4 @@
+import os
 from datetime import timedelta
 
 from django.utils import timezone
@@ -8,7 +9,7 @@ from rest_framework.test import APITestCase
 
 from django.test import TestCase
 
-from dusken.models import DuskenUser, Membership, MembershipType
+from dusken.models import DuskenUser, Order, Membership, MembershipType
 
 
 class DuskenUserAPITestCase(APITestCase):
@@ -84,6 +85,69 @@ class DuskenUserPhoneValidationTestCase(TestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed)
+
+
+class DuskenUserActivateTestCase(TestCase):
+    def setUp(self):
+        self.membership_type = MembershipType.objects.create(
+            name='Cool Club Membership',
+            slug='standard',
+            duration=timedelta(days=365),
+            is_default=True)
+        today = timezone.now().date()
+        self.membership = Membership.objects.create(
+            start_date=today - timedelta(days=10),
+            end_date=today + timedelta(days=10),
+            membership_type=self.membership_type)
+        self.order = Order.objects.create(
+            payment_method=Order.BY_CASH_REGISTER,
+            product=self.membership,
+            price_nok=0,
+            phone_number='+4794430002',
+            transaction_id='14bf6820-3aca-42c8-8a32-61d1b4c44781')
+        self.user_data = {
+            'first_name': 'Ola',
+            'last_name': 'Nordmann',
+            'email': 'olanord@example.com',
+            'g-recaptcha-response': 'PASSED',
+            'code': self.order.transaction_id[:8],
+        }
+        os.environ['RECAPTCHA_TESTING'] = 'True'
+
+    def tearDown(self):
+        os.environ['RECAPTCHA_TESTING'] = 'False'
+
+    def test_invalid_url_does_not_render_form(self):
+        kwargs = {
+            'phone': '4712345678',
+            'code': '12345678'
+        }
+        url = reverse('user-activate', kwargs=kwargs)
+        response = self.client.post(url)
+        # Very clever.
+        self.assertTrue(b'the link is invalid' in response.content)
+
+    def test_invalid_post_data_does_not_render_form(self):
+        kwargs = {
+            'phone': '4712345678',
+            'code': '12345678'
+        }
+        url = reverse('user-activate', kwargs=kwargs)
+        response = self.client.post(url, self.user_data)
+        # Very clever.
+        self.assertTrue(b'the link is invalid' in response.content)
+
+    def test_right_combination_confirms_phone_number_and_claims_order(self):
+        kwargs = {
+            'phone': str(self.order.phone_number).replace('+', ''),
+            'code': self.order.transaction_id[:8]
+        }
+        url = reverse('user-activate', kwargs=kwargs)
+        response = self.client.post(url, self.user_data)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)  # redirect to home
+        user = DuskenUser.objects.get(email=self.user_data.get('email'))
+        self.assertTrue(user.phone_number_confirmed)
+        self.assertTrue(user.is_member)
 
 
 class DuskenUserMembershipTestCase(TestCase):

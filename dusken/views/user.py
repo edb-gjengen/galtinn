@@ -4,8 +4,9 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, FormView
 
-from dusken.forms import UserEmailValidateForm, UserPhoneValidateForm, DuskenUserForm, DuskenUserUpdateForm
-from dusken.models import DuskenUser
+from dusken.forms import (UserEmailValidateForm, UserPhoneValidateForm, DuskenUserForm, 
+                          DuskenUserUpdateForm, DuskenUserActivateForm)
+from dusken.models import DuskenUser, Order
 from dusken.utils import send_validation_sms, generate_username
 
 
@@ -18,6 +19,50 @@ class UserRegisterView(FormView):
         self.object = form.save(commit=False)
         self.object.username = generate_username(self.object.first_name, self.object.last_name)
         self.object.save()
+
+        # Log the user in
+        self.object.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(self.request, self.object)
+
+        return redirect(self.get_success_url())
+
+
+class UserActivateView(FormView):
+    """ Registration via link sent by SMS. """
+    template_name = 'dusken/user_activate.html'
+    form_class = DuskenUserActivateForm
+    success_url = reverse_lazy('home')
+
+    def get(self, request, *args, **kwargs):
+        phone_number = kwargs.get('phone')
+        code = kwargs.get('code')
+        self.valid_link = False
+        try:
+            user = DuskenUser.objects.get(phone_number=phone_number)
+        except DuskenUser.DoesNotExist:
+            user = None
+        if not user and len(code) == 8:
+            self.valid_link = Order.objects.filter(phone_number=phone_number,
+                                                   transaction_id__startswith=code).exists()
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['valid_link'] = getattr(self, 'valid_link', False)
+        return context
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['phone_number'] = '+' + self.kwargs.get('phone', '')
+        initial['code'] = self.kwargs.get('code')
+        return initial
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.phone_number = self.get_initial().get('phone_number')
+        self.object.username = generate_username(self.object.first_name, self.object.last_name)
+        self.object.save()
+        self.object.confirm_phone_number()
 
         # Log the user in
         self.object.backend = 'django.contrib.auth.backends.ModelBackend'

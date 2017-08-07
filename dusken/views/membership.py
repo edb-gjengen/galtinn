@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import FormView, ListView
 
-from dusken.forms import DuskenUserForm, MembershipActivateForm, MembershipRenewForm
+from dusken.forms import DuskenUserForm, MembershipRenewForm
 from dusken.models import MembershipType, Membership
 
 logger = logging.getLogger(__name__)
@@ -49,12 +49,3 @@ class MembershipListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user).order_by('-start_date')
-
-
-class MembershipActivateView(FormView):
-    template_name = 'dusken/membership_activate.html'
-    form_class = MembershipActivateForm
-
-    def form_valid(self, form):
-        # TODO
-        print("YEY")

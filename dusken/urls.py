@@ -4,9 +4,10 @@ from dusken.api import urls as api_urls
 from dusken.views.email import EmailSubscriptions
 from dusken.views.general import IndexView, HomeView, OrderDetailView, HomeVolunteerView
 from dusken.views.membership import (MembershipPurchaseView, MembershipListView,
-                                     MembershipActivateView, MembershipRenewView)
+                                     MembershipRenewView)
 from dusken.views.orgunit import OrgUnitListView, OrgUnitDetailView, OrgUnitEditView
-from dusken.views.user import (UserRegisterView, UserDetailView, UserDetailMeView, UserListView,
+from dusken.views.user import (UserRegisterView, UserActivateView,
+                               UserDetailView, UserDetailMeView, UserListView,
                                UserUpdateView, UserUpdateMeView,
                                UserEmailValidateView, UserEmailValidateSuccessView,
                                UserPhoneValidateView, UserPhoneValidateSuccessView)
@@ -24,6 +25,7 @@ urlpatterns = [
 
     # User auth
     url(r'^register/$', UserRegisterView.as_view(), name='user-register'),
+    url(r'^activate/(?P<phone>[0-9]+)/(?P<code>[0-9a-zA-Z-]+)$', UserActivateView.as_view(), name='user-activate'),
     url(r'^users/(?P<slug>[0-9a-z-]+)/validate_email/(?P<email_key>[0-9a-zA-Z-]+)$',
         UserEmailValidateView.as_view(),
         name='user-email-validate'),
@@ -36,7 +38,6 @@ urlpatterns = [
     url(r'^memberships/$', MembershipListView.as_view(), name='membership-list'),
     url(r'^memberships/purchase/$', MembershipPurchaseView.as_view(), name='membership-purchase'),
     url(r'^memberships/renew/$', MembershipRenewView.as_view(), name='membership-renew'),
-    url(r'^memberships/activate/$', MembershipActivateView.as_view(), name='membership-activate'),
 
     url(r'^order/(?P<slug>[0-9a-z-]+)/$', OrderDetailView.as_view(), name='payment-detail'),
 
