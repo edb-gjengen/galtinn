@@ -3,7 +3,7 @@ import html
 import random
 import re
 from collections import defaultdict
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from pprint import pprint
 
 from django.contrib.auth.hashers import make_password
@@ -627,9 +627,6 @@ class Command(BaseCommand):
             m = Membership.objects.create(**m)
             Order.objects.create(product=m, **order_data)
 
-        # Keep phone numbers for later
-        sms_membership_phone_numbers = [m['phone_number'] for m in sms_memberships]
-
         # Create SMS memberships
         print("\tCreating SMS memberships...")
         for m in sms_memberships:
@@ -647,8 +644,9 @@ class Command(BaseCommand):
             membership = Membership.objects.create(**m)
             Order.objects.create(product=membership, **order_data)
 
-        # Claim SMS-memberships (after order creation)
-        for user in DuskenUser.objects.filter(phone_number__in=sms_membership_phone_numbers):
+        # Claim memberships (after order creation)
+        print("\tClaiming SMS and Card memberships...")
+        for user in DuskenUser.objects.all():
             user.claim_orders(ignore_confirmed_state=True)
 
         # Create unhandled memberships if none exists or
@@ -681,11 +679,13 @@ class Command(BaseCommand):
     def _get_snapporder_membership(self, user):
         log_strings_query = Q(comment='Medlemskap fornyet via snapporder.') | Q(comment='Medlemskap registrert via snapporder.')
         iu = InsideUser.objects.get(pk=user.legacy_id)
-        # FIXME: filter +/- N days
-        # Note: https://docs.djangoproject.com/en/1.11/ref/models/querysets/#database-time-zone-definitions
+        # FIXME: filter +/- N days?
+        purchase_date = iu.expires - timedelta(days=365)
+        purchase_datetime = datetime(
+            year=purchase_date.year, month=purchase_date.month, day=purchase_date.day, tzinfo=timezone.utc)
         has_snapporder_membership = UserUpdate.objects.filter(
             user_updated=iu,
-            date__gte=iu.expires - timedelta(days=365)).filter(log_strings_query).exists()
+            date__gte=purchase_datetime).filter(log_strings_query).exists()
         if not has_snapporder_membership:
             print("Missing valid membership", iu.pk, iu.expires, iu.source)
             return None
