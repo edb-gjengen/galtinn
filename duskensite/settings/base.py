@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_extensions',
     'django_filters',
+    'django_select2',
     'captcha',
     'svg',
 ]

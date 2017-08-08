@@ -35,3 +35,8 @@ urlpatterns += [
 urlpatterns += [
     url(r'^(?P<url>.*/)$', flatpage),
 ]
+
+# Select2
+urlpatterns += [
+    url(r'^select2/', include('django_select2.urls')),
+]

@@ -2,11 +2,32 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import fields
 from django.utils.translation import ugettext as _
+from django_select2.forms import ModelSelect2Widget
 
 from dusken.utils import email_exist, phone_number_exist
 from dusken.models import DuskenUser, Order
 from phonenumber_field.formfields import PhoneNumberField
 from captcha.fields import ReCaptchaField
+
+
+class UserSearchWidget(ModelSelect2Widget):
+    model = DuskenUser
+    queryset = DuskenUser.objects.by_membership_end_date()
+    search_fields = [
+        'first_name__icontains',
+        'last_name__icontains',
+        'username__icontains',
+    ]
+    max_results = 200
+
+
+# TODO: Make proper form
+class UserWidgetTestForm(forms.Form):
+    user = forms.ModelChoiceField(
+        queryset=DuskenUser.objects.all(),
+        label='User',
+        widget=UserSearchWidget(attrs={'data-placeholder': _('User')})
+    )
 
 
 class DuskenUserForm(forms.ModelForm):

@@ -12,6 +12,7 @@ const vendorJS = [
     'node_modules/tether/dist/**/*.min.js',
     'node_modules/bootstrap/dist/**/*.min.js',
     'node_modules/underscore/underscore-min.js',
+    'node_modules/select2/dist/js/select2.min.js',
 ];
 
 // TODO: postcss

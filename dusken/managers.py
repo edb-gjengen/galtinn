@@ -15,6 +15,8 @@ class DuskenUserQuerySet(QuerySet):
         """ Users with NO valid membership"""
         return self.exclude(self.get_membership_query())
 
+    def by_membership_end_date(self):
+        return self.order_by('-memberships__end_date')
 
 class DuskenUserManager(UserManager):
     def get_queryset(self):
@@ -25,3 +27,6 @@ class DuskenUserManager(UserManager):
 
     def no_valid_membership(self):
         return self.get_queryset().no_valid_membership()
+
+    def by_membership_end_date(self):
+        return self.get_queryset().by_membership_end_date()
