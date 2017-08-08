@@ -17,11 +17,20 @@ class OrgUnitDetailView(VolunteerRequiredMixin, DetailView):
     context_object_name = 'orgunit'
 
     def get_context_data(self, **kwargs):
-        admins = self.get_object().admin_group.user_set.order_by('first_name', 'last_name')
+        if self.get_object().admin_group:
+            admins = self.get_object().admin_group.user_set.order_by('first_name', 'last_name')
+        else:
+            admins = []
+
+        if self.get_object().group:
+            members = self.get_object().group.user_set.order_by('first_name', 'last_name').exclude(pk__in=admins)
+        else:
+            members = []
+
         return {
             **super().get_context_data(**kwargs),
             'admins': admins,
-            'members': self.get_object().group.user_set.order_by('first_name', 'last_name').exclude(pk__in=admins),
+            'members': members,
         }
 
 

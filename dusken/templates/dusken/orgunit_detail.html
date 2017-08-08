@@ -23,7 +23,7 @@
         <br><h5>{% trans "Description:" %}</h5>
         <p>{{ orgunit.description|safe }}</p>
     {% endif %}
-    <h5>{% trans "Members" %} ({{ orgunit.group.user_set.count }})</h5>
+    <h5>{% trans "Members" %} ({{ orgunit.group.user_set.count|default:0 }})</h5>
     <ul class="list-group">
     {% for user in admins %}
         <li class="list-group-item"><span>
