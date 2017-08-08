@@ -114,7 +114,7 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         if user:
             self._validate_user_can_renew(user)
         else:
-            last_order = Order.get_unclaimed_orders(phone_number, member_card).first()
+            last_order = Order.objects.unclaimed(phone_number, member_card).first()
             if last_order and not last_order.product.expires_in_less_than_one_month:
                 raise ValidationError(
                     'Cannot renew a membership that expires in more than one month')
@@ -148,7 +148,7 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         if user and user.is_member:
             return user.last_membership.end_date + timezone.timedelta(days=1)
         elif not user:
-            last_order = Order.get_unclaimed_orders(phone_number, member_card).first()
+            last_order = Order.objects.unclaimed(phone_number, member_card).first()
             if last_order and last_order.product.is_valid:
                 return last_order.product.end_date + timezone.timedelta(days=1)
         return timezone.now().date()

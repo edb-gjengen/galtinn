@@ -17,7 +17,7 @@ from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
-from dusken.managers import DuskenUserManager
+from dusken.managers import DuskenUserManager, OrderManager
 from dusken.utils import create_email_key, send_validation_email, create_phone_key
 
 
@@ -99,7 +99,7 @@ class DuskenUser(AbstractUser):
 
     @property
     def unclaimed_orders(self):
-        return Order.get_unclaimed_orders(phone_number=self.phone_number)
+        return Order.objects.unclaimed(phone_number=self.phone_number)
 
     def save(self, **kwargs):
         # If email or phone number has changed, invalidate confirmation state
@@ -399,16 +399,10 @@ class Order(BaseModel):
     phone_number = PhoneNumberField(blank=True, null=True)
     member_card = models.ForeignKey('dusken.MemberCard', related_name='orders', null=True, blank=True)
 
+    objects = OrderManager()
+
     def price_nok_kr(self):
         return int(self.price_nok / 100)
-
-    @classmethod
-    def get_unclaimed_orders(cls, phone_number=None, member_card=None):
-        # FIXME: Move this to a method on OrderManager (django way)
-        return cls.objects.filter(
-            Q(user__isnull=True) & (
-                Q(phone_number__isnull=False, phone_number=phone_number) |
-                Q(member_card__isnull=False, member_card=member_card))).order_by('-created')
 
     def __str__(self):
         return "{}".format(self.uuid)
