@@ -2,7 +2,7 @@
 {% load i18n bootstrap4 user svg %}
 {% block body %}
 <h4 class="card-title"><span>{% svg "icons/users" %} {{ orgunit.name }}</span></h4>
-{% if user|has_group:orgunit.admin_group %}
+{% if user|has_admin_group:orgunit.admin_group %}
     <form method="post">
         {% csrf_token %}
         {% bootstrap_form form %}

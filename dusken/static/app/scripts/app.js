@@ -171,6 +171,28 @@ function remove_user(user, orgunit) {
     });
 }
 
+function add_user(user, orgunit, type) {
+    $.ajax({
+        url: '/api/orgunit/add/user/',
+        data: {
+            'user': user,
+            'orgunit': orgunit,
+            'type': type
+        },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                //TODO: view in list of users
+            } else {
+                alert('Failed to add user');
+            }
+        },
+        error: function() {
+            alert('Failed to add user');
+        }
+    });
+}
+
 $(document).ready(function() {
     const $membershipPurchase = $('.membership-purchase');
     const $mailchimpSub = $('.js-toggle-mailchimp-subscription');
