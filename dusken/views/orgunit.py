@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView, UpdateView
 
 from dusken.models import OrgUnit
 from dusken.views.mixins import VolunteerRequiredMixin
+from dusken.forms import UserWidgetTestForm
 
 
 class OrgUnitListView(VolunteerRequiredMixin, ListView):
@@ -49,3 +50,9 @@ class OrgUnitEditUsersView(VolunteerRequiredMixin, DetailView):
     model = OrgUnit
     template_name = 'dusken/orgunit_edit_users.html'
     context_object_name = 'orgunit'
+
+    def get_context_data(self, **kwargs):
+        context = super(OrgUnitEditUsersView, self).get_context_data(**kwargs)
+        context['user_search'] = UserWidgetTestForm
+        return context
+

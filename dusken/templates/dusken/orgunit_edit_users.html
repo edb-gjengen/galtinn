@@ -3,6 +3,11 @@
 {% block body %}
 <h4 class="card-title"><span>{% svg "icons/users" %} {{ orgunit.name }}</span></h4>
 {% if user|has_admin_group:orgunit.admin_group %}
+    {% bootstrap_form user_search %}
+    <div class="p-2">
+        <button class="btn btn-primary">{% trans "Add member" %}</button>
+        <button class="btn btn-primary">{% trans "Add admin" %}</button>
+    </div>
     {% for user in orgunit.group.user_set.all %}
         <li class="list-group-item justify-content-between"><span>
             {% if user|has_group:orgunit.admin_group %}
@@ -15,7 +20,7 @@
                 ({% trans "Admin" %})
             {% endif %}
         </span><span>
-            <button  class="btn btn-outline-primary btn-block mt-2 mt-md-0 p-1" id="user_remove_{{ user.uuid }}"
+            <button  class="btn btn-outline-primary btn-block p-1" id="user_remove_{{ user.uuid }}"
                      onclick="remove_user('{{ user.uuid }}', '{{ orgunit.slug }}');">{%  trans "Remove" %}</button>
         </span></li>
     {% empty %}
