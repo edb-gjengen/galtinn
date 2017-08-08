@@ -747,9 +747,10 @@ class Command(BaseCommand):
 
         # Delete users with no memberships
         print("\tDelete users with no memberships")
-        for u in DuskenUser.objects.no_valid_membership():
+        users_with_no_memberships = DuskenUser.objects.filter(memberships__isnull=True).exclude(is_superuser=True)
+        for u in users_with_no_memberships:
             print('Deleting user {} with legacy_id={}'.format(u.get_full_name(), u.legacy_id))
-        DuskenUser.objects.no_valid_membership().exclude(is_superuser=True).delete()
+            users_with_no_memberships.delete()
 
     def handle(self, *args, **options):
         # Get data

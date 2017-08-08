@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, UpdateView
 
@@ -7,7 +6,6 @@ from dusken.views.mixins import VolunteerRequiredMixin
 
 
 class OrgUnitListView(VolunteerRequiredMixin, ListView):
-    model = OrgUnit
     template_name = 'dusken/orgunit_list.html'
     context_object_name = 'orgunits'
     queryset = OrgUnit.objects.filter(is_active=True)
