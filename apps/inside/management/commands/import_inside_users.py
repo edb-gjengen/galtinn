@@ -3,7 +3,7 @@ import html
 import random
 import re
 from collections import defaultdict
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from pprint import pprint
 
 from django.contrib.auth.hashers import make_password
@@ -64,13 +64,18 @@ class Command(BaseCommand):
                                                      slug='trial',
                                                      expiry_type=MembershipType.EXPIRY_END_OF_YEAR,
                                                      defaults={'name': 'Trial membership'})
+        m4, c = MembershipType.objects.get_or_create(pk=4,
+                                                     duration=timedelta(days=365*5),
+                                                     slug='five_year',
+                                                     defaults={'name': 'Five year membership'})
         self.membership_types = {
             'standard': m1,
             'life_long': m2,
             'trial': m3,
+            'five_year': m4,
         }
 
-        # Create places of study
+        # Create places of study and legacy mapping
         self.pos_map = {}
         for ipos in InsidePlaceOfStudy.objects.all():
             pos, _ = PlaceOfStudy.objects.get_or_create(name=ipos.navn)
@@ -82,6 +87,12 @@ class Command(BaseCommand):
         for user, group in rels:
             if user is not None:
                 self.group_rel_map[user].append(group)
+
+        self.log_map = {}
+        uus = UserUpdate.objects.order_by('date').values_list('user_updated__pk', 'date')
+        for user, ts in uus:
+            if user not in self.log_map:
+                self.log_map[user] = ts
 
     def _get_city_from_postal_code(self, postal_code):
         return self.zip_to_city_map.get(postal_code)
@@ -208,6 +219,40 @@ class Command(BaseCommand):
 
         return False
 
+    def get_snapporder_membership(self, user):
+        log_strings_query = (Q(comment='Medlemskap fornyet via snapporder.')
+                             | Q(comment='Medlemskap registrert via snapporder.'))
+        iu = InsideUser.objects.get(pk=user.legacy_id)
+        purchase_date = iu.expires - timedelta(days=365)
+        purchase_datetime = datetime(
+            year=purchase_date.year, month=purchase_date.month, day=purchase_date.day, tzinfo=timezone.utc)
+        has_snapporder_membership = UserUpdate.objects.filter(
+            user_updated=iu,
+            date__gte=purchase_datetime).filter(log_strings_query).exists()
+
+        if not has_snapporder_membership:
+            return None
+
+        return {
+            'start_date': iu.expires - timedelta(days=365),
+            'end_date': iu.expires,
+            'payment_method': Order.BY_APP,
+            'membership_type': self.membership_types['standard'],
+            'phone_number': user.phone_number,
+            'price_nok': 25000,
+            'user': user
+        }
+
+    def _create_unknown_membership(self, membership, user):
+        # No memberships registered, create the last one for reference (assume 1 year membership)
+        order_data = {
+            'payment_method': Order.PAYMENT_METHOD_OTHER,
+            'price_nok': 0,
+            'user': user
+        }
+        m_obj = Membership.objects.create(user=user, **membership)
+        Order.objects.create(product=m_obj, **order_data)
+
     @log_time('Fetching user data...')
     def get_user_data(self):
         user_field_map = {
@@ -217,7 +262,7 @@ class Command(BaseCommand):
             'ldap_username': 'username',
             'email': 'email',
             'birthdate': 'date_of_birth',
-            'placeofstudy': 'place_of_study',
+            'placeofstudy': 'place_of_study_id',
             'password': 'password',
             'ldap_password': 'ldap_password',
 
@@ -238,12 +283,12 @@ class Command(BaseCommand):
         more_fields = ['addresstype', 'registration_status', 'source', 'expires', 'username']
         fields = list(user_field_map.keys()) + more_fields
 
-        i_users = InsideUser.objects.order_by('pk').reverse().values(*fields)
+        i_users = InsideUser.objects.order_by('pk').values(*fields)
         d_users = []
         for u in i_users:
+            # Skip unwanted users
             if u['username'] in skip_usernames:
                 continue
-
             if self._is_spam_user(u):
                 continue
 
@@ -282,29 +327,35 @@ class Command(BaseCommand):
 
                 if dst_field == 'date_joined':
                     if new_val is None:
-                        new_val = timezone.now()
+                        # First log entry ts
+                        if u['pk'] in self.log_map:
+                            new_val = self.log_map[u['pk']]
+                        else:
+                            new_val = timezone.now()
 
-                if dst_field == 'place_of_study':
+                if dst_field == 'place_of_study_id':
                     new_val = self.pos_map.get(new_val)
-                    if new_val is None:
+                    if not new_val:
                         continue
-                    new_val = PlaceOfStudy.objects.get(pk=new_val)
 
                 if dst_field == 'phone_number' and (new_val is None or new_val == '-'):
                     new_val = ''
 
                 if dst_field == 'password':
                     # Note: All mysql PASSWORD() hashes are 41 chars
-                    if len(new_val) != 41:
+                    if len(new_val) == 41:
                         new_val = self._hash_password(new_val)
                     else:
-                        # Also remove ldap_password
+                        # Throw away all old hashes and unset ldap_password
                         new_val = self._get_unusable_password()
                         new_user['ldap_password'] = ''
 
                 # Clean
                 if dst_field in ['email', 'username']:
                     new_val = new_val.lower().strip()
+
+                if dst_field in ['first_name', 'last_name']:
+                    new_val = new_val.strip()
 
                 if dst_field == 'phone_number_confirmed':
                     new_val = bool(new_val)
@@ -435,7 +486,7 @@ class Command(BaseCommand):
             except TekstmeldingEvent.DoesNotExist:
                 continue  # Note: This happens with only two memberships, which have been refunded
 
-            msisdn = str(m['incoming__msisdn'])[:-2]
+            msisdn = str(m['incoming__msisdn'])[:-2]  # work around floatfield
             m_data = {
                 'start_date': m['timestamp'].date(),
                 'end_date': m['timestamp'].date() + timedelta(days=365),
@@ -557,8 +608,6 @@ class Command(BaseCommand):
         print("\tCreating users...")
         _legacy_users_map = {}
         for u in users:
-            # TODO: User.set_unusuable_password on:
-            # - users not active and membership expired before 2015-01-01 or not lifelong
             memberships = u.pop('memberships')
             ldap_password = u.pop('ldap_password')
 
@@ -636,37 +685,72 @@ class Command(BaseCommand):
                 'price_nok': m.pop('price_nok'),
             }
 
-            legacy_user = None
             if 'legacy_user' in m:
-                legacy_user = m.pop('legacy_user')
-                m['user'] = DuskenUser.objects.get(pk=_legacy_users_map[legacy_user])
+                m['user'] = DuskenUser.objects.get(pk=_legacy_users_map[m.pop('legacy_user')])
             elif 'card_number' in m:
                 order_data['member_card'] = MemberCard.objects.get(card_number=m.pop('card_number'))
 
             membership = Membership.objects.create(**m)
             Order.objects.create(product=membership, **order_data)
 
-            if legacy_user:
-                membership.user.claim_orders()  # ninja in orders after creation!
+        # Creating two 5-year memberships
+        print("\tCreating two 5-year memberships...")
+        for u in DuskenUser.objects.filter(pk__in=[_legacy_users_map.get(10709), _legacy_users_map.get(16430)]):
+            end_date = date(year=2018, month=8, day=1)
+            m = {
+                'start_date': end_date - timedelta(days=365*5),
+                'end_date': end_date,
+                'membership_type': self.membership_types['standard'],
+                'user': u
+            }
+            m_obj = Membership.objects.create(**m)
+
+            order_data = {
+                'payment_method': Order.PAYMENT_METHOD_OTHER,
+                'price_nok': 25000,
+                'user': u,
+                'product': m_obj,
+            }
+
+            Order.objects.create(**order_data)
+
+        # Claim memberships (after order creation)
+        print("\tClaiming SMS and card memberships...")
+        for user in DuskenUser.objects.no_valid_membership():
+            user.claim_orders(ignore_confirmed_state=True)
 
         # Create unhandled memberships if none exists or
         print("\tCreating unhandled memberships")
-        # TODO: Create memberships for users with a membership that is not expired and try to guess source
         for user, membership in unhandled_memberships:
             user.refresh_from_db()
             now = timezone.now().date()
             inside_membership_valid = membership['end_date'] >= now
             if inside_membership_valid and not user.is_member:
-                # Should have a valid membership, but no
-                print("Missing valid membership", user.legacy_id)
-                pass
-            elif not user.memberships.exists():
-                # No memberships registered, create the last one
-                pass
+                m = self.get_snapporder_membership(user)
 
-    def _guess_order_payment_method(self, user):
-        # TODO: look in din_user.source and UserLogMessage
-        pass
+                if m:
+                    order_data = {
+                        'phone_number': m.pop('phone_number'),
+                        'payment_method': m.pop('payment_method'),
+                        'price_nok': m.pop('price_nok'),
+                        'user': m['user']
+                    }
+                    m_obj = Membership.objects.create(**m)
+                    Order.objects.create(product=m_obj, **order_data)
+                else:
+                    # Should have a valid membership, but no
+                    print("Missing valid membership", user.legacy_id)
+                    self._create_unknown_membership(membership, user)
+
+            elif not user.memberships.exists():
+                self._create_unknown_membership(membership, user)
+
+        # Delete users with no memberships
+        print("\tDelete users with no memberships")
+        users_with_no_memberships = DuskenUser.objects.filter(memberships__isnull=True).exclude(is_superuser=True)
+        for u in users_with_no_memberships:
+            print('Deleting user {} with legacy_id={}'.format(u.get_full_name(), u.legacy_id))
+        users_with_no_memberships.delete()
 
     def handle(self, *args, **options):
         # Get data

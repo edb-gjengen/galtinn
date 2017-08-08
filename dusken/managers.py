@@ -4,10 +4,16 @@ from django.utils import timezone
 
 
 class DuskenUserQuerySet(QuerySet):
+    def get_membership_query(self):
+        return Q(memberships__isnull=False, memberships__end_date__isnull=True) | Q(memberships__end_date__gt=timezone.now().date())
+
     def with_valid_membership(self):
-        """ Get all users with valid membership"""
-        query = Q(memberships__isnull=False, memberships__end_date__isnull=True) | Q(memberships__end_date__gt=timezone.now().date())
-        return self.filter(query)
+        """ Users with a valid membership"""
+        return self.filter(self.get_membership_query())
+
+    def no_valid_membership(self):
+        """ Users with NO valid membership"""
+        return self.exclude(self.get_membership_query())
 
 
 class DuskenUserManager(UserManager):
@@ -16,3 +22,6 @@ class DuskenUserManager(UserManager):
 
     def with_valid_membership(self):
         return self.get_queryset().with_valid_membership()
+
+    def no_valid_membership(self):
+        return self.get_queryset().no_valid_membership()
