@@ -343,10 +343,10 @@ class Command(BaseCommand):
 
                 if dst_field == 'password':
                     # Note: All mysql PASSWORD() hashes are 41 chars
-                    if len(new_val) != 41:
+                    if len(new_val) == 41:
                         new_val = self._hash_password(new_val)
                     else:
-                        # Also remove ldap_password
+                        # Throw away all old hashes and unset ldap_password
                         new_val = self._get_unusable_password()
                         new_user['ldap_password'] = ''
 
