@@ -15,7 +15,8 @@
                 ({% trans "Admin" %})
             {% endif %}
         </span><span>
-            <a  class="btn btn-outline-primary btn-block mt-2 mt-md-0 p-1" href="#">{%  trans "Remove" %}</a>
+            <button  class="btn btn-outline-primary btn-block mt-2 mt-md-0 p-1" id="user_remove_{{ user.uuid }}"
+                     onclick="remove_user('{{ user.uuid }}', '{{ orgunit.slug }}');">{%  trans "Remove" %}</button>
         </span></li>
     {% empty %}
         {% trans "No members" %}

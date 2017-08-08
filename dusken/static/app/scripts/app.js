@@ -150,6 +150,27 @@ function formatMessage(message, alert) {
         '</div>';
 }
 
+function remove_user(user, orgunit) {
+    $.ajax({
+        url: '/api/orgunit/remove/user/',
+        data: {
+            'user': user,
+            'orgunit': orgunit
+        },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                $('#user_remove_'+user).parent().parent().slideUp();
+            } else {
+                alert('Failed to remove user');
+            }
+        },
+        error: function() {
+            alert('Failed to remove user');
+        }
+    });
+}
+
 $(document).ready(function() {
     const $membershipPurchase = $('.membership-purchase');
     const $mailchimpSub = $('.js-toggle-mailchimp-subscription');

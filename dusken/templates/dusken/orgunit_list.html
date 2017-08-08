@@ -13,7 +13,7 @@
     </li>
     {% for org in orgunits %}
         <li class="row list-group-item">
-            <div class="col-md pt-1 pb-1"><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a></div>
+            <div class="col-md"><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a></div>
             <div class="col-md">{{ org.phone_number }}</div>
             <div class="col-md">{{ org.email }}</div>
             <div class="col-md">
