@@ -21,7 +21,7 @@
     </ul>
     {% if orgunit.description %}
         <br><h5>{% trans "Description:" %}</h5>
-        <p>{{ orgunit.description }}</p>
+        <p>{{ orgunit.description|safe }}</p>
     {% endif %}
     <h5>{% trans "Members" %}</h5>
     <ul class="list-group">
