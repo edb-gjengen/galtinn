@@ -3,8 +3,7 @@ from django.conf.urls import url, include
 from dusken.api import urls as api_urls
 from dusken.views.email import EmailSubscriptions
 from dusken.views.general import IndexView, HomeView, OrderDetailView, HomeVolunteerView
-from dusken.views.membership import (MembershipPurchaseView, MembershipListView,
-                                     MembershipRenewView)
+from dusken.views.membership import MembershipListView
 from dusken.views.orgunit import (OrgUnitListView, OrgUnitDetailView, OrgUnitEditView,
                                   OrgUnitEditUsersView)
 from dusken.views.user import (UserRegisterView, UserActivateView,
@@ -37,8 +36,6 @@ urlpatterns = [
 
     # Membership
     url(r'^memberships/$', MembershipListView.as_view(), name='membership-list'),
-    url(r'^memberships/purchase/$', MembershipPurchaseView.as_view(), name='membership-purchase'),
-    url(r'^memberships/renew/$', MembershipRenewView.as_view(), name='membership-renew'),
 
     url(r'^order/(?P<slug>[0-9a-z-]+)/$', OrderDetailView.as_view(), name='payment-detail'),
 

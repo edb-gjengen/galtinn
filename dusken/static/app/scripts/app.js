@@ -82,8 +82,8 @@ function validate(formData, serverData) {
 
 function openStripe(email) {
     var stripeHandler = StripeCheckout.configure({
-        key: config.stripe_pub_key,
-        image: config.image,
+        key: stripe_config.stripe_pub_key,
+        image: stripe_config.image,
         locale: 'auto',
         token: onStripeToken,
         allowRememberMe: false  // Disallow the remember me function for new users
@@ -92,9 +92,9 @@ function openStripe(email) {
     // Open Checkout with further options
     stripeHandler.open({
         name: 'Det Norske Studentersamfund',
-        description: config.membership_name,
+        description: stripe_config.membership_name,
         currency: 'NOK',
-        amount: config.membership_price,
+        amount: stripe_config.membership_price,
         email: email
     });
 
@@ -109,7 +109,7 @@ function onStripeToken(token) {
     // You can access the token ID with `token.id` and user email with `token.email`
     var postData = {
         'stripe_token': token,
-        'membership_type': config.membership_type
+        'membership_type': stripe_config.membership_type
     };
     $.ajax(urls.charge, {
         data: JSON.stringify(postData),
@@ -194,28 +194,22 @@ function add_user(user, orgunit, type) {
 }
 
 $(document).ready(function() {
-    const $membershipPurchase = $('.membership-purchase');
+    const $membershipPurchase = $('#membership-purchase-form');
     const $mailchimpSub = $('.js-toggle-mailchimp-subscription');
     const $mailmanSub = $('.js-toggle-mailman-subscription');
     const $messages = $('.messages');
 
-    if( $membershipPurchase.length ) {
+    if ($membershipPurchase.length) {
         /* Membership purchase */
         urls = {
-            charge: config.charge_url,
+            charge: stripe_config.charge_url,
             profile: '/home/'
         };
 
-        $('#purchase-button').on('click', function(e) {
+        $('#purchase-button').on('click', function (e) {
             e.preventDefault();
-            serverValidation(getFormData($('#user-form')));
+            openStripe(getFormData($('#membership-purchase-form')).email);
         });
-
-        $('#renew-button').on('click', function(e) {
-            e.preventDefault();
-            openStripe(getFormData($('#user-form')).email);
-        });
-
     }
     /* Send validation email */
     const $validationEmailBtn = $('.js-send-validation-email');

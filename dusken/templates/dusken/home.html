@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n svg %}
+{% load i18n svg static %}
 {% block nav %}{% include "nav.html" with active='home' %}{% endblock %}
 {% block body %}
     <script>
@@ -52,7 +52,7 @@
                         </span></li>
                         {% if ms.order %}
                             <li class="list-group-item payment"><span>
-                            {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- {% trans "by" %} {{ ms.order.get_payment_method_display }}</strong>
+                            {% trans "Payment" %}: <strong>{{ ms.order.price_nok_kr }},- ({{ ms.order.get_payment_method_display }})</strong>
                             </span></li>
                         {% endif %}
                     {% endif %}
@@ -63,13 +63,7 @@
                             <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url "membership-renew" %}" class="btn btn-outline-primary btn-block">
-                        {% if ms == Null %}
-                            {% trans "Buy membership" %}
-                        {% else %}
-                            {% trans "Renew membership" %}
-                        {% endif %}
-                        </a>
+                        {% include "dusken/membership_purchase_form.html" %}
                     {% endif %}
                 </div>
             {% endwith %}

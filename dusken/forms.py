@@ -93,7 +93,7 @@ class DuskenUserUpdateForm(forms.ModelForm):
                   'street_address', 'street_address_two', 'postal_code', 'city', 'country']
 
 
-class MembershipRenewForm(forms.Form):
+class MembershipPurchaseForm(forms.Form):
     email = forms.EmailField(widget=forms.HiddenInput())
 
 

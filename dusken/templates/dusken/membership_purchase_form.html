@@ -1,0 +1,23 @@
+{% load i18n static %}
+<script src="https://checkout.stripe.com/checkout.js"></script>
+<script>
+    var stripe_config = {
+        image: '{% static "dist/images/logo.png" %}',
+        stripe_pub_key: '{{ view.stripe_public_key }}',
+        membership_type: '{{ view.membership_type.slug }}',
+        membership_name: '{{ view.membership_type.name }}',
+        membership_price: {{ view.membership_type.price }},
+        charge_url: '{% url "membership-charge" %}'
+    };
+</script>
+<form method="post" id="membership-purchase-form">
+    <div class="js-validation-errors"></div>
+    {{ view.membership_purchase_form }}
+    <button id="purchase-button" class="btn btn-outline-primary btn-block">
+    {% if ms == null %}
+        {% trans "Buy membership" %}
+    {% else %}
+        {% trans "Renew membership" %}
+    {% endif %} ({{ view.membership_type.price_nok_kr }} NOK)
+    </button>
+</form>

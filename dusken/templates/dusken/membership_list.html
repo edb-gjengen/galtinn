@@ -7,8 +7,8 @@
     {% with user.last_membership as ms %}
         <div>
         {% if not ms.is_valid %}
-            {% trans "No valid membership found" %}.<br>
-            <a href="{% url "membership-renew" %}" class="btn btn-outline-primary btn-block">{% trans "Renew membership" %}</a>
+            <p>{% trans "No valid membership found" %}.</p>
+            <p>{% include "dusken/membership_purchase_form.html" %}</p>
         {% endif %}
         </div>
         <br>
@@ -21,11 +21,13 @@
             </div>
             <ul class="list-group list-group-flush">
                 {% if ms.is_valid %}
-                    <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "Validity" %}: {% trans "Valid" %}</span></li>
+                    <li class="list-group-item list-group-item-success">{% trans "Validity" %}: {% trans "Valid" %}</li>
                 {% else %}
-                    <li class="list-group-item list-group-item-warning"><span>{% svg "icons/sad" %} {% trans "Validity" %}: {% trans "Expired" %}</span></li>
+                    <li class="list-group-item list-group-item-warning">{% trans "Validity" %}: {% trans "Expired" %}</li>
                 {% endif %}
-                    <li class="list-group-item">{% trans "Purchased" %}<span>{{ ms.order.created }} {% trans "by" %} {{ ms.order.get_payment_method_display }}</span></li>
+                {% if ms.order %}
+                    <li class="list-group-item">{% trans "Purchased" %} {{ ms.order.created }} ({{ ms.order.get_payment_method_display }})</span></li>
+                {% endif %}
             </ul>
             {% if ms.order %}
                 <div class="card-block">

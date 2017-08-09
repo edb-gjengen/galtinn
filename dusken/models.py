@@ -223,6 +223,10 @@ class MembershipType(BaseModel):
     duration = models.DurationField(default=timedelta(days=365), null=True, blank=True)
     expiry_type = models.CharField(max_length=254, choices=EXPIRY_TYPES, default=EXPIRY_DURATION)
 
+    @property
+    def price_nok_kr(self):
+        return int(self.price / 100)
+
     def __str__(self):
         return "{}".format(self.name)
 

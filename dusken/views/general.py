@@ -6,7 +6,8 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import FormView, DetailView
 
-from dusken.models import Order
+from dusken.models import Order, MembershipType
+from dusken.forms import MembershipPurchaseForm
 
 
 class IndexView(FormView):
@@ -30,8 +31,17 @@ class IndexView(FormView):
 class HomeView(LoginRequiredMixin, DetailView):
     template_name = 'dusken/home.html'
 
+    stripe_public_key = settings.STRIPE_PUBLIC_KEY
+    membership_type = None
+
     def get_object(self, queryset=None):
         return self.request.user
+
+    def get_context_data(self, **kwargs):
+        self.membership_type = MembershipType.get_default()
+        self.membership_purchase_form = MembershipPurchaseForm(
+            initial={'email': self.request.user.email})
+        return super().get_context_data(**kwargs)
 
 
 class HomeVolunteerView(LoginRequiredMixin, DetailView):
