@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.forms import fields
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django_select2.forms import ModelSelect2Widget
 
 from dusken.utils import email_exist, phone_number_exist
