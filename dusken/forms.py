@@ -94,13 +94,14 @@ class DuskenUserActivateForm(DuskenUserForm):
 class DuskenUserUpdateForm(forms.ModelForm):
     first_name = fields.CharField(label=_('First name'))
     last_name = fields.CharField(label=_('Last name'))
-    date_of_birth = fields.DateField(label=_('Date of birth'), widget=forms.DateInput(attrs={'type': 'date'}))
     email = fields.EmailField(label=_('Email'), widget=forms.EmailInput(attrs={'placeholder': _('Email')}))
     phone_number = PhoneNumberField(label=_('Phone number'))
+    date_of_birth = fields.DateField(
+        label=_('Date of birth'), required=False, widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:
         model = DuskenUser
-        fields = ['first_name', 'last_name', 'date_of_birth', 'email', 'phone_number', 'place_of_study',
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'date_of_birth', 'place_of_study',
                   'street_address', 'street_address_two', 'postal_code', 'city', 'country']
 
 

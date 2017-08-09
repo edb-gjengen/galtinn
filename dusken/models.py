@@ -107,8 +107,10 @@ class DuskenUser(AbstractUser):
         else:
             Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first().user_set.add(self)
 
-    def log(self, message, user):
-        UserLogMessage(user=self, message=message, changed_by=user).save()
+    def log(self, message, changed_by=None):
+        if changed_by is None:
+            changed_by = self
+        UserLogMessage(user=self, message=message, changed_by=changed_by).save()
 
     def save(self, **kwargs):
         # If email or phone number has changed, invalidate confirmation state
@@ -158,8 +160,7 @@ class DuskenUser(AbstractUser):
         return any((self.street_address,
                    self.street_address_two,
                    self.postal_code,
-                   self.city,
-                   self.country))
+                   self.city))
 
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:
@@ -365,33 +366,33 @@ class OrgUnit(MPTTModel, BaseModel):
     parent = TreeForeignKey(
         'self', verbose_name=_('parent'), null=True, blank=True, related_name='children', db_index=True)
 
-    def add_user(self, userobj, user):
-        self.group.user_set.add(userobj)
-        self.log('Added user {}'.format(userobj), user)
-        userobj.log('Added to {} OrgUnit'.format(self), user)
-        userobj.update_volunteer_status()
+    def add_user(self, user_obj, changed_by):
+        self.group.user_set.add(user_obj)
+        self.log('Added user {}'.format(user_obj), changed_by)
+        user_obj.log('Added to {} OrgUnit'.format(self), changed_by)
+        user_obj.update_volunteer_status()
 
-    def add_admin(self, userobj, user):
-        self.group.user_set.add(userobj)
-        self.admin_group.user_set.add(userobj)
-        self.log('Added admin {}'.format(userobj), user)
-        userobj.log('Added to {} OrgUnit as admin'.format(self), user)
-        userobj.update_volunteer_status()
+    def add_admin(self, user_obj, changed_by):
+        self.group.user_set.add(user_obj)
+        self.admin_group.user_set.add(user_obj)
+        self.log('Added admin {}'.format(user_obj), changed_by)
+        user_obj.log('Added to {} OrgUnit as admin'.format(self), changed_by)
+        user_obj.update_volunteer_status()
 
-    def remove_user(self, userobj, user):
-        self.group.user_set.remove(userobj)
-        self.admin_group.user_set.remove(userobj)
-        self.log('Removed user {}'.format(userobj), user)
-        userobj.log('Removed from {} OrgUnit'.format(self), user)
-        userobj.update_volunteer_status()
+    def remove_user(self, user_obj, changed_by):
+        self.group.user_set.remove(user_obj)
+        self.admin_group.user_set.remove(user_obj)
+        self.log('Removed user {}'.format(user_obj), changed_by)
+        user_obj.log('Removed from {} OrgUnit'.format(self), changed_by)
+        user_obj.update_volunteer_status()
 
-    def remove_admin(self, userobj, user):
-        self.admin_group.user_set.remove(userobj)
-        self.log('Removed {} from admin'.format(userobj), user)
-        userobj.log('No longer admin in {} OrgUnit'.format(self), user)
+    def remove_admin(self, user_obj, changed_by):
+        self.admin_group.user_set.remove(user_obj)
+        self.log('Removed {} from admin'.format(user_obj), changed_by)
+        user_obj.log('No longer admin in {} OrgUnit'.format(self), changed_by)
 
-    def log(self, message, user):
-        OrgUnitLogMessage(org_unit=self, message=message, changed_by=user).save()
+    def log(self, message, changed_by):
+        OrgUnitLogMessage(org_unit=self, message=message, changed_by=changed_by).save()
 
     def __str__(self):
         if self.short_name:
