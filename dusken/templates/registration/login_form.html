@@ -3,7 +3,7 @@
     <form method="post">
         {% bootstrap_form form %}
         {% csrf_token %}
-        <a href="{% url "password_reset" %}">{% trans "Forgot username or password?" %}</a><br>
+        <a href="{% url "password_reset" %}">{% trans "Forgot your password?" %}</a><br>
         <div class="submit-button-wrap"><button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
         </div>
     </form>

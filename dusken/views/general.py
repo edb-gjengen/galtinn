@@ -1,17 +1,16 @@
 from django.conf import settings
 from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import FormView, DetailView
 
 from dusken.models import Order, MembershipType
-from dusken.forms import MembershipPurchaseForm
+from dusken.forms import MembershipPurchaseForm, DuskenAuthenticationForm
 
 
 class IndexView(FormView):
-    form_class = AuthenticationForm
+    form_class = DuskenAuthenticationForm
     template_name = 'dusken/index.html'
     success_url = reverse_lazy('home')
 

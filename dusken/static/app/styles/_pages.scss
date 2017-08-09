@@ -3,10 +3,19 @@
     text-align: center;
 
     &__welcome {
+        &__text {
+            margin: 1.5rem auto;
+            max-width: 350px;
+        }
     }
 
     &__login {
         margin-top: 2rem;
+
+        em {
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
     }
 
     .login-form {
@@ -59,5 +68,12 @@
 
     &__actions {
         text-align: right;
+    }
+}
+
+/* User register */
+.user-register {
+    h4 {
+        text-align: center;
     }
 }

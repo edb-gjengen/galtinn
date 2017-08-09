@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.core.exceptions import ValidationError
 from django.forms import fields
 from django.utils.translation import ugettext as _
@@ -85,7 +86,6 @@ class DuskenUserActivateForm(DuskenUserForm):
         if not valid:
             raise ValidationError(_('You have already registered or the link is invalid.'))
 
-
     class Meta:
         model = DuskenUser
         fields = ['first_name', 'last_name', 'email', 'phone_number']
@@ -134,7 +134,7 @@ class UserPhoneValidateForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
-        super(UserPhoneValidateForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean(self):
         if self.user.phone_number_confirmed:
@@ -143,3 +143,10 @@ class UserPhoneValidateForm(forms.Form):
     def clean_phone_key(self):
         if self.user.phone_number_key != self.cleaned_data.get('phone_key'):
             raise ValidationError(_('Invalid code'))
+
+
+class DuskenAuthenticationForm(AuthenticationForm):
+    username = UsernameField(
+        max_length=254,
+        widget=forms.TextInput(attrs={'autofocus': True, 'placeholder': _('Email address / username')}),
+    )
