@@ -13,27 +13,32 @@
         </div>
         <br>
     {% endwith %}
-    {% for ms in membership_list %}
-        <section class="membership-item card">
-            <div class="card-block">
-                <h4 class="card-title">{% svg "icons/license" %} {{ ms.membership_type }}</h4>
-                <h6 class="card-subtitle text-muted">{% trans "Validity period" %}: {{ ms.start_date }} - {% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</h6>
+    <div class="row">
+        {% for ms in membership_list %}
+            <div class="col-md-4">
+                <section class="membership-item card">
+                    <div class="card-block">
+                        <h4 class="card-title">{% svg "icons/license" %} {{ ms.membership_type }}</h4>
+                        <h6 class="card-subtitle text-muted">{% trans "Period" %}: {{ ms.start_date }} - {% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% if ms.is_valid %}
+                            <li class="list-group-item list-group-item-success">{% trans "Valid until" %}: <strong>{% if ms.end_date %}&nbsp;{{ ms.end_date }}{% else %}&nbsp;{% trans "Lifelong" %}{% endif %}</strong>
+                              </li>
+                        {% else %}
+                            <li class="list-group-item list-group-item-warning">{% trans "Expired" %}</li>
+                        {% endif %}
+                        {% if ms.order %}
+                            <li class="list-group-item">{% trans "Purchased" %} {{ ms.order.created }} ({{ ms.order.get_payment_method_display }})</li>
+                        {% endif %}
+                    </ul>
+                    {% if ms.order %}
+                        <div class="card-block">
+                            <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
+                        </div>
+                    {% endif %}
+                </section>
             </div>
-            <ul class="list-group list-group-flush">
-                {% if ms.is_valid %}
-                    <li class="list-group-item list-group-item-success">{% trans "Validity" %}: {% trans "Valid" %}</li>
-                {% else %}
-                    <li class="list-group-item list-group-item-warning">{% trans "Validity" %}: {% trans "Expired" %}</li>
-                {% endif %}
-                {% if ms.order %}
-                    <li class="list-group-item">{% trans "Purchased" %} {{ ms.order.created }} ({{ ms.order.get_payment_method_display }})</span></li>
-                {% endif %}
-            </ul>
-            {% if ms.order %}
-                <div class="card-block">
-                    <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
-                </div>
-            {% endif %}
-        </section>
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endblock %}

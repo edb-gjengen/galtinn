@@ -5,7 +5,7 @@
         <form method="post">
             {% csrf_token %}
             {% bootstrap_form form %}
-            <button type="submit" class="btn btn-primary">{% trans "Update profile" %}</button>
+            <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
         </form>
     {% else %}
         You have no right to edit this user

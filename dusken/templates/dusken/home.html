@@ -55,18 +55,20 @@
                         {% endif %}
                     {% endif %}
                 </ul>
-                <div class="card-block">
-                    {% if ms.is_valid and not ms.expires_in_less_than_one_month %}
-                        {% if ms.order %}
+                {% if ms.is_valid and not ms.expires_in_less_than_one_month %}
+                    {% if ms.order %}
+                        <div class="card-block">
                             <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
-                        {% endif %}
-                    {% else %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="card-block">
                         {% include "dusken/membership_purchase_form.html" %}
                         {% if ms == null %}
                             <div class="membership-duration-hint">{% trans "Membership is valid for 1 year" %}</div>
                         {% endif %}
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             {% endwith %}
             </div>
         </div>
