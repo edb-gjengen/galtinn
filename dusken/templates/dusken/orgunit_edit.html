@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n bootstrap4 user svg %}
 {% block body %}
-<h4 class="card-title"><span>{% svg "icons/users" %} {{ orgunit.name }}</span></h4>
+    <h4 class="card-title"><span>{% svg "icons/users" %} <a href="{% url "orgunit-detail" orgunit.slug %}">{{ orgunit.name }}</a></span></h4>
 {% if user|has_admin_group:orgunit.admin_group %}
     <form method="post">
         {% csrf_token %}
