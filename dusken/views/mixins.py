@@ -18,4 +18,7 @@ class VolunteerRequiredMixin(PermissionRequiredMessagesMixin):
 
     def has_permission(self):
         user = self.request.user
+        if user.is_authenticated() and user.is_superuser:
+            return True
+
         return user.is_authenticated() and user.is_volunteer
