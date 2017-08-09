@@ -152,6 +152,7 @@ class DuskenUser(AbstractUser):
         zip_code_part = [str(self.postal_code), str(self.city)]
         zip_code_part = ' '.join(x for x in zip_code_part if x != 'None')
         country = self.country.name if self.country else ''
+
         return '{}{}, {}'.format(address_part + ', ' if address_part else '', zip_code_part, country)
 
     def have_address(self):
