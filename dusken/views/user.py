@@ -13,7 +13,7 @@ from dusken.utils import send_validation_sms, generate_username
 class UserRegisterView(FormView):
     template_name = 'dusken/user_register.html'
     form_class = DuskenUserForm
-    success_url = reverse_lazy('membership-renew')
+    success_url = reverse_lazy('membership-list')
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
