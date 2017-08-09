@@ -459,6 +459,9 @@ class PlaceOfStudy(BaseModel):
     short_name = models.CharField(_('short name'), max_length=16)
 
     def __str__(self):
+        if not self.short_name:
+            return self.name
+
         return '{} ({})'.format(self.name, self.short_name)
 
     class Meta:
