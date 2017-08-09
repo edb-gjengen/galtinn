@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-09 17:41+0200\n"
-"PO-Revision-Date: 2017-08-09 17:45+0200\n"
+"POT-Creation-Date: 2017-08-09 17:55+0200\n"
+"PO-Revision-Date: 2017-08-09 18:25+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -45,7 +45,7 @@ msgstr "Bankkortet ditt er avvist"
 
 #: api/views/orgunits.py:48 templates/dusken/orgunit_edit_users.html:25
 msgid "Remove"
-msgstr "Flett"
+msgstr "Fjern"
 
 #: api/views/orgunits.py:49 templates/dusken/orgunit_detail.html:35
 #: templates/dusken/orgunit_edit_users.html:21
@@ -512,7 +512,7 @@ msgid "Validate phone number"
 msgstr "Bekreft mobilnummer"
 
 #: templates/dusken/home.html:40
-msgid "Become a member now!"
+msgid "Become a member!"
 msgstr "Bli medlem du også!"
 
 #: templates/dusken/home.html:42
@@ -640,8 +640,8 @@ msgid ""
 "This is Galtinn, the membership database at <a href=\"https://"
 "studentersamfundet.no\">Chateau Neuf - The Norwegian Student Society</a>."
 msgstr ""
-"Dette er Galtinn, medlemdatabasen på <a href=\"https://studentersamfundet.no"
-"\">Chateau Neuf - Det Norske Studentersamfundet</a>."
+"Dette er Galtinn, som er medlemsdatabasen på <a href=\"https://"
+"studentersamfundet.no\">Chateau Neuf - Det Norske Studentersamfundet</a>."
 
 #: templates/dusken/index.html:9
 msgid "Become a member"
@@ -845,7 +845,7 @@ msgstr "Logg inn igjen"
 #: templates/registration/login_form.html:6
 #: templates/registration/password_reset_form.html:4
 msgid "Forgot your password?"
-msgstr "Glemt passord ditt?"
+msgstr "Glemt passordet ditt?"
 
 #: templates/registration/login_form.html:7
 msgid "Log in"
@@ -964,6 +964,9 @@ msgstr "Du har ikke tilgang til denne siden"
 #: views/mixins.py:16
 msgid "You need to be a volunteer to see this page"
 msgstr "Du må være registrert aktiv for å se denne siden"
+
+#~ msgid "Become a member now!"
+#~ msgstr "Bli medlem du også!"
 
 #~ msgid "Edit user"
 #~ msgstr "Endre bruker"
