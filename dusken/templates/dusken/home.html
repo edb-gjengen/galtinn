@@ -36,13 +36,11 @@
                                 <a href="{% url "user-phone-validate" %}">{% trans "Validate phone number" %}</a>
                             </span></li>
                         {% else %}
-                            <li class="list-group-item list-group-item-danger"><span>{% svg "icons/sad" %}
-                                {% if ms == null %}
-                                    {% trans "You have no membership" %}
-                                {% else %}
-                                    {% trans "Membership expired." %}
-                                {% endif %}
-                            </span></li>
+                            {% if ms == null %}
+                                <li class="list-group-item"><span>{% trans "Become a member now!" %}</span></li>
+                            {% else %}
+                                <li class="list-group-item list-group-item-danger"><span>{% svg "icons/sad" %} {% trans "Membership expired." %}</span></li>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
 
@@ -64,6 +62,9 @@
                         {% endif %}
                     {% else %}
                         {% include "dusken/membership_purchase_form.html" %}
+                        {% if ms == null %}
+                            <div class="membership-duration-hint">{% trans "Membership is valid for 1 year" %}</div>
+                        {% endif %}
                     {% endif %}
                 </div>
             {% endwith %}
