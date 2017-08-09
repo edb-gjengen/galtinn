@@ -19,12 +19,13 @@ class UserRegisterView(FormView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.username = generate_username(self.object.first_name, self.object.last_name)
+        self.object.set_password(form.cleaned_data['password'])
         self.object.save()
 
         # Log the user in
         self.object.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, self.object)
-
+        
         return redirect(self.get_success_url())
 
 
