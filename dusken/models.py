@@ -101,6 +101,15 @@ class DuskenUser(AbstractUser):
     def unclaimed_orders(self):
         return Order.objects.unclaimed(phone_number=self.phone_number)
 
+    def update_volunteer_status(self):
+        if self.groups.count() <= 1 and self.is_volunteer:
+            Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first().user_set.remove(self)
+        else:
+            Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first().user_set.add(self)
+
+    def log(self, message, user):
+        UserLogMessage(user=self, message=message, changed_by=user).save()
+
     def save(self, **kwargs):
         # If email or phone number has changed, invalidate confirmation state
         self.invalidate_confirmation_state()
@@ -355,6 +364,31 @@ class OrgUnit(MPTTModel, BaseModel):
     # Hierarchical :-)
     parent = TreeForeignKey(
         'self', verbose_name=_('parent'), null=True, blank=True, related_name='children', db_index=True)
+
+    def add_user(self, userobj, user):
+        self.group.user_set.add(userobj)
+        self.log('Added user {}'.format(userobj), user)
+        userobj.log('Added to {} OrgUnit'.format(self), user)
+        userobj.update_volunteer_status()
+
+    def add_admin(self, userobj, user):
+        self.add_user(userobj, user)
+        self.admin_group.user_set.add(userobj)
+
+    def remove_user(self, userobj, user):
+        self.group.user_set.remove(userobj)
+        self.admin_group.user_set.remove(userobj)
+        self.log('Removed user {}'.format(userobj), user)
+        userobj.log('Removed from {} OrgUnit'.format(self), user)
+        userobj.update_volunteer_status()
+
+    def remove_admin(self, userobj, user):
+        self.admin_group.user_set.remove(userobj)
+        self.log('Removed {} from admin'.format(userobj), user)
+        userobj.log('No longer admin in {} OrgUnit'.format(self), user)
+
+    def log(self, message, user):
+        OrgUnitLogMessage(org_unit=self, message=message, changed_by=user).save()
 
     def __str__(self):
         if self.short_name:

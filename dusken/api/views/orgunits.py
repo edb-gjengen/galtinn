@@ -12,9 +12,7 @@ def remove_user(request):
     orgunit = OrgUnit.objects.get(slug=orgunit_slug)
     if request.user.has_group(orgunit.admin_group) or request.user.is_superuser:
         if user.has_group(orgunit.group):
-            orgunit.group.user_set.remove(user)
-            if user.has_group(orgunit.admin_group):
-                orgunit.admin_group.user_set.remove(user)
+            orgunit.remove_user(user, request.user)
             success = True
         else:
             success = False
@@ -36,14 +34,12 @@ def add_user(request):
     orgunit = OrgUnit.objects.get(slug=orgunit_slug)
     success = False
     if request.user.has_group(orgunit.admin_group) or request.user.is_superuser:
-        if not user.has_group(orgunit.group):
-            orgunit.group.user_set.add(user)
-            success = True
         if not user.has_group(orgunit.admin_group) and member_type == 'admin':
-            orgunit.admin_group.user_set.add(user)
+            orgunit.add_admin(user, request.user)
             success = True
-    if success:
-        Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first().user_set.add(user)
+        elif not user.has_group(orgunit.group):
+            orgunit.add_user(user, request.user)
+            success = True
     data = {
         'success': success,
         'user_uuid': user.uuid,
