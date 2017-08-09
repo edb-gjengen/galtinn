@@ -456,7 +456,7 @@ class Order(BaseModel):
 
 class PlaceOfStudy(BaseModel):
     name = models.CharField(_('name'), max_length=255)
-    short_name = models.CharField(_('short name'), max_length=16)
+    short_name = models.CharField(_('short name'), max_length=16, default='', blank=True)
 
     def __str__(self):
         if not self.short_name:
