@@ -10,7 +10,7 @@ from dusken.api.views.memberships import (MembershipViewSet,
 from dusken.api.views.users import DuskenUserViewSet, CurrentUserView
 from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.validate import validate
-from dusken.api.views.orgunits import remove_user
+from dusken.api.views.orgunits import remove_user, add_user
 
 router = DefaultRouter()
 router.register(r'users', DuskenUserViewSet, base_name='user-api')
@@ -42,5 +42,6 @@ urlpatterns += [
 
     # OrgUnit
     url(r'orgunit/remove/user/$', remove_user, name='remove_user'),
+    url(r'orgunit/add/user/$', add_user, name='add_user'),
 
 ]
