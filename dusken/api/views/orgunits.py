@@ -1,5 +1,6 @@
+from django.contrib.auth.models import Group
 from django.http import JsonResponse, HttpResponseForbidden
-from dusken.models import DuskenUser, OrgUnit
+from dusken.models import DuskenUser, OrgUnit, GroupProfile
 from django.utils.translation import ugettext as _
 
 def remove_user(request):
@@ -41,6 +42,8 @@ def add_user(request):
         if not user.has_group(orgunit.admin_group) and member_type == 'admin':
             orgunit.admin_group.user_set.add(user)
             success = True
+    if success:
+        Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first().user_set.add(user)
     data = {
         'success': success,
         'user_uuid': user.uuid,
