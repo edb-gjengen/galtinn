@@ -109,7 +109,7 @@ class DuskenUserActivateTestCase(TestCase):
             'first_name': 'Ola',
             'last_name': 'Nordmann',
             'email': 'olanord@example.com',
-            'password': 'password',
+            'password': 'irifjckekemvjfgsdfshdf',
             'g-recaptcha-response': 'PASSED',
             'code': self.order.transaction_id[:8],
         }

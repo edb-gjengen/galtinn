@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.forms import fields
 from django.utils.translation import ugettext as _
@@ -61,6 +62,11 @@ class DuskenUserForm(forms.ModelForm):
         if phone_number_exist(phone_number):
             raise ValidationError(_('Phone number already in use'))
         return phone_number
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        validate_password(password)
+        return password
 
     class Meta:
         model = DuskenUser
