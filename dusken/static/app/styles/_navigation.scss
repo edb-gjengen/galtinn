@@ -1,5 +1,5 @@
 .nav-wrap {
-    background-color: #f58220;
+    background-color: $color-orange;
 
     .navbar {
         max-width: $grid-max-width;
@@ -13,7 +13,18 @@
             fill: white;
         }
     }
+}
+#main-navigation {
+    padding: 0 1rem;
 
+    a.nav-link {
+        color: white;
+        transition: all 0.14s ease-in-out;
+
+        &:hover {
+            background-color: rgba(white, 0.2);
+        }
+    }
 }
 
 .user-menu {
@@ -30,11 +41,13 @@
         }
     }
 }
+
 .language-select {
     &.hidden {
         display: none;
     }
 }
+
 .nav-link {
     svg path {
         /*fill: rgba(0, 0, 0, 0.5);*/
