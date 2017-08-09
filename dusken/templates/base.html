@@ -1,4 +1,4 @@
-{% load static i18n raven flatpages %}
+{% load static i18n raven flatpages google_analytics %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +8,7 @@
     <title>{% block title %}Galtinn - {% trans "The membership database at Chateau Neuf - The Norwegian Student Society" %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'dist/styles/app.css' %}" type="text/css">
     <script type="text/javascript" src="{% static 'dist/scripts/vendor.js' %}"></script>
-
+    {% google_analytics_tag %}
 </head>
 <body class="{% block body-css-classes %}{% endblock %}">
     <div class="page-wrap">

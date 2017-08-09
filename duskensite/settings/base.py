@@ -48,6 +48,7 @@ INSTALLED_APPS += [
     'apps.neuf_auth',
     'apps.mailchimp',
     'apps.mailman',
+    'apps.common',
     # TODO Remove these after import and new integrations are OK
     'apps.inside',
     'apps.kassa',
@@ -224,3 +225,6 @@ MAILCHIMP_API_URL = os.getenv('MAILCHIMP_API_URL', 'https://us1.api.mailchimp.co
 MAILMAN_API_URL = os.getenv('MAILMAN_API_URL', 'https://mailman-api.neuf.no')
 MAILMAN_API_USERNAME = os.getenv('MAILMAN_API_USERNAME', '')
 MAILMAN_API_PASSWORD = os.getenv('MAILMAN_API_PASSWORD', '')
+
+# Google Analytics
+GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv('GOOGLE_ANALYTICS_PROPERTY_ID', '')
