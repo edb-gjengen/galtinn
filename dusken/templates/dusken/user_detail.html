@@ -68,5 +68,7 @@
     <br>
     {% if userobj == user %}
         <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit your profile" %}</a>
+    {% elif user.is_superuser %}
+        <a href="{% url "user-update" userobj.uuid %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit user" %}</a>
     {% endif %}
 {% endblock %}

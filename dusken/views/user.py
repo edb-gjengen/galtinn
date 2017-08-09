@@ -92,6 +92,9 @@ class UserDetailMeView(UserDetailView):
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = DuskenUserUpdateForm
     template_name = 'dusken/user_update.html'
+    model = DuskenUser
+    slug_field = 'uuid'
+    context_object_name = 'userobj'
 
 
 class UserUpdateMeView(UserUpdateView):
