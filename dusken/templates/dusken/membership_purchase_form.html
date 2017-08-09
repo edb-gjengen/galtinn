@@ -13,7 +13,7 @@
 <form method="post" id="membership-purchase-form">
     <div class="js-validation-errors"></div>
     {{ view.membership_purchase_form }}
-    <button id="purchase-button" class="btn btn-outline-primary btn-block">
+    <button id="purchase-button" type="submit" class="btn btn-primary btn-block">
     {% if ms == null %}
         {% trans "Buy membership" %}
     {% else %}
