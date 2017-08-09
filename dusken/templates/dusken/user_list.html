@@ -1,9 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n bootstrap4 %}
 {% block body %}
     <h2>{% trans "Users" %}</h2>
-    <label for="searc-field">{% trans "Search" %}</label><input id="search-field" type="search" class="form-control">
-    {% for user in user_list %}
-        {{ user }}
-    {% endfor %}
+    {% bootstrap_form user_search %}
+    <button class="btn btn-primary" onclick="view_user();">{% trans "View" %}</button>
 {% endblock %}

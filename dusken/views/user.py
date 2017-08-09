@@ -3,9 +3,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, FormView
+from dusken.views.mixins import VolunteerRequiredMixin
 
 from dusken.forms import (UserEmailValidateForm, UserPhoneValidateForm, DuskenUserForm, 
-                          DuskenUserUpdateForm, DuskenUserActivateForm)
+                          DuskenUserUpdateForm, DuskenUserActivateForm, UserWidgetForm)
 from dusken.models import DuskenUser, Order
 from dusken.utils import send_validation_sms, generate_username
 
@@ -71,10 +72,14 @@ class UserActivateView(FormView):
         return redirect(self.get_success_url())
 
 
-class UserListView(LoginRequiredMixin, ListView):
+class UserListView(VolunteerRequiredMixin, ListView):
     model = DuskenUser
     template_name = 'dusken/user_list.html'
-    slug_field = 'uuid'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserListView, self).get_context_data(**kwargs)
+        context['user_search'] = UserWidgetForm
+        return context
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
