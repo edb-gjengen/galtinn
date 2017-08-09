@@ -77,3 +77,9 @@
         text-align: center;
     }
 }
+
+@include media-breakpoint-down(sm) {
+    #orgunit-name {
+        font-size: 1.5em;
+    }
+}
