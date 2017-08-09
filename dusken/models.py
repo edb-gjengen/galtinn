@@ -372,8 +372,11 @@ class OrgUnit(MPTTModel, BaseModel):
         userobj.update_volunteer_status()
 
     def add_admin(self, userobj, user):
-        self.add_user(userobj, user)
+        self.group.user_set.add(userobj)
         self.admin_group.user_set.add(userobj)
+        self.log('Added admin {}'.format(userobj), user)
+        userobj.log('Added to {} OrgUnit as admin'.format(self), user)
+        userobj.update_volunteer_status()
 
     def remove_user(self, userobj, user):
         self.group.user_set.remove(userobj)
