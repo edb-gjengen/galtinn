@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-09 17:55+0200\n"
-"PO-Revision-Date: 2017-08-09 18:25+0200\n"
+"POT-Creation-Date: 2017-08-09 23:13+0200\n"
+"PO-Revision-Date: 2017-08-09 23:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -26,7 +26,7 @@ msgstr "år solgt"
 msgid "Payment method"
 msgstr "Betalingsmåte"
 
-#: admin.py:62 admin.py:87 admin.py:134 forms.py:28 forms.py:29 forms.py:37
+#: admin.py:62 admin.py:87 admin.py:134 forms.py:29 forms.py:30 forms.py:38
 #: models.py:173
 msgid "User"
 msgstr "Bruker"
@@ -43,11 +43,11 @@ msgstr "Dusken-felter"
 msgid "Your card has been declined"
 msgstr "Bankkortet ditt er avvist"
 
-#: api/views/orgunits.py:48 templates/dusken/orgunit_edit_users.html:25
+#: api/views/orgunits.py:50 templates/dusken/orgunit_edit_users.html:25
 msgid "Remove"
 msgstr "Fjern"
 
-#: api/views/orgunits.py:49 templates/dusken/orgunit_detail.html:35
+#: api/views/orgunits.py:51 templates/dusken/orgunit_detail.html:35
 #: templates/dusken/orgunit_edit_users.html:21
 msgid "Admin"
 msgstr "Admin"
@@ -64,73 +64,73 @@ msgstr "Du må fylle inn etternavnet ditt."
 msgid "Dusken"
 msgstr "Dusken"
 
-#: forms.py:36
+#: forms.py:37
 msgid "Contact person"
 msgstr "Kontaktperson"
 
-#: forms.py:46 forms.py:96
+#: forms.py:47 forms.py:102
 msgid "First name"
 msgstr "Fornavn"
 
-#: forms.py:47 forms.py:97
+#: forms.py:48 forms.py:103
 msgid "Last name"
 msgstr "Etternavn"
 
-#: forms.py:48 forms.py:98 templates/dusken/home.html:88
+#: forms.py:49 forms.py:104 templates/dusken/home.html:90
 #: templates/dusken/orgunit_detail.html:10 templates/dusken/user_detail.html:28
 msgid "Email"
 msgstr "E-post"
 
-#: forms.py:49 forms.py:71 forms.py:99 templates/dusken/home.html:101
+#: forms.py:50 forms.py:77 forms.py:105 templates/dusken/home.html:103
 #: templates/dusken/orgunit_detail.html:14 templates/dusken/user_detail.html:41
 msgid "Phone number"
 msgstr "Mobilnummer"
 
-#: forms.py:51
+#: forms.py:52
 msgid "I'm not a robot"
 msgstr "Jeg er ikke en maskin"
 
-#: forms.py:56
+#: forms.py:57
 msgid "Email already in use"
 msgstr "E-postadressen er i bruk"
 
-#: forms.py:62
+#: forms.py:63
 msgid "Phone number already in use"
 msgstr "Mobilnummeret er i bruk"
 
-#: forms.py:88 templates/dusken/user_activate.html:6
+#: forms.py:94 templates/dusken/user_activate.html:6
 msgid "You have already registered or the link is invalid."
 msgstr "Du har allerede registrert deg eller så er lenken ugyldig."
 
-#: forms.py:101
+#: forms.py:107
 msgid "Date of birth"
 msgstr "Fødselsdato"
 
-#: forms.py:122
+#: forms.py:128
 msgid "User does not exist"
 msgstr "Brukeren finnes ikke"
 
-#: forms.py:125
+#: forms.py:131
 msgid "Invalid email key for user"
 msgstr "Ugyldig e-postnøkkel for bruker"
 
-#: forms.py:128
+#: forms.py:134
 msgid "Email already confirmed"
 msgstr "E-post allerede bekreftet"
 
-#: forms.py:134
+#: forms.py:140
 msgid "Code"
 msgstr "Kode"
 
-#: forms.py:143
+#: forms.py:149
 msgid "Phone number already confirmed"
 msgstr "Mobilnummeret er allerede bekreftet"
 
-#: forms.py:147
+#: forms.py:153
 msgid "Invalid code"
 msgstr "Ugyldig kode"
 
-#: forms.py:153
+#: forms.py:159
 msgid "Email address / username"
 msgstr "E-postadresse / brukernavn"
 
@@ -378,7 +378,7 @@ msgstr "Stuegrisene som er på vakt har blitt varslet"
 msgid "The membership database at Chateau Neuf - The Norwegian Student Society"
 msgstr "Medlemskapsdatabasen på Chateau Neuf - Det Norske Studentersamfundet"
 
-#: templates/dusken/email_subscriptions.html:15 templates/dusken/home.html:125
+#: templates/dusken/email_subscriptions.html:15 templates/dusken/home.html:127
 msgid "Email subscriptions"
 msgstr "E-postabonnement"
 
@@ -469,9 +469,14 @@ msgid "Go forth and confirm!"
 msgstr "Bekreft min e-post!"
 
 #: templates/dusken/emails/validation_email.html:7
-#: templates/dusken/emails/validation_email.txt:6
-msgid "From the friendly people at"
-msgstr "Fra folka på"
+#: templates/dusken/emails/validation_email.txt:6 templates/nav.html:7
+msgid "Galtinn"
+msgstr "Galtinn"
+
+#: templates/dusken/emails/validation_email.html:8
+#: templates/dusken/emails/validation_email.txt:7
+msgid "The Norwegian Student Society - Chateau Neuf"
+msgstr "Det Norske Studentersamfund - Chateau Neuf"
 
 #: templates/dusken/emails/validation_email.txt:3
 #, python-format
@@ -506,7 +511,7 @@ msgstr "Du har gyldig medlemskap"
 msgid "There is a membership connected to your phone number."
 msgstr "Det finnes et medlemskap knyttet til mobilnummeret ditt."
 
-#: templates/dusken/home.html:36 templates/dusken/home.html:109
+#: templates/dusken/home.html:36 templates/dusken/home.html:111
 #: templates/dusken/user_detail.html:49
 msgid "Validate phone number"
 msgstr "Bekreft mobilnummer"
@@ -519,15 +524,16 @@ msgstr "Bli medlem du også!"
 msgid "Membership expired."
 msgstr "Medlemskapet har utløpt."
 
-#: templates/dusken/home.html:49
+#: templates/dusken/home.html:49 templates/dusken/membership_list.html:26
 msgid "Valid until"
 msgstr "Gyldig til"
 
-#: templates/dusken/home.html:49 templates/dusken/membership_list.html:26
+#: templates/dusken/home.html:49 templates/dusken/membership_list.html:29
 msgid "Expired"
 msgstr "Utløpt"
 
-#: templates/dusken/home.html:49 templates/dusken/membership_list.html:20
+#: templates/dusken/home.html:49 templates/dusken/membership_list.html:22
+#: templates/dusken/membership_list.html:26
 msgid "Lifelong"
 msgstr "Livsvarig"
 
@@ -535,61 +541,61 @@ msgstr "Livsvarig"
 msgid "Payment"
 msgstr "Betaling"
 
-#: templates/dusken/home.html:61 templates/dusken/membership_list.html:34
+#: templates/dusken/home.html:61 templates/dusken/membership_list.html:37
 msgid "See reciept"
 msgstr "Se kvittering"
 
-#: templates/dusken/home.html:66
+#: templates/dusken/home.html:68
 msgid "Membership is valid for 1 year"
 msgstr "Medlemskapet er gyldig i ett år"
 
-#: templates/dusken/home.html:77 templates/dusken/user_detail.html:18
+#: templates/dusken/home.html:79 templates/dusken/user_detail.html:18
 msgid "Your profile"
 msgstr "Din profil"
 
-#: templates/dusken/home.html:78
+#: templates/dusken/home.html:80
 msgid "Quick view of your profile details"
 msgstr "Oversikt over dine profildetaljer"
 
-#: templates/dusken/home.html:81 templates/dusken/user_detail.html:24
+#: templates/dusken/home.html:83 templates/dusken/user_detail.html:24
 msgid "Full name"
 msgstr "Fullt navn"
 
-#: templates/dusken/home.html:90 templates/dusken/home.html:103
+#: templates/dusken/home.html:92 templates/dusken/home.html:105
 #: templates/dusken/user_detail.html:30 templates/dusken/user_detail.html:43
 msgid "Validated"
 msgstr "Bekreftet"
 
-#: templates/dusken/home.html:92 templates/dusken/home.html:105
+#: templates/dusken/home.html:94 templates/dusken/home.html:107
 #: templates/dusken/user_detail.html:32 templates/dusken/user_detail.html:45
 msgid "Not validated"
 msgstr "Ubekreftet"
 
-#: templates/dusken/home.html:96 templates/dusken/user_detail.html:36
+#: templates/dusken/home.html:98 templates/dusken/user_detail.html:36
 msgid "Resend validation email"
 msgstr "Send ny bekreftelse på e-post"
 
-#: templates/dusken/home.html:114
+#: templates/dusken/home.html:116
 msgid "Edit your profile"
 msgstr "Endre din profil"
 
-#: templates/dusken/home.html:126
+#: templates/dusken/home.html:128
 msgid "Newsletter and mailing lists"
 msgstr "Nyhetsbrev og e-postlister"
 
-#: templates/dusken/home.html:129
+#: templates/dusken/home.html:131
 msgid "Change subscriptions"
 msgstr "Endre abonnementer"
 
-#: templates/dusken/home.html:137
+#: templates/dusken/home.html:139
 msgid "Password"
 msgstr "Passord"
 
-#: templates/dusken/home.html:138
+#: templates/dusken/home.html:140
 msgid "Change it if you want to"
 msgstr "Endre passordet hvis du vil"
 
-#: templates/dusken/home.html:141
+#: templates/dusken/home.html:143
 #: templates/registration/password_change_form.html:5
 msgid "Change password"
 msgstr "Endre passord"
@@ -631,7 +637,8 @@ msgid "Manage members"
 msgstr "Administrèr medlemmer"
 
 #: templates/dusken/home_volunteer.html:25
-#: templates/dusken/orgunit_detail.html:6
+#: templates/dusken/orgunit_detail.html:6 templates/dusken/user_detail.html:70
+#: templates/dusken/user_detail.html:72
 msgid "Edit"
 msgstr "Rediger"
 
@@ -659,20 +666,11 @@ msgstr "Logg inn her"
 msgid "No valid membership found"
 msgstr "Ingen gyldige medlemskap"
 
-#: templates/dusken/membership_list.html:20
-msgid "Validity period"
-msgstr "Gyldig periode"
+#: templates/dusken/membership_list.html:22
+msgid "Period"
+msgstr "Periode"
 
-#: templates/dusken/membership_list.html:24
-#: templates/dusken/membership_list.html:26
-msgid "Validity"
-msgstr "Gyldighet"
-
-#: templates/dusken/membership_list.html:24
-msgid "Valid"
-msgstr "Gyldig"
-
-#: templates/dusken/membership_list.html:29
+#: templates/dusken/membership_list.html:32
 #: templates/dusken/order_detail.html:8
 msgid "Purchased"
 msgstr "Kjøpt"
@@ -763,10 +761,6 @@ msgstr "Registrert"
 msgid "Last updated"
 msgstr "Sist oppdatert"
 
-#: templates/dusken/user_detail.html:70 templates/dusken/user_detail.html:72
-msgid "Save"
-msgstr "Lagre"
-
 #: templates/dusken/user_email_confirm_success.html:4
 #: templates/dusken/user_phone_confirm_success.html:4
 msgid "Success!"
@@ -803,8 +797,8 @@ msgid "Confirm"
 msgstr "Bekreft"
 
 #: templates/dusken/user_update.html:8
-msgid "Update profile"
-msgstr "Oppdatèr min profil"
+msgid "Save"
+msgstr "Lagre"
 
 #: templates/footer.html:20
 msgid "Created with"
@@ -817,10 +811,6 @@ msgstr "av"
 #: templates/nav.html:4
 msgid "Toggle navigation"
 msgstr "Svitsj navigasjon"
-
-#: templates/nav.html:7
-msgid "Galtinn"
-msgstr "Galtinn"
 
 #: templates/nav.html:25
 msgid "Profile"
@@ -964,6 +954,21 @@ msgstr "Du har ikke tilgang til denne siden"
 #: views/mixins.py:16
 msgid "You need to be a volunteer to see this page"
 msgstr "Du må være registrert aktiv for å se denne siden"
+
+#~ msgid "From the friendly people at"
+#~ msgstr "Fra folka på"
+
+#~ msgid "Validity period"
+#~ msgstr "Gyldig periode"
+
+#~ msgid "Validity"
+#~ msgstr "Gyldighet"
+
+#~ msgid "Valid"
+#~ msgstr "Gyldig"
+
+#~ msgid "Update profile"
+#~ msgstr "Oppdatèr min profil"
 
 #~ msgid "Become a member now!"
 #~ msgstr "Bli medlem du også!"

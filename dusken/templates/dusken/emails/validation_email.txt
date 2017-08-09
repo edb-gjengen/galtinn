@@ -3,4 +3,5 @@
 {% blocktrans %}Go forth and click the link to confirm: {{ validation_url }}{% endblocktrans %}
 
 --
-{% trans "From the friendly people at" %} {{ site_name }}
+{% trans "Galtinn" %}
+{% trans "The Norwegian Student Society - Chateau Neuf" %}
