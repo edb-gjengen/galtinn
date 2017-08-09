@@ -55,4 +55,3 @@ class OrgUnitEditUsersView(VolunteerRequiredMixin, DetailView):
         context = super(OrgUnitEditUsersView, self).get_context_data(**kwargs)
         context['user_search'] = UserWidgetForm
         return context
-
