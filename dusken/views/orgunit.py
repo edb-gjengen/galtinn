@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, UpdateView
 
 from dusken.models import OrgUnit
 from dusken.views.mixins import VolunteerRequiredMixin
-from dusken.forms import UserWidgetTestForm
+from dusken.forms import UserWidgetForm, OrgUnitEditForm
 
 
 class OrgUnitListView(VolunteerRequiredMixin, ListView):
@@ -37,9 +37,9 @@ class OrgUnitDetailView(VolunteerRequiredMixin, DetailView):
 
 class OrgUnitEditView(VolunteerRequiredMixin, UpdateView):
     model = OrgUnit
+    form_class = OrgUnitEditForm
     template_name = 'dusken/orgunit_edit.html'
     context_object_name = 'orgunit'
-    fields = ['name', 'short_name', 'email', 'phone_number', 'website', 'description']
 
     def get_success_url(self):
         slug = self.kwargs['slug']
@@ -53,6 +53,6 @@ class OrgUnitEditUsersView(VolunteerRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(OrgUnitEditUsersView, self).get_context_data(**kwargs)
-        context['user_search'] = UserWidgetTestForm
+        context['user_search'] = UserWidgetForm
         return context
 

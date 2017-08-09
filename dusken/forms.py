@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from django_select2.forms import ModelSelect2Widget
 
 from dusken.utils import email_exist, phone_number_exist
-from dusken.models import DuskenUser, Order
+from dusken.models import DuskenUser, Order, OrgUnit
 from phonenumber_field.formfields import PhoneNumberField
 from captcha.fields import ReCaptchaField
 
@@ -21,13 +21,24 @@ class UserSearchWidget(ModelSelect2Widget):
     max_results = 200
 
 
-# TODO: Make proper form
-class UserWidgetTestForm(forms.Form):
+class UserWidgetForm(forms.Form):
     user = forms.ModelChoiceField(
         queryset=DuskenUser.objects.all(),
-        label='User',
+        label=_('User'),
         widget=UserSearchWidget(attrs={'data-placeholder': _('User')})
     )
+
+
+class OrgUnitEditForm(forms.ModelForm):
+    contact_person = forms.ModelChoiceField(
+        queryset=DuskenUser.objects.all(),
+        label=_('Contact person'),
+        widget=UserSearchWidget(attrs={'data-placeholder': _('User')})
+    )
+
+    class Meta:
+        model = OrgUnit
+        fields = ['name', 'short_name', 'email', 'phone_number', 'website', 'description', 'contact_person']
 
 
 class DuskenUserForm(forms.ModelForm):
