@@ -1,4 +1,6 @@
+import os
 from contextlib import contextmanager as _contextmanager
+
 from fabric.api import run, sudo, env, cd, prefix, lcd, local
 from fabric.context_managers import shell_env
 
@@ -8,12 +10,45 @@ env.project_path = '/var/www/neuf.no/dusken'
 env.user = 'gitdeploy'
 env.activate = 'source {}/venv/bin/activate'.format(env.project_path)
 
+LOCALES = ['nb']
+LOCAL_APPS = ['common', 'hooks', 'mailchimp', 'mailman', 'neuf_auth', 'neuf_ldap']
+
+
+def _lrun_locale_task(command, limit=None):
+    param = ' -l '
+    locale_params = param.join(LOCALES)
+
+    if limit is not None and limit in LOCAL_APPS + ['dusken']:
+        app_paths = [os.path.join('apps', limit)] if limit != 'dusken' else ['dusken']
+    else:
+        app_paths = [os.path.join('apps', app) for app in LOCAL_APPS] + ['dusken']
+
+    for cur_path in app_paths:
+        with lcd(cur_path):
+            locale_path = os.path.join(cur_path, 'locale')
+            if not os.path.exists(locale_path):
+                local('mkdir locale')
+
+            if cur_path.endswith('dusken'):
+                run_cmd = '../manage.py {}{}{}'.format(command, param, locale_params)
+            else:
+                run_cmd = '../../manage.py {}{}{}'.format(command, param, locale_params)
+            local(run_cmd)
+
 
 @_contextmanager
 def virtualenv():
     with cd(env.project_path):
         with prefix(env.activate):
             yield
+
+
+def makemessages(limit=None):
+    _lrun_locale_task('makemessages', limit=limit)
+
+
+def compilemessages(limit=None):
+    _lrun_locale_task('compilemessages', limit=limit)
 
 
 def deploy():

@@ -14,7 +14,7 @@ class NeufPasswordChangeView(PasswordChangeView):
     def form_valid(self, form):
         UserLogMessage.objects.create(user=form.user, message='Password changed', changed_by=self.request.user)
 
-        messages.success(self.request, _('Password changed 😎'))
+        messages.success(self.request, '{} 😎'.format(_('Password changed')))
         return super().form_valid(form)
 
 
@@ -27,5 +27,5 @@ class NeufPasswordResetConfirmView(PasswordResetConfirmView):
         UserLogMessage.objects.create(
             user=form.user, message='Password changed via password reset', changed_by=self.user)
 
-        messages.success(self.request, _('Password changed 😎'))
+        messages.success(self.request, '{} 😎'.format(_('Password changed')))
         return super().form_valid(form)

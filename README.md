@@ -33,20 +33,41 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
 
 ### Tests
 
-    python manage.py test dusken
+    python manage.py test
     # Run this for testing import from Inside (legacy)
     python manage.py test --testrunner apps.inside.tests.NoDbTestRunner apps.inside
     
 ## Development
 Font icons are from: https://linearicons.com/free
 
-## Card payments
+### Card payments
 Dusken supports Stripe for card payments. The Stripe API's are documented here:
 
 * Stripe Checkout (JS): https://stripe.com/docs/checkout
 * Stripe API (Python): https://stripe.com/docs/api?lang=python
 
 Use this VISA card for testing: 4242 4242 4242 4242
+
+### LDAP
+    # Run LDAP
+    docker run -e LDAP_DOMAIN=neuf.no -e LDAP_ORGANISATION="Neuf" -e LDAP_ADMIN_PWD="toor" -p 389:389 -d nikolaik/openldap
+    # Add testdata
+    ldapadd -D "cn=admin,dc=neuf,dc=no" -w "toor" -f apps/neuf_ldap/tests/testdata.ldif  # Testdata
+
+    # Configure our LDAP database like so in local_settings.py:
+    'ldap': {
+        'ENGINE': 'ldapdb.backends.ldap',
+        'NAME': 'ldap://localhost/',
+        'USER': 'cn=admin,dc=neuf,dc=no',
+        'PASSWORD': 'toor',
+    },
+
+### Translations
+
+    # Generate .po files based on translation strings in code and template files
+    fab makemessages
+    # Only for app dusken
+    fab makemessages:limit=dusken
 
 ## System Configuration
 
@@ -60,16 +81,3 @@ To indentify users as volunteers exactly one `GroupProfile` has to have `type` s
 - Setup a webhook with unsubscribes using [this guide](http://kb.mailchimp.com/integrations/api-integrations/how-to-set-up-webhooks) (via API should be unchecked).
 - The webhook URL path is: `/mailchimp/incoming/?secret=WEBHOOK_SECRET/`.
 
-## LDAP development
-    # Run LDAP
-    docker run -e LDAP_DOMAIN=neuf.no -e LDAP_ORGANISATION="Neuf" -e LDAP_ADMIN_PWD="toor" -p 389:389 -d nikolaik/openldap
-    # Add testdata
-    ldapadd -D "cn=admin,dc=neuf,dc=no" -w "toor" -f apps/neuf_ldap/tests/testdata.ldif  # Testdata
-
-    # Configure our LDAP database like so in local_settings.py:
-    'ldap': {
-        'ENGINE': 'ldapdb.backends.ldap',
-        'NAME': 'ldap://localhost/',
-        'USER': 'cn=admin,dc=neuf,dc=no',
-        'PASSWORD': 'toor',
-    },

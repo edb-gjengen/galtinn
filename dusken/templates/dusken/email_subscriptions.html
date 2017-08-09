@@ -21,7 +21,7 @@
         <br>
         <h4>{% trans "Newsletter" %}</h4>
         <p>{% trans "Upcoming events and announcements. Maximum one email per week." %}</p>
-        {% trans "Your are" %} <span class="js-mailchimp-status" data-text-subscribed="{% trans "subscribed" %}" data-text-unsubscribed="{% trans "unsubscribed" %}">{% if newsletter_subscription.show_checked %}{% trans "subscribed" %} ✅{% else %}{% trans "unsubscribed" %} ❌{% endif %}</span>
+        {% trans "You are" %} <span class="js-mailchimp-status" data-text-subscribed="{% trans "subscribed" %}" data-text-unsubscribed="{% trans "unsubscribed" %}">{% if newsletter_subscription.show_checked %}{% trans "subscribed" %} ✅{% else %}{% trans "unsubscribed" %} ❌{% endif %}</span>
             <a href="#"
                class="btn btn-outline-primary newsletter-btn js-toggle-mailchimp-subscription{% if newsletter_subscription.show_checked %} active{% endif %}"
                data-text-subscribe="{% trans "Subscribe" %}"

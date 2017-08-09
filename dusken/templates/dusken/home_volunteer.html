@@ -5,7 +5,7 @@
     <div class="home-volunteer">
     <h2 class="card-title">{% svg "icons/apartment" %} {% trans "Volunteer" %}</h2>
     {% if not user.is_volunteer %}
-        <div class="alert alert-info">{% trans "This section is for active volunteers, but your are not registered in the volunteer group yet." %}</div>
+        <div class="alert alert-info">{% trans "This section is for active volunteers, but you are not registered in the volunteer group yet." %}</div>
         <p>{% trans "The effort of our active volunteers form The Norwegian Student Society, want to become a part of it?" %}</p>
         {% get_current_language as LANGUAGE_CODE %}
         <a class="btn btn-primary btn-lg" href="{% if LANGUAGE_CODE == 'nb' %}https://studentersamfundet.no/bli-aktiv/{% else %}https://studentersamfundet.no/bli-aktiv/become-a-volunteer/{% endif %}">{% trans "Read more" %}</a>

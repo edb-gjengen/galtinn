@@ -147,14 +147,12 @@ class DuskenUser(AbstractUser):
                     order.member_card.save()
 
     def get_full_address(self):
-        elements = [
-            self.street_address.__str__(),
-            self.street_address_two.__str__(),
-            self.postal_code.__str__(),
-            self.city.__str__(),
-            self.country.__str__()
-        ]
-        return ' '.join(x for x in elements if not x == 'None')
+        address_part = [str(self.street_address), str(self.street_address_two)]
+        address_part = ' '.join(x for x in address_part if x != 'None')
+        zip_code_part = [str(self.postal_code), str(self.city)]
+        zip_code_part = ' '.join(x for x in zip_code_part if x != 'None')
+        country = self.country.name if self.country else ''
+        return '{}{}, {}'.format(address_part + ', ' if address_part else '', zip_code_part, country)
 
     def have_address(self):
         return any((self.street_address,
