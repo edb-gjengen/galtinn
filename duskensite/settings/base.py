@@ -3,6 +3,8 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+
+from captcha.constants import TEST_PUBLIC_KEY, TEST_PRIVATE_KEY
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
@@ -169,6 +171,8 @@ PHONENUMBER_DEFAULT_REGION = 'NO'
 TEKSTMELDING_API_URL = 'https://tekstmelding.neuf.no/'
 TEKSTMELDING_API_KEY = os.getenv('TEKSTMELDING_API_KEY', '')
 
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', TEST_PUBLIC_KEY)
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', TEST_PRIVATE_KEY)
 NOCAPTCHA = True
 
 SVG_DIRS = [
