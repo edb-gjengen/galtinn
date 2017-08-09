@@ -21,8 +21,9 @@
         color: white;
         transition: all 0.14s ease-in-out;
 
-        &:hover {
-            background-color: rgba(white, 0.2);
+        &:hover,
+        &.active {
+            background-color: rgba(white, 0.15);
         }
     }
 }
