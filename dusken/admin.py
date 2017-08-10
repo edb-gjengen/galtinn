@@ -135,14 +135,17 @@ class MemberCardAdmin(admin.ModelAdmin):
 
 
 class UserLogMessageAdmin(admin.ModelAdmin):
-    list_display = ['user', 'message', 'changed_by']
-    search_fields = ['message']
+    list_display = ['user', 'message', 'changed_by', 'created']
+    list_filter = ['created']
+    search_fields = ['message', 'user']
     readonly_fields = ['user', 'message', 'changed_by']
 
 
 class OrgUnitLogMessageAdmin(admin.ModelAdmin):
-    list_display = ['org_unit', 'message', 'changed_by']
-    search_fields = ['message']
+    list_display = ['org_unit', 'message', 'changed_by', 'created']
+    list_filter = ['created']
+    search_fields = ['message', 'org_unit']
+    readonly_fields = ['org_unit', 'message', 'changed_by']
 
 
 class GroupProfileAdmin(admin.ModelAdmin):
