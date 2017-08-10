@@ -206,6 +206,23 @@ function add_user(orgunit, type) {
     });
 }
 
+function view_user() {
+    const user = $('#id_user').select2('data')[0].id;
+    $.ajax({
+        url: '/api/user/pk/to/uuid/',
+        data: {
+            'user': user,
+        },
+        dataType: 'json',
+        success: function (response) {
+            window.location.href = '/users/' + response.uuid;
+        },
+        error: function() {
+            alert('Failed view user');
+        }
+    });
+}
+
 $(document).ready(function() {
     const $membershipPurchase = $('#membership-purchase-form');
     const $mailchimpSub = $('.js-toggle-mailchimp-subscription');

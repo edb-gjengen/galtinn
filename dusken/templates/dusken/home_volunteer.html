@@ -12,6 +12,7 @@
     {% else %}
         <ul>
             <li><a href="{% url "orgunit-list" %}">{% trans "List of organizational units" %}</a></li>
+            <li><a href="{% url "user-list" %}">{% trans "Users" %}</a></li>
         </ul>
         {% if user.groups %}
             <h4>{% svg "icons/users" %} {% trans "Your organizations" %}</h4>

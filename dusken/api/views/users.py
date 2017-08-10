@@ -5,6 +5,7 @@ from rest_framework import views, viewsets, filters, permissions
 from rest_framework.response import Response
 from dusken.api.serializers.users import DuskenUserSerializer
 from dusken.models import DuskenUser
+from django.http import JsonResponse, HttpResponseForbidden
 
 
 class DuskenUserFilter(FilterSet):
@@ -39,3 +40,15 @@ class CurrentUserView(views.APIView):
     def get(self, request):
         serializer = DuskenUserSerializer(request.user)
         return Response(serializer.data)
+
+
+def user_pk_to_uuid(request):
+    if not request.user.is_authenticated or not request.user.is_volunteer:
+        return HttpResponseForbidden()
+    user_pk = request.GET.get('user', None)
+    user = DuskenUser.objects.get(pk=user_pk)
+
+    data = {
+        'uuid': user.uuid
+    }
+    return JsonResponse(data)

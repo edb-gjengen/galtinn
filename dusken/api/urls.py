@@ -7,7 +7,7 @@ from dusken.api.views.cards import (MemberCardViewSet,
 from dusken.api.views.memberships import (MembershipViewSet,
                                           MembershipChargeView,
                                           KassaMembershipView)
-from dusken.api.views.users import DuskenUserViewSet, CurrentUserView
+from dusken.api.views.users import DuskenUserViewSet, CurrentUserView, user_pk_to_uuid
 from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.validate import validate
 from dusken.api.views.orgunits import remove_user, add_user
@@ -36,6 +36,7 @@ urlpatterns += [
     # Users
     url(r'user/resend_validation_email/$', ResendValidationEmailView.as_view(),
         name='resend-validation-email'),
+    url(r'user/pk/to/uuid/$', user_pk_to_uuid, name='user_pk_to_uuid'),
 
     # Validation
     url(r'validate/$', validate, name='validate'),
