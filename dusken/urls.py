@@ -8,9 +8,8 @@ from dusken.views.orgunit import (OrgUnitListView, OrgUnitDetailView, OrgUnitEdi
                                   OrgUnitEditUsersView)
 from dusken.views.user import (UserRegisterView, UserActivateView,
                                UserDetailView, UserDetailMeView, UserListView,
-                               UserUpdateView, UserUpdateMeView,
-                               UserEmailValidateView, UserEmailValidateSuccessView,
-                               UserPhoneValidateView, UserPhoneValidateSuccessView)
+                               UserUpdateView, UserUpdateMeView)
+from dusken.views.validation import UserEmailValidateView, UserPhoneValidateView
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
@@ -23,16 +22,15 @@ urlpatterns = [
     url(r'^users/(?P<slug>[0-9a-z-]+)/update/$', UserUpdateView.as_view(), name='user-update'),
     url(r'^users/$', UserListView.as_view(), name='user-list'),
 
-    # User auth
+    # Registration
     url(r'^register/$', UserRegisterView.as_view(), name='user-register'),
     url(r'^activate/(?P<phone>[0-9]+)/(?P<code>[0-9a-zA-Z-]+)$', UserActivateView.as_view(), name='user-activate'),
+
+    # Contact info validation
     url(r'^users/(?P<slug>[0-9a-z-]+)/validate_email/(?P<email_key>[0-9a-zA-Z-]+)$',
         UserEmailValidateView.as_view(),
         name='user-email-validate'),
-    url(r'^users/validate_email_success/$', UserEmailValidateSuccessView.as_view(), name='user-email-validate-success'),
     url(r'^me/validate_phone/$', UserPhoneValidateView.as_view(), name='user-phone-validate'),
-    url(r'^me/validate_phone_success/$', UserPhoneValidateSuccessView.as_view(),
-        name='user-phone-validate-success'),
 
     # Membership
     url(r'^memberships/$', MembershipListView.as_view(), name='membership-list'),

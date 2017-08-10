@@ -22,6 +22,7 @@ class NeufPasswordResetConfirmView(PasswordResetConfirmView):
     form_class = NeufSetPasswordForm
     post_reset_login = True
     success_url = reverse_lazy('home')
+    post_reset_login_backend = 'django.contrib.auth.backends.ModelBackend'
 
     def form_valid(self, form):
         UserLogMessage.objects.create(
