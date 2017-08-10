@@ -3,6 +3,7 @@ machine:
     version: 3.5.2
 dependencies:
   pre:
+    - sduo apt update; sudo apt install libsasl2-dev libldap2-dev -y
     - pip install codecov
 test:
   override:
