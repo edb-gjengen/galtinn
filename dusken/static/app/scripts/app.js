@@ -151,24 +151,26 @@ function formatMessage(message, alert) {
 }
 
 function remove_user(user, orgunit) {
-    $.ajax({
-        url: '/api/orgunit/remove/user/',
-        data: {
-            'user': user,
-            'orgunit': orgunit
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.success) {
-                $('#user_remove_'+user).parent().parent().slideUp();
-            } else {
+    if (confirm('Remove user?')) {
+        $.ajax({
+            url: '/api/orgunit/remove/user/',
+            data: {
+                'user': user,
+                'orgunit': orgunit
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    $('#user_remove_' + user).parent().parent().slideUp();
+                } else {
+                    alert('Failed to remove user');
+                }
+            },
+            error: function () {
                 alert('Failed to remove user');
             }
-        },
-        error: function() {
-            alert('Failed to remove user');
-        }
-    });
+        });
+    }
 }
 
 function add_user(orgunit, type) {
