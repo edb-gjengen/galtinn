@@ -9,7 +9,7 @@
         <button class="btn btn-primary" onclick="add_user('{{ orgunit.slug }}', 'admin');">{% trans "Add admin" %}</button>
     </div>
     <ul class="list-group" id="user_list">
-    {% for user in orgunit.group.user_set.all %}
+    {% for user in users_sorted %}
         <li class="list-group-item justify-content-between"><span>
             {% if user|has_group:orgunit.admin_group %}
                 {% svg "icons/star" %}

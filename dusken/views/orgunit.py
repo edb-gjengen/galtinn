@@ -54,4 +54,5 @@ class OrgUnitEditUsersView(VolunteerRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(OrgUnitEditUsersView, self).get_context_data(**kwargs)
         context['user_search'] = UserWidgetForm
+        context['users_sorted'] = context['orgunit'].group.user_set.all().order_by('first_name', 'last_name', 'username')
         return context

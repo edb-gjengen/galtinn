@@ -173,7 +173,6 @@ class DuskenUser(AbstractUser):
         verbose_name = _('User')
         verbose_name_plural = _('Users')
         default_permissions = ('add', 'change', 'delete', 'view')
-        ordering = ['first_name', 'last_name', 'username']
 
 
 class Membership(BaseModel):
