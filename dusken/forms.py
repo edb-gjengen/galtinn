@@ -48,7 +48,7 @@ class DuskenUserForm(forms.ModelForm):
     last_name = fields.CharField(label=_('Last name'))
     email = fields.EmailField(label=_('Email'), widget=forms.EmailInput(attrs={'placeholder': _('Email')}))
     phone_number = PhoneNumberField(label=_('Phone number'))
-    password = fields.CharField(widget=forms.PasswordInput())
+    password = fields.CharField(label=_('Password'), widget=forms.PasswordInput())
     captcha = ReCaptchaField(label=_('I\'m not a robot'))
 
     def clean_email(self):
