@@ -33,7 +33,7 @@ msgstr "Bruker"
 
 #: admin.py:96 models.py:299
 msgid "Member card"
-msgstr "Medlemsskort"
+msgstr "Medlemskort"
 
 #: admin.py:111
 msgid "Dusken fields"
@@ -41,7 +41,7 @@ msgstr "Dusken-felter"
 
 #: api/views/memberships.py:97
 msgid "Your card has been declined"
-msgstr "Bankkortet ditt er avvist"
+msgstr "Bankkortet ditt ble avvist"
 
 #: api/views/orgunits.py:50 templates/dusken/orgunit_edit_users.html:25
 msgid "Remove"
@@ -260,11 +260,11 @@ msgstr "slug"
 
 #: models.py:347 models.py:459
 msgid "short name"
-msgstr "kort navn"
+msgstr "kortnavn"
 
 #: models.py:349
 msgid "description"
-msgstr "beskkrivelse"
+msgstr "beskrivelse"
 
 #: models.py:352
 msgid "email"
@@ -376,7 +376,7 @@ msgstr "Stuegrisene som er på vakt har blitt varslet"
 
 #: templates/base.html:8
 msgid "The membership database at Chateau Neuf - The Norwegian Student Society"
-msgstr "Medlemskapsdatabasen på Chateau Neuf - Det Norske Studentersamfundet"
+msgstr "Medlemskapsdatabasen på Chateau Neuf - Det Norske Studentersamfund"
 
 #: templates/dusken/email_subscriptions.html:15 templates/dusken/home.html:127
 msgid "Email subscriptions"
@@ -462,7 +462,7 @@ msgstr "Hei"
 #: templates/dusken/emails/validation_email.html:2
 #: templates/dusken/emails/validation_email.txt:2
 msgid "Do you want to confirm your email?"
-msgstr "Vil du bekrefte din e-postadresse?"
+msgstr "Vil du bekrefte e-postadressen din?"
 
 #: templates/dusken/emails/validation_email.html:4
 msgid "Go forth and confirm!"
@@ -826,7 +826,7 @@ msgstr "Logg ut"
 
 #: templates/registration/logged_out.html:7
 msgid "Goodbye"
-msgstr "Hade bra"
+msgstr "Ha det bra"
 
 #: templates/registration/logged_out.html:8
 msgid "Log in again"
