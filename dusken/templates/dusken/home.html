@@ -101,13 +101,18 @@
                     <li class="list-group-item justify-content-between">
                         <span>
                             {% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong>
-                            {% if user.phone_number_confirmed %}
-                                <span class="badge badge-success">{% trans "Validated" %}</span>
+                            {% if user.phone_number %}
+                                {% if user.phone_number_confirmed %}
+                                    <span class="badge badge-success">{% trans "Validated" %}</span>
+                                {% else %}
+                                    <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                                {% endif %}
                             {% else %}
-                                <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                                <span class="badge badge-danger">{% trans "Missing" %}</span>
                             {% endif %}
+
                         </span>
-                        {% if not user.phone_number_confirmed %}
+                        {% if user.phone_number and not user.phone_number_confirmed %}
                             <a href="{% url "user-phone-validate" %}" class="btn btn-outline-primary btn-sm">{% trans "Validate phone number" %}</a>
                         {% endif %}
                     </li>
