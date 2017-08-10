@@ -647,8 +647,8 @@ msgid ""
 "This is Galtinn, the membership database at <a href=\"https://"
 "studentersamfundet.no\">Chateau Neuf - The Norwegian Student Society</a>."
 msgstr ""
-"Dette er Galtinn, som er medlemsdatabasen på <a href=\"https://"
-"studentersamfundet.no\">Chateau Neuf - Det Norske Studentersamfundet</a>."
+"Dette er Galtinn, medlemsdatabasen på <a href=\"https://"
+"studentersamfundet.no\">Chateau Neuf - Det Norske Studentersamfund</a>."
 
 #: templates/dusken/index.html:9
 msgid "Become a member"
