@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-09 23:13+0200\n"
+"POT-Creation-Date: 2017-08-10 22:20+0200\n"
 "PO-Revision-Date: 2017-08-09 23:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -186,7 +186,8 @@ msgstr "foreldet id"
 msgid "stripe customer id"
 msgstr "stripe kunde-id"
 
-#: models.py:174 templates/dusken/user_list.html:4
+#: models.py:174 templates/dusken/home_volunteer.html:15
+#: templates/dusken/user_list.html:4
 msgid "Users"
 msgstr "Brukere"
 
@@ -330,27 +331,27 @@ msgstr "Ordre"
 msgid "Orders"
 msgstr "Ordre"
 
-#: models.py:465 templates/dusken/user_detail.html:59
+#: models.py:468 templates/dusken/user_detail.html:59
 msgid "Place of study"
 msgstr "Studiested"
 
-#: models.py:466
+#: models.py:469
 msgid "Places of study"
 msgstr "Studiesteder"
 
-#: models.py:479
+#: models.py:482
 msgid "User log message"
 msgstr "Brukerloggmelding"
 
-#: models.py:480
+#: models.py:483
 msgid "User log messages"
 msgstr "Brukerloggmeldinger"
 
-#: models.py:493
+#: models.py:496
 msgid "Org unit log message"
 msgstr "Foreningsloggmelding"
 
-#: models.py:494
+#: models.py:497
 msgid "Org unit log messages"
 msgstr "Foreningsloggmeldinger"
 
@@ -374,11 +375,11 @@ msgstr "🔥 500 Noe gikk galt"
 msgid "Our space geckos on duty have been notified #GoGetThoseGeckos"
 msgstr "Stuegrisene som er på vakt har blitt varslet"
 
-#: templates/base.html:8
+#: templates/base.html:9
 msgid "The membership database at Chateau Neuf - The Norwegian Student Society"
 msgstr "Medlemskapsdatabasen på Chateau Neuf - Det Norske Studentersamfund"
 
-#: templates/dusken/email_subscriptions.html:15 templates/dusken/home.html:127
+#: templates/dusken/email_subscriptions.html:15 templates/dusken/home.html:132
 msgid "Email subscriptions"
 msgstr "E-postabonnement"
 
@@ -469,7 +470,7 @@ msgid "Go forth and confirm!"
 msgstr "Bekreft min e-post!"
 
 #: templates/dusken/emails/validation_email.html:7
-#: templates/dusken/emails/validation_email.txt:6 templates/nav.html:7
+#: templates/dusken/emails/validation_email.txt:6
 msgid "Galtinn"
 msgstr "Galtinn"
 
@@ -511,7 +512,7 @@ msgstr "Du har gyldig medlemskap"
 msgid "There is a membership connected to your phone number."
 msgstr "Det finnes et medlemskap knyttet til mobilnummeret ditt."
 
-#: templates/dusken/home.html:36 templates/dusken/home.html:111
+#: templates/dusken/home.html:36 templates/dusken/home.html:116
 #: templates/dusken/user_detail.html:49
 msgid "Validate phone number"
 msgstr "Bekreft mobilnummer"
@@ -561,12 +562,12 @@ msgstr "Oversikt over dine profildetaljer"
 msgid "Full name"
 msgstr "Fullt navn"
 
-#: templates/dusken/home.html:92 templates/dusken/home.html:105
+#: templates/dusken/home.html:92 templates/dusken/home.html:106
 #: templates/dusken/user_detail.html:30 templates/dusken/user_detail.html:43
 msgid "Validated"
 msgstr "Bekreftet"
 
-#: templates/dusken/home.html:94 templates/dusken/home.html:107
+#: templates/dusken/home.html:94 templates/dusken/home.html:108
 #: templates/dusken/user_detail.html:32 templates/dusken/user_detail.html:45
 msgid "Not validated"
 msgstr "Ubekreftet"
@@ -575,27 +576,31 @@ msgstr "Ubekreftet"
 msgid "Resend validation email"
 msgstr "Send ny bekreftelse på e-post"
 
-#: templates/dusken/home.html:116
+#: templates/dusken/home.html:111
+msgid "Missing"
+msgstr ""
+
+#: templates/dusken/home.html:121
 msgid "Edit your profile"
 msgstr "Endre din profil"
 
-#: templates/dusken/home.html:128
+#: templates/dusken/home.html:133
 msgid "Newsletter and mailing lists"
 msgstr "Nyhetsbrev og e-postlister"
 
-#: templates/dusken/home.html:131
+#: templates/dusken/home.html:136
 msgid "Change subscriptions"
 msgstr "Endre abonnementer"
 
-#: templates/dusken/home.html:139
+#: templates/dusken/home.html:144
 msgid "Password"
 msgstr "Passord"
 
-#: templates/dusken/home.html:140
+#: templates/dusken/home.html:145
 msgid "Change it if you want to"
 msgstr "Endre passordet hvis du vil"
 
-#: templates/dusken/home.html:143
+#: templates/dusken/home.html:148
 #: templates/registration/password_change_form.html:5
 msgid "Change password"
 msgstr "Endre passord"
@@ -627,38 +632,38 @@ msgstr "Les mer"
 msgid "List of organizational units"
 msgstr "Foreningsoversikt"
 
-#: templates/dusken/home_volunteer.html:17
+#: templates/dusken/home_volunteer.html:18
 msgid "Your organizations"
 msgstr "Dine foreninger"
 
-#: templates/dusken/home_volunteer.html:24
+#: templates/dusken/home_volunteer.html:25
 #: templates/dusken/orgunit_detail.html:28
 msgid "Manage members"
 msgstr "Administrèr medlemmer"
 
-#: templates/dusken/home_volunteer.html:25
+#: templates/dusken/home_volunteer.html:26
 #: templates/dusken/orgunit_detail.html:6 templates/dusken/user_detail.html:70
 #: templates/dusken/user_detail.html:72
 msgid "Edit"
 msgstr "Rediger"
 
-#: templates/dusken/index.html:8
-msgid ""
-"This is Galtinn, the membership database at <a href=\"https://"
-"studentersamfundet.no\">Chateau Neuf - The Norwegian Student Society</a>."
-msgstr ""
-"Dette er Galtinn, medlemsdatabasen på <a href=\"https://"
-"studentersamfundet.no\">Chateau Neuf - Det Norske Studentersamfund</a>."
-
 #: templates/dusken/index.html:9
+msgid "This is Galtinn, the membership database at"
+msgstr "Dette er Galtinn, medlemskapsdatabasen på"
+
+#: templates/dusken/index.html:10
+msgid "Chateau Neuf – The Norwegian Student Society"
+msgstr "Chateau Neuf – Det Norske Studentersamfund"
+
+#: templates/dusken/index.html:12
 msgid "Become a member"
 msgstr "Bli medlem"
 
-#: templates/dusken/index.html:13
+#: templates/dusken/index.html:16
 msgid "Already a member?"
 msgstr "Allerede medlem?"
 
-#: templates/dusken/index.html:14 templates/registration/login.html:6
+#: templates/dusken/index.html:17 templates/registration/login.html:6
 msgid "Log in here"
 msgstr "Logg inn her"
 
@@ -731,9 +736,7 @@ msgstr "Foreninger"
 
 #: templates/dusken/user_activate.html:7
 #: templates/dusken/user_email_confirm.html:7
-#: templates/dusken/user_email_confirm_success.html:5
 #: templates/dusken/user_phone_confirm.html:7
-#: templates/dusken/user_phone_confirm_success.html:5
 msgid "Go home"
 msgstr "Tilbake til hjem"
 
@@ -760,11 +763,6 @@ msgstr "Registrert"
 #: templates/dusken/user_detail.html:66
 msgid "Last updated"
 msgstr "Sist oppdatert"
-
-#: templates/dusken/user_email_confirm_success.html:4
-#: templates/dusken/user_phone_confirm_success.html:4
-msgid "Success!"
-msgstr "Hurra!"
 
 #: templates/dusken/user_list.html:6
 msgid "View"
@@ -889,16 +887,7 @@ msgstr "Vi har sent deg en e-post med informasjon om bytte av passord"
 msgid "Go check your email! Could even be in your spam folder."
 msgstr "Sjekk e-posten din! Den kan fort ha havnet i spammappen."
 
-#: templates/registration/password_reset_email.html:3
-#, python-format
-msgid ""
-"Someone has asked to reset the password for %(email)s(%(user.username)s). "
-"Please follow the link: "
-msgstr ""
-"Noen har bedt om å endre passordet til brukeren  "
-"%(email)s(%(user.username)s). Vennligst følg lenken: "
-
-#: templates/registration/password_reset_email.html:5
+#: templates/registration/password_reset_email.html:2
 #, python-format
 msgid ""
 "Someone has asked to reset the password for %(email)s. Please follow the "
@@ -954,6 +943,24 @@ msgstr "Du har ikke tilgang til denne siden"
 #: views/mixins.py:16
 msgid "You need to be a volunteer to see this page"
 msgstr "Du må være registrert aktiv for å se denne siden"
+
+#: views/validation.py:29 views/validation.py:63
+msgid "Success!"
+msgstr "Hurra!"
+
+#~ msgid ""
+#~ "This is Galtinn, the membership database at <a href=\"https://"
+#~ "studentersamfundet.no\">Chateau Neuf - The Norwegian Student Society</a>."
+#~ msgstr ""
+#~ "Dette er Galtinn, medlemsdatabasen på <a href=\"https://"
+#~ "studentersamfundet.no\">Chateau Neuf - Det Norske Studentersamfund</a>."
+
+#~ msgid ""
+#~ "Someone has asked to reset the password for %(email)s(%(user.username)s). "
+#~ "Please follow the link: "
+#~ msgstr ""
+#~ "Noen har bedt om å endre passordet til brukeren  %(email)s(%(user."
+#~ "username)s). Vennligst følg lenken: "
 
 #~ msgid "From the friendly people at"
 #~ msgstr "Fra folka på"
