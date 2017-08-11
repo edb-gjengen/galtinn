@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import TemplateView
 
@@ -6,7 +7,7 @@ from apps.mailchimp.models import MailChimpSubscription
 from apps.mailman.api import get_lists_by_email
 
 
-class EmailSubscriptions(TemplateView):
+class EmailSubscriptions(LoginRequiredMixin, TemplateView):
     MAILMAN_LISTS = ['medlemmer']  # TODO: Make these database objects
     template_name = 'dusken/email_subscriptions.html'
 
