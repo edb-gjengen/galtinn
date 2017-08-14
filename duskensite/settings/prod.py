@@ -25,7 +25,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 # Sentry
 RAVEN_CONFIG = {
     'dsn': os.getenv('SENTRY_DSN'),
-    'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
+    'release': raven.fetch_git_sha(BASE_DIR),
     'CELERY_LOGLEVEL': logging.WARNING,
     'environment': os.getenv('SENTRY_ENVIRONMENT', 'production')
 }
