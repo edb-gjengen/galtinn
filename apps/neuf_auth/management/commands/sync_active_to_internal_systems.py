@@ -162,7 +162,7 @@ class Command(BaseCommand):
             missing_groups = dusken_groups.difference(ldap_groups)
             in_sync = len(missing_groups) == 0
             if not in_sync and int(self.options['verbosity']) >= 2:
-                self.stdout.write('{}: Missing groups in LDAP: {}'.format(
+                self.stdout.write('{}: Not in LDAP groups: {}'.format(
                     dusken_user['username'],
                     ','.join(missing_groups)))
 
