@@ -60,7 +60,7 @@ class Command(BaseCommand):
     def get_dusken_users_diffable(self):
         dusken_users_diffable = {}
         dusken_users = DuskenUser.objects.filter(groups=self.volunteer_group, is_active=True)
-        dusken_users = dusken_users.filter(authprofile__isnull=False)
+        dusken_users = dusken_users.filter(authprofile__isnull=False, authprofile__username_updated__isnull=False)
         dusken_users = dusken_users.select_related('authprofile').prefetch_related('groups', 'groups__profile')
 
         for u in dusken_users:
