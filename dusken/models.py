@@ -17,6 +17,7 @@ from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
+from apps.neuf_auth.models import AuthProfile
 from dusken.managers import DuskenUserManager, OrderManager
 from dusken.utils import create_email_key, send_validation_email, create_phone_key
 
@@ -79,6 +80,12 @@ class DuskenUser(AbstractUser):
     @property
     def is_volunteer(self):
         return self.groups.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).exists()
+
+    @property
+    def have_set_username(self):
+        # FIXME: Try to keep neuf_auth stuff out of dusken app
+        ap = AuthProfile.objects.filter(user=self).first()
+        return ap is not None and ap.username_updated is not None
 
     @property
     def is_member(self):

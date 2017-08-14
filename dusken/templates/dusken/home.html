@@ -149,6 +149,7 @@
                     </div>
                 </div>
             </div>
+            {% if user.is_volunteer and not user.have_set_username %}
             <div class="col-md-4">
                 <div class="home__actions__change-username card">
                     <div class="card-block">
@@ -163,6 +164,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </section>
     </div>

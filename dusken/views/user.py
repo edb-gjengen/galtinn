@@ -1,8 +1,11 @@
+from datetime import datetime
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, UpdateView, FormView
+from django.core.exceptions import ValidationError
+
 
 from apps.neuf_auth.models import AuthProfile
 from apps.neuf_ldap.utils import ldap_create_password
@@ -126,9 +129,21 @@ class UserUpdateMeView(UserUpdateView):
 
 
 class UserUpdateUsernameView(VolunteerRequiredMixin, UpdateView):
-    template_name = 'dusken/user_username.html'
     model = DuskenUser
     fields = ['username']
+    template_name = 'dusken/user_username.html'
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def form_valid(self, form):
+        self._set_ldap_username_updated()
+        return super(UserUpdateUsernameView, self).form_valid(form)
+
+    def _set_ldap_username_updated(self):
+        # FIXME: Try to keep neuf_auth stuff out of dusken app
+        ap, _ = AuthProfile.objects.get_or_create(user=self.object)
+        if ap.username_updated is not None:
+            raise Exception('Username can only be set once!')
+        ap.username_updated = datetime.now()
+        ap.save()
