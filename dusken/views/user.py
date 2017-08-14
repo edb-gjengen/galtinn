@@ -114,3 +114,12 @@ class UserUpdateMeView(UserUpdateView):
 
     def get_success_url(self):
         return reverse('user-detail-me')
+
+
+class UserUpdateUsernameView(VolunteerRequiredMixin, UpdateView):
+    template_name = 'dusken/user_username.html'
+    model = DuskenUser
+    fields = ['username']
+
+    def get_object(self, queryset=None):
+        return self.request.user

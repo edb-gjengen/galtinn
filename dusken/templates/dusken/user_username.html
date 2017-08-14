@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n bootstrap4 %}
+{% block body %}
+    <div class="alert alert-danger" role="alert">
+        The username can only be set once!
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+    </form>
+{% endblock %}
