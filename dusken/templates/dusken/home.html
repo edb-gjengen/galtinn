@@ -157,7 +157,7 @@
                         <h6 class="card-subtitle text-muted">{% trans "Set a username so your user get's synced to other systems" %}</h6>
                     </div>
                     <div class="alert alert-danger" role="alert">
-                       The username can only be set once!
+                       {% trans "The username can only be set once!" %}
                     </div>
                     <div class="card-block">
                         <a href="{% url "user-update-username" %}" class="btn btn-outline-primary btn-block">{% trans "Set username" %}</a>
