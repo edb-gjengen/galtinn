@@ -1,14 +1,15 @@
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, TemplateView, UpdateView, FormView
-from dusken.views.mixins import VolunteerRequiredMixin
+from django.shortcuts import redirect
+from django.views.generic import ListView, DetailView, UpdateView, FormView
 
-from dusken.forms import (UserEmailValidateForm, UserPhoneValidateForm, DuskenUserForm, 
-                          DuskenUserUpdateForm, DuskenUserActivateForm, UserWidgetForm)
+from apps.neuf_auth.models import AuthProfile
+from apps.neuf_ldap.utils import ldap_create_password
+from dusken.forms import DuskenUserForm, DuskenUserUpdateForm, DuskenUserActivateForm, UserWidgetForm
 from dusken.models import DuskenUser, Order
-from dusken.utils import send_validation_sms, generate_username
+from dusken.utils import generate_username
+from dusken.views.mixins import VolunteerRequiredMixin
 
 
 class UserRegisterView(FormView):
@@ -25,8 +26,16 @@ class UserRegisterView(FormView):
         # Log the user in
         self.object.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, self.object)
+
+        self._set_ldap_hash(form.cleaned_data['password'])
         
         return redirect(self.get_success_url())
+
+    def _set_ldap_hash(self, raw_password):
+        # FIXME: Try to keep neuf_auth stuff out of dusken app
+        ap, _ = AuthProfile.objects.get_or_create(user=self.object)
+        ap.ldap_password = ldap_create_password(raw_password)
+        ap.save()
 
 
 class UserActivateView(FormView):
