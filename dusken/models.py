@@ -109,6 +109,7 @@ class DuskenUser(AbstractUser):
         return Order.objects.unclaimed(phone_number=self.phone_number)
 
     def update_volunteer_status(self):
+        # FIXME: What if user is part of a group not tied to an org unit? Should check that
         if self.groups.count() <= 1 and self.is_volunteer:
             Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first().user_set.remove(self)
         else:

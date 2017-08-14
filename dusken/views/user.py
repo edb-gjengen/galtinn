@@ -1,12 +1,14 @@
-from datetime import datetime
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import redirect
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, DetailView, UpdateView, FormView
 from django.core.exceptions import ValidationError
 
-
+from apps.neuf_auth.forms import SetUsernameForm
 from apps.neuf_auth.models import AuthProfile
 from apps.neuf_ldap.utils import ldap_create_password
 from dusken.forms import DuskenUserForm, DuskenUserUpdateForm, DuskenUserActivateForm, UserWidgetForm
@@ -128,22 +130,27 @@ class UserUpdateMeView(UserUpdateView):
         return reverse('user-detail-me')
 
 
-class UserUpdateUsernameView(VolunteerRequiredMixin, UpdateView):
-    model = DuskenUser
-    fields = ['username']
+class UserSetUsernameView(VolunteerRequiredMixin, UpdateView):
+    form_class = SetUsernameForm
     template_name = 'dusken/user_username.html'
+    success_url = reverse_lazy('home')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            ap = AuthProfile.objects.filter(user=self.request.user).first()
+            if ap is not None and ap.username_updated is not None:
+                messages.error(self.request, _('Username can only be set once'))
+                return redirect(self.success_url)
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         return self.request.user
 
     def form_valid(self, form):
-        self._set_ldap_username_updated()
-        return super(UserUpdateUsernameView, self).form_valid(form)
+        form.save()
+        username = form.cleaned_data['username']
+        self.object.log('Username set to {username}'.format(username=username))
+        messages.success(self.request, '{} 😎'.format(_('Username set to {username}').format(username=username)))
 
-    def _set_ldap_username_updated(self):
-        # FIXME: Try to keep neuf_auth stuff out of dusken app
-        ap, _ = AuthProfile.objects.get_or_create(user=self.object)
-        if ap.username_updated is not None:
-            raise Exception('Username can only be set once!')
-        ap.username_updated = datetime.now()
-        ap.save()
+        return redirect(self.success_url)

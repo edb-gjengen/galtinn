@@ -153,11 +153,8 @@
             <div class="col-md-4">
                 <div class="home__actions__change-username card">
                     <div class="card-block">
-                        <h4 class="card-title">{% trans "Username" %}</h4>
-                        <h6 class="card-subtitle text-muted">{% trans "Set a username so your user get's synced to other systems" %}</h6>
-                    </div>
-                    <div class="alert alert-danger" role="alert">
-                       {% trans "The username can only be set once!" %}
+                        <h4 class="card-title">{% trans "Set a username" %}</h4>
+                        <h6 class="card-subtitle text-muted">{% trans "Needed to get access to internal systems" %}</h6>
                     </div>
                     <div class="card-block">
                         <a href="{% url "user-update-username" %}" class="btn btn-outline-primary btn-block">{% trans "Set username" %}</a>

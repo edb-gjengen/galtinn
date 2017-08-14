@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% load i18n bootstrap4 %}
 {% block body %}
-    <div class="alert alert-danger" role="alert">
-        The username can only be set once!
+    <h2>{% trans "Pick a username" %}</h2>
+    <p>{% trans "To get access to other systems for volunteers you have to pick a username for your account." %}</p>
+    <div class="alert alert-warning" role="alert">
+        {% trans "Please note that the username can only be set this once" %}
     </div>
     <form method="post">
         {% csrf_token %}
