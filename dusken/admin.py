@@ -75,7 +75,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['payment_method']
     search_fields = ['uuid', 'phone_number', 'member_card__card_number', 'user__username',
                      'user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
-    readonly_fields = ['uuid', 'product', 'price_nok', 'user', 'payment_method', 'transaction_id']
+    readonly_fields = ['uuid', 'product', 'price_nok', 'user', 'payment_method', 'transaction_id', 'member_card']
 
     def show_user_link(self, obj):
         if obj.user is None:
