@@ -1,4 +1,6 @@
 // generated on 2015-09-03 using generator-gulp-webapp 1.0.3
+import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
@@ -15,7 +17,6 @@ const vendorJS = [
     'node_modules/select2/dist/js/select2.min.js',
 ];
 
-// TODO: postcss
 gulp.task('styles', () => {
     return gulp.src('app/styles/*.scss')
         .pipe($.plumber())
@@ -25,7 +26,10 @@ gulp.task('styles', () => {
             precision: 10,
             includePaths: ['.', 'node_modules/bootstrap/scss']
         }).on('error', $.sass.logError))
-        .pipe($.autoprefixer({browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']}))
+        .pipe($.postcss([
+            autoprefixer({browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']}),
+            cssnano(),
+        ]))
         .pipe($.sourcemaps.write())
         .pipe(gulp.dest('dist/styles'))
         .pipe(reload({stream: true}));
