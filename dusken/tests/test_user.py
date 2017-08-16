@@ -10,6 +10,7 @@ from rest_framework.test import APITestCase
 from django.test import TestCase
 
 from dusken.models import DuskenUser, Order, Membership, MembershipType
+from dusken.utils import generate_username
 
 
 class DuskenUserAPITestCase(APITestCase):
@@ -177,3 +178,13 @@ class DuskenUserMembershipTestCase(TestCase):
 
         m.delete()
         self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 0)
+
+
+class DuskenUtilTests(TestCase):
+    def test_generate_username_without_blanks(self):
+        first_name = 'ole remi'
+        last_name = 'nordmann'
+        generated = generate_username(first_name, last_name)
+        print(generated)
+        self.assertGreater(len(generated), 0)
+        self.assertNotIn(' ', generated)
