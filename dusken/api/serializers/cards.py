@@ -25,6 +25,9 @@ class KassaMemberCardUpdateSerializer(serializers.Serializer):
     member_card = serializers.SlugRelatedField(
         slug_field='card_number',
         queryset=MemberCard.objects.all())
+    transaction_id = serializers.CharField(
+        allow_null=True,
+        required=False)
 
     def validate(self, data):
         user = data.get('user')

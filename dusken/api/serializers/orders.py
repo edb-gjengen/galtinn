@@ -21,6 +21,10 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class BaseMembershipOrder(object):
+    transaction_id = serializers.CharField(
+        allow_null=True,
+        required=False)
+
     def _create_order(self, membership, transaction_id, payment_method, phone_number=None, member_card=None):
         order = Order.objects.create(
             payment_method=payment_method,
@@ -68,17 +72,19 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
 
     def create(self, validated_data, **kwargs):
         user = validated_data.get('user')
+        membership_type = validated_data.get('membership_type')
+        transaction_id = validated_data.get('transaction_id')
         start_date = self._get_start_date(user)
 
         with transaction.atomic():
             membership = self._create_membership(
                 user=user,
                 start_date=start_date,
-                membership_type=validated_data.get('membership_type'))
+                membership_type=membership_type)
             order = self._create_order(
                 membership=membership,
                 payment_method=Order.BY_CARD,
-                transaction_id=validated_data.get('transaction_id'))
+                transaction_id=transaction_id)
 
         return order
 
@@ -124,6 +130,7 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         user = validated_data.get('user')
         phone_number = validated_data.get('phone_number')
         member_card = validated_data.get('member_card')
+        transaction_id = validated_data.get('transaction_id')
 
         membership_start_date = self._get_start_date(user, phone_number, member_card)
 
@@ -136,7 +143,7 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
                 membership=membership,
                 payment_method=Order.BY_CASH_REGISTER,
                 phone_number=phone_number if not user else None,
-                transaction_id=validated_data.get('transaction_id'))
+                transaction_id=transaction_id)
             if user and member_card and not user.member_cards.filter(pk=member_card.pk).exists():
                 member_card.register(user=user)
             elif not user and member_card:

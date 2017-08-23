@@ -54,15 +54,18 @@ class KassaCardUpdateTestCase(APITestCase):
     def test_kassa_can_set_blank_card_on_order(self):
         order = Order.objects.create(price_nok=0,
                                      phone_number='+4794430002')
+        transaction_id = 'this-is-a-fake-uuid'
         url = reverse('kassa-card-update')
         payload = {
             'user': None,
             'order': order.uuid,
             'member_card': self.blank_card.card_number,
+            'transaction_id': transaction_id,
         }
         response = self.client.patch(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.data)
         self.assertTrue(Order.objects.get(pk=order.pk).member_card.pk, self.blank_card.pk)
+        self.assertEqual(Order.objects.get(pk=order.pk).transaction_id, transaction_id)
         self.assertTrue(MemberCard.objects.get(pk=self.blank_card.pk).is_active)
         self.assertTrue(MemberCard.objects.get(pk=self.blank_card.pk).registered is not None)
 

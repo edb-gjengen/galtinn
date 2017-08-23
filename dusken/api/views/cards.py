@@ -47,10 +47,14 @@ class KassaMemberCardUpdateView(UpdateAPIView):
         user = data.get('user')
         order = data.get('order')
         member_card = data.get('member_card')
+        transaction_id = data.get('transaction_id')
 
         if user:
             member_card.register(user=user)
         elif order:
             member_card.register(order=order)
+            if transaction_id:
+                order.transaction_id = transaction_id
+                order.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
