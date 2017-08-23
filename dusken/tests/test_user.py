@@ -185,6 +185,5 @@ class DuskenUtilTests(TestCase):
         first_name = 'ole remi'
         last_name = 'nordmann'
         generated = generate_username(first_name, last_name)
-        print(generated)
         self.assertGreater(len(generated), 0)
         self.assertNotIn(' ', generated)
