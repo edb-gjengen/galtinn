@@ -37,4 +37,4 @@ class Command(BaseCommand):
             script_response = proc.stdout.read()
 
             if len(script_response) != 0:
-                self.stdout.write(script_response.encode('utf-8'))
+                self.stdout.write(script_response.decode('utf-8'))
