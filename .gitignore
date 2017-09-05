@@ -12,3 +12,5 @@ node_modules
 /insidedocs
 /celerybeat-schedule
 .coverage
+
+scripts/users_in_group_active.json

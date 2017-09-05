@@ -228,3 +228,11 @@ MAILMAN_API_PASSWORD = os.getenv('MAILMAN_API_PASSWORD', '')
 
 # Google Analytics
 GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv('GOOGLE_ANALYTICS_PROPERTY_ID', '')
+
+# Wordpress sync
+WP_PHP_SCRIPT_PATH = os.path.join(BASE_DIR, 'scripts')
+WP_OUT_FILENAME = os.path.join(WP_PHP_SCRIPT_PATH, "users_in_group_active.json")
+WP_LOAD_PATHS = [
+    "/var/www/studentersamfundet.no/www/wp/wp-load.php",
+    "/var/www/neuf.no/aktivweb/wp-load.php"
+]
