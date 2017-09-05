@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from django.conf import settings
 import ldapdb.models
 from ldapdb.models.fields import CharField, ImageField, IntegerField, ListField
@@ -50,17 +50,13 @@ class LdapUser(ldapdb.models.Model):
     description = CharField(db_column='description')
 
     @staticmethod
-    def _days_since_1970():
-        epoch = datetime.datetime.utcfromtimestamp(0)
-        today = datetime.datetime.today()
-        delta = today - epoch
-
-        return delta.days
+    def _days_since_epoch():
+        return (datetime.utcnow() - datetime(1970, 1, 1)).days
 
     def set_password(self, raw_password, commit=True):
         self.password = ldap_create_password(raw_password)
         # Update last changed password date
-        self.shadowLastChange = LdapUser._days_since_1970()
+        self.shadowLastChange = LdapUser._days_since_epoch()
 
         if commit:
             self.save()
