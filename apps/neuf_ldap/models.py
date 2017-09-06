@@ -53,8 +53,8 @@ class LdapUser(ldapdb.models.Model):
     def _days_since_epoch():
         return (datetime.utcnow() - datetime(1970, 1, 1)).days
 
-    def set_password(self, raw_password, commit=True):
-        self.password = ldap_create_password(raw_password)
+    def set_password(self, raw_password, commit=True, prehashed=False):
+        self.password = raw_password if prehashed else ldap_create_password(raw_password)
         # Update last changed password date
         self.shadowLastChange = LdapUser._days_since_epoch()
 

@@ -93,8 +93,7 @@ def create_ldap_user(user, dry_run=False):
         ldap_user.set_password(user['password'], commit=False)  # Raw
         pwd_type = 'raw'
     elif user.get('ldap_password') is not None:
-        ldap_user.password = user['ldap_password']  # Hashed
-        ldap_user.shadowLastChange = LdapUser._days_since_epoch()
+        ldap_user.set_password(user['ldap_password'], commit=False, prehashed=True)  # Hashed
         pwd_type = 'hashed'
     else:
         # No password
