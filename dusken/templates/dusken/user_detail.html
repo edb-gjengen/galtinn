@@ -62,6 +62,33 @@
     </ul>
     <br>
     <ul class="list-group">
+        <li class="list-group-item">
+            <span>
+                {% svg "icons/license" %} {% trans "Membership" %}:
+                {% with userobj.last_membership as ms %}
+                    {% if ms != null %}
+                        <strong>
+                            {% if ms.end_date %}
+                                {{ ms.end_date }}
+                            {% else %}
+                                {% trans "Lifelong" %}
+                            {% endif %}
+                        </strong>
+                        {% if ms.is_valid %}
+                            <span class="badge badge-success">{% trans "Valid" %}</span>
+                        {% else %}
+                            <span class="badge badge-danger">{% trans "Expired" %}</span>
+                        {% endif %}
+                    {% else %}
+                        <strong>{% trans "None" %}</strong>
+                        <span class="badge badge-danger">{% trans "Expired" %}</span>
+                    {% endif %}
+                {% endwith %}
+            </span>
+        </li>
+    </ul>
+    <br>
+    <ul class="list-group">
         <li class="list-group-item"><em><span>{% trans "Registered" %}: <strong>{{ userobj.date_joined|date }}</strong></span></em></li>
         <li class="list-group-item"><em><span>{% trans "Last updated" %}: <strong title="{{ userobj.updated }}">{{ userobj.updated|naturaltime }}</strong></span></em></li>
     </ul>
