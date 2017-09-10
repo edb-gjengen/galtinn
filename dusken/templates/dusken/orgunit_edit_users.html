@@ -10,20 +10,43 @@
     </div>
     <ul class="list-group" id="user_list">
     {% for user in users_sorted %}
-        <li class="list-group-item justify-content-between"><span>
-            {% if user|has_group:orgunit.admin_group %}
-                {% svg "icons/star" %}
-            {% else %}
-                {% svg "icons/user" %}
-            {% endif %}
-            <a href="{% url "user-detail" user.uuid %}"> {{ user.get_full_name }}</a> - <a href="mailto:{{ user.email }}">{{ user.email }}</a>
-            {% if user|has_group:orgunit.admin_group %}
-                ({% trans "Admin" %})
-            {% endif %}
-        </span><span>
-            <button  class="btn btn-outline-primary btn-block p-1" id="user_remove_{{ user.uuid }}"
-                     onclick="remove_user('{{ user.uuid }}', '{{ orgunit.slug }}');">{%  trans "Remove" %}</button>
-        </span></li>
+        <li class="list-group-item justify-content-between">
+            <span>
+                {% if user|has_group:orgunit.admin_group %}
+                    {% svg "icons/star" %}
+                {% else %}
+                    {% svg "icons/user" %}
+                {% endif %}
+                <a href="{% url "user-detail" user.uuid %}"> {{ user.get_full_name }}</a>
+                &ndash; <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                {% if user|has_group:orgunit.admin_group %}
+                    ({% trans "Admin" %})
+                {% endif %}
+                &ndash; <span title="{% trans "Membership" %}">
+                    {% with user.last_membership as ms %}
+                        {% if ms != null %}
+                            {% if ms.is_valid %}
+                                <span class="badge badge-success">
+                                    {% if ms.end_date %}
+                                        {{ ms.end_date }}
+                                    {% else %}
+                                        {% trans "Lifelong" %}
+                                    {% endif %}
+                                </span>
+                            {% else %}
+                                <span class="badge badge-danger">{{ ms.end_date }}</span>
+                            {% endif %}
+                        {% else %}
+                            <strong></strong>
+                            <span class="badge badge-danger">{% trans "None" %}</span>
+                        {% endif %}
+                    {% endwith %}
+                </span>
+            </span>
+            <span>
+                <button class="btn btn-outline-primary btn-block p-1" id="user_remove_{{ user.uuid }}" onclick="remove_user('{{ user.uuid }}', '{{ orgunit.slug }}');">{% trans "Remove" %}</button>
+            </span>
+        </li>
     {% empty %}
         {% trans "No members" %}
     {% endfor %}
