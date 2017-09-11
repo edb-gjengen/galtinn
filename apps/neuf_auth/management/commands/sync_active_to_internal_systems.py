@@ -64,7 +64,7 @@ class Command(BaseCommand):
         dusken_users = dusken_users.select_related('authprofile').prefetch_related('groups', 'groups__profile')
 
         for u in dusken_users:
-            posix_groups = u.groups.exclude(profile__posix_name='', profile__posix_name__isnull=True)
+            posix_groups = u.groups.exclude(profile__isnull=True, profile__posix_name='')
             dusken_groups = list(posix_groups.values_list('profile__posix_name', flat=True))
             dusken_users_diffable[u.username] = {
                 'username': u.username,
