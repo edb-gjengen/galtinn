@@ -50,7 +50,7 @@ class DuskenUserForm(forms.ModelForm):
     email = fields.EmailField(label=_('Email'), widget=forms.EmailInput(attrs={'placeholder': _('Email')}))
     phone_number = PhoneNumberField(label=_('Phone number'))
     password = fields.CharField(label=_('Password'), widget=forms.PasswordInput())
-    captcha = ReCaptchaField(label=_('I\'m not a robot'))
+    captcha = ReCaptchaField(label='')
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -157,5 +157,12 @@ class UserPhoneValidateForm(forms.Form):
 class DuskenAuthenticationForm(AuthenticationForm):
     username = UsernameField(
         max_length=254,
-        widget=forms.TextInput(attrs={'autofocus': True, 'placeholder': _('Email address / username')}),
+        widget=forms.TextInput(attrs={
+            'autofocus': True,
+            'placeholder': _('Email address / username'),
+            'autocomplete': 'off',
+            'autocorrect': 'off',
+            'autocapitalize': 'off',
+            'spellcheck': 'false'
+        }),
     )
