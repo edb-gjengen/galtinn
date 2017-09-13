@@ -31,9 +31,7 @@ class UserRegisterView(FormView):
         # Log the user in
         self.object.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, self.object)
-
         self._set_ldap_hash(form.cleaned_data['password'])
-        
         return redirect(self.get_success_url())
 
     def _set_ldap_hash(self, raw_password):
@@ -77,14 +75,21 @@ class UserActivateView(FormView):
         self.object = form.save(commit=False)
         self.object.phone_number = self.get_initial().get('phone_number')
         self.object.username = generate_username(self.object.first_name, self.object.last_name)
+        self.object.set_password(form.cleaned_data['password'])
         self.object.save()
         self.object.confirm_phone_number()
 
         # Log the user in
         self.object.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, self.object)
-
+        self._set_ldap_hash(form.cleaned_data['password'])
         return redirect(self.get_success_url())
+
+    def _set_ldap_hash(self, raw_password):
+        # FIXME: Try to keep neuf_auth stuff out of dusken app
+        ap, _ = AuthProfile.objects.get_or_create(user=self.object)
+        ap.ldap_password = ldap_create_password(raw_password)
+        ap.save()
 
 
 class UserListView(VolunteerRequiredMixin, ListView):
