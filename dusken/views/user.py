@@ -50,7 +50,7 @@ class UserActivateView(FormView):
     success_url = reverse_lazy('home')
 
     def get(self, request, *args, **kwargs):
-        phone_number = kwargs.get('phone')
+        phone_number = '+' + kwargs.get('phone', '')
         code = kwargs.get('code')
         self.valid_link = False
         try:

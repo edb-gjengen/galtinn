@@ -100,12 +100,22 @@ class DuskenUserActivateTestCase(TestCase):
             start_date=today - timedelta(days=10),
             end_date=today + timedelta(days=10),
             membership_type=self.membership_type)
+        self.membership_two = Membership.objects.create(
+            start_date=today - timedelta(days=10),
+            end_date=today + timedelta(days=10),
+            membership_type=self.membership_type)
         self.order = Order.objects.create(
             payment_method=Order.BY_CASH_REGISTER,
             product=self.membership,
             price_nok=0,
             phone_number='+4794430002',
             transaction_id='14bf6820-3aca-42c8-8a32-61d1b4c44781')
+        self.order_foreign = Order.objects.create(
+            payment_method=Order.BY_CASH_REGISTER,
+            product=self.membership_two,
+            price_nok=0,
+            phone_number='+46771793336',
+            transaction_id='79c2bf64-5b37-43a1-917a-85512eee4bbd')
         self.user_data = {
             'first_name': 'Ola',
             'last_name': 'Nordmann',
@@ -144,6 +154,19 @@ class DuskenUserActivateTestCase(TestCase):
             'phone': str(self.order.phone_number).replace('+', ''),
             'code': self.order.transaction_id[:8]
         }
+        url = reverse('user-activate', kwargs=kwargs)
+        response = self.client.post(url, self.user_data)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)  # redirect to home
+        user = DuskenUser.objects.get(email=self.user_data.get('email'))
+        self.assertTrue(user.phone_number_confirmed)
+        self.assertTrue(user.is_member)
+
+    def test_right_combination_works_for_foreign_phone(self):
+        kwargs = {
+            'phone': str(self.order_foreign.phone_number).replace('+', ''),
+            'code': self.order_foreign.transaction_id[:8]
+        }
+        self.user_data['code'] = self.order_foreign.transaction_id[:8]
         url = reverse('user-activate', kwargs=kwargs)
         response = self.client.post(url, self.user_data)
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)  # redirect to home
