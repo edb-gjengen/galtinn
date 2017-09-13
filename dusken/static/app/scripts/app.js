@@ -150,31 +150,54 @@ function formatMessage(message, alert) {
         '</div>';
 }
 
-function remove_user(user, orgunit) {
+function remove_member(user, orgunit) {
     if (confirm('Remove user?')) {
-        $.ajax({
-            url: '/api/orgunit/remove/user/',
-            data: {
-                'user': user,
-                'orgunit': orgunit
-            },
-            dataType: 'json',
-            success: function (response) {
-                if (response.success) {
-                    $('#user_remove_' + user).parent().parent().slideUp();
-                } else {
-                    alert('Failed to remove user');
-                }
-            },
-            error: function () {
-                alert('Failed to remove user');
-            }
-        });
+        remove_user(user, orgunit, 'member');
     }
 }
 
-function add_user(orgunit, type) {
-    const user = $('#id_user').select2('data')[0].id;
+function remove_admin(user, orgunit) {
+    remove_user(user, orgunit, 'admin');
+}
+
+function remove_user(user, orgunit, type) {
+    $.ajax({
+        url: '/api/orgunit/remove/user/',
+        data: {
+            'user': user,
+            'orgunit': orgunit,
+            'type': type
+        },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                if (type == 'admin') {
+                    location.reload()
+                } else {
+                    $('#user_remove_' + user).parent().parent().slideUp();
+                }
+            } else {
+                alert('Failed to remove user');
+            }
+        },
+        error: function () {
+            alert('Failed to remove user');
+        }
+    });
+}
+
+function add_selected_user(orgunit, type) {
+    let user = null;
+    try {
+        user = $('#id_user').select2('data')[0].id;
+    }
+    catch(err) {
+        return
+    }
+    add_user(user, orgunit, type);
+}
+
+function add_user(user, orgunit, type) {
     $.ajax({
         url: '/api/orgunit/add/user/',
         data: {
@@ -184,20 +207,8 @@ function add_user(orgunit, type) {
         },
         dataType: 'json',
         success: function (response) {
-            if (response.success) { // FIXME: get something better from the server instead of recreating... (this causes dual maintenance)
-                $('#user_remove_'+response.user_uuid).parent().parent().slideUp();
-                var icon = '<svg class="linearicon icon-user" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M9.5 11C6.467 11 4 8.533 4 5.5S6.467 0 9.5 0 15 2.467 15 5.5 12.533 11 9.5 11zm0-10C7.019 1 5 3.019 5 5.5S7.019 10 9.5 10 14 7.981 14 5.5 11.981 1 9.5 1zm8 19h-16C.673 20 0 19.327 0 18.5c0-.068.014-1.685 1.225-3.3.705-.94 1.67-1.687 2.869-2.219C5.558 12.33 7.377 12 9.5 12s3.942.33 5.406.981c1.199.533 2.164 1.279 2.869 2.219C18.986 16.815 19 18.432 19 18.5c0 .827-.673 1.5-1.5 1.5zm-8-7c-3.487 0-6.06.953-7.441 2.756C1.024 17.107 1.001 18.488 1 18.502a.5.5 0 0 0 .5.498h16a.5.5 0 0 0 .5-.5c0-.012-.023-1.393-1.059-2.744C15.559 13.953 12.986 13 9.5 13z"></path></svg>'
-                var admin = '';
-                if (type === 'admin') {
-                    icon = '<svg class="linearicon icon-star" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15.5 19a.497.497 0 0 1-.239-.061L10 16.07l-5.261 2.869a.499.499 0 0 1-.732-.522l.958-5.746-3.818-3.818a.501.501 0 0 1 .271-.847l5.749-.958 2.386-4.772a.5.5 0 0 1 .894 0l2.386 4.772 5.749.958a.5.5 0 0 1 .271.847l-3.818 3.818.958 5.746A.503.503 0 0 1 15.5 19zM10 15c.082 0 .165.02.239.061l4.599 2.508-.831-4.987a.497.497 0 0 1 .14-.436l3.313-3.313-5.042-.84a.5.5 0 0 1-.365-.27L10 3.617 7.947 7.723a.503.503 0 0 1-.365.27l-5.042.84 3.313 3.313a.502.502 0 0 1 .14.436l-.831 4.987 4.599-2.508A.497.497 0 0 1 10 15z"></path></svg>'
-                    admin = '(' + response.admin + ')'
-                }
-                var li ='<li class="list-group-item justify-content-between"><span>' + icon +
-                '<a href="/users/' + response.user_uuid + '/"> ' + response.user_name + '</a> - ' +
-                    '<a href="mailto:' + response.user_email + '">' + response.user_email + '</a> ' + admin + '</span><span>' +
-                '<button  class="btn btn-outline-primary btn-block p-1" id="user_remove_' + response.user_uuid + '"' +
-                'onclick="remove_user(\'' + response.user_uuid + '\', \'' + orgunit + '\');">' + response.remove + '</button></span></li>';
-                $(li).prependTo('#user_list').hide().slideDown();
+            if (response.success) {
+                location.reload()
             } else {
                 alert('Failed to add user');
             }

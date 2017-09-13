@@ -394,6 +394,8 @@ class OrgUnit(MPTTModel, BaseModel):
         user_obj.update_volunteer_status()
 
     def remove_admin(self, user_obj, changed_by):
+        if self.admin_group == self.group:
+            return
         self.admin_group.user_set.remove(user_obj)
         self.log('Removed {} from admin'.format(user_obj), changed_by)
         user_obj.log('No longer admin in {} OrgUnit'.format(self), changed_by)
