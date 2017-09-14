@@ -52,7 +52,7 @@
                                 onclick="remove_admin('{{ user.uuid }}', '{{ orgunit.slug }}');">{% trans "Make member" %}</button>
                     {% else %}
                         <button class="btn btn-outline-primary btn-block mt-2 mt-lg-0 p-1" id="user_remove_{{ user.uuid }}"
-                                onclick="add_user('{{ user.uuid }}', '{{ orgunit.slug }}', 'admin');">{% trans "Make admin" %}</button>
+                                onclick="add_user('{{ user.uuid }}', '{{ orgunit.slug }}', 'admin_uuid');">{% trans "Make admin" %}</button>
                     {% endif %}
                 {% endif %}
             </div>

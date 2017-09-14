@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 22:26+0200\n"
-"PO-Revision-Date: 2017-09-13 22:51+0200\n"
+"POT-Creation-Date: 2017-09-14 14:40+0200\n"
+"PO-Revision-Date: 2017-09-14 14:43+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -42,6 +42,26 @@ msgstr "Dusken-felter"
 #: api/views/memberships.py:97
 msgid "Your card has been declined"
 msgstr "Bankkortet ditt ble avvist"
+
+#: api/views/orgunits.py:15 api/views/orgunits.py:50
+msgid "Error"
+msgstr "Feil"
+
+#: api/views/orgunits.py:22
+msgid "Can't remove user because the user is not in the group"
+msgstr "Kan ikke fjerne brukeren fordi en ikke er i gruppen"
+
+#: api/views/orgunits.py:24
+msgid "You are not authorized to remove users"
+msgstr "Du har ikke tilgang til å fjerne brukere"
+
+#: api/views/orgunits.py:59
+msgid "User already added"
+msgstr "Brukeren er allerede lagt til"
+
+#: api/views/orgunits.py:61
+msgid "You are not authorized to add users"
+msgstr "Du har ikke tilgang til å legge til brukere"
 
 #: api/views/validate.py:16
 msgid "You need to enter your first name."
@@ -80,10 +100,6 @@ msgstr "Mobilnummer"
 #: forms.py:52 templates/dusken/home.html:144
 msgid "Password"
 msgstr "Passord"
-
-#: forms.py:53
-msgid "I'm not a robot"
-msgstr "Jeg er ikke en maskin"
 
 #: forms.py:58
 msgid "Email already in use"
@@ -125,7 +141,7 @@ msgstr "Mobilnummeret er allerede bekreftet"
 msgid "Invalid code"
 msgstr "Ugyldig kode"
 
-#: forms.py:160
+#: forms.py:162
 msgid "Email address / username"
 msgstr "E-postadresse / brukernavn"
 
@@ -186,8 +202,7 @@ msgstr "stripe kunde-id"
 msgid "Users"
 msgstr "Brukere"
 
-#: models.py:212 templates/dusken/nav.html:13
-#: templates/dusken/orgunit_edit_users.html:27
+#: models.py:212 templates/dusken/orgunit_edit_users.html:27
 #: templates/dusken/user_detail.html:67 templates/nav.html:16
 msgid "Membership"
 msgstr "Medlemskap"
@@ -481,8 +496,7 @@ msgstr "Det Norske Studentersamfund - Chateau Neuf"
 msgid "Go forth and click the link to confirm: %(validation_url)s"
 msgstr "Trykk på lenken for å bekrefte: %(validation_url)s"
 
-#: templates/dusken/home.html:10 templates/dusken/nav.html:11
-#: templates/nav.html:13
+#: templates/dusken/home.html:10 templates/nav.html:13
 msgid "Home"
 msgstr "Hjem"
 
@@ -697,22 +711,6 @@ msgstr "Kjøp medlemskap"
 msgid "Renew membership"
 msgstr "Forny medlemskap"
 
-#: templates/dusken/nav.html:6
-msgid "dusken.neuf.no"
-msgstr "dusken.neuf.no"
-
-#: templates/dusken/nav.html:16
-msgid "Active"
-msgstr "Aktiv"
-
-#: templates/dusken/nav.html:27 templates/nav.html:25
-msgid "Profile"
-msgstr "Profil"
-
-#: templates/dusken/nav.html:28 templates/nav.html:46
-msgid "Log out"
-msgstr "Logg ut"
-
 #: templates/dusken/order_detail.html:4
 msgid "Reciept"
 msgstr "Kvittering"
@@ -876,9 +874,17 @@ msgstr "av"
 msgid "Toggle navigation"
 msgstr "Svitsj navigasjon"
 
+#: templates/nav.html:25
+msgid "Profile"
+msgstr "Profil"
+
 #: templates/nav.html:42
 msgid "Change language to..."
 msgstr "Endre språk til..."
+
+#: templates/nav.html:46
+msgid "Log out"
+msgstr "Logg ut"
 
 #: templates/registration/logged_out.html:7
 msgid "Goodbye"
@@ -1002,11 +1008,11 @@ msgstr "Du har ikke tilgang til denne siden"
 msgid "You need to be a volunteer to see this page"
 msgstr "Du må være registrert aktiv for å se denne siden"
 
-#: views/user.py:142
+#: views/user.py:147
 msgid "Username can only be set once"
 msgstr "Brukernavnet kan bare settes én gang"
 
-#: views/user.py:154
+#: views/user.py:159
 #, python-brace-format
 msgid "Username set to {username}"
 msgstr "Brukernavnet er satt til {username}"
@@ -1014,6 +1020,15 @@ msgstr "Brukernavnet er satt til {username}"
 #: views/validation.py:29 views/validation.py:63
 msgid "Success!"
 msgstr "Hurra!"
+
+#~ msgid "I'm not a robot"
+#~ msgstr "Jeg er ikke en maskin"
+
+#~ msgid "dusken.neuf.no"
+#~ msgstr "dusken.neuf.no"
+
+#~ msgid "Active"
+#~ msgstr "Aktiv"
 
 #~ msgid ""
 #~ "This is Galtinn, the membership database at <a href=\"https://"

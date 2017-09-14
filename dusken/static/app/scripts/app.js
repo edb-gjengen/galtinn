@@ -151,7 +151,7 @@ function formatMessage(message, alert) {
 }
 
 function remove_member(user, orgunit) {
-    if (confirm('Remove user?')) {
+    if (confirm('Remove user?')) { //FIXME: Translation... or just remove??
         remove_user(user, orgunit, 'member');
     }
 }
@@ -177,11 +177,11 @@ function remove_user(user, orgunit, type) {
                     $('#user_remove_' + user).parent().parent().slideUp();
                 }
             } else {
-                alert('Failed to remove user');
+                alert(response.error);
             }
         },
         error: function () {
-            alert('Failed to remove user');
+            alert('Failed to contact server');
         }
     });
 }
@@ -210,11 +210,11 @@ function add_user(user, orgunit, type) {
             if (response.success) {
                 location.reload()
             } else {
-                alert('Failed to add user');
+                alert(response.error);
             }
         },
         error: function() {
-            alert('Failed to add user');
+            alert('Failed to contact server');
         }
     });
 }
