@@ -112,7 +112,7 @@
     <ul class="list-group">
         {% for group in userobj.groups.all %}
             {% for ou in group.member_orgunits.all %}
-                <li class="list-group-item"><a href="{% url "org-unit-detail" ou.slug %}">{{ ou.name }}</a></li>
+                <li class="list-group-item"><a href="{% url "orgunit-detail" ou.slug %}">{{ ou.name }}</a></li>
             {% endfor %}
         {% empty %}
             <li class="list-group-item">{% trans "No organizations" %}</li>
