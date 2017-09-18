@@ -24,7 +24,6 @@
                         {% if user|has_admin_group:org.admin_group %}
                             <span><a class="btn btn-outline-primary btn-block pt-1 pb-1" href="{% url "orgunit-edit-users" org.slug %}">{%  trans "Manage members" %}</a></span>
                             <span><a class="btn btn-outline-primary btn-block pt-1 pb-1" href="{% url "orgunit-edit" org.slug %}">{%  trans "Edit" %}</a></span>
-
                         {% endif %}
                     </li>
                 {% endfor %}

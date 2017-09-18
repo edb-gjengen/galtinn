@@ -107,4 +107,15 @@
     {% elif user.is_superuser %}
         <a href="{% url "user-update" userobj.uuid %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit" %}</a>
     {% endif %}
+    <br>
+    <h5>{% trans "Organizations" %}</h5>
+    <ul class="list-group">
+        {% for group in userobj.groups.all %}
+            {% for ou in group.member_orgunits.all %}
+                <li class="list-group-item"><a href="{% url "org-unit-detail" ou.slug %}">{{ ou.name }}</a></li>
+            {% endfor %}
+        {% empty %}
+            <li class="list-group-item">{% trans "No organizations" %}</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
