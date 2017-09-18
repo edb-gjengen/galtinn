@@ -234,5 +234,5 @@ WP_PHP_SCRIPT_PATH = os.path.join(BASE_DIR, 'scripts')
 WP_OUT_FILENAME = os.path.join(WP_PHP_SCRIPT_PATH, "users_in_group_active.json")
 WP_LOAD_PATHS = [
     "/var/www/studentersamfundet.no/www/wp/wp-load.php",
-    "/var/www/neuf.no/aktivweb/wp-load.php"
+    "/var/www/neuf.no/aktivweb/wp/wp-load.php"
 ]
