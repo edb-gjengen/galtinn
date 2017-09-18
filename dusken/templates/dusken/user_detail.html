@@ -22,7 +22,16 @@
     </h4>
     <ul class="list-group">
         <li class="list-group-item"><span>{% trans "Full name" %}: <strong>{{ userobj.get_full_name }}</strong></span></li>
-        <li class="list-group-item"><span>{% trans "Username" %}: <strong>{{ userobj.username }}</strong></span></li>
+        <li class="list-group-item justify-content-between"><span>
+            {% trans "Username" %}: <strong>{{ userobj.username }}</strong>
+            {% if not userobj.auth_profile.exists and user.is_superuser %}
+                <span class="badge badge-info">{% trans "Not set" %}</span>
+            {% endif %}
+        </span>
+            {% if userobj == user and not userobj.userobj.auth_profile.username_updated %}
+                <a href="{% url "user-update-username" %}" class="btn btn-outline-primary btn-sm">{% trans "Set username" %}</a>
+            {% endif %}
+        </li>
         <li class="list-group-item justify-content-between">
             <span>
                 {% svg "icons/envelope" %} {% trans "Email" %}: <strong>{{ userobj.email }}</strong>
