@@ -43,7 +43,7 @@ class CurrentUserView(views.APIView):
 
 
 def user_pk_to_uuid(request):
-    if not request.user.is_authenticated or not request.user.is_volunteer:
+    if not request.user.is_authenticated or not (request.user.is_volunteer or request.user.is_superuser):
         return HttpResponseForbidden()
     user_pk = request.GET.get('user', None)
     user = DuskenUser.objects.get(pk=user_pk)
