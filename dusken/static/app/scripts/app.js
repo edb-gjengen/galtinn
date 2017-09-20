@@ -220,7 +220,13 @@ function add_user(user, orgunit, type) {
 }
 
 function view_user() {
-    const user = $('#id_user').select2('data')[0].id;
+    let user = null;
+    try {
+        user = $('#id_user').select2('data')[0].id;
+    }
+    catch(err) {
+        return
+    }
     $.ajax({
         url: '/api/user/pk/to/uuid/',
         data: {

@@ -277,6 +277,7 @@ class MembershipType(BaseModel):
 
     class Meta:
         verbose_name = _('Membership type')
+        verbose_name_plural = _('Membership types')
 
 
 class MemberCard(BaseModel):
@@ -305,6 +306,7 @@ class MemberCard(BaseModel):
 
     class Meta:
         verbose_name = _('Member card')
+        verbose_name_plural = _('Member cards')
         default_permissions = ('add', 'change', 'delete', 'view')
 
 
@@ -343,6 +345,8 @@ class GroupProfile(BaseModel):
 
     class Meta:
         verbose_name = _('Group profile')
+        verbose_name_plural = _('Group profiles')
+
 
 
 class OrgUnit(MPTTModel, BaseModel):

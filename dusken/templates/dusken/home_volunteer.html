@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block nav %}{% include "nav.html" with active='home-volunteer' %}{% endblock %}
-{% load i18n user svg %}
+{% load i18n user svg bootstrap4 %}
 {% block body %}
     <div class="home-volunteer">
     <h2 class="card-title">{% svg "icons/apartment" %} {% trans "Volunteer" %}</h2>
@@ -12,8 +12,11 @@
     {% else %}
         <ul>
             <li><a href="{% url "orgunit-list" %}">{% trans "List of organizational units" %}</a></li>
-            <li><a href="{% url "user-list" %}">{% trans "Users" %}</a></li>
         </ul>
+        <h4>{% svg "icons/user" %} {% trans "Find users" %}</h4><p>
+        {% bootstrap_form user_search %}
+        <button class="btn btn-primary" onclick="view_user();">{% trans "View" %}</button>
+        </p>
         {% if user.groups %}
             <h4>{% svg "icons/users" %} {% trans "Your organizations" %}</h4>
             <ul class="list-group">

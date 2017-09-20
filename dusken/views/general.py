@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.views.generic import FormView, DetailView
 
 from dusken.models import Order, MembershipType
-from dusken.forms import MembershipPurchaseForm, DuskenAuthenticationForm
+from dusken.forms import MembershipPurchaseForm, DuskenAuthenticationForm, UserWidgetForm
 
 
 class IndexView(FormView):
@@ -48,6 +48,11 @@ class HomeVolunteerView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeVolunteerView, self).get_context_data(**kwargs)
+        context['user_search'] = UserWidgetForm
+        return context
 
 
 class OrderDetailView(LoginRequiredMixin, DetailView):
