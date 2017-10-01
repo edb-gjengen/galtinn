@@ -43,7 +43,7 @@ class SetUsernameForm(forms.Form):
         super().__init__(*args, **kwargs)
 
     def clean(self):
-        if self.instance.have_set_username:
+        if self.instance.has_set_username:
             raise ValidationError(_('Username can only be set once'))
 
     def save(self):

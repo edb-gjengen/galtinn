@@ -1,6 +1,5 @@
 import os
 from datetime import timedelta
-from pprint import pprint
 
 from django.utils import timezone
 from rest_framework import status

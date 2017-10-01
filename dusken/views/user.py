@@ -27,7 +27,7 @@ class UserRegisterView(FormView):
         self.object.username = generate_username(self.object.first_name, self.object.last_name)
         self.object.set_password(form.cleaned_data['password'])
         self.object.save()
-        self.object.set_ldap_hash()
+        self.object.set_ldap_hash(form.cleaned_data['password'])
 
         # Log the user in
         self.object.backend = 'django.contrib.auth.backends.ModelBackend'
@@ -71,7 +71,7 @@ class UserActivateView(FormView):
         self.object.username = generate_username(self.object.first_name, self.object.last_name)
         self.object.set_password(form.cleaned_data['password'])
         self.object.save()
-        self.object.set_ldap_hash()
+        self.object.set_ldap_hash(form.cleaned_data['password'])
         self.object.confirm_phone_number()
 
         # Log the user in
@@ -130,7 +130,7 @@ class UserSetUsernameView(VolunteerRequiredMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.have_set_username:
+            if request.user.has_set_username:
                 messages.error(self.request, _('Username can only be set once'))
                 return redirect(self.success_url)
 

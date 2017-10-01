@@ -81,7 +81,7 @@ class DuskenUser(AbstractUser):
         return self.groups.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).exists()
 
     @property
-    def have_set_username(self):
+    def has_set_username(self):
         from apps.neuf_auth.models import AuthProfile
         return AuthProfile.objects.filter(user=self, username_updates__isnull=False).exists()
 
