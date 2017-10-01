@@ -3,15 +3,13 @@ import re
 import requests
 import logging
 
-from django.core import validators
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext as _
-from phonenumber_field.validators import validate_international_phonenumber
+import dns.resolver
 
 logger = logging.getLogger(__name__)
 
@@ -71,9 +69,9 @@ def send_sms(to, message):
     }
     response = requests.post(url, json=payload, headers=headers)
     if response.status_code != 200:
-        logger.warn('Failed to send SMS, status_code={} payload={}'.format(
-            response.status_code, payload))
+        logger.warning('Failed to send SMS, status_code={} payload={}'.format(response.status_code, payload))
         return
+
     return response.json().get('outgoing_id')
 
 
@@ -105,3 +103,12 @@ def email_exists(email):
 def phone_number_exist(phone_number):
     from dusken.models import DuskenUser
     return DuskenUser.objects.filter(phone_number=phone_number).exists()
+
+
+def mx_record_exists(domain):
+    """True if the domain exists and if it has an MX record, False otherwise"""
+    try:
+        dns.resolver.query(domain, 'MX')
+        return True
+    except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
+        return False

@@ -3,14 +3,10 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import redirect
-from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, DetailView, UpdateView, FormView
-from django.core.exceptions import ValidationError
 
 from apps.neuf_auth.forms import SetUsernameForm
-from apps.neuf_auth.models import AuthProfile
-from apps.neuf_ldap.utils import ldap_create_password
 from dusken.forms import DuskenUserForm, DuskenUserUpdateForm, DuskenUserActivateForm, UserWidgetForm
 from dusken.models import DuskenUser, Order
 from dusken.utils import generate_username

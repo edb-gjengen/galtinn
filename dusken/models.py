@@ -18,7 +18,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from apps.common.mixins import BaseModel
 from apps.neuf_ldap.utils import ldap_create_password
 from dusken.managers import DuskenUserManager, OrderManager
-from dusken.utils import create_email_key, send_validation_email, create_phone_key
+from dusken.utils import create_email_key, send_validation_email
 
 
 class DuskenUser(AbstractUser):

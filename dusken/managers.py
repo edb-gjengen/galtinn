@@ -5,7 +5,8 @@ from django.utils import timezone
 
 class DuskenUserQuerySet(QuerySet):
     def get_membership_query(self):
-        return Q(memberships__isnull=False, memberships__end_date__isnull=True) | Q(memberships__end_date__gt=timezone.now().date())
+        return (Q(memberships__isnull=False, memberships__end_date__isnull=True)
+                | Q(memberships__end_date__gt=timezone.now().date()))
 
     def with_valid_membership(self):
         """ Users with a valid membership"""
