@@ -93,41 +93,15 @@ def send_validation_sms(user):
     return send_sms(to=user.phone_number, message=message)
 
 
-def create_phone_key():
-    return ''.join([random.choice('0123456789') for i in range(6)])
+def create_phone_key(length=6):
+    return ''.join([random.choice('0123456789') for i in range(length)])
 
 
-def email_exist(email):
+def email_exists(email):
     from dusken.models import DuskenUser
     return DuskenUser.objects.filter(email=email).exists()
-
-
-def validate_email(email):
-    if email == '':
-        return _('You need to enter an email.')
-
-    try:
-        validators.validate_email(email)
-    except ValidationError:
-        return _('Email is invalid.')
-
-    if email_exist(email):
-        return _('Email is already in use.')
 
 
 def phone_number_exist(phone_number):
     from dusken.models import DuskenUser
     return DuskenUser.objects.filter(phone_number=phone_number).exists()
-
-
-def validate_phone_number(phone_number):
-    if phone_number == '':
-        return _('You need to enter a phone number.')
-
-    try:
-        validate_international_phonenumber(phone_number)
-    except ValidationError:
-        return _('Phone number is invalid')
-
-    if phone_number_exist(phone_number):
-        return _('Phone number is already in use.')

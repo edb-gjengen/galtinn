@@ -9,7 +9,6 @@ from dusken.api.views.memberships import (MembershipViewSet,
                                           KassaMembershipView)
 from dusken.api.views.users import DuskenUserViewSet, CurrentUserView, user_pk_to_uuid, RegisterUserView
 from dusken.api.views.orders import OrderViewSet
-from dusken.api.views.validate import validate
 from dusken.api.views.orgunits import remove_user, add_user
 
 router = DefaultRouter()
@@ -38,9 +37,6 @@ urlpatterns += [
         name='resend-validation-email'),
     url(r'user/register/$', RegisterUserView.as_view(), name='user-api-register'),
     url(r'user/pk/to/uuid/$', user_pk_to_uuid, name='user_pk_to_uuid'),
-
-    # Validation
-    url(r'validate/$', validate, name='validate'),
 
     # OrgUnit
     url(r'orgunit/remove/user/$', remove_user, name='remove_user'),

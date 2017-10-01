@@ -39,21 +39,6 @@ function getFormData(formElement) {
     return formData;
 }
 
-function serverValidation(formData) {
-    $.ajax({
-        url: '/api/validate/',
-        data: {
-            'email': formData.email,
-            'number': formData.phone_number
-        },
-        dataType: 'json',
-        formData: formData,
-        success: function (serverData) {
-            validate(this.formData, serverData);
-        }
-    });
-}
-
 function validate(formData, serverData) {
     clearError();
     var errors = [];

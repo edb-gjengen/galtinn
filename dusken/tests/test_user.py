@@ -69,11 +69,10 @@ class DuskenUserAPITestCase(APITestCase):
 
         # Check if the response even makes sense:
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
-        token = response.data.get('auth_token')
-
+        # Do not return a password:
         self.assertIsNone(response.data.get('password', None))
         # Check if the returned login token is correct:
-        self.assertIsNotNone(token, 'No token was returned in response')
+        self.assertIsNotNone(response.data.get('auth_token'), 'No token was returned in response')
 
 
 class DuskenUserPhoneValidationTestCase(TestCase):

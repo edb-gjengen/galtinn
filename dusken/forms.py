@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_select2.forms import ModelSelect2Widget
 
 from apps.neuf_auth.validators import LDAPUsernameValidator, blacklist_validator
-from dusken.utils import email_exist, phone_number_exist
+from dusken.utils import email_exists, phone_number_exist
 from dusken.models import DuskenUser, Order, OrgUnit
 from phonenumber_field.formfields import PhoneNumberField
 from captcha.fields import ReCaptchaField
@@ -54,7 +54,7 @@ class DuskenUserForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if email_exist(email):
+        if email_exists(email):
             raise ValidationError(_('Email already in use'))
         return email
 
