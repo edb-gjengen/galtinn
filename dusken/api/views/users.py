@@ -1,9 +1,10 @@
 import django_filters
 from phonenumber_field.modelfields import PhoneNumberField
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-from rest_framework import views, viewsets, filters, permissions
-from rest_framework.response import Response
-from dusken.api.serializers.users import DuskenUserSerializer
+from rest_framework import viewsets, filters, permissions
+from rest_framework.generics import RetrieveAPIView, CreateAPIView
+
+from dusken.api.serializers.users import DuskenUserSerializer, DuskenUserRegisterSerializer
 from dusken.models import DuskenUser
 from django.http import JsonResponse, HttpResponseForbidden
 
@@ -34,12 +35,18 @@ class DuskenUserViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(pk=self.request.user.pk)
 
 
-class CurrentUserView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated, )
+class CurrentUserView(RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = DuskenUserSerializer
 
-    def get(self, request):
-        serializer = DuskenUserSerializer(request.user)
-        return Response(serializer.data)
+    def get_object(self):
+        return self.request.user
+
+
+class RegisterUserView(CreateAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = DuskenUserRegisterSerializer
+    queryset = DuskenUser.objects.all()
 
 
 def user_pk_to_uuid(request):

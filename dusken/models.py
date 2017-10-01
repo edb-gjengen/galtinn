@@ -8,7 +8,6 @@ from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import Group as DjangoGroup
-from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
@@ -17,7 +16,7 @@ from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
-from apps.neuf_auth.models import AuthProfile
+from apps.neuf_ldap.utils import ldap_create_password
 from dusken.managers import DuskenUserManager, OrderManager
 from dusken.utils import create_email_key, send_validation_email, create_phone_key
 
@@ -83,9 +82,8 @@ class DuskenUser(AbstractUser):
 
     @property
     def have_set_username(self):
-        # FIXME: Try to keep neuf_auth stuff out of dusken app
-        ap = AuthProfile.objects.filter(user=self).first()
-        return ap is not None and ap.username_updated is not None
+        from apps.neuf_auth.models import AuthProfile
+        return AuthProfile.objects.filter(user=self, username_updates__isnull=False).exists()
 
     @property
     def is_member(self):
@@ -128,6 +126,12 @@ class DuskenUser(AbstractUser):
         self.claim_orders()
 
         super().save(**kwargs)
+
+    def set_ldap_hash(self, raw_password):
+        from apps.neuf_auth.models import AuthProfile
+        ap, _ = AuthProfile.objects.get_or_create(user=self)
+        ap.ldap_password = ldap_create_password(raw_password)
+        ap.save()
 
     def invalidate_confirmation_state(self):
         if self.pk is not None:
@@ -346,7 +350,6 @@ class GroupProfile(BaseModel):
     class Meta:
         verbose_name = _('Group profile')
         verbose_name_plural = _('Group profiles')
-
 
 
 class OrgUnit(MPTTModel, BaseModel):

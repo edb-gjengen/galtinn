@@ -1,5 +1,6 @@
 import os
 from datetime import timedelta
+from pprint import pprint
 
 from django.utils import timezone
 from rest_framework import status
@@ -53,6 +54,26 @@ class DuskenUserAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results'][0]['id'], self.user.pk)
+        self.assertIsNone(response.data.get('password', None))
+
+    def test_user_can_register(self):
+        data = {
+            'email': 'appuser@example.com',
+            'password': 'mypassword',
+            'first_name': 'yo',
+            'last_name': 'lo',
+            'phone_number': '48105885'
+        }
+        url = reverse('user-api-register')
+        response = self.client.post(url, data, format='json')
+
+        # Check if the response even makes sense:
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        token = response.data.get('auth_token')
+
+        self.assertIsNone(response.data.get('password', None))
+        # Check if the returned login token is correct:
+        self.assertIsNotNone(token, 'No token was returned in response')
 
 
 class DuskenUserPhoneValidationTestCase(TestCase):

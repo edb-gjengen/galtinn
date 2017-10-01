@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from apps.neuf_auth.models import AuthProfile
 from apps.neuf_auth.validators import LDAPUsernameValidator, blacklist_validator
-from apps.neuf_ldap.utils import set_ldap_password, ldap_username_exists, ldap_create_password
+from apps.neuf_ldap.utils import set_ldap_password, ldap_username_exists
 
 
 class NeufSetPasswordForm(SetPasswordForm):
@@ -25,15 +25,9 @@ class NeufSetPasswordForm(SetPasswordForm):
         if ldap_username_exists(username):
             set_ldap_password(username, raw_password)
 
-        self._set_ldap_hash(raw_password)
+        self.user.set_ldap_hash(raw_password)
 
         return self.user
-
-    def _set_ldap_hash(self, raw_password):
-        ap, _ = AuthProfile.objects.get_or_create(user=self.user)
-        # FIXME: Switch to {CRYPT} and salted SHA-512
-        ap.ldap_password = ldap_create_password(raw_password)
-        ap.save()
 
 
 class SetUsernameForm(forms.Form):
@@ -45,11 +39,11 @@ class SetUsernameForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance')
+        # TODO: If there is no authprofile, then show password field
         super().__init__(*args, **kwargs)
 
     def clean(self):
-        ap = AuthProfile.objects.filter(user=self.instance).first()
-        if ap is not None and ap.username_updated is not None:
+        if self.instance.have_set_username:
             raise ValidationError(_('Username can only be set once'))
 
     def save(self):
