@@ -19,7 +19,7 @@ class OrderSerializer(serializers.ModelSerializer):
                   'transaction_id', 'phone_number', 'member_card')
 
 
-class BaseMembershipOrder(object):
+class BaseMembershipOrder:
     transaction_id = serializers.CharField(
         allow_null=True,
         required=False)
@@ -60,9 +60,10 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def validate_membership_type(self, value):
+        # FIXME(nikolark): validate membership_type, only active users get active product
+        # FIXME(nikolark): Get from available MembershipType's
         if not value or value.slug not in ('standard', 'active'):
             raise ValidationError('Invalid membership type')
-        # FIXME(nikolark): validate membership_type, only active users get active product
         return value
 
     def validate(self, data):
@@ -73,6 +74,7 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         user = validated_data.get('user')
         membership_type = validated_data.get('membership_type')
         transaction_id = validated_data.get('transaction_id')
+        payment_method = validated_data.get('payment_method', Order.BY_CARD)
         start_date = self._get_start_date(user)
 
         with transaction.atomic():
@@ -82,7 +84,7 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
                 membership_type=membership_type)
             order = self._create_order(
                 membership=membership,
-                payment_method=Order.BY_CARD,
+                payment_method=payment_method,
                 transaction_id=transaction_id)
 
         return order
@@ -94,7 +96,7 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('user', 'membership_type')
+        fields = ('user', 'membership_type', 'payment_method')
 
 
 class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):

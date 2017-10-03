@@ -73,8 +73,7 @@ class MembershipChargeView(GenericAPIView):
         stripe.api_key = settings.STRIPE_SECRET_KEY
 
         # Validate
-        serializer = self.serializer_class(data=self.request.data,
-                                           context={'request': request})
+        serializer = self.serializer_class(data=self.request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
 
         # Stripe customer
