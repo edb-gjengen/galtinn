@@ -1,4 +1,3 @@
-/* FIXME: Make this more generic */
 var saleTypes = [];
 var salesData = {};
 
@@ -12,9 +11,9 @@ function sumSales(memo, num) {
 }
 
 function toHighchartsSeries(memberships) {
-    memberships = _.sortBy(memberships, 'start_date');
+    memberships = _.sortBy(memberships, 'date');
     return _.map(memberships, function (el) {
-        return [moment.utc(el.start_date).valueOf(), el.sales]
+        return [moment.utc(el.date).valueOf(), el.sales]
     });
 }
 
@@ -22,7 +21,9 @@ function getSales(start) {
     return $.getJSON(url + '?start_date=' + start, function (data) {
         salesData = data.memberships;
         saleTypes = data.payment_methods;
-        salesChart.addSeries({name: 'Sales', data: toHighchartsSeries(salesData)});
+        _.each(saleTypes, function(type) {
+            salesChart.addSeries({name: type +'-salg', data: toHighchartsSeries(salesData[type])});
+        })
     });
 }
 
@@ -40,7 +41,7 @@ function totals() {
 function today() {
     var today = moment.utc().format('YYYY-MM-DD');
     $('.today-date-wrap').text(today);
-    var todaySales = _.findWhere(salesData, {start_date: today}) || {sales: 0};
+    var todaySales = _.findWhere(salesData, {date: today}) || {sales: 0};
     $('.app-today').html(todaySales.sales);
 
     salesChartToday = new Highcharts.Chart({
@@ -88,23 +89,25 @@ function groupSalesByDate() {
         sales.date = date;
         table_friendly.push(sales);
     });
-    table_friendly = _.sortBy(table_friendly, 'start_date').reverse();
+    table_friendly = _.sortBy(table_friendly, 'date').reverse();
 
     return table_friendly;
 }
 
 function salesTable() {
-    var html = '<thead><tr><th>Dato</th><th>Kilde</th><th>Salg</th></tr></thead>';
-    html += '<tbody>';
-    //salesData = groupSalesByDate();
+    var html = '<thead><tr><th>Dato</th>';
+    _.each(saleTypes, function(type) {
+        html += '<th>' + type + '</th>';
+    });
+    html += '</tr></thead><tbody>';
+    salesData = groupSalesByDate();
 
     _.each(salesData, function(el) {
-        html += '<tr><td>' + el.start_date + '</td>';
-        html += '<td>' + el.payment_method + '</td>';
-        html += '<td>' + el.sales + '</td>';
-        // _.each(saleTypes, function(type) {
-        //     html += '<td>' + el[type] + '</td>';
-        // });
+        html += '<tr><td>' + el.date + '</td>';
+        _.each(saleTypes, function(type) {
+            console.log(el);
+            html += '<td>' + el[type] + '</td>';
+        });
         html += '</tr>';
     });
     html += '</tbody>';
@@ -113,7 +116,7 @@ function salesTable() {
 
 function toCSV(data) {
     var csvLines = data.map(function(d){
-        return d.start_date + ',' + saleTypes.map(function(t) { return d[t]; }).join(',');
+        return d.date + ',' + saleTypes.map(function(t) { return d[t]; }).join(',');
     });
     var csvHeader = 'date,' +saleTypes.join(',') + '\n';
     return csvHeader + csvLines.join('\n')

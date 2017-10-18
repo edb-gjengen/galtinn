@@ -1,5 +1,6 @@
 from itertools import groupby
 
+from collections import defaultdict
 from django.http import JsonResponse
 from django.utils.dateparse import parse_date
 
@@ -15,12 +16,13 @@ def membership_stats(request):
         memberships = memberships.filter(order__created__gte=parse_date(start_date))
 
     memberships = memberships.order_by('-order__created')
-    memberships_grouped = []
+    memberships_grouped = defaultdict(list)
     for key, values in groupby(memberships, key=lambda x: '{}{}'.format(x.order.payment_method, x.order.created.date())):
         sales = list(values)
-        memberships_grouped.append({
+        method = sales[0].order.payment_method
+        memberships_grouped[method].append({
             'sales': len(sales),
-            'start_date': str(sales[0].order.created.date()),
+            'date': str(sales[0].order.created.date()),
             'payment_method': sales[0].order.payment_method
         })
 
