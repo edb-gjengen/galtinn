@@ -47,3 +47,21 @@ class OrderManager(Manager):
 
     def unclaimed(self, phone_number=None, member_card=None):
         return self.get_queryset().unclaimed(phone_number, member_card)
+
+
+class MembershipQuerySet(QuerySet):
+    def valid(self):
+        from dusken.models import MembershipType
+        is_lifelong = Q(membership_type__expiry_type=MembershipType.EXPIRY_NEVER, end_date__isnull=True)
+        is_valid_duration = Q(
+            membership_type__expiry_type=MembershipType.EXPIRY_DURATION, end_date__gte=timezone.now().date())
+        query = is_lifelong | is_valid_duration
+        return self.filter(query)
+
+
+class MembershipManager(Manager):
+    def get_queryset(self):
+        return MembershipQuerySet(self.model, using=self._db)
+
+    def valid(self):
+        return self.get_queryset().valid()

@@ -7,6 +7,7 @@ from dusken.api.views.cards import (MemberCardViewSet,
 from dusken.api.views.memberships import (MembershipViewSet,
                                           MembershipChargeView,
                                           KassaMembershipView)
+from dusken.api.views.stats import membership_stats
 from dusken.api.views.users import DuskenUserViewSet, CurrentUserView, user_pk_to_uuid
 from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.validate import validate
@@ -44,5 +45,8 @@ urlpatterns += [
     # OrgUnit
     url(r'orgunit/remove/user/$', remove_user, name='remove_user'),
     url(r'orgunit/add/user/$', add_user, name='add_user'),
+
+    # Stats
+    url(r'stats/$', membership_stats, name='membership-stats'),
 
 ]

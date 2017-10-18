@@ -17,7 +17,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
 from apps.neuf_auth.models import AuthProfile
-from dusken.managers import DuskenUserManager, OrderManager
+from dusken.managers import DuskenUserManager, OrderManager, MembershipManager
 from dusken.utils import create_email_key, send_validation_email, create_phone_key
 
 
@@ -187,6 +187,8 @@ class Membership(BaseModel):
     end_date = models.DateField(null=True, blank=True)
     membership_type = models.ForeignKey('dusken.MembershipType')
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='memberships')
+
+    objects = MembershipManager()
 
     @property
     def is_valid(self):

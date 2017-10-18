@@ -33,6 +33,13 @@
             {% endfor %}
             </ul>
         {% endif %}
+        {% if user.is_superuser %}
+            <div class="stats">
+                <br>
+                <h3>{% trans "Statistics" %}</h3>
+                <a href="{% url "stats" %}">{% trans "Membership statistics" %}</a>
+            </div>
+        {% endif %}
     {% endif %}
     </div>
 {% endblock %}
