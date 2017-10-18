@@ -22,7 +22,7 @@ function getSales(start) {
         salesData = data.memberships;
         saleTypes = data.payment_methods;
         _.each(saleTypes, function(type) {
-            salesChart.addSeries({name: type +'-salg', data: toHighchartsSeries(salesData[type])});
+            salesChart.addSeries({name: type, data: toHighchartsSeries(salesData[type])});
         })
     });
 }
@@ -105,7 +105,6 @@ function salesTable() {
     _.each(salesData, function(el) {
         html += '<tr><td>' + el.date + '</td>';
         _.each(saleTypes, function(type) {
-            console.log(el);
             html += '<td>' + el[type] + '</td>';
         });
         html += '</tr>';
