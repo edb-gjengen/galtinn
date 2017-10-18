@@ -8,7 +8,6 @@ from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import Group as DjangoGroup
-from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
@@ -346,7 +345,6 @@ class GroupProfile(BaseModel):
     class Meta:
         verbose_name = _('Group profile')
         verbose_name_plural = _('Group profiles')
-
 
 
 class OrgUnit(MPTTModel, BaseModel):

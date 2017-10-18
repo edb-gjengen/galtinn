@@ -28,17 +28,17 @@
         <p><a class="btn btn-outline-primary btn-block" href="{% url "orgunit-edit-users" orgunit.slug %}">{%  trans "Manage members" %}</a></p>
     {% endif %}
     <ul class="list-group">
-    {% for user in admins %}
+    {% for user in users_sorted %}
         <li class="list-group-item"><span>
-            {% svg "icons/star" %}
+            {% if user|has_group:orgunit.admin_group %}
+                {% svg "icons/star" %}
+            {% else %}
+                {% svg "icons/user" %}
+            {% endif %}
             <a href="{% url "user-detail" user.uuid %}"> {{ user.get_full_name }}</a> - <a href="mailto:{{ user.email }}">{{ user.email }}</a>
-            ({% trans "Admin" %})
-        </span></li>
-    {% endfor %}
-    {% for user in members %}
-        <li class="list-group-item"><span>
-            {% svg "icons/user" %}
-            <a href="{% url "user-detail" user.uuid %}"> {{ user.get_full_name }}</a> - <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+            {% if user|has_group:orgunit.admin_group %}
+                ({% trans "Admin" %})
+            {% endif %}
         </span></li>
     {% empty %}
         {% trans "No members" %}

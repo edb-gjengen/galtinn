@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, UpdateView
 
-from dusken.models import OrgUnit
+from dusken.models import OrgUnit, DuskenUser
 from dusken.views.mixins import VolunteerRequiredMixin
 from dusken.forms import UserWidgetForm, OrgUnitEditForm
 
@@ -18,21 +18,22 @@ class OrgUnitDetailView(VolunteerRequiredMixin, DetailView):
     context_object_name = 'orgunit'
 
     def get_context_data(self, **kwargs):
-        if self.get_object().admin_group:
-            admins = self.get_object().admin_group.user_set.order_by('first_name', 'last_name')
+        context = super().get_context_data(**kwargs)
+        order_fields = ['first_name', 'last_name', 'username']
+
+        if context['orgunit'].admin_group:
+            admins = self.get_object().admin_group.user_set.order_by(*order_fields)
         else:
             admins = []
 
-        if self.get_object().group:
-            members = self.get_object().group.user_set.order_by('first_name', 'last_name').exclude(pk__in=admins)
+        if context['orgunit'].group:
+            users = self.get_object().group.user_set.order_by(*order_fields).exclude(pk__in=admins)
         else:
-            members = []
+            users = []
 
-        return {
-            **super().get_context_data(**kwargs),
-            'admins': admins,
-            'members': members,
-        }
+        context['users_sorted'] = admins | users
+
+        return context
 
 
 class OrgUnitEditView(VolunteerRequiredMixin, UpdateView):
@@ -52,12 +53,19 @@ class OrgUnitEditUsersView(VolunteerRequiredMixin, DetailView):
     context_object_name = 'orgunit'
 
     def get_context_data(self, **kwargs):
-        context = super(OrgUnitEditUsersView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['user_search'] = UserWidgetForm
-        if context['orgunit'].group:
-            order_fields = ['first_name', 'last_name', 'username']
-            context['users_sorted'] = context['orgunit'].group.user_set.all().order_by(*order_fields)
+        order_fields = ['first_name', 'last_name', 'username']
+        if context['orgunit'].admin_group:
+            admins = self.get_object().admin_group.user_set.order_by(*order_fields)
         else:
-            context['users_sorted'] = []
+            admins = []
+
+        if context['orgunit'].group:
+            users = self.get_object().group.user_set.order_by(*order_fields).exclude(pk__in=admins)
+        else:
+            users = []
+
+        context['users_sorted'] = admins | users
 
         return context
