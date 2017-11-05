@@ -158,7 +158,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissions',
     ],
-    'PAGE_SIZE': 25
+    'PAGE_SIZE': 25,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination'
 }
 
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
