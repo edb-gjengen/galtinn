@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.views.decorators.csrf import csrf_exempt
+from graphene_django.views import GraphQLView
 from rest_framework.routers import DefaultRouter
 
 from dusken.api.views import ResendValidationEmailView
@@ -42,4 +44,5 @@ urlpatterns += [
     url(r'orgunit/remove/user/$', remove_user, name='remove_user'),
     url(r'orgunit/add/user/$', add_user, name='add_user'),
 
+    url(r'^graphql/$', csrf_exempt(GraphQLView.as_view(graphiql=True)), name='graphql'),
 ]
