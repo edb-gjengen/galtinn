@@ -11,7 +11,7 @@
         <button class="btn btn-primary" onclick="add_selected_user('{{ orgunit.slug }}', 'admin');">{% trans "Add admin" %}</button>
     </div>
     <ul class="list-group" id="user_list">
-    {% for user in users_sorted %}
+    {% for user in orgunit.users %}
         <li class="list-group-item">
             <div class="col-xl-8 col-lg-7">
                 {% if user|has_group:orgunit.admin_group %}
