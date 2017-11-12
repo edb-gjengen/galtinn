@@ -12,8 +12,10 @@ def convert_stream_field_to_string(field, registry=None):
     return graphene.String()
 
 
-class MembershipTypeType(DjangoObjectType, model=MembershipType):
+class MembershipTypeType(DjangoObjectType):
     """MembershipType"""
+    class Meta:
+        model = MembershipType
 
 
 class DuskenQuery:
