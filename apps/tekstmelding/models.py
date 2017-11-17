@@ -55,11 +55,12 @@ class TekstmeldingEvent(models.Model):
     )
 
     timestamp = models.DateTimeField()
-    incoming = models.ForeignKey('tekstmelding.IncomingMessage', blank=True, null=True)
-    outgoing = models.ForeignKey('tekstmelding.OutgoingMessage', blank=True, null=True, related_name='events')
-    dlr = models.ForeignKey('tekstmelding.DeliveryReport', blank=True, null=True)
+    incoming = models.ForeignKey('tekstmelding.IncomingMessage', models.SET_NULL, blank=True, null=True)
+    outgoing = models.ForeignKey(
+        'tekstmelding.OutgoingMessage', models.SET_NULL, blank=True, null=True, related_name='events')
+    dlr = models.ForeignKey('tekstmelding.DeliveryReport', models.SET_NULL, blank=True, null=True)
     action = models.TextField(choices=ACTION_CHOICES, blank=True, null=True)
-    user = models.ForeignKey('inside.InsideUser', blank=True, null=True)
+    user = models.IntegerField(blank=True, null=True)
     activation_code = models.TextField(blank=True, null=True)
 
     def __str__(self):
