@@ -287,10 +287,6 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
         ),
-        migrations.RunPython(
-            code=dusken.migrations.0024_delete_tokens.delete_tokens,
-            reverse_code=django.db.migrations.operations.special.RunPython.noop,
-        ),
         migrations.AddField(
             model_name='duskenuser',
             name='email_confirmed_at',
@@ -630,10 +626,6 @@ class Migration(migrations.Migration):
             model_name='membershiptype',
             name='slug',
             field=models.SlugField(null=True),
-        ),
-        migrations.RunPython(
-            code=dusken.migrations.0041_membershiptype_slug_part_2.set_dummy_slugs,
-            reverse_code=django.db.migrations.operations.special.RunPython.noop,
         ),
         migrations.AlterField(
             model_name='membershiptype',
