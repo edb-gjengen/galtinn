@@ -6,9 +6,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('dusken', '0037_auto_20170714_1710'), ('dusken', '0038_auto_20170714_1744')]
-
     dependencies = [
         ('dusken', '0036_auto_20170710_0025'),
     ]
