@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-09 16:41+0200\n"
-"PO-Revision-Date: 2017-08-09 16:41+0200\n"
+"POT-Creation-Date: 2017-11-10 16:30+0100\n"
+"PO-Revision-Date: 2017-11-10 16:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -16,14 +16,38 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.4\n"
 
-#: validators.py:6
+#: forms.py:41
+msgid "Username"
+msgstr "Brukernavn"
+
+#: forms.py:43
+msgid ""
+"Between 3 and 32 characters. Small letters, digits and - or _ only. It must "
+"start with a letter."
+msgstr ""
+"Mellom 3 og 32 tegn. Bare små bokstaver, tall og - eller _. Må starte med "
+"en bokstav."
+
+#: forms.py:53
+msgid "Username can only be set once"
+msgstr "Brukernavn kan bare settes en gang"
+
+#: forms.py:67 forms.py:70
+#, python-brace-format
+msgid "Username {value} is taken"
+msgstr "Brukernavnet {value} er allerede i bruk"
+
+#: validators.py:8
 msgid "Enter a valid username."
 msgstr "Skriv inn et gyldig brukernavn."
 
-#: views.py:17 views.py:30
-#, fuzzy
-#| msgid "Password changed 😎"
+#: validators.py:65
+#, python-format
+msgid "%(value)s is not an allowed username"
+msgstr "%(value)s er ikke et gyldig brukernavn"
+
+#: views.py:16 views.py:29
 msgid "Password changed"
 msgstr "Passordet er endret"

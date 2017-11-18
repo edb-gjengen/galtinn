@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-20 21:30+0200\n"
-"PO-Revision-Date: 2017-09-20 21:31+0200\n"
+"POT-Creation-Date: 2017-11-10 16:31+0100\n"
+"PO-Revision-Date: 2017-11-10 16:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #: admin.py:18
 msgid "year sold"
@@ -31,7 +31,7 @@ msgstr "Betalingsmåte"
 msgid "User"
 msgstr "Bruker"
 
-#: admin.py:96 models.py:308
+#: admin.py:96 models.py:310
 msgid "Member card"
 msgstr "Medlemskort"
 
@@ -157,7 +157,7 @@ msgstr "etternavn"
 msgid "email address"
 msgstr "e-postadresse"
 
-#: models.py:33 models.py:365
+#: models.py:33 models.py:366
 msgid "phone number"
 msgstr "mobilnummer"
 
@@ -201,181 +201,180 @@ msgstr "stripe kunde-id"
 msgid "Users"
 msgstr "Brukere"
 
-#: models.py:212 templates/dusken/nav.html:13
-#: templates/dusken/orgunit_edit_users.html:27
+#: models.py:214 templates/dusken/orgunit_edit_users.html:27
 #: templates/dusken/user_detail.html:76 templates/nav.html:16
 msgid "Membership"
 msgstr "Medlemskap"
 
-#: models.py:213 templates/dusken/membership_list.html:5
+#: models.py:215 templates/dusken/membership_list.html:5
 msgid "Memberships"
 msgstr "Medlemskap"
 
-#: models.py:229
+#: models.py:231
 msgid "Duration"
 msgstr "Varighet"
 
-#: models.py:230
+#: models.py:232
 msgid "Never"
 msgstr "Aldri"
 
-#: models.py:231
+#: models.py:233
 msgid "End of year"
 msgstr "Ved årsslutt"
 
-#: models.py:238 models.py:440
+#: models.py:240 models.py:448
 msgid "Price in øre"
 msgstr "Pris i øre"
 
-#: models.py:279
+#: models.py:281
 msgid "Membership type"
 msgstr "Medlemskapstype"
 
-#: models.py:280
+#: models.py:282
 msgid "Membership types"
 msgstr "Medlemskapstyper"
 
-#: models.py:284
+#: models.py:286
 msgid "card number"
 msgstr "kortnummer"
 
-#: models.py:285
+#: models.py:287
 msgid "registered"
 msgstr "registrert"
 
-#: models.py:286 models.py:360
+#: models.py:288 models.py:361
 msgid "is active"
 msgstr "er aktiv"
 
-#: models.py:288
+#: models.py:290
 msgid "user"
 msgstr "bruker"
 
-#: models.py:309
+#: models.py:311
 msgid "Member cards"
 msgstr "Medlemskort"
 
-#: models.py:321
+#: models.py:323
 msgid "Volunteers"
 msgstr "Aktive"
 
-#: models.py:322
+#: models.py:324
 msgid "Standard"
 msgstr "Standard"
 
-#: models.py:334
+#: models.py:336
 msgid "Posix name must be unique or empty"
 msgstr "POSIX-navn må være unikt eller tomt"
 
-#: models.py:347
+#: models.py:349
 msgid "Group profile"
 msgstr "Gruppeprofil"
 
-#: models.py:348
+#: models.py:350
 msgid "Group profiles"
 msgstr "Gruppeprofiler"
 
-#: models.py:357 models.py:472
+#: models.py:358 models.py:480
 msgid "name"
 msgstr "navn"
 
-#: models.py:358
+#: models.py:359
 msgid "slug"
 msgstr "slug"
 
-#: models.py:359 models.py:473
+#: models.py:360 models.py:481
 msgid "short name"
 msgstr "kortnavn"
 
-#: models.py:361
+#: models.py:362
 msgid "description"
 msgstr "beskrivelse"
 
-#: models.py:364
+#: models.py:365
 msgid "email"
 msgstr "e-post"
 
-#: models.py:367
+#: models.py:368
 msgid "contact person"
 msgstr "kontaktperson"
 
-#: models.py:368
+#: models.py:369
 msgid "website"
 msgstr "nettside"
 
-#: models.py:372
+#: models.py:373
 msgid "group"
 msgstr "gruppe"
 
-#: models.py:374
+#: models.py:375
 msgid "admin group"
 msgstr "admingruppe"
 
-#: models.py:378
+#: models.py:379
 msgid "parent"
 msgstr "forelder"
 
-#: models.py:420
+#: models.py:428
 msgid "Org unit"
 msgstr "Forening"
 
-#: models.py:421
+#: models.py:429
 msgid "Org units"
 msgstr "Foreninger"
 
-#: models.py:432
+#: models.py:440
 msgid "Mobile app"
 msgstr "Mobilapplikasjon"
 
-#: models.py:433
+#: models.py:441
 msgid "SMS"
 msgstr "SMS"
 
-#: models.py:434
+#: models.py:442
 msgid "Credit card"
 msgstr "Kredittkort"
 
-#: models.py:435
+#: models.py:443
 msgid "Cash register"
 msgstr "Kassaapparat"
 
-#: models.py:436
+#: models.py:444
 msgid "Other"
 msgstr "Annet"
 
-#: models.py:451
+#: models.py:459
 msgid "Stripe charge ID, Kassa event ID, SMS event ID or App event ID"
 msgstr "Stripe transaksjons-ID, Kassa-hendelses-ID, SMS-hendelses-ID"
 
-#: models.py:466
+#: models.py:474
 msgid "Order"
 msgstr "Ordre"
 
-#: models.py:467
+#: models.py:475
 msgid "Orders"
 msgstr "Ordre"
 
-#: models.py:482 templates/dusken/user_detail.html:68
+#: models.py:490 templates/dusken/user_detail.html:68
 msgid "Place of study"
 msgstr "Studiested"
 
-#: models.py:483
+#: models.py:491
 msgid "Places of study"
 msgstr "Studiesteder"
 
-#: models.py:496
+#: models.py:504
 msgid "User log message"
 msgstr "Brukerloggmelding"
 
-#: models.py:497
+#: models.py:505
 msgid "User log messages"
 msgstr "Brukerloggmeldinger"
 
-#: models.py:510
+#: models.py:518
 msgid "Org unit log message"
 msgstr "Foreningsloggmelding"
 
-#: models.py:511
+#: models.py:519
 msgid "Org unit log messages"
 msgstr "Foreningsloggmeldinger"
 
@@ -508,8 +507,7 @@ msgstr "Det Norske Studentersamfund - Chateau Neuf"
 msgid "Go forth and click the link to confirm: %(validation_url)s"
 msgstr "Trykk på lenken for å bekrefte: %(validation_url)s"
 
-#: templates/dusken/home.html:10 templates/dusken/nav.html:11
-#: templates/nav.html:13
+#: templates/dusken/home.html:10 templates/nav.html:13
 msgid "Home"
 msgstr "Hjem"
 
@@ -691,6 +689,14 @@ msgstr "Administrèr medlemmer"
 msgid "Edit"
 msgstr "Rediger"
 
+#: templates/dusken/home_volunteer.html:39
+msgid "Statistics"
+msgstr "Statistikk"
+
+#: templates/dusken/home_volunteer.html:40
+msgid "Membership statistics"
+msgstr "Medlemsstatistikk"
+
 #: templates/dusken/index.html:9
 msgid "This is Galtinn, the membership database at"
 msgstr "Dette er Galtinn, medlemskapsdatabasen på"
@@ -732,22 +738,6 @@ msgstr "Kjøp medlemskap"
 msgid "Renew membership"
 msgstr "Forny medlemskap"
 
-#: templates/dusken/nav.html:6
-msgid "dusken.neuf.no"
-msgstr "dusken.neuf.no"
-
-#: templates/dusken/nav.html:16
-msgid "Active"
-msgstr "Aktiv"
-
-#: templates/dusken/nav.html:27 templates/nav.html:25
-msgid "Profile"
-msgstr "Profil"
-
-#: templates/dusken/nav.html:28 templates/nav.html:46
-msgid "Log out"
-msgstr "Logg ut"
-
 #: templates/dusken/order_detail.html:4
 msgid "Reciept"
 msgstr "Kvittering"
@@ -768,7 +758,7 @@ msgstr "Beskrivelse:"
 msgid "Members"
 msgstr "Medlemmer"
 
-#: templates/dusken/orgunit_detail.html:35
+#: templates/dusken/orgunit_detail.html:40
 #: templates/dusken/orgunit_edit_users.html:25
 msgid "Admin"
 msgstr "Admin"
@@ -919,9 +909,17 @@ msgstr "av"
 msgid "Toggle navigation"
 msgstr "Svitsj navigasjon"
 
+#: templates/nav.html:25
+msgid "Profile"
+msgstr "Profil"
+
 #: templates/nav.html:42
 msgid "Change language to..."
 msgstr "Endre språk til..."
+
+#: templates/nav.html:46
+msgid "Log out"
+msgstr "Logg ut"
 
 #: templates/registration/logged_out.html:7
 msgid "Goodbye"
@@ -1057,6 +1055,12 @@ msgstr "Brukernavnet er satt til {username}"
 #: views/validation.py:29 views/validation.py:63
 msgid "Success!"
 msgstr "Hurra!"
+
+#~ msgid "dusken.neuf.no"
+#~ msgstr "dusken.neuf.no"
+
+#~ msgid "Active"
+#~ msgstr "Aktiv"
 
 #~ msgid "I'm not a robot"
 #~ msgstr "Jeg er ikke en maskin"

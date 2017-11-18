@@ -1,3 +1,4 @@
+
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, UpdateView
 
@@ -17,23 +18,6 @@ class OrgUnitDetailView(VolunteerRequiredMixin, DetailView):
     template_name = 'dusken/orgunit_detail.html'
     context_object_name = 'orgunit'
 
-    def get_context_data(self, **kwargs):
-        if self.get_object().admin_group:
-            admins = self.get_object().admin_group.user_set.order_by('first_name', 'last_name')
-        else:
-            admins = []
-
-        if self.get_object().group:
-            members = self.get_object().group.user_set.order_by('first_name', 'last_name').exclude(pk__in=admins)
-        else:
-            members = []
-
-        return {
-            **super().get_context_data(**kwargs),
-            'admins': admins,
-            'members': members,
-        }
-
 
 class OrgUnitEditView(VolunteerRequiredMixin, UpdateView):
     model = OrgUnit
@@ -52,12 +36,6 @@ class OrgUnitEditUsersView(VolunteerRequiredMixin, DetailView):
     context_object_name = 'orgunit'
 
     def get_context_data(self, **kwargs):
-        context = super(OrgUnitEditUsersView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['user_search'] = UserWidgetForm
-        if context['orgunit'].group:
-            order_fields = ['first_name', 'last_name', 'username']
-            context['users_sorted'] = context['orgunit'].group.user_set.all().order_by(*order_fields)
-        else:
-            context['users_sorted'] = []
-
         return context

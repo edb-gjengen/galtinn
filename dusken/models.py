@@ -1,6 +1,7 @@
 # coding: utf-8
 import uuid
 from datetime import timedelta
+from itertools import chain
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, Group
@@ -17,7 +18,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
 from apps.neuf_ldap.utils import ldap_create_password
-from dusken.managers import DuskenUserManager, OrderManager
+from dusken.managers import DuskenUserManager, OrderManager, MembershipManager
 from dusken.utils import create_email_key, send_validation_email
 
 
@@ -192,6 +193,8 @@ class Membership(BaseModel):
     end_date = models.DateField(null=True, blank=True)
     membership_type = models.ForeignKey('dusken.MembershipType')
     user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='memberships')
+
+    objects = MembershipManager()
 
     @property
     def is_valid(self):
@@ -379,6 +382,13 @@ class OrgUnit(MPTTModel, BaseModel):
     # Hierarchical :-)
     parent = TreeForeignKey(
         'self', verbose_name=_('parent'), null=True, blank=True, related_name='children', db_index=True)
+
+    @property
+    def users(self):
+        order_fields = ['first_name', 'last_name', 'username']
+        admins = self.admin_group.user_set.order_by(*order_fields)
+        users = self.group.user_set.order_by(*order_fields).exclude(pk__in=admins)
+        return chain(admins, users)
 
     def add_user(self, user_obj, changed_by):
         self.group.user_set.add(user_obj)

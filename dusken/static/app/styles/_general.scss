@@ -12,3 +12,8 @@ body {
 .alert-error {
     @extend .alert-danger;
 }
+
+.big-number {
+    font-weight: bold;
+    font-size: 1.5em;
+}

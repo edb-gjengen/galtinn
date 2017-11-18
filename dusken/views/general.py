@@ -3,7 +3,9 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
-from django.views.generic import FormView, DetailView
+from django.utils import timezone
+from django.utils.dateparse import parse_date
+from django.views.generic import FormView, DetailView, TemplateView
 
 from dusken.models import Order, MembershipType
 from dusken.forms import MembershipPurchaseForm, DuskenAuthenticationForm, UserWidgetForm
@@ -61,3 +63,19 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
+
+
+class StatsView(LoginRequiredMixin, TemplateView):
+    template_name = 'dusken/stats.html'
+
+    def get_context_data(self, **kwargs):
+        start_date = self.request.GET.get('start_date', None)
+        if not start_date:
+            start_date = timezone.now().date().replace(month=8, day=1)
+        else:
+            start_date = parse_date(start_date)
+
+        return {
+            **super().get_context_data(**kwargs),
+            'start_date': start_date
+        }

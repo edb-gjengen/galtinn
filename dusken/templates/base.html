@@ -29,6 +29,7 @@
 
     {% include "footer.html" %}
 
+    {% block tailinc %}{% endblock %}
     <script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
     <script>Raven.config('{% sentry_public_dsn 'https' %}').install()</script>
     <script type="text/javascript" src="{% static 'dist/scripts/app.js' %}"></script>
