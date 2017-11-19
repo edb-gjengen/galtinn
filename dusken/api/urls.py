@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.views.decorators.csrf import csrf_exempt
+from graphene_django.views import GraphQLView
 from rest_framework.routers import DefaultRouter
 
 from dusken.api.views import ResendValidationEmailView
@@ -8,9 +10,8 @@ from dusken.api.views.memberships import (MembershipViewSet,
                                           MembershipChargeView,
                                           KassaMembershipView)
 from dusken.api.views.stats import membership_stats
-from dusken.api.views.users import DuskenUserViewSet, CurrentUserView, user_pk_to_uuid
+from dusken.api.views.users import DuskenUserViewSet, CurrentUserView, user_pk_to_uuid, RegisterUserView
 from dusken.api.views.orders import OrderViewSet
-from dusken.api.views.validate import validate
 from dusken.api.views.orgunits import remove_user, add_user
 
 router = DefaultRouter()
@@ -37,10 +38,8 @@ urlpatterns += [
     # Users
     url(r'user/resend_validation_email/$', ResendValidationEmailView.as_view(),
         name='resend-validation-email'),
+    url(r'user/register/$', RegisterUserView.as_view(), name='user-api-register'),
     url(r'user/pk/to/uuid/$', user_pk_to_uuid, name='user_pk_to_uuid'),
-
-    # Validation
-    url(r'validate/$', validate, name='validate'),
 
     # OrgUnit
     url(r'orgunit/remove/user/$', remove_user, name='remove_user'),
@@ -49,4 +48,6 @@ urlpatterns += [
     # Stats
     url(r'stats/$', membership_stats, name='membership-stats'),
 
+    # GraphQL API
+    url(r'^graphql/$', csrf_exempt(GraphQLView.as_view(graphiql=True)), name='graphql'),
 ]

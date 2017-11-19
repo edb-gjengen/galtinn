@@ -3,15 +3,13 @@ import re
 import requests
 import logging
 
-from django.core import validators
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext as _
-from phonenumber_field.validators import validate_international_phonenumber
+import dns.resolver
 
 logger = logging.getLogger(__name__)
 
@@ -71,9 +69,9 @@ def send_sms(to, message):
     }
     response = requests.post(url, json=payload, headers=headers)
     if response.status_code != 200:
-        logger.warn('Failed to send SMS, status_code={} payload={}'.format(
-            response.status_code, payload))
+        logger.warning('Failed to send SMS, status_code={} payload={}'.format(response.status_code, payload))
         return
+
     return response.json().get('outgoing_id')
 
 
@@ -93,26 +91,13 @@ def send_validation_sms(user):
     return send_sms(to=user.phone_number, message=message)
 
 
-def create_phone_key():
-    return ''.join([random.choice('0123456789') for i in range(6)])
+def create_phone_key(length=6):
+    return ''.join([random.choice('0123456789') for i in range(length)])
 
 
-def email_exist(email):
+def email_exists(email):
     from dusken.models import DuskenUser
     return DuskenUser.objects.filter(email=email).exists()
-
-
-def validate_email(email):
-    if email == '':
-        return _('You need to enter an email.')
-
-    try:
-        validators.validate_email(email)
-    except ValidationError:
-        return _('Email is invalid.')
-
-    if email_exist(email):
-        return _('Email is already in use.')
 
 
 def phone_number_exist(phone_number):
@@ -120,14 +105,10 @@ def phone_number_exist(phone_number):
     return DuskenUser.objects.filter(phone_number=phone_number).exists()
 
 
-def validate_phone_number(phone_number):
-    if phone_number == '':
-        return _('You need to enter a phone number.')
-
+def mx_record_exists(domain):
+    """True if the domain exists and if it has an MX record, False otherwise"""
     try:
-        validate_international_phonenumber(phone_number)
-    except ValidationError:
-        return _('Phone number is invalid')
-
-    if phone_number_exist(phone_number):
-        return _('Phone number is already in use.')
+        dns.resolver.query(domain, 'MX')
+        return True
+    except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
+        return False

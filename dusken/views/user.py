@@ -3,14 +3,10 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import redirect
-from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, DetailView, UpdateView, FormView
-from django.core.exceptions import ValidationError
 
 from apps.neuf_auth.forms import SetUsernameForm
-from apps.neuf_auth.models import AuthProfile
-from apps.neuf_ldap.utils import ldap_create_password
 from dusken.forms import DuskenUserForm, DuskenUserUpdateForm, DuskenUserActivateForm, UserWidgetForm
 from dusken.models import DuskenUser, Order
 from dusken.utils import generate_username
@@ -27,18 +23,12 @@ class UserRegisterView(FormView):
         self.object.username = generate_username(self.object.first_name, self.object.last_name)
         self.object.set_password(form.cleaned_data['password'])
         self.object.save()
+        self.object.set_ldap_hash(form.cleaned_data['password'])
 
         # Log the user in
         self.object.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, self.object)
-        self._set_ldap_hash(form.cleaned_data['password'])
         return redirect(self.get_success_url())
-
-    def _set_ldap_hash(self, raw_password):
-        # FIXME: Try to keep neuf_auth stuff out of dusken app
-        ap, _ = AuthProfile.objects.get_or_create(user=self.object)
-        ap.ldap_password = ldap_create_password(raw_password)
-        ap.save()
 
 
 class UserActivateView(FormView):
@@ -77,19 +67,13 @@ class UserActivateView(FormView):
         self.object.username = generate_username(self.object.first_name, self.object.last_name)
         self.object.set_password(form.cleaned_data['password'])
         self.object.save()
+        self.object.set_ldap_hash(form.cleaned_data['password'])
         self.object.confirm_phone_number()
 
         # Log the user in
         self.object.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, self.object)
-        self._set_ldap_hash(form.cleaned_data['password'])
         return redirect(self.get_success_url())
-
-    def _set_ldap_hash(self, raw_password):
-        # FIXME: Try to keep neuf_auth stuff out of dusken app
-        ap, _ = AuthProfile.objects.get_or_create(user=self.object)
-        ap.ldap_password = ldap_create_password(raw_password)
-        ap.save()
 
 
 class UserListView(VolunteerRequiredMixin, ListView):
@@ -142,8 +126,7 @@ class UserSetUsernameView(VolunteerRequiredMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            ap = AuthProfile.objects.filter(user=self.request.user).first()
-            if ap is not None and ap.username_updated is not None:
+            if request.user.has_set_username:
                 messages.error(self.request, _('Username can only be set once'))
                 return redirect(self.success_url)
 

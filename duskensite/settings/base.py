@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_select2',
     'captcha',
     'svg',
+    'graphene_django',
 ]
 INSTALLED_APPS += [
     'dusken',
@@ -158,7 +159,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissions',
     ],
-    'PAGE_SIZE': 25
+    'PAGE_SIZE': 25,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination'
 }
 
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
@@ -236,3 +238,9 @@ WP_LOAD_PATHS = [
     "/var/www/studentersamfundet.no/www/wp/wp-load.php",
     "/var/www/neuf.no/aktivweb/wp/wp-load.php"
 ]
+
+GRAPHENE = {
+    'SCHEMA': 'dusken.api.graphql.schema',
+    'SCHEMA_OUTPUT': 'dusken/static/schema.json',
+    'SCHEMA_INDENT': 2,
+}

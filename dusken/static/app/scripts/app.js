@@ -39,21 +39,6 @@ function getFormData(formElement) {
     return formData;
 }
 
-function serverValidation(formData) {
-    $.ajax({
-        url: '/api/validate/',
-        data: {
-            'email': formData.email,
-            'number': formData.phone_number
-        },
-        dataType: 'json',
-        formData: formData,
-        success: function (serverData) {
-            validate(this.formData, serverData);
-        }
-    });
-}
-
 function validate(formData, serverData) {
     clearError();
     var errors = [];
@@ -125,7 +110,7 @@ function onStripeToken(token) {
     }).fail(function(data) {
         console.log('failed', data);
         $('.js-validation-errors').addClass('alert alert-danger');
-        $('.js-validation-errors').html(JSON.parse(data.responseText).error)
+        $('.js-validation-errors').html(JSON.parse(data.responseText).detail)
     });
 }
 
