@@ -110,7 +110,7 @@ function onStripeToken(token) {
     }).fail(function(data) {
         console.log('failed', data);
         $('.js-validation-errors').addClass('alert alert-danger');
-        $('.js-validation-errors').html(JSON.parse(data.responseText).error)
+        $('.js-validation-errors').html(JSON.parse(data.responseText).detail)
     });
 }
 
