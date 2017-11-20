@@ -17,7 +17,7 @@ from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
-from apps.neuf_auth.models import AuthProfile
+from apps.neuf_ldap.utils import ldap_create_password
 from dusken.managers import DuskenUserManager, OrderManager, MembershipManager
 from dusken.utils import create_email_key, send_validation_email
 
@@ -83,10 +83,9 @@ class DuskenUser(AbstractUser):
         return self.groups.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).exists()
 
     @property
-    def have_set_username(self):
-        # FIXME: Try to keep neuf_auth stuff out of dusken app
-        ap = AuthProfile.objects.filter(user=self).first()
-        return ap is not None and ap.username_updated is not None
+    def has_set_username(self):
+        from apps.neuf_auth.models import AuthProfile
+        return AuthProfile.objects.filter(user=self, username_updates__isnull=False).exists()
 
     @property
     def is_member(self):
@@ -129,6 +128,12 @@ class DuskenUser(AbstractUser):
         self.claim_orders()
 
         super().save(**kwargs)
+
+    def set_ldap_hash(self, raw_password):
+        from apps.neuf_auth.models import AuthProfile
+        ap, _ = AuthProfile.objects.get_or_create(user=self)
+        ap.ldap_password = ldap_create_password(raw_password)
+        ap.save()
 
     def invalidate_confirmation_state(self):
         if self.pk is not None:

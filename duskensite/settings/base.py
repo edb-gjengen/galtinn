@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_select2',
     'captcha',
     'svg',
+    'graphene_django',
 ]
 INSTALLED_APPS += [
     'dusken',
@@ -235,3 +236,9 @@ WP_LOAD_PATHS = [
     "/var/www/studentersamfundet.no/www/wp/wp-load.php",
     "/var/www/neuf.no/aktivweb/wp/wp-load.php"
 ]
+
+GRAPHENE = {
+    'SCHEMA': 'dusken.api.graphql.schema',
+    'SCHEMA_OUTPUT': 'dusken/static/schema.json',
+    'SCHEMA_INDENT': 2,
+}

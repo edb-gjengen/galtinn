@@ -20,4 +20,3 @@ class Argon2WrappedMySQL41PasswordHasher(Argon2PasswordHasher):
     def encode(self, password, salt):
         sha1sha1_hash = mysql_create_password(password)
         return self.encode_sha1_sha1_hash(sha1sha1_hash, salt)
-

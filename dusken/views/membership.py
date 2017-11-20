@@ -3,8 +3,7 @@ import logging
 from django.conf import settings
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
-from django.views.generic import FormView, ListView
+from django.views.generic import ListView
 
 from dusken.forms import MembershipPurchaseForm
 from dusken.models import MembershipType, Membership
@@ -23,6 +22,5 @@ class MembershipListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         self.membership_type = MembershipType.get_default()
-        self.membership_purchase_form = MembershipPurchaseForm(
-            initial={'email': self.request.user.email})
+        self.membership_purchase_form = MembershipPurchaseForm(initial={'email': self.request.user.email})
         return super().get_context_data(**kwargs)
