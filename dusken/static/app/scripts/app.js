@@ -135,8 +135,8 @@ function formatMessage(message, alert) {
         '</div>';
 }
 
-function remove_member(user, orgunit) {
-    if (confirm('Remove user?')) { //FIXME: Translation... or just remove??
+function remove_member(user, orgunit, confirm_text) {
+    if (confirm(confirm_text)) {
         remove_user(user, orgunit, 'member');
     }
 }

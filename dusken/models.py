@@ -84,7 +84,7 @@ class DuskenUser(AbstractUser):
     @property
     def has_set_username(self):
         from apps.neuf_auth.models import AuthProfile
-        return AuthProfile.objects.filter(user=self, username_updates__isnull=False).exists()
+        return AuthProfile.objects.filter(user=self, username_updated__isnull=False).exists()
 
     @property
     def is_member(self):

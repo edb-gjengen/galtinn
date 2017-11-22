@@ -119,7 +119,7 @@ class UserUpdateMeView(UserUpdateView):
         return reverse('user-detail-me')
 
 
-class UserSetUsernameView(VolunteerRequiredMixin, UpdateView):
+class UserSetUsernameView(UpdateView):
     form_class = SetUsernameForm
     template_name = 'dusken/user_username.html'
     success_url = reverse_lazy('home')

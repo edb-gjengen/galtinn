@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-10 16:30+0100\n"
-"PO-Revision-Date: 2017-11-10 16:36+0100\n"
+"POT-Creation-Date: 2017-11-22 20:30+0100\n"
+"PO-Revision-Date: 2017-11-22 20:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.0.4\n"
 
-#: forms.py:41
+#: forms.py:35
 msgid "Username"
 msgstr "Brukernavn"
 
-#: forms.py:43
+#: forms.py:37
 msgid ""
-"Between 3 and 32 characters. Small letters, digits and - or _ only. It must "
-"start with a letter."
+"Between 3 and 32 characters. Lowercase letters, digits and - or _ only. It "
+"must start with a letter."
 msgstr ""
-"Mellom 3 og 32 tegn. Bare små bokstaver, tall og - eller _. Må starte med "
-"en bokstav."
+"Mellom 3 og 32 tegn. Bare små bokstaver, tall og - eller _. Må starte med en "
+"bokstav."
 
-#: forms.py:53
+#: forms.py:47
 msgid "Username can only be set once"
 msgstr "Brukernavn kan bare settes en gang"
 
-#: forms.py:67 forms.py:70
+#: forms.py:61 forms.py:64
 #, python-brace-format
 msgid "Username {value} is taken"
 msgstr "Brukernavnet {value} er allerede i bruk"
