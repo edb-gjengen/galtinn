@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n bootstrap4 %}
+{% block body %}
+    {% if not user.is_superuser %}
+        <p class="alert alert-danger">{% trans "Superusers can't delete their accounts" %}</p>
+    {% else %}
+        <p>TODO: Warning i rød skrift, google DeleteView</p>
+        <form method="post">
+            {{ form }}
+            <button type="submit" class="btn btn-danger">{% trans "Delete" %} {{ user }}</button>
+        </form>
+    {% endif %}
+{% endblock %}

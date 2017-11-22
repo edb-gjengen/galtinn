@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import ListView, DetailView, UpdateView, FormView
+from django.views.generic import ListView, DetailView, UpdateView, FormView, DeleteView
 
 from apps.neuf_auth.forms import SetUsernameForm
 from dusken.forms import DuskenUserForm, DuskenUserUpdateForm, DuskenUserActivateForm, UserWidgetForm
@@ -119,7 +119,7 @@ class UserUpdateMeView(UserUpdateView):
         return reverse('user-detail-me')
 
 
-class UserSetUsernameView(UpdateView):
+class UserSetUsernameView(LoginRequiredMixin, UpdateView):
     form_class = SetUsernameForm
     template_name = 'dusken/user_username.html'
     success_url = reverse_lazy('home')
@@ -142,3 +142,19 @@ class UserSetUsernameView(UpdateView):
         messages.success(self.request, '{} 😎'.format(_('Username set to {username}').format(username=username)))
 
         return redirect(self.success_url)
+
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = DuskenUser
+    success_url = reverse_lazy('index')
+    template_name = 'dusken/user_confirm_delete.html'
+    context_object_name = 'user'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def delete(self, request, *args, **kwargs):
+        ret = super().delete(request, *args, **kwargs)
+        # TODO Log the user out
+        # TODO Set success message
+        return ret

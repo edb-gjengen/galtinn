@@ -17,7 +17,7 @@ from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
-from apps.neuf_ldap.utils import ldap_create_password
+from apps.neuf_ldap.utils import ldap_create_password, delete_ldap_user
 from dusken.managers import DuskenUserManager, OrderManager, MembershipManager
 from dusken.utils import create_email_key, send_validation_email
 
@@ -43,7 +43,8 @@ class DuskenUser(AbstractUser):
     city = models.CharField(_('city'), max_length=100, null=True, blank=True)
     country = CountryField(_('country'), default='NO', blank=True)
 
-    place_of_study = models.ForeignKey('dusken.PlaceOfStudy', verbose_name=_('place of study'), blank=True, null=True)
+    place_of_study = models.ForeignKey(
+        'dusken.PlaceOfStudy', on_delete=models.SET_NULL, verbose_name=_('place of study'), blank=True, null=True)
     legacy_id = models.IntegerField(_('legacy id'), null=True, blank=True)
 
     stripe_customer_id = models.CharField(_('stripe customer id'), max_length=254, null=True, blank=True)
@@ -128,6 +129,16 @@ class DuskenUser(AbstractUser):
 
         super().save(**kwargs)
 
+    def delete(self, **kwargs):
+        # Before deleting, remove phone number from user orders to prevent leaking related user data
+        # with a recycled phone number (ie. membership and order data).
+        self.user.orders.update(phone_number='')
+
+        # Delete all the LDAP related user data if LDAP is configured
+        delete_ldap_user(self.username)
+
+        super().delete(**kwargs)
+
     def set_ldap_hash(self, raw_password):
         from apps.neuf_auth.models import AuthProfile
         ap, _ = AuthProfile.objects.get_or_create(user=self)
@@ -192,7 +203,8 @@ class Membership(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     membership_type = models.ForeignKey('dusken.MembershipType')
-    user = models.ForeignKey('dusken.DuskenUser', null=True, blank=True, related_name='memberships')
+    user = models.ForeignKey(
+        'dusken.DuskenUser', on_delete=models.SET_NULL, null=True, blank=True, related_name='memberships')
 
     objects = MembershipManager()
 
@@ -291,8 +303,8 @@ class MemberCard(BaseModel):
     card_number = models.IntegerField(_('card number'), unique=True)
     registered = models.DateTimeField(_('registered'), null=True, blank=True)
     is_active = models.BooleanField(_('is active'), default=True)
-    user = models.ForeignKey(
-        'dusken.DuskenUser', verbose_name=_('user'), null=True, blank=True, related_name='member_cards')
+    user = models.ForeignKey('dusken.DuskenUser', on_delete=models.SET_NULL, verbose_name=_('user'), null=True,
+                             blank=True, related_name='member_cards')
 
     def register(self, user=None, order=None):
         assert not (user and order)
@@ -370,18 +382,18 @@ class OrgUnit(MPTTModel, BaseModel):
     email = models.EmailField(_('email'), blank=True, default='')
     phone_number = PhoneNumberField(_('phone number'), blank=True, default='')
     contact_person = models.ForeignKey(
-        'dusken.DuskenUser', verbose_name=_('contact person'), blank=True, null=True, on_delete=models.SET_NULL)
+        'dusken.DuskenUser', on_delete=models.SET_NULL, verbose_name=_('contact person'), blank=True, null=True)
     website = models.URLField(_('website'), blank=True, default='')
 
     # Member and permission groups
-    group = models.ForeignKey(
-        DjangoGroup, verbose_name=_('group'), blank=True, null=True, related_name='member_orgunits')
-    admin_group = models.ForeignKey(
-        DjangoGroup, verbose_name=_('admin group'), blank=True, null=True, related_name='admin_orgunits')
+    group = models.ForeignKey(DjangoGroup, on_delete=models.SET_NULL, verbose_name=_('group'), blank=True, null=True,
+                              related_name='member_orgunits')
+    admin_group = models.ForeignKey(DjangoGroup, on_delete=models.SET_NULL, verbose_name=_('admin group'), blank=True,
+                                    null=True, related_name='admin_orgunits')
 
     # Hierarchical :-)
-    parent = TreeForeignKey(
-        'self', verbose_name=_('parent'), null=True, blank=True, related_name='children', db_index=True)
+    parent = TreeForeignKey('self', on_delete=models.SET_NULL, verbose_name=_('parent'), null=True, blank=True,
+                            related_name='children', db_index=True)
 
     @property
     def users(self):
@@ -452,8 +464,9 @@ class Order(BaseModel):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     price_nok = models.IntegerField(help_text=_('Price in øre'))
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', null=True, blank=True)
-    product = models.OneToOneField('dusken.Membership', null=True, blank=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='orders', null=True, blank=True)
+    product = models.OneToOneField('dusken.Membership', on_delete=models.SET_NULL, null=True, blank=True)
 
     # Payment
     payment_method = models.CharField(max_length=254, choices=PAYMENT_METHODS, default=PAYMENT_METHOD_OTHER)
@@ -465,7 +478,8 @@ class Order(BaseModel):
     )
 
     phone_number = PhoneNumberField(blank=True, null=True)
-    member_card = models.ForeignKey('dusken.MemberCard', related_name='orders', null=True, blank=True)
+    member_card = models.ForeignKey(
+        'dusken.MemberCard', on_delete=models.SET_NULL, related_name='orders', null=True, blank=True)
 
     objects = OrderManager()
 
@@ -500,7 +514,7 @@ class UserLogMessage(BaseModel):
     user = models.ForeignKey('dusken.DuskenUser', related_name='log_messages')
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        'dusken.DuskenUser', related_name='user_changes', on_delete=models.SET_NULL, blank=True, null=True)
+        'dusken.DuskenUser', on_delete=models.SET_NULL, related_name='user_changes', blank=True, null=True)
 
     def __str__(self):
         return '{}: {} ({})'.format(self.__class__.__name__, self.message, self.user_id)
@@ -514,7 +528,7 @@ class OrgUnitLogMessage(BaseModel):
     org_unit = models.ForeignKey('dusken.OrgUnit', related_name='log_messages')
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        'dusken.DuskenUser', related_name='org_unit_changes', on_delete=models.SET_NULL, blank=True, null=True)
+        'dusken.DuskenUser', on_delete=models.SET_NULL, related_name='org_unit_changes', blank=True, null=True)
 
     def __str__(self):
         return '{}: {} ({})'.format(self.__class__.__name__, self.message, self.org_unit_id)

@@ -5,6 +5,7 @@ import pprint
 
 from datetime import datetime
 from django.conf import settings
+from django.db.utils import ConnectionDoesNotExist
 from passlib.hash import ldap_salted_sha1
 
 logger = logging.getLogger(__name__)
@@ -172,7 +173,7 @@ def ldap_update_user_groups(dusken_user, ldap_user_diffable, dry_run=False, dele
 def create_ldap_automount(username, dry_run=False):
     from .models import LdapAutomountHome
 
-    if len(LdapAutomountHome.objects.filter(username=username)) != 0:
+    if LdapAutomountHome.objects.filter(username=username).exists():
         # Bail if it already exists
         return True
 
@@ -184,3 +185,34 @@ def create_ldap_automount(username, dry_run=False):
     logger.debug('Automount {} added for user {}'.format(automount.automountInformation, username))
 
     return True
+
+
+def delete_ldap_automount(username):
+    from .models import LdapAutomountHome
+    LdapAutomountHome.objects.filter(username=username).delete()
+
+
+def delete_ldap_user_groups(username):
+    from .models import LdapGroup
+    groups_with_memberships = LdapGroup.objects.filter(members__contains=username)
+
+    for g in groups_with_memberships:
+        g.members.remove(username)
+        g.save()
+
+
+def delete_ldap_user(username):
+    from .models import LdapUser, LdapGroup
+    try:
+        logger.info('Deleting LDAP user {}'.format(username))
+
+        if ldap_user_group_exists(username):
+            LdapGroup.objects.filter(name=username).delete()
+
+        delete_ldap_automount(username)
+        delete_ldap_user_groups(username)
+
+        if ldap_username_exists(username):
+            LdapUser.objects.filter(username=username).delete()
+    except ConnectionDoesNotExist:
+        logger.warning('Skipping deletion of LDAP user {}, since the LDAP connection does not exist'.format(username))
