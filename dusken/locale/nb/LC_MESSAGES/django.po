@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-22 20:24+0100\n"
-"PO-Revision-Date: 2017-11-22 20:31+0100\n"
+"POT-Creation-Date: 2017-11-27 23:08+0100\n"
+"PO-Revision-Date: 2017-11-27 23:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -27,11 +27,11 @@ msgid "Payment method"
 msgstr "Betalingsmåte"
 
 #: admin.py:62 admin.py:87 admin.py:134 forms.py:29 forms.py:30 forms.py:38
-#: models.py:186
+#: models.py:197
 msgid "User"
 msgstr "Bruker"
 
-#: admin.py:96 models.py:315
+#: admin.py:96 models.py:327
 msgid "Member card"
 msgstr "Medlemskort"
 
@@ -88,12 +88,12 @@ msgid "Last name"
 msgstr "Etternavn"
 
 #: forms.py:49 forms.py:104 templates/dusken/home.html:90
-#: templates/dusken/orgunit_detail.html:10 templates/dusken/user_detail.html:37
+#: templates/dusken/orgunit_detail.html:10 templates/dusken/user_detail.html:38
 msgid "Email"
 msgstr "E-post"
 
 #: forms.py:50 forms.py:77 forms.py:105 templates/dusken/home.html:103
-#: templates/dusken/orgunit_detail.html:14 templates/dusken/user_detail.html:50
+#: templates/dusken/orgunit_detail.html:14 templates/dusken/user_detail.html:51
 msgid "Phone number"
 msgstr "Mobilnummer"
 
@@ -137,6 +137,10 @@ msgstr "Ugyldig kode"
 msgid "Email address / username"
 msgstr "E-postadresse / brukernavn"
 
+#: forms.py:179
+msgid "The username entered is not equal to your own."
+msgstr "Angitt brukernavn er ikke likt ditt eget."
+
 #: models.py:28
 msgid "first name"
 msgstr "fornavn"
@@ -149,7 +153,7 @@ msgstr "etternavn"
 msgid "email address"
 msgstr "e-postadresse"
 
-#: models.py:33 models.py:371
+#: models.py:33 models.py:383
 msgid "phone number"
 msgstr "mobilnummer"
 
@@ -177,197 +181,196 @@ msgstr "by"
 msgid "country"
 msgstr "land"
 
-#: models.py:46
+#: models.py:47
 msgid "place of study"
 msgstr "studiested"
 
-#: models.py:47
+#: models.py:48
 msgid "legacy id"
 msgstr "foreldet id"
 
-#: models.py:49
+#: models.py:50
 msgid "stripe customer id"
 msgstr "stripe kunde-id"
 
-#: models.py:187 templates/dusken/user_list.html:4
+#: models.py:198 templates/dusken/user_list.html:4
 msgid "Users"
 msgstr "Brukere"
 
-#: models.py:219 templates/dusken/nav.html:13
-#: templates/dusken/orgunit_edit_users.html:27
-#: templates/dusken/user_detail.html:76 templates/nav.html:16
+#: models.py:231 templates/dusken/orgunit_edit_users.html:27
+#: templates/dusken/user_detail.html:77 templates/nav.html:16
 msgid "Membership"
 msgstr "Medlemskap"
 
-#: models.py:220 templates/dusken/membership_list.html:5
+#: models.py:232 templates/dusken/membership_list.html:5
 msgid "Memberships"
 msgstr "Medlemskap"
 
-#: models.py:236
+#: models.py:248
 msgid "Duration"
 msgstr "Varighet"
 
-#: models.py:237
+#: models.py:249
 msgid "Never"
 msgstr "Aldri"
 
-#: models.py:238
+#: models.py:250
 msgid "End of year"
 msgstr "Ved årsslutt"
 
-#: models.py:245 models.py:453
+#: models.py:257 models.py:465
 msgid "Price in øre"
 msgstr "Pris i øre"
 
-#: models.py:286
+#: models.py:298
 msgid "Membership type"
 msgstr "Medlemskapstype"
 
-#: models.py:287
+#: models.py:299
 msgid "Membership types"
 msgstr "Medlemskapstyper"
 
-#: models.py:291
+#: models.py:303
 msgid "card number"
 msgstr "kortnummer"
 
-#: models.py:292
+#: models.py:304
 msgid "registered"
 msgstr "registrert"
 
-#: models.py:293 models.py:366
+#: models.py:305 models.py:378
 msgid "is active"
 msgstr "er aktiv"
 
-#: models.py:295
+#: models.py:306
 msgid "user"
 msgstr "bruker"
 
-#: models.py:316
+#: models.py:328
 msgid "Member cards"
 msgstr "Medlemskort"
 
-#: models.py:328
+#: models.py:340
 msgid "Volunteers"
 msgstr "Aktive"
 
-#: models.py:329
+#: models.py:341
 msgid "Standard"
 msgstr "Standard"
 
-#: models.py:341
+#: models.py:353
 msgid "Posix name must be unique or empty"
 msgstr "POSIX-navn må være unikt eller tomt"
 
-#: models.py:354
+#: models.py:366
 msgid "Group profile"
 msgstr "Gruppeprofil"
 
-#: models.py:355
+#: models.py:367
 msgid "Group profiles"
 msgstr "Gruppeprofiler"
 
-#: models.py:363 models.py:485
+#: models.py:375 models.py:499
 msgid "name"
 msgstr "navn"
 
-#: models.py:364
+#: models.py:376
 msgid "slug"
 msgstr "slug"
 
-#: models.py:365 models.py:486
+#: models.py:377 models.py:500
 msgid "short name"
 msgstr "kortnavn"
 
-#: models.py:367
+#: models.py:379
 msgid "description"
 msgstr "beskrivelse"
 
-#: models.py:370
+#: models.py:382
 msgid "email"
 msgstr "e-post"
 
-#: models.py:373
+#: models.py:385
 msgid "contact person"
 msgstr "kontaktperson"
 
-#: models.py:374
+#: models.py:386
 msgid "website"
 msgstr "nettside"
 
-#: models.py:378
+#: models.py:389
 msgid "group"
 msgstr "gruppe"
 
-#: models.py:380
+#: models.py:391
 msgid "admin group"
 msgstr "admingruppe"
 
-#: models.py:384
+#: models.py:395
 msgid "parent"
 msgstr "forelder"
 
-#: models.py:433
+#: models.py:445
 msgid "Org unit"
 msgstr "Forening"
 
-#: models.py:434
+#: models.py:446
 msgid "Org units"
 msgstr "Foreninger"
 
-#: models.py:445
+#: models.py:457
 msgid "Mobile app"
 msgstr "Mobilapplikasjon"
 
-#: models.py:446
+#: models.py:458
 msgid "SMS"
 msgstr "SMS"
 
-#: models.py:447
+#: models.py:459
 msgid "Credit card"
 msgstr "Kredittkort"
 
-#: models.py:448
+#: models.py:460
 msgid "Cash register"
 msgstr "Kassaapparat"
 
-#: models.py:449
+#: models.py:461
 msgid "Other"
 msgstr "Annet"
 
-#: models.py:464
+#: models.py:477
 msgid "Stripe charge ID, Kassa event ID, SMS event ID or App event ID"
 msgstr "Stripe transaksjons-ID, Kassa-hendelses-ID, SMS-hendelses-ID"
 
-#: models.py:479
+#: models.py:493
 msgid "Order"
 msgstr "Ordre"
 
-#: models.py:480
+#: models.py:494
 msgid "Orders"
 msgstr "Ordre"
 
-#: models.py:495 templates/dusken/user_detail.html:68
+#: models.py:509 templates/dusken/user_detail.html:69
 msgid "Place of study"
 msgstr "Studiested"
 
-#: models.py:496
+#: models.py:510
 msgid "Places of study"
 msgstr "Studiesteder"
 
-#: models.py:509
+#: models.py:523
 msgid "User log message"
 msgstr "Brukerloggmelding"
 
-#: models.py:510
+#: models.py:524
 msgid "User log messages"
 msgstr "Brukerloggmeldinger"
 
-#: models.py:523
+#: models.py:537
 msgid "Org unit log message"
 msgstr "Foreningsloggmelding"
 
-#: models.py:524
+#: models.py:538
 msgid "Org unit log messages"
 msgstr "Foreningsloggmeldinger"
 
@@ -500,8 +503,7 @@ msgstr "Det Norske Studentersamfund - Chateau Neuf"
 msgid "Go forth and click the link to confirm: %(validation_url)s"
 msgstr "Trykk på lenken for å bekrefte: %(validation_url)s"
 
-#: templates/dusken/home.html:10 templates/dusken/nav.html:11
-#: templates/nav.html:13
+#: templates/dusken/home.html:10 templates/nav.html:13
 msgid "Home"
 msgstr "Hjem"
 
@@ -530,7 +532,7 @@ msgid "There is a membership connected to your phone number."
 msgstr "Det finnes et medlemskap knyttet til mobilnummeret ditt."
 
 #: templates/dusken/home.html:36 templates/dusken/home.html:116
-#: templates/dusken/user_detail.html:58
+#: templates/dusken/user_detail.html:59
 msgid "Validate phone number"
 msgstr "Bekreft mobilnummer"
 
@@ -547,14 +549,14 @@ msgid "Valid until"
 msgstr "Gyldig til"
 
 #: templates/dusken/home.html:49 templates/dusken/membership_list.html:29
-#: templates/dusken/user_detail.html:89 templates/dusken/user_detail.html:93
+#: templates/dusken/user_detail.html:90 templates/dusken/user_detail.html:94
 msgid "Expired"
 msgstr "Utløpt"
 
 #: templates/dusken/home.html:49 templates/dusken/membership_list.html:22
 #: templates/dusken/membership_list.html:26
 #: templates/dusken/orgunit_edit_users.html:35
-#: templates/dusken/user_detail.html:83
+#: templates/dusken/user_detail.html:84
 msgid "Lifelong"
 msgstr "Livsvarig"
 
@@ -570,7 +572,7 @@ msgstr "Se kvittering"
 msgid "Membership is valid for 1 year"
 msgstr "Medlemskapet er gyldig i ett år"
 
-#: templates/dusken/home.html:79 templates/dusken/user_detail.html:18
+#: templates/dusken/home.html:79 templates/dusken/user_detail.html:19
 msgid "Your profile"
 msgstr "Din profil"
 
@@ -578,21 +580,21 @@ msgstr "Din profil"
 msgid "Quick view of your profile details"
 msgstr "Oversikt over dine profildetaljer"
 
-#: templates/dusken/home.html:83 templates/dusken/user_detail.html:24
+#: templates/dusken/home.html:83 templates/dusken/user_detail.html:25
 msgid "Full name"
 msgstr "Fullt navn"
 
 #: templates/dusken/home.html:92 templates/dusken/home.html:106
-#: templates/dusken/user_detail.html:39 templates/dusken/user_detail.html:52
+#: templates/dusken/user_detail.html:40 templates/dusken/user_detail.html:53
 msgid "Validated"
 msgstr "Bekreftet"
 
 #: templates/dusken/home.html:94 templates/dusken/home.html:108
-#: templates/dusken/user_detail.html:41 templates/dusken/user_detail.html:54
+#: templates/dusken/user_detail.html:42 templates/dusken/user_detail.html:55
 msgid "Not validated"
 msgstr "Ubekreftet"
 
-#: templates/dusken/home.html:98 templates/dusken/user_detail.html:45
+#: templates/dusken/home.html:98 templates/dusken/user_detail.html:46
 msgid "Resend validation email"
 msgstr "Send ny bekreftelse på e-post"
 
@@ -617,7 +619,7 @@ msgid "Change it if you want to"
 msgstr "Endre passordet hvis du vil"
 
 #: templates/dusken/home.html:148
-#: templates/registration/password_change_form.html:5
+#: templates/registration/password_change_form.html:6
 msgid "Change password"
 msgstr "Endre passord"
 
@@ -629,7 +631,7 @@ msgstr "Velg et brukernavn"
 msgid "Needed to get access to internal systems"
 msgstr "Påkrevd for å få tilgang internsystemene"
 
-#: templates/dusken/home.html:160 templates/dusken/user_detail.html:32
+#: templates/dusken/home.html:160 templates/dusken/user_detail.html:33
 msgid "Set username"
 msgstr "Velg brukernavn"
 
@@ -678,8 +680,8 @@ msgid "Manage members"
 msgstr "Administrèr medlemmer"
 
 #: templates/dusken/home_volunteer.html:29
-#: templates/dusken/orgunit_detail.html:6 templates/dusken/user_detail.html:106
-#: templates/dusken/user_detail.html:108
+#: templates/dusken/orgunit_detail.html:6 templates/dusken/user_detail.html:107
+#: templates/dusken/user_detail.html:109
 msgid "Edit"
 msgstr "Rediger"
 
@@ -732,22 +734,6 @@ msgstr "Kjøp medlemskap"
 msgid "Renew membership"
 msgstr "Forny medlemskap"
 
-#: templates/dusken/nav.html:6
-msgid "dusken.neuf.no"
-msgstr "dusken.neuf.no"
-
-#: templates/dusken/nav.html:16
-msgid "Active"
-msgstr "Aktiv"
-
-#: templates/dusken/nav.html:27 templates/nav.html:25
-msgid "Profile"
-msgstr "Profil"
-
-#: templates/dusken/nav.html:28 templates/nav.html:46
-msgid "Log out"
-msgstr "Logg ut"
-
 #: templates/dusken/order_detail.html:4
 msgid "Reciept"
 msgstr "Kvittering"
@@ -796,7 +782,7 @@ msgid "Add admin"
 msgstr "Legg til admin"
 
 #: templates/dusken/orgunit_edit_users.html:43
-#: templates/dusken/user_detail.html:92
+#: templates/dusken/user_detail.html:93
 msgid "None"
 msgstr "Ingen"
 
@@ -834,37 +820,74 @@ msgstr "Opprett bruker"
 msgid "Register"
 msgstr "Videre"
 
-#: templates/dusken/user_detail.html:26
+#: templates/dusken/user_confirm_delete.html:6
+msgid "Superusers can't delete their accounts"
+msgstr "Superbrukere kan ikke slette kontoen sin"
+
+#: templates/dusken/user_confirm_delete.html:8
+#: templates/dusken/user_detail.html:125
+msgid "Permanently delete your account"
+msgstr "Slett kontoen din permanent"
+
+#: templates/dusken/user_confirm_delete.html:9
+msgid ""
+"Are you absolutely sure you want to <strong>delete</strong> your user "
+"account?"
+msgstr ""
+"Er du helt sikker på at du vil <strong>slette</strong> brukerkontoen din?"
+
+#: templates/dusken/user_confirm_delete.html:11
+#, python-format
+msgid ""
+"This will delete your account with the username <strong>%(username)s</"
+"strong> including all associated personal data <strong>forever</strong>."
+msgstr ""
+"Dette sletter kontoen med brukernavn <strong>%(username)s</strong> inkludert "
+"all tilknyttet persondata <strong>for alltid</strong>."
+
+#: templates/dusken/user_confirm_delete.html:13
+msgid "Please type in your username to confirm."
+msgstr "Skriv inn brukernavnet ditt for å fortsette."
+
+#: templates/dusken/user_confirm_delete.html:17
+msgid "I understand, delete my account"
+msgstr "Jeg forstår, slett kontoen min"
+
+#: templates/dusken/user_detail.html:27
 msgid "Username"
 msgstr "Brukernavn"
 
-#: templates/dusken/user_detail.html:28
+#: templates/dusken/user_detail.html:29
 msgid "Not set"
 msgstr "Ikke satt"
 
-#: templates/dusken/user_detail.html:63
+#: templates/dusken/user_detail.html:64
 msgid "Address"
 msgstr "Adresse"
 
-#: templates/dusken/user_detail.html:87
+#: templates/dusken/user_detail.html:88
 msgid "Valid"
 msgstr "Gyldig"
 
-#: templates/dusken/user_detail.html:101
+#: templates/dusken/user_detail.html:102
 msgid "Registered"
 msgstr "Registrert"
 
-#: templates/dusken/user_detail.html:102
+#: templates/dusken/user_detail.html:103
 msgid "Last updated"
 msgstr "Sist oppdatert"
 
-#: templates/dusken/user_detail.html:111
+#: templates/dusken/user_detail.html:112
 msgid "Organizations"
 msgstr "Foreninger"
 
-#: templates/dusken/user_detail.html:118
+#: templates/dusken/user_detail.html:119
 msgid "No organizations"
 msgstr "Ingen foreninger"
+
+#: templates/dusken/user_detail.html:123
+msgid "Danger zone"
+msgstr "Farlig område"
 
 #: templates/dusken/user_phone_confirm.html:6
 msgid "Your phone number is already confirmed"
@@ -923,9 +946,17 @@ msgstr "av"
 msgid "Toggle navigation"
 msgstr "Svitsj navigasjon"
 
+#: templates/nav.html:25
+msgid "Profile"
+msgstr "Profil"
+
 #: templates/nav.html:42
 msgid "Change language to..."
 msgstr "Endre språk til..."
+
+#: templates/nav.html:46
+msgid "Log out"
+msgstr "Logg ut"
 
 #: templates/registration/logged_out.html:7
 msgid "Goodbye"
@@ -952,7 +983,7 @@ msgstr "Passordet ditt har blitt endret."
 msgid "Back"
 msgstr "Tilbake"
 
-#: templates/registration/password_change_form.html:9
+#: templates/registration/password_change_form.html:10
 msgid "Change my password"
 msgstr "Endre mitt passord"
 
@@ -1050,9 +1081,20 @@ msgstr "Brukernavnet kan bare settes én gang"
 msgid "Username set to {username}"
 msgstr "Brukernavnet er satt til {username}"
 
+#: views/user.py:163
+#, python-brace-format
+msgid "So long {user} and good luck on your future travels 🚣"
+msgstr "Takk og farvel {user} og lykke til på reisen 🚣"
+
 #: views/validation.py:29 views/validation.py:63
 msgid "Success!"
 msgstr "Hurra!"
+
+#~ msgid "dusken.neuf.no"
+#~ msgstr "dusken.neuf.no"
+
+#~ msgid "Active"
+#~ msgstr "Aktiv"
 
 #~ msgid "You need to enter your first name."
 #~ msgstr "Du må fylle inn fornavnet ditt."
