@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n bootstrap4 %}
+{% block body %}
+    <div class="form-page">
+    {% if user.is_superuser %}
+        <p class="alert alert-danger">{% trans "Superusers can't delete their accounts" %}</p>
+    {% else %}
+        <h1>{% trans "Permanently delete your account" %}</h1>
+        <p class="alert alert-danger" style="display: inline-block">{% trans "Are you absolutely sure you want to <strong>delete</strong> your user account?" %}</p>
+        {% with user.username as username %}
+            <p>{% blocktrans %}This will delete your account with the username <strong>{{ username }}</strong> including all associated personal data <strong>forever</strong>.{% endblocktrans %}</p>
+        {% endwith %}
+        <p>{% trans "Please type in your username to confirm." %}</p>
+        <form method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="btn btn-danger">{% trans "I understand, delete my account" %}</button>
+        </form>
+    {% endif %}
+    </div>
+{% endblock %}

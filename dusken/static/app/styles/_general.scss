@@ -4,6 +4,9 @@ body {
 
 
 .messages {
+    margin: 0 auto;
+    max-width: 650px;
+
     &:empty {
         display: none;
     }

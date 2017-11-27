@@ -1,5 +1,5 @@
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.utils import timezone
 from rest_framework import status
@@ -17,10 +17,8 @@ class DuskenUserAPITestCase(APITestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user(
             'olanord', email='olanord@example.com', password='mypassword')
-        self.user.save()
         self.other_user = DuskenUser.objects.create_user(
             'karinord', email='karinord@example.com', password='mypassword')
-        self.other_user.save()
         self.token = Token.objects.create(user=self.user).key
 
     def __set_login(self, user_is_logged_in=True):
@@ -76,11 +74,11 @@ class DuskenUserAPITestCase(APITestCase):
 
 class DuskenUserPhoneValidationTestCase(TestCase):
     def setUp(self):
+        from dusken.utils import send_validation_sms
+
         self.user = DuskenUser.objects.create_user(
             'olanord', email='olanord@example.com', password='mypassword',
             phone_number='+4794430002')
-        self.user.save()
-        from dusken.utils import send_validation_sms
         send_validation_sms(self.user)
 
     def test_user_phone_number_confirmation_valid_key(self):
@@ -229,3 +227,36 @@ class DuskenUtilTests(TestCase):
         generated = generate_username(first_name, last_name)
         self.assertGreater(len(generated), 0)
         self.assertNotIn(' ', generated)
+
+
+class DuskenUserDelete(TestCase):
+    fixtures = ['testdata']
+
+    def setUp(self):
+        self.user = DuskenUser.objects.create_user('mrclean', email='mrclean@example.com', password='mypassword')
+
+        mt = MembershipType.objects.first()
+        self.membership = Membership.objects.create(start_date=datetime.now(), membership_type=mt, user=self.user)
+        self.order = Order.objects.create(
+            user=self.user, product=self.membership, phone_number='48105885', price_nok=mt.price)
+
+        self.user_2 = DuskenUser.objects.create_user('mrclean1', email='mrclean1@example.com', password='mypassword')
+        self.user_3 = DuskenUser.objects.create_user('mrclean2', email='mrclean2@example.com', password='mypassword')
+
+    def test_delete_user(self):
+        url = reverse('user-delete')
+        self.client.force_login(self.user)
+        response = self.client.post(url, {'confirm_username': 'wrong_username'})
+        self.assertFormError(response, 'form', 'confirm_username', 'The username entered is not equal to your own.')
+
+        response = self.client.post(url, {'confirm_username': self.user.username})
+        self.assertRedirects(response, reverse('index'))
+
+        self.assertFalse(DuskenUser.objects.filter(pk=self.user.pk).exists())
+        self.assertEqual(DuskenUser.objects.filter(username__in=['mrclean1', 'mrclean2']).count(), 2)
+
+        self.assertTrue(Order.objects.filter(pk=self.order.pk).exists())
+        self.order.refresh_from_db()
+        self.assertEqual(self.order.phone_number, '')
+
+        self.membership.refresh_from_db()  # Will trigger DoesNotExists if was deleted
