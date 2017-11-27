@@ -1,4 +1,5 @@
 # coding: utf-8
+import logging
 import uuid
 from datetime import timedelta
 from itertools import chain
@@ -20,6 +21,8 @@ from apps.common.mixins import BaseModel
 from apps.neuf_ldap.utils import ldap_create_password, delete_ldap_user
 from dusken.managers import DuskenUserManager, OrderManager, MembershipManager
 from dusken.utils import create_email_key, send_validation_email
+
+logger = logging.getLogger(__name__)
 
 
 class DuskenUser(AbstractUser):
@@ -130,6 +133,7 @@ class DuskenUser(AbstractUser):
         super().save(**kwargs)
 
     def delete(self, **kwargs):
+        logger.info('Deleting user with username {}'.format(self.username))
         # Before deleting, remove phone number from user orders to prevent leaking related user data
         # with a recycled phone number (ie. membership and order data).
         self.orders.update(phone_number='')
