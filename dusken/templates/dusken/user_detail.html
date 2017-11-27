@@ -8,6 +8,7 @@
     {% endif %}
 {% endblock %}
 {% block body %}
+<div class="form-page">
     <script>
     var config = {
         validateEmail: '{% url "resend-validation-email" %}'
@@ -121,6 +122,7 @@
     <br>
     <h5>{% trans "Danger zone" %}</h5>
     {% if userobj == user %}
-        <a href="{% url "user-delete" %}" class="text-danger">{% trans "Slett kontoen permanent" %}</a>
+        <a href="{% url "user-delete" %}" class="text-danger">{% trans "Permanently delete your account" %}</a>
     {% endif %}
+    </div>
 {% endblock %}

@@ -132,7 +132,7 @@ class DuskenUser(AbstractUser):
     def delete(self, **kwargs):
         # Before deleting, remove phone number from user orders to prevent leaking related user data
         # with a recycled phone number (ie. membership and order data).
-        self.user.orders.update(phone_number='')
+        self.orders.update(phone_number='')
 
         # Delete all the LDAP related user data if LDAP is configured
         delete_ldap_user(self.username)
