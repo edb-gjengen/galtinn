@@ -119,9 +119,9 @@
             <li class="list-group-item">{% trans "No organizations" %}</li>
         {% endfor %}
     </ul>
-    <br>
-    <h5>{% trans "Danger zone" %}</h5>
     {% if userobj == user %}
+        <br>
+        <h5>{% trans "Danger zone" %}</h5>
         <a href="{% url "user-delete" %}" class="text-danger">{% trans "Permanently delete your account" %}</a>
     {% endif %}
     </div>
