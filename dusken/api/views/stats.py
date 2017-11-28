@@ -17,7 +17,11 @@ def membership_stats(request):
 
     memberships = memberships.order_by('-order__created').select_related('order')
     memberships_grouped = defaultdict(list)
-    for key, values in groupby(memberships, key=lambda x: '{}{}'.format(x.order.payment_method, x.order.created.date())):
+
+    def _key_func(x):
+        return '{}{}'.format(x.order.payment_method, x.order.created.date())
+
+    for key, values in groupby(memberships, key=_key_func):
         sales = list(values)
         method = sales[0].order.payment_method
         memberships_grouped[method].append({

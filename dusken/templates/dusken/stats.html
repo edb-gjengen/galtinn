@@ -3,12 +3,12 @@
 {% block title %}Medlemskapsstatistikk{% endblock %}
 {% block body %}
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
             <h1>Medlemskapsstatistikk</h1>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 col-md-6">
+        <div class="col-12 col-md-6">
 
             <h2>Salg per dag</h2>
             <label for="start">Fra</label> <input id="start" name="start" type="date" value="{{ start_date|date:"Y-m-d" }}" />
@@ -28,7 +28,7 @@
                 <div>Totalt: <span class="sum-today big-number"></span></div>
             </div>
         </div>
-        <div class="col-xs-12 col-md-6">
+        <div class="col-12 col-md-6">
             <h2>Salg per dag</h2>
             <button class="export-data-btn btn btn-default btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Eksporter til CSV</button>
             <table id="sales-table" class="table table-striped"></table>
