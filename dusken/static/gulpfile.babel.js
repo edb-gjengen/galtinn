@@ -1,4 +1,3 @@
-// generated on 2015-09-03 using generator-gulp-webapp 1.0.3
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import gulp from 'gulp';
@@ -15,6 +14,8 @@ const vendorJS = [
     'node_modules/bootstrap/dist/**/*.min.js',
     'node_modules/underscore/underscore-min.js',
     'node_modules/select2/dist/js/select2.min.js',
+    'node_modules/moment/min/moment.min.js',
+    'node_modules/chart.js/dist/Chart.min.js',
 ];
 
 gulp.task('styles', () => {

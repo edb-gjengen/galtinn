@@ -1,8 +1,19 @@
+var chartColors = {
+	red: 'rgb(255, 99, 132)',
+	orange: 'rgb(255, 159, 64)',
+	yellow: 'rgb(255, 205, 86)',
+	green: 'rgb(75, 192, 192)',
+	blue: 'rgb(54, 162, 235)',
+	purple: 'rgb(153, 102, 255)',
+	grey: 'rgb(201, 203, 207)'
+};
+
 var saleTypes = [];
 var salesData = {};
 
 var salesChart;
 var salesChartToday;
+var salesChartData;
 
 var url = '/api/stats/';
 
@@ -10,20 +21,26 @@ function sumSales(memo, num) {
     return memo + num.sales;
 }
 
-function toHighchartsSeries(memberships) {
+function toChartJSDatasets(memberships) {
     memberships = _.sortBy(memberships, 'date');
-    return _.map(memberships, function (el) {
-        return [moment.utc(el.date).valueOf(), el.sales]
+    // TODO: you are here
+    var dss = _.map(memberships, function(series, i) {
+        var series_out = {label: i};
+        series_out.data = _.map(series, function (el) {
+            return [moment.utc(el.date), el.sales]
+        });
+        return series_out;
     });
+
+    return {datasets: dss};
 }
 
 function getSales(start) {
     return $.getJSON(url + '?start_date=' + start, function (data) {
         salesData = data.memberships;
         saleTypes = data.payment_methods;
-        _.each(saleTypes, function(type) {
-            salesChart.addSeries({name: type, data: toHighchartsSeries(salesData[type])});
-        })
+        salesChartData = toChartJSDatasets(salesData);
+        console.log(salesChartData);
     });
 }
 
@@ -44,24 +61,25 @@ function today() {
     var todaySales = _.findWhere(salesData, {date: today}) || {sales: 0};
     $('.app-today').html(todaySales.sales);
 
-    salesChartToday = new Highcharts.Chart({
-        chart: {
-            renderTo: 'sales-chart-today',
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: false
-        },
-        series: [{
-            name: 'Salg', data: [
-                {name: 'Salg', y: todaySales.sales},
-            ]
-        }
-        ]
-    });
+    // TODO: chartjs
+    // salesChartToday = new Highcharts.Chart({
+    //     chart: {
+    //         renderTo: 'sales-chart-today',
+    //         plotBackgroundColor: null,
+    //         plotBorderWidth: null,
+    //         plotShadow: false,
+    //         type: 'pie'
+    //     },
+    //     title: {
+    //         text: false
+    //     },
+    //     series: [{
+    //         name: 'Salg', data: [
+    //             {name: 'Salg', y: todaySales.sales},
+    //         ]
+    //     }
+    //     ]
+    // });
 }
 
 function groupSalesByDate() {
@@ -134,31 +152,45 @@ function downloadCSVFile(csvData, fileName) {
 }
 
 function recalc(start, cb) {
-    salesChart = new Highcharts.Chart({
-        chart: {
-            renderTo: 'sales-chart'
-        },
-        title: {
-            text: false
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: 'Salg'
-            },
-            min: 0
-        },
-        plotOptions: {
-            series: {
-                marker: {
-                    radius: 4
-                }
+    console.log('in recalc');
+    var renderTo = document.getElementById('sales-chart');
+    // TODO
+    var stackedLine = new Chart(renderTo, {
+        type: 'line',
+        data: salesChartData,
+        options: {
+            scales: {
+                yAxes: [{
+                    stacked: true
+                }]
             }
-        },
-        series: []
+        }
     });
+    // salesChart = new Highcharts.Chart({
+    //     chart: {
+    //         renderTo: 'sales-chart'
+    //     },
+    //     title: {
+    //         text: false
+    //     },
+    //     xAxis: {
+    //         type: 'datetime'
+    //     },
+    //     yAxis: {
+    //         title: {
+    //             text: 'Salg'
+    //         },
+    //         min: 0
+    //     },
+    //     plotOptions: {
+    //         series: {
+    //             marker: {
+    //                 radius: 4
+    //             }
+    //         }
+    //     },
+    //     series: []
+    // });
 
     $.when(getSales(start)).done(function() {
         totals();
@@ -171,10 +203,6 @@ function recalc(start, cb) {
 }
 
 $(document).ready(function() {
-    Highcharts.setOptions({
-        credits: {enabled: false}
-    });
-
     var $exportBtn = $('.export-data-btn');
     var $startInput = $('#start');
 
