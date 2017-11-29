@@ -1,36 +1,37 @@
 {% extends "base.html" %}
-{% load i18n static %}
-{% block title %}Medlemskapsstatistikk{% endblock %}
+{% load i18n static svg %}
+{% block title %}{% trans "Membership statistics" %}{% endblock %}
 {% block body %}
     <div class="row">
         <div class="col-12">
-            <h1>Medlemskapsstatistikk</h1>
+            <h1>{% trans "Membership statistics" %}</h1>
         </div>
     </div>
     <div class="row">
         <div class="col-12 col-md-6">
 
-            <h2>Salg per dag</h2>
+            <h2>{% trans "Sales per day" %}</h2>
             <label for="start">Fra</label> <input id="start" name="start" type="date" value="{{ start_date|date:"Y-m-d" }}" />
             <canvas id="sales-chart"></canvas>
 
-            <h3>Salg totalt</h3>
+            <h3>{% trans "Sales total" %}</h3>
             <div id="sums">
-                <div>Totalt: <span class="sum big-number"></span></div>
+                <div>{% trans "In total" %}: <span class="sum big-number"></span></div>
             </div>
 
             <hr>
 
-            <h2>Salg idag</h2>
-            <em>Dato: <span class="today-date-wrap"></span></em>
-            <div id="sales-chart-today" style="min-width: 310px; height: 400px; max-width: 600px;"></div>
+            <h2>{% trans "Sales today" %}</h2>
+            <em>{% trans "Date" %}: <span class="today-date-wrap"></span></em>
+            <canvas id="sales-chart-today" style="min-width: 310px; height: 400px; max-width: 600px;"></canvas>
             <div id="sums">
-                <div>Totalt: <span class="sum-today big-number"></span></div>
+                <div>{% trans "In total" %}: <span class="sum-today big-number"></span></div>
             </div>
         </div>
         <div class="col-12 col-md-6">
-            <h2>Salg per dag</h2>
-            <button class="export-data-btn btn btn-default btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Eksporter til CSV</button>
+            <h2 style="display: inline-block;">{% trans "Sales per day" %}</h2><button class="export-data-btn btn btn-outline-primary" style="margin-left: 1rem;">{% svg "icons/download" %} {% trans "Download as CSV" %}</button>
+            <br>
+            <br>
             <table id="sales-table" class="table table-striped"></table>
         </div>
     </div>

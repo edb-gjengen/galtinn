@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-27 23:08+0100\n"
-"PO-Revision-Date: 2017-11-27 23:16+0100\n"
+"POT-Creation-Date: 2017-11-29 16:28+0100\n"
+"PO-Revision-Date: 2017-11-29 16:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -26,16 +26,20 @@ msgstr "år solgt"
 msgid "Payment method"
 msgstr "Betalingsmåte"
 
-#: admin.py:62 admin.py:87 admin.py:134 forms.py:29 forms.py:30 forms.py:38
-#: models.py:197
+#: admin.py:62 admin.py:87 admin.py:143 forms.py:29 forms.py:30 forms.py:38
+#: models.py:201
 msgid "User"
 msgstr "Bruker"
 
-#: admin.py:96 models.py:327
+#: admin.py:96
+msgid "Product"
+msgstr "Produkt"
+
+#: admin.py:105 models.py:331
 msgid "Member card"
 msgstr "Medlemskort"
 
-#: admin.py:111
+#: admin.py:120
 msgid "Dusken fields"
 msgstr "Dusken-felter"
 
@@ -141,236 +145,236 @@ msgstr "E-postadresse / brukernavn"
 msgid "The username entered is not equal to your own."
 msgstr "Angitt brukernavn er ikke likt ditt eget."
 
-#: models.py:28
+#: models.py:31
 msgid "first name"
 msgstr "fornavn"
 
-#: models.py:29
+#: models.py:32
 msgid "last name"
 msgstr "etternavn"
 
-#: models.py:30
+#: models.py:33
 msgid "email address"
 msgstr "e-postadresse"
 
-#: models.py:33 models.py:383
+#: models.py:36 models.py:387
 msgid "phone number"
 msgstr "mobilnummer"
 
-#: models.py:37
+#: models.py:40
 msgid "date of birth"
 msgstr "fødselsdato"
 
-#: models.py:40
+#: models.py:43
 msgid "street address"
 msgstr "adresse"
 
-#: models.py:41
+#: models.py:44
 msgid "street address 2"
 msgstr "adresselinje 2"
 
-#: models.py:42
+#: models.py:45
 msgid "postal code"
 msgstr "postnummer"
 
-#: models.py:43
+#: models.py:46
 msgid "city"
 msgstr "by"
 
-#: models.py:44
+#: models.py:47
 msgid "country"
 msgstr "land"
 
-#: models.py:47
+#: models.py:50
 msgid "place of study"
 msgstr "studiested"
 
-#: models.py:48
+#: models.py:51
 msgid "legacy id"
 msgstr "foreldet id"
 
-#: models.py:50
+#: models.py:53
 msgid "stripe customer id"
 msgstr "stripe kunde-id"
 
-#: models.py:198 templates/dusken/user_list.html:4
+#: models.py:202 templates/dusken/user_list.html:4
 msgid "Users"
 msgstr "Brukere"
 
-#: models.py:231 templates/dusken/orgunit_edit_users.html:27
+#: models.py:235 templates/dusken/orgunit_edit_users.html:27
 #: templates/dusken/user_detail.html:77 templates/nav.html:16
 msgid "Membership"
 msgstr "Medlemskap"
 
-#: models.py:232 templates/dusken/membership_list.html:5
+#: models.py:236 templates/dusken/membership_list.html:5
 msgid "Memberships"
 msgstr "Medlemskap"
 
-#: models.py:248
+#: models.py:252
 msgid "Duration"
 msgstr "Varighet"
 
-#: models.py:249
+#: models.py:253
 msgid "Never"
 msgstr "Aldri"
 
-#: models.py:250
+#: models.py:254
 msgid "End of year"
 msgstr "Ved årsslutt"
 
-#: models.py:257 models.py:465
+#: models.py:261 models.py:469
 msgid "Price in øre"
 msgstr "Pris i øre"
 
-#: models.py:298
+#: models.py:302
 msgid "Membership type"
 msgstr "Medlemskapstype"
 
-#: models.py:299
+#: models.py:303
 msgid "Membership types"
 msgstr "Medlemskapstyper"
 
-#: models.py:303
+#: models.py:307
 msgid "card number"
 msgstr "kortnummer"
 
-#: models.py:304
+#: models.py:308
 msgid "registered"
 msgstr "registrert"
 
-#: models.py:305 models.py:378
+#: models.py:309 models.py:382
 msgid "is active"
 msgstr "er aktiv"
 
-#: models.py:306
+#: models.py:310
 msgid "user"
 msgstr "bruker"
 
-#: models.py:328
+#: models.py:332
 msgid "Member cards"
 msgstr "Medlemskort"
 
-#: models.py:340
+#: models.py:344
 msgid "Volunteers"
 msgstr "Aktive"
 
-#: models.py:341
+#: models.py:345
 msgid "Standard"
 msgstr "Standard"
 
-#: models.py:353
+#: models.py:357
 msgid "Posix name must be unique or empty"
 msgstr "POSIX-navn må være unikt eller tomt"
 
-#: models.py:366
+#: models.py:370
 msgid "Group profile"
 msgstr "Gruppeprofil"
 
-#: models.py:367
+#: models.py:371
 msgid "Group profiles"
 msgstr "Gruppeprofiler"
 
-#: models.py:375 models.py:499
+#: models.py:379 models.py:503
 msgid "name"
 msgstr "navn"
 
-#: models.py:376
+#: models.py:380
 msgid "slug"
 msgstr "slug"
 
-#: models.py:377 models.py:500
+#: models.py:381 models.py:504
 msgid "short name"
 msgstr "kortnavn"
 
-#: models.py:379
+#: models.py:383
 msgid "description"
 msgstr "beskrivelse"
 
-#: models.py:382
+#: models.py:386
 msgid "email"
 msgstr "e-post"
 
-#: models.py:385
+#: models.py:389
 msgid "contact person"
 msgstr "kontaktperson"
 
-#: models.py:386
+#: models.py:390
 msgid "website"
 msgstr "nettside"
 
-#: models.py:389
+#: models.py:393
 msgid "group"
 msgstr "gruppe"
 
-#: models.py:391
+#: models.py:395
 msgid "admin group"
 msgstr "admingruppe"
 
-#: models.py:395
+#: models.py:399
 msgid "parent"
 msgstr "forelder"
 
-#: models.py:445
+#: models.py:449
 msgid "Org unit"
 msgstr "Forening"
 
-#: models.py:446
+#: models.py:450
 msgid "Org units"
 msgstr "Foreninger"
 
-#: models.py:457
+#: models.py:461
 msgid "Mobile app"
 msgstr "Mobilapplikasjon"
 
-#: models.py:458
+#: models.py:462
 msgid "SMS"
 msgstr "SMS"
 
-#: models.py:459
+#: models.py:463
 msgid "Credit card"
 msgstr "Kredittkort"
 
-#: models.py:460
+#: models.py:464
 msgid "Cash register"
 msgstr "Kassaapparat"
 
-#: models.py:461
+#: models.py:465
 msgid "Other"
 msgstr "Annet"
 
-#: models.py:477
+#: models.py:481
 msgid "Stripe charge ID, Kassa event ID, SMS event ID or App event ID"
 msgstr "Stripe transaksjons-ID, Kassa-hendelses-ID, SMS-hendelses-ID"
 
-#: models.py:493
+#: models.py:497
 msgid "Order"
 msgstr "Ordre"
 
-#: models.py:494
+#: models.py:498
 msgid "Orders"
 msgstr "Ordre"
 
-#: models.py:509 templates/dusken/user_detail.html:69
+#: models.py:513 templates/dusken/user_detail.html:69
 msgid "Place of study"
 msgstr "Studiested"
 
-#: models.py:510
+#: models.py:514
 msgid "Places of study"
 msgstr "Studiesteder"
 
-#: models.py:523
+#: models.py:527
 msgid "User log message"
 msgstr "Brukerloggmelding"
 
-#: models.py:524
+#: models.py:528
 msgid "User log messages"
 msgstr "Brukerloggmeldinger"
 
-#: models.py:537
+#: models.py:541
 msgid "Org unit log message"
 msgstr "Foreningsloggmelding"
 
-#: models.py:538
+#: models.py:542
 msgid "Org unit log messages"
 msgstr "Foreningsloggmeldinger"
 
@@ -689,7 +693,8 @@ msgstr "Rediger"
 msgid "Statistics"
 msgstr "Statistikk"
 
-#: templates/dusken/home_volunteer.html:40
+#: templates/dusken/home_volunteer.html:40 templates/dusken/stats.html:3
+#: templates/dusken/stats.html:7
 msgid "Membership statistics"
 msgstr "Medlemsstatistikk"
 
@@ -806,6 +811,30 @@ msgstr "Fjern"
 msgid "Organizational Units"
 msgstr "Foreninger"
 
+#: templates/dusken/stats.html:13 templates/dusken/stats.html:32
+msgid "Sales per day"
+msgstr "Salg per dag"
+
+#: templates/dusken/stats.html:17
+msgid "Sales total"
+msgstr "Salg totalt"
+
+#: templates/dusken/stats.html:19 templates/dusken/stats.html:28
+msgid "In total"
+msgstr "Totalt"
+
+#: templates/dusken/stats.html:24
+msgid "Sales today"
+msgstr "Salg i dag"
+
+#: templates/dusken/stats.html:25
+msgid "Date"
+msgstr "Dato"
+
+#: templates/dusken/stats.html:32
+msgid "Download as CSV"
+msgstr "Last ned som CSV"
+
 #: templates/dusken/user_activate.html:7
 #: templates/dusken/user_email_confirm.html:7
 #: templates/dusken/user_phone_confirm.html:7
@@ -885,7 +914,7 @@ msgstr "Foreninger"
 msgid "No organizations"
 msgstr "Ingen foreninger"
 
-#: templates/dusken/user_detail.html:123
+#: templates/dusken/user_detail.html:124
 msgid "Danger zone"
 msgstr "Farlig område"
 

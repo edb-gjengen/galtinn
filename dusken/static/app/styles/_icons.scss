@@ -6,7 +6,8 @@
     top: 2px;
 }
 
-a {
+a,
+button {
     .linearicon {
         fill: $brand-primary;
         transition: fill 0.2s;
@@ -16,7 +17,7 @@ a {
     }
 
     &.btn-outline-primary {
-        .linearicon{
+        .linearicon {
             transition: fill 0.2s;
         }
         &:hover .linearicon{
