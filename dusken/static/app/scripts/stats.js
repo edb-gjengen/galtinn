@@ -85,7 +85,7 @@ function today() {
     $('.sum-today').html(sumSales);
 
 
-    let salesChartTodayData = salesChartData;
+    let salesChartTodayData = Object.assign({}, salesChartData);
     _.each(salesChartTodayData.datasets, (el) => {
         el.data = _.filter(el.data, (point) => {
             return point.x.format('YYYY-MM-DD') === today;
