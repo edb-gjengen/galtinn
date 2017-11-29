@@ -72,7 +72,16 @@ function today() {
         return _.findWhere(salesPerDay, {date: today});
     });
 
-    const sumSales = _.map(todaySales, (x) => { return x.sales}).reduce((a, b) => {return a + b; }, 0);
+    const sumSales = _.map(todaySales, (x) => {
+            if (!x) {
+                return 0;
+            }
+            return x.sales
+        })
+        .reduce((a, b) => {
+            return a + b;
+            }, 0);
+
     $('.sum-today').html(sumSales);
 
 
