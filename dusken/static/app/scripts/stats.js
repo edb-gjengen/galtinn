@@ -69,7 +69,7 @@ function today() {
     $('.today-date-wrap').text(today);
 
     const todaySales = _.map(salesData, (salesPerDay, key) => {
-        return _.findWhere(salesPerDay, {date: today});
+        return _.find(salesPerDay, {date: today});
     });
 
     const sumSales = _.map(todaySales, (x) => {
@@ -85,7 +85,7 @@ function today() {
     $('.sum-today').html(sumSales);
 
 
-    let salesChartTodayData = Object.assign({}, salesChartData);
+    let salesChartTodayData = _.cloneDeep(salesChartData);
     _.each(salesChartTodayData.datasets, (el) => {
         el.data = _.filter(el.data, (point) => {
             return point.x.format('YYYY-MM-DD') === today;
