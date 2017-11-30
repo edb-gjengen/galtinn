@@ -1,11 +1,11 @@
 const chartColors = {
-	red: 'rgb(255, 99, 132)',
-	orange: 'rgb(255, 159, 64)',
-	yellow: 'rgb(255, 205, 86)',
-	green: 'rgb(75, 192, 192)',
-	blue: 'rgb(54, 162, 235)',
-	purple: 'rgb(153, 102, 255)',
-	grey: 'rgb(201, 203, 207)'
+	app: 'rgb(255, 99, 132)',
+	cash_register: 'rgb(255, 159, 64)',
+	other: 'rgb(255, 205, 86)',
+	card: 'rgb(75, 192, 192)',
+	// blue: 'rgb(54, 162, 235)',
+	// purple: 'rgb(153, 102, 255)',
+	// grey: 'rgb(201, 203, 207)'
 };
 const url = '/api/stats/';
 
@@ -24,15 +24,17 @@ function snakecaseToLabel(text) {
 }
 
 function toChartJSDatasets(memberships) {
-    memberships = _.sortBy(memberships, 'date');
-    const dss = _.map(memberships, (series, i) => {
+    const dss = _.map(memberships, (series, key) => {
+        series = _.sortBy(series, 'date');
+        let accumelated = 0;
         let seriesOut = {
-            label: snakecaseToLabel(series[0].payment_method),
-            backgroundColor: _.values(chartColors)[i]
+            label: snakecaseToLabel(key),
+            backgroundColor: chartColors[key]
         };
 
         seriesOut.data = _.map(series, function (el) {
-            return {x: moment.utc(el.date), y: el.sales}
+            accumelated += el.sales;
+            return {x: el.date, y: accumelated, sales: el.sales}
         });
 
         return seriesOut;
@@ -88,7 +90,7 @@ function today() {
     let salesChartTodayData = _.cloneDeep(salesChartData);
     _.each(salesChartTodayData.datasets, (el) => {
         el.data = _.filter(el.data, (point) => {
-            return point.x.format('YYYY-MM-DD') === today;
+            return moment.utc(point.x).format('YYYY-MM-DD') === today;
         })
     });
 
@@ -191,15 +193,21 @@ function recalc(start) {
             type: 'line',
             data: salesChartData,
             options: {
+                tooltips: {
+                    callbacks: {
+                        label: (tooltipItem, data) => {
+                            const dataSet = data.datasets[tooltipItem.datasetIndex];
+                            const dataSetItem = dataSet.data[tooltipItem.index];
+                            return dataSet.label + ' sales: ' + dataSetItem.sales + ' ' + 'Total: ' + dataSetItem.y;
+                        }
+                    }
+                },
                 scales: {
                     yAxes: [{
                         stacked: true,
                     }],
                     xAxes: [{
                         type: 'time',
-                        time: {
-                            tooltipFormat: 'll'
-                        }
                     }]
                 }
             }
@@ -227,6 +235,9 @@ $(document).ready(() => {
     $exportBtn.on('click', (e) => {
         e.preventDefault();
         const fileName = 'medlemskapsstats-' + $startInput.val() + '.csv';
+        if( !salesData.length ) {
+            return;
+        }
         const csvData = toCSV(salesData);
         downloadCSVFile(csvData, fileName);
     });

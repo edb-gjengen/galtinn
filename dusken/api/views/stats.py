@@ -15,7 +15,7 @@ def membership_stats(request):
     if start_date:
         memberships = memberships.filter(order__created__gte=parse_date(start_date))
 
-    memberships = memberships.order_by('-order__created').select_related('order')
+    memberships = memberships.order_by('order__created').select_related('order')
     memberships_grouped = defaultdict(list)
 
     def _key_func(x):
