@@ -235,7 +235,7 @@ $(document).ready(() => {
     $exportBtn.on('click', (e) => {
         e.preventDefault();
         const fileName = 'medlemskapsstats-' + $startInput.val() + '.csv';
-        if( !salesData.length ) {
+        if( !Object.keys(salesData).length ) {
             return;
         }
         const csvData = toCSV(salesData);
