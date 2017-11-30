@@ -11,6 +11,7 @@ const url = '/api/stats/';
 
 let saleTypes = [];
 let salesData = {};
+let salesDataByDate;
 
 let salesChart;
 let salesChartToday;
@@ -149,7 +150,7 @@ function salesTable() {
     });
     html += '</tr></thead><tbody>';
 
-    const salesDataByDate = groupSalesByDate();
+    salesDataByDate = groupSalesByDate();
 
     _.each(salesDataByDate, function(el) {
         html += '<tr><td>' + el.date + '</td>';
@@ -164,8 +165,10 @@ function salesTable() {
 }
 
 function toCSV(data) {
-    const csvLines = data.map((d) => {
-        return d.date + ',' + saleTypes.map(function(t) { return d[t]; }).join(',');
+    const csvLines = _.map(data, (day) => {
+        return day.date + ',' + _.map(saleTypes, (t) => {
+            return day[t] || 0;
+        }).join(',');
     });
     const csvHeader = 'date,' +saleTypes.join(',') + '\n';
     return csvHeader + csvLines.join('\n')
@@ -238,7 +241,7 @@ $(document).ready(() => {
         if( !Object.keys(salesData).length ) {
             return;
         }
-        const csvData = toCSV(salesData);
+        const csvData = toCSV(salesDataByDate);
         downloadCSVFile(csvData, fileName);
     });
 
