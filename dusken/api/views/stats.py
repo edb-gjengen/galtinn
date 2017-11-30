@@ -10,6 +10,9 @@ from dusken.models import Membership
 def membership_stats(request):
     start_date = request.GET.get('start_date', None)
 
+    if start_date is None:
+        return JsonResponse({}, status=400)
+
     # FIXME: Remove these filters and show life long and trial memberships in front end
     memberships = Membership.objects.exclude(membership_type__slug='trial', order=None)
     if start_date:

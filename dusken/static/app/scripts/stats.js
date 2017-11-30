@@ -3,7 +3,7 @@ const chartColors = {
 	cash_register: 'rgb(255, 159, 64)',
 	other: 'rgb(255, 205, 86)',
 	card: 'rgb(75, 192, 192)',
-	// blue: 'rgb(54, 162, 235)',
+	sms: 'rgb(54, 162, 235)',
 	// purple: 'rgb(153, 102, 255)',
 	// grey: 'rgb(201, 203, 207)'
 };
@@ -225,12 +225,13 @@ $(document).ready(() => {
     salesChart = document.getElementById('sales-chart');
     salesChartToday = document.getElementById('sales-chart-today');
 
-    const start = $startInput.val();
+    let start = $startInput.val();
     recalc(start);
 
     /* Dynamic date change */
     $startInput.on('input', (e) => {
-        history.replaceState(null, null, '?start_date=' + $(e.target).val());
+        start = $(e.target).val();
+        history.replaceState(null, null, '?start_date=' + start);
         recalc(start);
     });
 
