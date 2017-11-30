@@ -13,7 +13,9 @@ let saleTypes = [];
 let salesData = {};
 let salesDataByDate;
 
+let salesChartEl;
 let salesChart;
+let salesChartTodayEl;
 let salesChartToday;
 let salesChartData;
 
@@ -94,8 +96,10 @@ function today() {
             return moment.utc(point.x).format('YYYY-MM-DD') === today;
         })
     });
-
-    new Chart(salesChartToday, {
+    if(salesChartToday) {
+        salesChartToday.destroy();
+    }
+    salesChartToday = new Chart(salesChartTodayEl, {
         type: 'bar',
         data: salesChartTodayData,
         options: {
@@ -192,7 +196,10 @@ function recalc(start) {
         salesTable();
         today();
 
-        new Chart(salesChart, {
+        if (salesChart) {
+            salesChart.destroy();
+        }
+        salesChart = new Chart(salesChartEl, {
             type: 'line',
             data: salesChartData,
             options: {
@@ -222,8 +229,8 @@ function recalc(start) {
 $(document).ready(() => {
     const $exportBtn = $('.export-data-btn');
     const $startInput = $('#start');
-    salesChart = document.getElementById('sales-chart');
-    salesChartToday = document.getElementById('sales-chart-today');
+    salesChartEl = document.getElementById('sales-chart');
+    salesChartTodayEl = document.getElementById('sales-chart-today');
 
     let start = $startInput.val();
     recalc(start);
