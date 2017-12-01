@@ -31,7 +31,7 @@ class Command(BaseCommand):
         stale_ldap_users = ldap_users_all - inside_users_active
         # stale_homedirs = set(home_dirs) - inside_users_active
 
-        self.stdout.write('{} LDAP users not in group {} in Inside:\n{}'.format(
+        self.stdout.write('{} LDAP users not in group {} in Dusken:\n{}'.format(
             len(stale_ldap_users),
             self.group_profile.posix_name,
             '\n'.join(stale_ldap_users)))

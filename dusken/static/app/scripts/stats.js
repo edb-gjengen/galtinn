@@ -70,12 +70,12 @@ function totals() {
 }
 
 function today() {
-    var today = moment.utc().format('YYYY-MM-DD');
+    const today = moment.utc().format('YYYY-MM-DD');
     $('.today-date-wrap').text(today);
 
     const todaySales = _.map(salesData, (salesPerDay, key) => {
         return _.find(salesPerDay, {date: today});
-    });
+    }).filter((el) => { return el !== undefined; });
 
     const sumSales = _.map(todaySales, (x) => {
             if (!x) {
@@ -89,29 +89,24 @@ function today() {
 
     $('.sum-today').html(sumSales);
 
-
-    let salesChartTodayData = _.cloneDeep(salesChartData);
-    _.each(salesChartTodayData.datasets, (el) => {
-        el.data = _.filter(el.data, (point) => {
-            return moment.utc(point.x).format('YYYY-MM-DD') === today;
-        })
+    const salesChartTodayData = _.map(todaySales, (el) => {
+        return {
+            label: snakecaseToLabel(el.payment_method),
+            backgroundColor: chartColors[el.payment_method],
+            data: [el.sales]
+        }
     });
+
     if(salesChartToday) {
         salesChartToday.destroy();
     }
     salesChartToday = new Chart(salesChartTodayEl, {
-        type: 'bar',
-        data: salesChartTodayData,
-        options: {
-            scales: {
-                yAxes: [{
-                    stacked: true,
-                    ticks: {
-                        stepSize: 1
-                    }
-                }],
-            }
-        }
+        type: 'pie',
+        data: {
+            datasets: salesChartTodayData,
+            labels: _.map(salesChartTodayData, (el) => { return el.label; })
+        },
+
     });
 }
 
