@@ -30,43 +30,8 @@ $.ajaxSetup({
     }
 });
 
-function getFormData(formElement) {
-    var formData = formElement.serializeArray();
-    formData = _.object(_.map(formData, function (x) {
-        return [x.name, x.value];
-    }));
-
-    return formData;
-}
-
-function validate(formData, serverData) {
-    clearError();
-    var errors = [];
-    if ($.trim(formData.first_name) === '') {
-        $('#id_first_name').parent().addClass('has-danger');
-        errors.push(serverData.missing_first_name);
-    }
-    if ($.trim(formData.last_name) === '') {
-        $('#id_last_name').parent().addClass('has-danger');
-        errors.push(serverData.missing_last_name);
-    }
-    if (serverData.email_message) {
-        $('#id_email').parent().addClass('has-danger');
-        errors.push(serverData.email_message);
-    }
-    if (serverData.number_message) {
-        $('#id_phone_number').parent().addClass('has-danger');
-        errors.push(serverData.number_message);
-    }
-    if (errors.length) {
-        displayError(errors.join('<br>'));
-    } else {
-        openStripe(formData.email);
-    }
-}
-
 function openStripe(email) {
-    var stripeHandler = StripeCheckout.configure({
+    const stripeHandler = StripeCheckout.configure({
         key: stripe_config.stripe_pub_key,
         image: stripe_config.image,
         locale: 'auto',
@@ -114,19 +79,6 @@ function onStripeToken(token) {
     });
 }
 
-function displayError(message) {
-    $('.js-validation-errors').html(message);
-    $('.js-validation-errors').addClass('alert alert-danger');
-}
-
-function clearError() {
-    $('.js-validation-errors').html('');
-    $('.js-validation-errors').removeClass('alert alert-danger');
-    $('#id_first_name').parent().removeClass('has-danger');
-    $('#id_last_name').parent().removeClass('has-danger');
-    $('#id_email').parent().removeClass('has-danger');
-    $('#id_phone_number').parent().removeClass('has-danger');
-}
 
 function formatMessage(message, alert) {
     return '<div class="alert alert-' + alert + ' alert-dismissible fade show" role="alert">'+
@@ -240,9 +192,11 @@ $(document).ready(function() {
             profile: '/home/'
         };
 
+        const email = $membershipPurchase.find('input[name="email"]').val();
+
         $('#purchase-button').on('click', function (e) {
             e.preventDefault();
-            openStripe(getFormData($('#membership-purchase-form')).email);
+            openStripe(email);
         });
     }
     /* Send validation email */
