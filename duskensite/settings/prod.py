@@ -71,6 +71,11 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
+        'stripe': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': False,
+        },
     },
 }
 
