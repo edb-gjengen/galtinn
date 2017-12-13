@@ -136,7 +136,7 @@ class DuskenUser(AbstractUser):
         logger.info('Deleting user with username {}'.format(self.username))
         # Before deleting, remove phone number from user orders to prevent leaking related user data
         # with a recycled phone number (ie. membership and order data).
-        self.orders.update(phone_number='')
+        self.orders.update(phone_number=None)
 
         # Delete all the LDAP related user data if LDAP is configured
         delete_ldap_user(self.username)

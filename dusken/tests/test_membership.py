@@ -112,9 +112,9 @@ class MembershipTest(APITestCase):
             payment_method=Order.BY_APP,
             product=membership_from_deleted_user,
             price_nok=0,
-            phone_number='')
+            phone_number=None)
 
-        self.assertEqual(Order.objects.filter(phone_number='').count(), 1)
+        self.assertEqual(Order.objects.filter(phone_number__isnull=True).count(), 1)
         self.assertFalse(self.user.unclaimed_orders.exists())
 
         self.user.phone_number = ''
