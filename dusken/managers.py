@@ -38,7 +38,7 @@ class OrderQuerySet(QuerySet):
     def unclaimed(self, phone_number=None, member_card=None):
         return self.filter(
             Q(user__isnull=True) & (
-                Q(phone_number__isnull=True, phone_number=phone_number) |
+                Q(phone_number__isnull=False, phone_number=phone_number) |
                 Q(member_card__isnull=False, member_card=member_card))).order_by('-created')
 
 
