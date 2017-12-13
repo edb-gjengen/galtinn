@@ -1,36 +1,67 @@
-var saleTypes = [];
-var salesData = {};
+const chartColors = {
+	app: 'rgb(255, 99, 132)',
+	cash_register: 'rgb(255, 159, 64)',
+	other: 'rgb(255, 205, 86)',
+	card: 'rgb(75, 192, 192)',
+	sms: 'rgb(54, 162, 235)',
+	// purple: 'rgb(153, 102, 255)',
+	// grey: 'rgb(201, 203, 207)'
+};
+const url = '/api/stats/';
 
-var salesChart;
-var salesChartToday;
+let saleTypes = [];
+let salesData = {};
+let salesDataByDate;
 
-var url = '/api/stats/';
+let salesChartEl;
+let salesChart;
+let salesChartTodayEl;
+let salesChartToday;
+let salesChartData;
 
-function sumSales(memo, num) {
-    return memo + num.sales;
+
+function snakecaseToLabel(text) {
+    text = text.replace('_', ' ');
+    text = text.charAt(0).toUpperCase() + text.slice(1);
+    return text;
 }
 
-function toHighchartsSeries(memberships) {
-    memberships = _.sortBy(memberships, 'date');
-    return _.map(memberships, function (el) {
-        return [moment.utc(el.date).valueOf(), el.sales]
+function toChartJSDatasets(memberships) {
+    const dss = _.map(memberships, (series, key) => {
+        series = _.sortBy(series, 'date');
+        let accumelated = 0;
+        let seriesOut = {
+            label: snakecaseToLabel(key),
+            backgroundColor: chartColors[key]
+        };
+
+        seriesOut.data = _.map(series, function (el) {
+            accumelated += el.sales;
+            return {x: el.date, y: accumelated, sales: el.sales}
+        });
+
+        return seriesOut;
     });
+
+    return {datasets: dss};
 }
 
-function getSales(start) {
+function getSales(start, cb) {
     return $.getJSON(url + '?start_date=' + start, function (data) {
         salesData = data.memberships;
         saleTypes = data.payment_methods;
-        _.each(saleTypes, function(type) {
-            salesChart.addSeries({name: type, data: toHighchartsSeries(salesData[type])});
-        })
+        salesChartData = toChartJSDatasets(salesData);
+
+        if(cb) {
+            cb();
+        }
     });
 }
 
 function totals() {
-    var sum = 0;
+    let sum = 0;
     _.each(saleTypes, function(type) {
-        var total = _.reduce(salesData[type], sumSales, 0);
+        const total = _.reduce(salesData[type], (memo, num) => { return memo + num.sales; }, 0);
         $('.'+ type).html(total);
         sum += total;
     }) ;
@@ -39,36 +70,51 @@ function totals() {
 }
 
 function today() {
-    var today = moment.utc().format('YYYY-MM-DD');
+    const today = moment.utc().format('YYYY-MM-DD');
     $('.today-date-wrap').text(today);
-    var todaySales = _.findWhere(salesData, {date: today}) || {sales: 0};
-    $('.app-today').html(todaySales.sales);
 
-    salesChartToday = new Highcharts.Chart({
-        chart: {
-            renderTo: 'sales-chart-today',
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: false
-        },
-        series: [{
-            name: 'Salg', data: [
-                {name: 'Salg', y: todaySales.sales},
-            ]
+    const todaySales = _.map(salesData, (salesPerDay, key) => {
+        return _.find(salesPerDay, {date: today});
+    }).filter((el) => { return el !== undefined; });
+
+    const sumSales = _.map(todaySales, (x) => {
+            if (!x) {
+                return 0;
+            }
+            return x.sales
+        })
+        .reduce((a, b) => {
+            return a + b;
+            }, 0);
+
+    $('.sum-today').html(sumSales);
+
+    const salesChartTodayData = _.map(todaySales, (el) => {
+        return {
+            label: snakecaseToLabel(el.payment_method),
+            backgroundColor: chartColors[el.payment_method],
+            data: [el.sales]
         }
-        ]
+    });
+
+    if(salesChartToday) {
+        salesChartToday.destroy();
+    }
+    salesChartToday = new Chart(salesChartTodayEl, {
+        type: 'pie',
+        data: {
+            datasets: salesChartTodayData,
+            labels: _.map(salesChartTodayData, (el) => { return el.label; })
+        },
+
     });
 }
 
 function groupSalesByDate() {
-    var salesByDate = {};
+    let salesByDate = {};
     _.each(saleTypes, function (type) {
         _.each(salesData[type], function (el) {
-            var d = {};
+            let d = {};
             d[el.date] = {};
             d[el.date][type]= el.sales;
 
@@ -84,25 +130,28 @@ function groupSalesByDate() {
         });
     });
 
-    var table_friendly = [];
+    let tableFriendly = [];
     _.each(salesByDate, function (sales, date) {
         sales.date = date;
-        table_friendly.push(sales);
+        tableFriendly.push(sales);
     });
-    table_friendly = _.sortBy(table_friendly, 'date').reverse();
+    tableFriendly = _.sortBy(tableFriendly, 'date').reverse();
 
-    return table_friendly;
+    return tableFriendly;
 }
 
 function salesTable() {
-    var html = '<thead><tr><th>Dato</th>';
+    // FIXME: translation
+    let html = '<thead><tr><th>Dato</th>';
     _.each(saleTypes, function(type) {
+        type = snakecaseToLabel(type);
         html += '<th>' + type + '</th>';
     });
     html += '</tr></thead><tbody>';
-    salesData = groupSalesByDate();
 
-    _.each(salesData, function(el) {
+    salesDataByDate = groupSalesByDate();
+
+    _.each(salesDataByDate, function(el) {
         html += '<tr><td>' + el.date + '</td>';
         _.each(saleTypes, function(type) {
             html += '<td>' + el[type] + '</td>';
@@ -110,22 +159,25 @@ function salesTable() {
         html += '</tr>';
     });
     html += '</tbody>';
+
     $('#sales-table').html(html);
 }
 
 function toCSV(data) {
-    var csvLines = data.map(function(d){
-        return d.date + ',' + saleTypes.map(function(t) { return d[t]; }).join(',');
+    const csvLines = _.map(data, (day) => {
+        return day.date + ',' + _.map(saleTypes, (t) => {
+            return day[t] || 0;
+        }).join(',');
     });
-    var csvHeader = 'date,' +saleTypes.join(',') + '\n';
+    const csvHeader = 'date,' +saleTypes.join(',') + '\n';
     return csvHeader + csvLines.join('\n')
 }
 
 function downloadCSVFile(csvData, fileName) {
     csvData = 'data:text/csv;charset=utf-8,' + csvData;
-    var encodedUri = encodeURI(csvData);
+    const encodedUri = encodeURI(csvData);
 
-    var link = document.createElement('a');
+    let link = document.createElement('a');
     link.setAttribute('href', encodedUri);
     link.setAttribute('download', fileName);
     document.body.appendChild(link); // Required for FF
@@ -133,68 +185,66 @@ function downloadCSVFile(csvData, fileName) {
     link.click();
 }
 
-function recalc(start, cb) {
-    salesChart = new Highcharts.Chart({
-        chart: {
-            renderTo: 'sales-chart'
-        },
-        title: {
-            text: false
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: 'Salg'
-            },
-            min: 0
-        },
-        plotOptions: {
-            series: {
-                marker: {
-                    radius: 4
-                }
-            }
-        },
-        series: []
-    });
-
-    $.when(getSales(start)).done(function() {
+function recalc(start) {
+    getSales(start, () => {
         totals();
         salesTable();
+        today();
 
-        if(cb) {
-            cb();
+        if (salesChart) {
+            salesChart.destroy();
         }
+        salesChart = new Chart(salesChartEl, {
+            type: 'line',
+            data: salesChartData,
+            options: {
+                tooltips: {
+                    callbacks: {
+                        label: (tooltipItem, data) => {
+                            const dataSet = data.datasets[tooltipItem.datasetIndex];
+                            const dataSetItem = dataSet.data[tooltipItem.index];
+                            return dataSet.label + ' sales: ' + dataSetItem.sales + ' ' + 'Total: ' + dataSetItem.y;
+                        }
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        stacked: true,
+                    }],
+                    xAxes: [{
+                        type: 'time',
+                    }]
+                }
+            }
+        });
+
     });
 }
 
-$(document).ready(function() {
-    Highcharts.setOptions({
-        credits: {enabled: false}
-    });
+$(document).ready(() => {
+    const $exportBtn = $('.export-data-btn');
+    const $startInput = $('#start');
+    salesChartEl = document.getElementById('sales-chart');
+    salesChartTodayEl = document.getElementById('sales-chart-today');
 
-    var $exportBtn = $('.export-data-btn');
-    var $startInput = $('#start');
-
-    var start = $startInput.val();
-    recalc(start, function() {
-        today();
-    });
+    let start = $startInput.val();
+    recalc(start);
 
     /* Dynamic date change */
-    $startInput.on('input', function(e) {
+    $startInput.on('input', (e) => {
         start = $(e.target).val();
         history.replaceState(null, null, '?start_date=' + start);
         recalc(start);
     });
 
     /* Export to CSV */
-    $exportBtn.on('click', function (e) {
+    $exportBtn.on('click', (e) => {
         e.preventDefault();
-        var fileName = 'medlemskapsstats-' + $startInput.val() + '.csv';
-        var csvData = toCSV(salesData);
+        const fileName = 'medlemskapsstats-' + $startInput.val() + '.csv';
+        if( !Object.keys(salesData).length ) {
+            return;
+        }
+        const csvData = toCSV(salesDataByDate);
         downloadCSVFile(csvData, fileName);
     });
 

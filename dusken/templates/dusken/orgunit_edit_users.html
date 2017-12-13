@@ -58,7 +58,7 @@
             </div>
             <div class="col-xl-2 col-lg-2 col-sm-6">
                 <button class="btn btn-outline-primary btn-block mt-2 mt-lg-0 p-1" id="user_remove_{{ user.uuid }}"
-                        onclick="remove_member('{{ user.uuid }}', '{{ orgunit.slug }}');">{% trans "Remove" %}</button>
+                        onclick="remove_member('{{ user.uuid }}', '{{ orgunit.slug }}', '{% trans "Remove User?" %}');">{% trans "Remove" %}</button>
             </div>
         </li>
     {% empty %}

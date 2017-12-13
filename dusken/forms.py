@@ -165,3 +165,15 @@ class DuskenAuthenticationForm(AuthenticationForm):
             'spellcheck': 'false'
         }),
     )
+
+
+class UserDeleteForm(forms.Form):
+    confirm_username = forms.CharField(required=True, label='')
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_confirm_username(self):
+        if self.cleaned_data['confirm_username'] != self.user.username:
+            raise ValidationError(_('The username entered is not equal to your own.'), code=400)

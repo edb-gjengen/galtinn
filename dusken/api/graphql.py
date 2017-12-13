@@ -30,6 +30,7 @@ class DuskenQuery:
 
 class Query(DuskenQuery, graphene.ObjectType):
     """This class can inherit from multiple queries if we want add more apps to the project"""
+    # TODO: Add opening hours and other static app info from a separate app
 
 
 schema = graphene.Schema(query=Query)

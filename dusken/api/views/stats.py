@@ -10,14 +10,21 @@ from dusken.models import Membership
 def membership_stats(request):
     start_date = request.GET.get('start_date', None)
 
+    if start_date is None:
+        return JsonResponse({}, status=400)
+
     # FIXME: Remove these filters and show life long and trial memberships in front end
     memberships = Membership.objects.exclude(membership_type__slug='trial', order=None)
     if start_date:
         memberships = memberships.filter(order__created__gte=parse_date(start_date))
 
-    memberships = memberships.order_by('-order__created').select_related('order')
+    memberships = memberships.order_by('order__created').select_related('order')
     memberships_grouped = defaultdict(list)
-    for key, values in groupby(memberships, key=lambda x: '{}{}'.format(x.order.payment_method, x.order.created.date())):
+
+    def _key_func(x):
+        return '{}{}'.format(x.order.payment_method, x.order.created.date())
+
+    for key, values in groupby(memberships, key=_key_func):
         sales = list(values)
         method = sales[0].order.payment_method
         memberships_grouped[method].append({

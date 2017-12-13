@@ -51,6 +51,12 @@ def compilemessages(limit=None):
     _lrun_locale_task('compilemessages', limit=limit)
 
 
+def poedit(app):
+    app_path = os.path.join('apps', app) if app != 'dusken' else 'dusken'
+    po_path = os.path.join(app_path, 'locale/nb/LC_MESSAGES/django.po')
+    local('poedit {}'.format(po_path))
+
+
 def deploy():
     with virtualenv():
         run('git pull')  # Get source

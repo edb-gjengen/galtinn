@@ -1,4 +1,5 @@
 # coding: utf-8
+import logging
 import uuid
 from datetime import timedelta
 from itertools import chain
@@ -17,9 +18,11 @@ from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
-from apps.neuf_ldap.utils import ldap_create_password
+from apps.neuf_ldap.utils import ldap_create_password, delete_ldap_user
 from dusken.managers import DuskenUserManager, OrderManager, MembershipManager
 from dusken.utils import create_email_key, send_validation_email
+
+logger = logging.getLogger(__name__)
 
 
 class DuskenUser(AbstractUser):
@@ -85,7 +88,7 @@ class DuskenUser(AbstractUser):
     @property
     def has_set_username(self):
         from apps.neuf_auth.models import AuthProfile
-        return AuthProfile.objects.filter(user=self, username_updates__isnull=False).exists()
+        return AuthProfile.objects.filter(user=self, username_updated__isnull=False).exists()
 
     @property
     def is_member(self):
@@ -128,6 +131,17 @@ class DuskenUser(AbstractUser):
         self.claim_orders()
 
         super().save(**kwargs)
+
+    def delete(self, **kwargs):
+        logger.info('Deleting user with username {}'.format(self.username))
+        # Before deleting, remove phone number from user orders to prevent leaking related user data
+        # with a recycled phone number (ie. membership and order data).
+        self.orders.update(phone_number='')
+
+        # Delete all the LDAP related user data if LDAP is configured
+        delete_ldap_user(self.username)
+
+        super().delete(**kwargs)
 
     def set_ldap_hash(self, raw_password):
         from apps.neuf_auth.models import AuthProfile
@@ -371,7 +385,7 @@ class OrgUnit(MPTTModel, BaseModel):
     email = models.EmailField(_('email'), blank=True, default='')
     phone_number = PhoneNumberField(_('phone number'), blank=True, default='')
     contact_person = models.ForeignKey(
-        'dusken.DuskenUser', verbose_name=_('contact person'), blank=True, null=True, on_delete=models.SET_NULL)
+        'dusken.DuskenUser', models.SET_NULL, verbose_name=_('contact person'), blank=True, null=True)
     website = models.URLField(_('website'), blank=True, default='')
 
     # Member and permission groups
@@ -501,7 +515,7 @@ class UserLogMessage(BaseModel):
     user = models.ForeignKey('dusken.DuskenUser', models.CASCADE, related_name='log_messages')
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        'dusken.DuskenUser', related_name='user_changes', on_delete=models.SET_NULL, blank=True, null=True)
+        'dusken.DuskenUser', on_delete=models.SET_NULL, related_name='user_changes', blank=True, null=True)
 
     def __str__(self):
         return '{}: {} ({})'.format(self.__class__.__name__, self.message, self.user_id)
@@ -515,7 +529,7 @@ class OrgUnitLogMessage(BaseModel):
     org_unit = models.ForeignKey('dusken.OrgUnit', models.CASCADE, related_name='log_messages')
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        'dusken.DuskenUser', related_name='org_unit_changes', on_delete=models.SET_NULL, blank=True, null=True)
+        'dusken.DuskenUser', on_delete=models.SET_NULL, related_name='org_unit_changes', blank=True, null=True)
 
     def __str__(self):
         return '{}: {} ({})'.format(self.__class__.__name__, self.message, self.org_unit_id)

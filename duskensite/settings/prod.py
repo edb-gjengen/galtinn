@@ -36,8 +36,8 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'root': {
-        'level': 'WARNING',
-        'handlers': ['sentry'],
+        'level': 'INFO',
+        'handlers': ['console', 'sentry'],
     },
     'formatters': {
         'verbose': {
@@ -67,6 +67,11 @@ LOGGING = {
             'propagate': False,
         },
         'sentry.errors': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'stripe': {
             'level': 'WARNING',
             'handlers': ['console'],
             'propagate': False,

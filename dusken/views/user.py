@@ -4,10 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import ListView, DetailView, UpdateView, FormView
+from django.views.generic import ListView, DetailView, UpdateView, FormView, DeleteView
 
 from apps.neuf_auth.forms import SetUsernameForm
-from dusken.forms import DuskenUserForm, DuskenUserUpdateForm, DuskenUserActivateForm, UserWidgetForm
+from dusken.forms import DuskenUserForm, DuskenUserUpdateForm, DuskenUserActivateForm, UserWidgetForm, UserDeleteForm
 from dusken.models import DuskenUser, Order
 from dusken.utils import generate_username
 from dusken.views.mixins import VolunteerRequiredMixin
@@ -119,7 +119,7 @@ class UserUpdateMeView(UserUpdateView):
         return reverse('user-detail-me')
 
 
-class UserSetUsernameView(VolunteerRequiredMixin, UpdateView):
+class UserSetUsernameView(LoginRequiredMixin, UpdateView):
     form_class = SetUsernameForm
     template_name = 'dusken/user_username.html'
     success_url = reverse_lazy('home')
@@ -142,3 +142,24 @@ class UserSetUsernameView(VolunteerRequiredMixin, UpdateView):
         messages.success(self.request, '{} 😎'.format(_('Username set to {username}').format(username=username)))
 
         return redirect(self.success_url)
+
+
+class UserDeleteView(LoginRequiredMixin, FormView):
+    form_class = UserDeleteForm
+    success_url = reverse_lazy('index')
+    template_name = 'dusken/user_confirm_delete.html'
+
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            'user': self.request.user,
+        }
+
+    def form_valid(self, form):
+        user = str(self.request.user)
+        self.request.user.delete()
+
+        messages.success(
+            self.request, _('So long {user} and good luck on your future travels 🚣'.format(user=user)))
+
+        return super().form_valid(form)

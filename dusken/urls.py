@@ -8,7 +8,7 @@ from dusken.views.orgunit import (OrgUnitListView, OrgUnitDetailView, OrgUnitEdi
                                   OrgUnitEditUsersView)
 from dusken.views.user import (UserRegisterView, UserActivateView,
                                UserDetailView, UserDetailMeView, UserListView,
-                               UserUpdateView, UserUpdateMeView, UserSetUsernameView)
+                               UserUpdateView, UserUpdateMeView, UserSetUsernameView, UserDeleteView)
 from dusken.views.validation import UserEmailValidateView, UserPhoneValidateView
 
 urlpatterns = [
@@ -19,6 +19,7 @@ urlpatterns = [
     path('me/', UserDetailMeView.as_view(), name='user-detail-me'),
     path('me/update/', UserUpdateMeView.as_view(), name='user-update-me'),
     path('me/update/username/', UserSetUsernameView.as_view(), name='user-update-username'),
+    path('me/delete/', UserDeleteView.as_view(), name='user-delete'),
     re_path(r'^users/(?P<slug>[0-9a-z-]+)/$', UserDetailView.as_view(), name='user-detail'),
     re_path(r'^users/(?P<slug>[0-9a-z-]+)/update/$', UserUpdateView.as_view(), name='user-update'),
     path('users/', UserListView.as_view(), name='user-list'),

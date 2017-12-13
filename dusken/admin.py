@@ -70,7 +70,7 @@ class OrgUnitAdmin(MPTTModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['uuid', 'product', 'show_user_link', 'phone_number', 'show_member_card_link',
+    list_display = ['uuid', 'show_product_link', 'show_user_link', 'phone_number', 'show_member_card_link',
                     'created', 'payment_method']
     list_filter = ['payment_method']
     search_fields = ['uuid', 'phone_number', 'member_card__card_number', 'user__username',
@@ -85,6 +85,15 @@ class OrderAdmin(admin.ModelAdmin):
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
     show_user_link.allow_tags = True
     show_user_link.short_description = _('User')
+
+    def show_product_link(self, obj):
+        if obj.user is None:
+            return ''
+
+        url = reverse("admin:dusken_membership_change", args=[obj.product.pk])
+        return format_html("<a href='{url}'>{product}</a>", url=url, product=obj.product)
+    show_product_link.allow_tags = True
+    show_product_link.short_description = _('Product')
 
     def show_member_card_link(self, obj):
         if obj.member_card is None:
