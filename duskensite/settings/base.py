@@ -5,7 +5,7 @@ import os
 import sys
 
 from captcha.constants import TEST_PUBLIC_KEY, TEST_PRIVATE_KEY
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -44,14 +44,12 @@ INSTALLED_APPS = [
 ]
 INSTALLED_APPS += [
     'dusken',
-    # 'apps.hooks',
     'apps.neuf_ldap',
     'apps.neuf_auth',
     'apps.mailchimp',
     'apps.mailman',
     'apps.common',
-    # TODO Remove these after import and new integrations are OK
-    'apps.inside',
+    # FIXME Keep these for easy referencing in django admin for now
     'apps.kassa',
     'apps.tekstmelding',
 ]

@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import redirect
+from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, DetailView, UpdateView, FormView, DeleteView
 

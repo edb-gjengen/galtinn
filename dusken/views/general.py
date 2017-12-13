@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.views.generic import FormView, DetailView, TemplateView
@@ -23,7 +23,7 @@ class IndexView(FormView):
 
     def render_to_response(self, context, **response_kwargs):
         # IF already logged in, then redirect
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return redirect(settings.LOGIN_REDIRECT_URL)
 
         return super().render_to_response(context, **response_kwargs)
