@@ -98,9 +98,29 @@ class MembershipTest(APITestCase):
         self.assertTrue(self.user.unclaimed_orders.exists())
         self.user.phone_number_confirmed = True
         self.user.save()
-        user = DuskenUser.objects.get(pk=self.user.pk)
-        self.assertTrue(user.is_member)
-        self.assertFalse(user.unclaimed_orders.exists())
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.is_member)
+        self.assertFalse(self.user.unclaimed_orders.exists())
+
+    def test_disallow_claiming_orders_from_deleted_users(self):
+        today = datetime.datetime.now().date()
+        membership_from_deleted_user = Membership.objects.create(
+            start_date=today - datetime.timedelta(days=10),
+            end_date=today + datetime.timedelta(days=10),
+            membership_type=self.membership_type)
+        Order.objects.create(
+            payment_method=Order.BY_APP,
+            product=membership_from_deleted_user,
+            price_nok=0,
+            phone_number='')
+
+        self.assertEqual(Order.objects.filter(phone_number='').count(), 1)
+        self.assertFalse(self.user.unclaimed_orders.exists())
+
+        self.user.phone_number = ''
+        self.user.save()
+
+        self.assertFalse(self.user.unclaimed_orders.exists())
 
 
 class KassaMembershipTest(APITestCase):
