@@ -257,6 +257,6 @@ class DuskenUserDelete(TestCase):
 
         self.assertTrue(Order.objects.filter(pk=self.order.pk).exists())
         self.order.refresh_from_db()
-        self.assertEqual(self.order.phone_number, '')
+        self.assertEqual(self.order.phone_number, None)
 
         self.membership.refresh_from_db()  # Will trigger DoesNotExists if was deleted
