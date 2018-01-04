@@ -8,7 +8,6 @@
     <meta name="x-csrf-token" content="{{ csrf_token }}">
     <title>{% block title %}Galtinn - {% trans "The membership database at Chateau Neuf - The Norwegian Student Society" %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'dist/styles/app.css' %}" type="text/css">
-    <script type="text/javascript" src="{% static 'dist/scripts/vendor.js' %}"></script>
     {% google_analytics_tag %}
 </head>
 <body class="{% block body-css-classes %}{% endblock %}">
@@ -29,10 +28,11 @@
 
     {% include "footer.html" %}
 
-    {% block tailinc %}{% endblock %}
+    <script type="text/javascript" src="{% static 'dist/scripts/vendor.js' %}"></script>
     <script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
     <script>Raven.config('{% sentry_public_dsn 'https' %}').install()</script>
     <script type="text/javascript" src="{% static 'dist/scripts/app.js' %}"></script>
     <script type="text/javascript" src="{% static 'django_select2/django_select2.js' %}"></script>
+    {% block tailinc %}{% endblock %}
 </body>
 </html>

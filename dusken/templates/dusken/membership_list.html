@@ -17,7 +17,7 @@
         {% for ms in membership_list %}
             <div class="col-md-4">
                 <section class="membership-item card">
-                    <div class="card-block">
+                    <div class="card-body">
                         <h4 class="card-title">{% svg "icons/license" %} {{ ms.membership_type }}</h4>
                         <h6 class="card-subtitle text-muted">{% trans "Period" %}: {{ ms.start_date }} - {% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</h6>
                     </div>
@@ -33,7 +33,7 @@
                         {% endif %}
                     </ul>
                     {% if ms.order %}
-                        <div class="card-block">
+                        <div class="card-body">
                             <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
                         </div>
                     {% endif %}

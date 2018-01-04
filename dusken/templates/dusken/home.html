@@ -17,7 +17,7 @@
 
             <div class="col-md-4">
             <div class="home__membership-status card">
-                <div class="card-block">
+                <div class="card-body">
                     <h4 class="card-title">{% svg "icons/license" %} {% trans "Your Membership" %}</h4>
                     <h6 class="card-subtitle text-muted">{% trans "See your membership status" %}</h6>
                 </div>
@@ -57,12 +57,12 @@
                 </ul>
                 {% if ms.is_valid and not ms.expires_in_less_than_one_month %}
                     {% if ms.order %}
-                        <div class="card-block">
+                        <div class="card-body">
                             <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
                         </div>
                     {% endif %}
                 {% else %}
-                    <div class="card-block">
+                    <div class="card-body">
                         {% include "dusken/membership_purchase_form.html" %}
                         {% if ms == null %}
                             <div class="membership-duration-hint">{% trans "Membership is valid for 1 year" %}</div>
@@ -75,7 +75,7 @@
 
         <div class="col-md-8">
             <div class="home__quick-profile card">
-                <div class="card-block">
+                <div class="card-body">
                     <h4 class="card-title"><a href="{% url "user-detail-me" %}">{% svg "icons/user" %} {% trans "Your profile" %}</a></h4>
                     <h6 class="card-subtitle text-muted">{% trans "Quick view of your profile details" %}</h6>
                 </div>
@@ -117,7 +117,7 @@
                         {% endif %}
                     </li>
                 </ul>
-                <div class="card-block">
+                <div class="card-body">
                     <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit your profile" %}</a>
                 </div>
             </div>
@@ -128,11 +128,11 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="home__actions__update-email-subscriptions card">
-                    <div class="card-block">
+                    <div class="card-body">
                         <h4 class="card-title">{% svg "icons/envelope" %} {% trans "Email subscriptions" %}</h4>
                         <h6 class="card-subtitle text-muted">{% trans "Newsletter and mailing lists" %}</h6>
                     </div>
-                    <div class="card-block">
+                    <div class="card-body">
                         <a href="{% url "email-subscriptions" %}" class="btn btn-outline-primary btn-block">{% trans "Change subscriptions" %}</a>
                     </div>
                 </div>
@@ -140,11 +140,11 @@
 
             <div class="col-md-4">
                 <div class="home__actions__change-password card">
-                    <div class="card-block">
+                    <div class="card-body">
                         <h4 class="card-title">{% trans "Password" %}</h4>
                         <h6 class="card-subtitle text-muted">{% trans "Change it if you want to" %}</h6>
                     </div>
-                    <div class="card-block">
+                    <div class="card-body">
                         <a href="{% url "password_change" %}" class="btn btn-outline-primary btn-block">{% trans "Change password" %}</a>
                     </div>
                 </div>
@@ -152,11 +152,11 @@
             {% if not user.has_set_username %}
             <div class="col-md-4">
                 <div class="home__actions__change-username card">
-                    <div class="card-block">
+                    <div class="card-body">
                         <h4 class="card-title">{% trans "Set a username" %}</h4>
                         <h6 class="card-subtitle text-muted">{% trans "Needed to get access to internal systems" %}</h6>
                     </div>
-                    <div class="card-block">
+                    <div class="card-body">
                         <a href="{% url "user-update-username" %}" class="btn btn-outline-primary btn-block">{% trans "Set username" %}</a>
                     </div>
                 </div>
