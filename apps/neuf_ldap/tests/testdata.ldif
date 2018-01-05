@@ -40,9 +40,9 @@ cn: test
 gidNumber: 10005
 
 # Sample groups (matches settings-sample.py)
-dn: cn=dns-alle,ou=Groups,dc=neuf,dc=no
+dn: cn=dns-aktiv,ou=Groups,dc=neuf,dc=no
 objectClass: posixGroup
-cn: dns-alle
+cn: dns-aktiv
 gidNumber: 1
 memberUid: test
 
