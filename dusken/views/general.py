@@ -52,8 +52,8 @@ class HomeVolunteerView(LoginRequiredMixin, DetailView):
         return self.request.user
 
     def get_context_data(self, **kwargs):
-        context = super(HomeVolunteerView, self).get_context_data(**kwargs)
-        context['user_search'] = UserWidgetForm
+        context = super().get_context_data(**kwargs)
+        context['user_search'] = UserWidgetForm()
         return context
 
 
