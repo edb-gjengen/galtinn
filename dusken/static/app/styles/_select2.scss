@@ -1,14 +1,7 @@
-/*
-Select2 with Bootstrap 3 theme + workarounds for Bootstrap 4 support
-
-https://github.com/select2/select2-bootstrap-theme/issues/60
-http://avladov.com/blog/494/select2-with-bootstrap4
-*/
+/* Select2 with Bootstrap 4 theme */
 
 @import "node_modules/select2/src/scss/core";
-@import "select2-bootstrap4-fix/before"; // Variable remapping
 @import "node_modules/select2-bootstrap-theme/src/select2-bootstrap";
-@import "select2-bootstrap4-fix/after"; // Override theme styles
 
 /* Fix to make select fields responsive */
 .select2 {

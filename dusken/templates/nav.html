@@ -1,10 +1,10 @@
 {% load i18n svg %}
 <div class="nav-wrap">
-    <nav id="main-navigation" class="navbar navbar-inverse navbar-toggleable-md">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{% trans "Toggle navigation" %}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav id="main-navigation" class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="{% url 'index' %}">{% svg "galtinn-logo" %}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{% trans "Toggle navigation" %}">
+            {% svg "icons/menu" %}
+        </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav mr-auto">

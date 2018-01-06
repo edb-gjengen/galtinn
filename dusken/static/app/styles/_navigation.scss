@@ -48,8 +48,16 @@
         display: none;
     }
 }
+.navbar-toggler {
+    svg {
+        top: 1px;
+        width: 24px;
+        height: 24px;
+    }
+}
 
-.nav-link {
+.nav-link,
+.navbar-toggler {
     svg path {
         /*fill: rgba(0, 0, 0, 0.5);*/
         fill: white;
