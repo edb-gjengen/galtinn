@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-29 16:28+0100\n"
-"PO-Revision-Date: 2017-11-29 16:28+0100\n"
+"POT-Creation-Date: 2018-01-07 16:40+0100\n"
+"PO-Revision-Date: 2018-01-07 16:41+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -35,7 +35,7 @@ msgstr "Bruker"
 msgid "Product"
 msgstr "Produkt"
 
-#: admin.py:105 models.py:331
+#: admin.py:105 models.py:330
 msgid "Member card"
 msgstr "Medlemskort"
 
@@ -101,7 +101,7 @@ msgstr "E-post"
 msgid "Phone number"
 msgstr "Mobilnummer"
 
-#: forms.py:51 templates/dusken/home.html:144
+#: forms.py:51 templates/dusken/home.html:145
 msgid "Password"
 msgstr "Passord"
 
@@ -157,7 +157,7 @@ msgstr "etternavn"
 msgid "email address"
 msgstr "e-postadresse"
 
-#: models.py:36 models.py:387
+#: models.py:36 models.py:386
 msgid "phone number"
 msgstr "mobilnummer"
 
@@ -201,104 +201,104 @@ msgstr "stripe kunde-id"
 msgid "Users"
 msgstr "Brukere"
 
-#: models.py:235 templates/dusken/orgunit_edit_users.html:27
+#: models.py:234 templates/dusken/orgunit_edit_users.html:31
 #: templates/dusken/user_detail.html:77 templates/nav.html:16
 msgid "Membership"
 msgstr "Medlemskap"
 
-#: models.py:236 templates/dusken/membership_list.html:5
+#: models.py:235 templates/dusken/membership_list.html:5
 msgid "Memberships"
 msgstr "Medlemskap"
 
-#: models.py:252
+#: models.py:251
 msgid "Duration"
 msgstr "Varighet"
 
-#: models.py:253
+#: models.py:252
 msgid "Never"
 msgstr "Aldri"
 
-#: models.py:254
+#: models.py:253
 msgid "End of year"
 msgstr "Ved årsslutt"
 
-#: models.py:261 models.py:469
+#: models.py:260 models.py:468
 msgid "Price in øre"
 msgstr "Pris i øre"
 
-#: models.py:302
+#: models.py:301
 msgid "Membership type"
 msgstr "Medlemskapstype"
 
-#: models.py:303
+#: models.py:302
 msgid "Membership types"
 msgstr "Medlemskapstyper"
 
-#: models.py:307
+#: models.py:306
 msgid "card number"
 msgstr "kortnummer"
 
-#: models.py:308
+#: models.py:307
 msgid "registered"
 msgstr "registrert"
 
-#: models.py:309 models.py:382
+#: models.py:308 models.py:381
 msgid "is active"
 msgstr "er aktiv"
 
-#: models.py:310
+#: models.py:309
 msgid "user"
 msgstr "bruker"
 
-#: models.py:332
+#: models.py:331
 msgid "Member cards"
 msgstr "Medlemskort"
 
-#: models.py:344
+#: models.py:343
 msgid "Volunteers"
 msgstr "Aktive"
 
-#: models.py:345
+#: models.py:344
 msgid "Standard"
 msgstr "Standard"
 
-#: models.py:357
+#: models.py:356
 msgid "Posix name must be unique or empty"
 msgstr "POSIX-navn må være unikt eller tomt"
 
-#: models.py:370
+#: models.py:369
 msgid "Group profile"
 msgstr "Gruppeprofil"
 
-#: models.py:371
+#: models.py:370
 msgid "Group profiles"
 msgstr "Gruppeprofiler"
 
-#: models.py:379 models.py:503
+#: models.py:378 models.py:500
 msgid "name"
 msgstr "navn"
 
-#: models.py:380
+#: models.py:379
 msgid "slug"
 msgstr "slug"
 
-#: models.py:381 models.py:504
+#: models.py:380 models.py:501
 msgid "short name"
 msgstr "kortnavn"
 
-#: models.py:383
+#: models.py:382
 msgid "description"
 msgstr "beskrivelse"
 
-#: models.py:386
+#: models.py:385
 msgid "email"
 msgstr "e-post"
 
-#: models.py:389
+#: models.py:388
 msgid "contact person"
 msgstr "kontaktperson"
 
-#: models.py:390
+#: models.py:389
 msgid "website"
 msgstr "nettside"
 
@@ -306,75 +306,75 @@ msgstr "nettside"
 msgid "group"
 msgstr "gruppe"
 
-#: models.py:395
+#: models.py:394
 msgid "admin group"
 msgstr "admingruppe"
 
-#: models.py:399
+#: models.py:398
 msgid "parent"
 msgstr "forelder"
 
-#: models.py:449
+#: models.py:448
 msgid "Org unit"
 msgstr "Forening"
 
-#: models.py:450
+#: models.py:449
 msgid "Org units"
 msgstr "Foreninger"
 
-#: models.py:461
+#: models.py:460
 msgid "Mobile app"
 msgstr "Mobilapplikasjon"
 
-#: models.py:462
+#: models.py:461
 msgid "SMS"
 msgstr "SMS"
 
-#: models.py:463
+#: models.py:462
 msgid "Credit card"
 msgstr "Kredittkort"
 
-#: models.py:464
+#: models.py:463
 msgid "Cash register"
 msgstr "Kassaapparat"
 
-#: models.py:465
+#: models.py:464
 msgid "Other"
 msgstr "Annet"
 
-#: models.py:481
+#: models.py:479
 msgid "Stripe charge ID, Kassa event ID, SMS event ID or App event ID"
 msgstr "Stripe transaksjons-ID, Kassa-hendelses-ID, SMS-hendelses-ID"
 
-#: models.py:497
+#: models.py:494
 msgid "Order"
 msgstr "Ordre"
 
-#: models.py:498
+#: models.py:495
 msgid "Orders"
 msgstr "Ordre"
 
-#: models.py:513 templates/dusken/user_detail.html:69
+#: models.py:510 templates/dusken/user_detail.html:69
 msgid "Place of study"
 msgstr "Studiested"
 
-#: models.py:514
+#: models.py:511
 msgid "Places of study"
 msgstr "Studiesteder"
 
-#: models.py:527
+#: models.py:524
 msgid "User log message"
 msgstr "Brukerloggmelding"
 
-#: models.py:528
+#: models.py:525
 msgid "User log messages"
 msgstr "Brukerloggmeldinger"
 
-#: models.py:541
+#: models.py:538
 msgid "Org unit log message"
 msgstr "Foreningsloggmelding"
 
-#: models.py:542
+#: models.py:539
 msgid "Org unit log messages"
 msgstr "Foreningsloggmeldinger"
 
@@ -402,7 +402,7 @@ msgstr "Stuegrisene som er på vakt har blitt varslet"
 msgid "The membership database at Chateau Neuf - The Norwegian Student Society"
 msgstr "Medlemskapsdatabasen på Chateau Neuf - Det Norske Studentersamfund"
 
-#: templates/dusken/email_subscriptions.html:15 templates/dusken/home.html:132
+#: templates/dusken/email_subscriptions.html:15 templates/dusken/home.html:133
 msgid "Email subscriptions"
 msgstr "E-postabonnement"
 
@@ -559,7 +559,7 @@ msgstr "Utløpt"
 
 #: templates/dusken/home.html:49 templates/dusken/membership_list.html:22
 #: templates/dusken/membership_list.html:26
-#: templates/dusken/orgunit_edit_users.html:35
+#: templates/dusken/orgunit_edit_users.html:39
 #: templates/dusken/user_detail.html:84
 msgid "Lifelong"
 msgstr "Livsvarig"
@@ -610,47 +610,47 @@ msgstr "Mangler"
 msgid "Edit your profile"
 msgstr "Endre din profil"
 
-#: templates/dusken/home.html:133
+#: templates/dusken/home.html:134
 msgid "Newsletter and mailing lists"
 msgstr "Nyhetsbrev og e-postlister"
 
-#: templates/dusken/home.html:136
+#: templates/dusken/home.html:137
 msgid "Change subscriptions"
 msgstr "Endre abonnementer"
 
-#: templates/dusken/home.html:145
+#: templates/dusken/home.html:146
 msgid "Change it if you want to"
 msgstr "Endre passordet hvis du vil"
 
-#: templates/dusken/home.html:148
+#: templates/dusken/home.html:149
 #: templates/registration/password_change_form.html:6
 msgid "Change password"
 msgstr "Endre passord"
 
-#: templates/dusken/home.html:156
+#: templates/dusken/home.html:157
 msgid "Set a username"
 msgstr "Velg et brukernavn"
 
-#: templates/dusken/home.html:157
+#: templates/dusken/home.html:158
 msgid "Needed to get access to internal systems"
 msgstr "Påkrevd for å få tilgang internsystemene"
 
-#: templates/dusken/home.html:160 templates/dusken/user_detail.html:33
+#: templates/dusken/home.html:161 templates/dusken/user_detail.html:33
 msgid "Set username"
 msgstr "Velg brukernavn"
 
-#: templates/dusken/home_volunteer.html:6 templates/nav.html:19
+#: templates/dusken/home_volunteer.html:7 templates/nav.html:19
 msgid "Volunteer"
 msgstr "Aktiv"
 
-#: templates/dusken/home_volunteer.html:8
+#: templates/dusken/home_volunteer.html:10
 msgid ""
 "This section is for active volunteers, but you are not registered in the "
 "volunteer group yet."
 msgstr ""
 "Dette området er for aktive, men du er ikke registert i aktivgruppen enda."
 
-#: templates/dusken/home_volunteer.html:9
+#: templates/dusken/home_volunteer.html:11
 msgid ""
 "The effort of our active volunteers form The Norwegian Student Society, want "
 "to become a part of it?"
@@ -658,43 +658,56 @@ msgstr ""
 "Innsatsen som de aktive legger ned er med på å forme Det Norske "
 "Studentersamfund, vil du bli en del av det?"
 
-#: templates/dusken/home_volunteer.html:11
+#: templates/dusken/home_volunteer.html:13
 msgid "Read more"
 msgstr "Les mer"
 
-#: templates/dusken/home_volunteer.html:14
-msgid "List of organizational units"
-msgstr "Foreningsoversikt"
+#: templates/dusken/home_volunteer.html:15
+msgid "Section for active volunteers"
+msgstr "Side for aktive medlemmer"
 
-#: templates/dusken/home_volunteer.html:16
+#: templates/dusken/home_volunteer.html:21
 msgid "Find users"
 msgstr "Finn brukere"
 
-#: templates/dusken/home_volunteer.html:18 templates/dusken/user_list.html:6
+#: templates/dusken/home_volunteer.html:23 templates/dusken/user_list.html:6
 msgid "View"
 msgstr "Vis"
 
-#: templates/dusken/home_volunteer.html:21
+#: templates/dusken/home_volunteer.html:30
+msgid "List of organizational units"
+msgstr "Foreningsoversikt"
+
+#: templates/dusken/home_volunteer.html:31
+msgid "Contact informaction and member lists"
+msgstr "Kontaktinformasjone og medlemslister"
+
+#: templates/dusken/home_volunteer.html:34
+msgid "Show organizational units"
+msgstr "Vis foreningslisten"
+
+#: templates/dusken/home_volunteer.html:43
 msgid "Your organizations"
 msgstr "Dine foreninger"
 
-#: templates/dusken/home_volunteer.html:28
-#: templates/dusken/orgunit_detail.html:28
+#: templates/dusken/home_volunteer.html:50
+#: templates/dusken/orgunit_detail.html:29
+#: templates/dusken/orgunit_list.html:32
 msgid "Manage members"
 msgstr "Administrèr medlemmer"
 
-#: templates/dusken/home_volunteer.html:29
-#: templates/dusken/orgunit_detail.html:6 templates/dusken/user_detail.html:107
-#: templates/dusken/user_detail.html:109
+#: templates/dusken/home_volunteer.html:51
+#: templates/dusken/orgunit_detail.html:6 templates/dusken/orgunit_list.html:33
+#: templates/dusken/user_detail.html:107 templates/dusken/user_detail.html:109
 msgid "Edit"
 msgstr "Rediger"
 
-#: templates/dusken/home_volunteer.html:39
+#: templates/dusken/home_volunteer.html:67
 msgid "Statistics"
 msgstr "Statistikk"
 
-#: templates/dusken/home_volunteer.html:40 templates/dusken/stats.html:3
-#: templates/dusken/stats.html:7
+#: templates/dusken/home_volunteer.html:68 templates/dusken/stats.html:3
+#: templates/dusken/stats.html:8
 msgid "Membership statistics"
 msgstr "Medlemsstatistikk"
 
@@ -755,83 +768,87 @@ msgstr "Nettside"
 msgid "Description:"
 msgstr "Beskrivelse:"
 
-#: templates/dusken/orgunit_detail.html:26
+#: templates/dusken/orgunit_detail.html:27
 msgid "Members"
 msgstr "Medlemmer"
 
-#: templates/dusken/orgunit_detail.html:40
-#: templates/dusken/orgunit_edit_users.html:25
+#: templates/dusken/orgunit_detail.html:41
+#: templates/dusken/orgunit_edit_users.html:29
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/dusken/orgunit_detail.html:44
-#: templates/dusken/orgunit_edit_users.html:65
+#: templates/dusken/orgunit_detail.html:45
+#: templates/dusken/orgunit_edit_users.html:70
 msgid "No members"
 msgstr "Ingen medlemmer"
 
-#: templates/dusken/orgunit_edit.html:9
+#: templates/dusken/orgunit_edit.html:10
 msgid "Save changes"
 msgstr "Lagre"
 
-#: templates/dusken/orgunit_edit.html:12
-#: templates/dusken/orgunit_edit_users.html:69
+#: templates/dusken/orgunit_edit.html:13
+#: templates/dusken/orgunit_edit_users.html:74
 msgid "You have no right to edit this organisation"
 msgstr "Du har ikke tilgang til å endre denne foreningen"
 
-#: templates/dusken/orgunit_edit_users.html:9
+#: templates/dusken/orgunit_edit_users.html:11
 msgid "Add member"
 msgstr "Legg til medlem"
 
-#: templates/dusken/orgunit_edit_users.html:11
+#: templates/dusken/orgunit_edit_users.html:13
 msgid "Add admin"
 msgstr "Legg til admin"
 
-#: templates/dusken/orgunit_edit_users.html:43
+#: templates/dusken/orgunit_edit_users.html:47
 #: templates/dusken/user_detail.html:93
 msgid "None"
 msgstr "Ingen"
 
-#: templates/dusken/orgunit_edit_users.html:52
+#: templates/dusken/orgunit_edit_users.html:56
 msgid "Make member"
 msgstr "Gjør til medlem"
 
-#: templates/dusken/orgunit_edit_users.html:55
+#: templates/dusken/orgunit_edit_users.html:59
 msgid "Make admin"
 msgstr "Gjør til admin"
 
-#: templates/dusken/orgunit_edit_users.html:61
+#: templates/dusken/orgunit_edit_users.html:65
 msgid "Remove User?"
 msgstr "Fjern bruker?"
 
-#: templates/dusken/orgunit_edit_users.html:61
+#: templates/dusken/orgunit_edit_users.html:65
 msgid "Remove"
 msgstr "Fjern"
 
-#: templates/dusken/orgunit_list.html:4
+#: templates/dusken/orgunit_list.html:5
 msgid "Organizational Units"
 msgstr "Foreninger"
 
-#: templates/dusken/stats.html:13 templates/dusken/stats.html:32
+#: templates/dusken/orgunit_list.html:29
+msgid "Actions"
+msgstr "Endre"
+
+#: templates/dusken/stats.html:14 templates/dusken/stats.html:33
 msgid "Sales per day"
 msgstr "Salg per dag"
 
-#: templates/dusken/stats.html:17
+#: templates/dusken/stats.html:18
 msgid "Sales total"
 msgstr "Salg totalt"
 
-#: templates/dusken/stats.html:19 templates/dusken/stats.html:28
+#: templates/dusken/stats.html:20 templates/dusken/stats.html:29
 msgid "In total"
 msgstr "Totalt"
 
-#: templates/dusken/stats.html:24
+#: templates/dusken/stats.html:25
 msgid "Sales today"
 msgstr "Salg i dag"
 
-#: templates/dusken/stats.html:25
+#: templates/dusken/stats.html:26
 msgid "Date"
 msgstr "Dato"
 
-#: templates/dusken/stats.html:32
+#: templates/dusken/stats.html:33
 msgid "Download as CSV"
 msgstr "Last ned som CSV"
 
@@ -971,7 +988,7 @@ msgstr "Laget med"
 msgid "by"
 msgstr "av"
 
-#: templates/nav.html:4
+#: templates/nav.html:5
 msgid "Toggle navigation"
 msgstr "Svitsj navigasjon"
 

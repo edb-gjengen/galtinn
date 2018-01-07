@@ -7,30 +7,33 @@
             {% for org in orgunits %}
                 <div class="list-group-item">
                     <div class="row">
-                        <div class="col-md">
+                        <div class="col-sm-7">
                             {% svg "icons/users" %}
                             <a id="orgunit-name" href="{% url "orgunit-detail" org.slug %}">{{ org }}</a><br>
                             {% if org.contact_person %}
-                                <a href="{% url "user-detail" org.contact_person.uuid %}" class="orgunit__list__contact-person">{{ org.contact_person.get_full_name }}</a>
+                                <a href="{% url "user-detail" org.contact_person.uuid %}" class="orgunit_list__contact-person">{{ org.contact_person.get_full_name }}</a>
                             {% endif %}
                         </div>
-                        <div class="col-md">
-                            <div class="dropdown">
-                                <!-- Actions -->
-                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {% trans "Actions" %}
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="mailto:{{ org.email }}">{% svg "icons/envelope" %} {{ org.email }}</a>
-                                    {% if org.phone_number %}
-                                        <a class="dropdown-item" href="tel:{{ org.phone_number }}">{% svg "icons/phone" %} {{ org.phone_number }}</a>
-                                    {% endif %}
-                                    {% if user|has_group:org.admin_group %}
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="{% url "orgunit-edit-users" org.slug %}">{% svg "icons/users" %} {% trans "Manage members" %}</a>
-                                        <a class="dropdown-item" href="{% url "orgunit-edit" org.slug %}">{% svg "icons/pencil" %} {% trans "Edit" %}</a>
-                                    {% endif %}
-                                </div>
+                        <div class="col-sm">
+                            <div class="btn-group">
+                                {% if org.email %}
+                                    <a class="btn btn-outline-primary" href="mailto:{{ org.email }}">{% svg "icons/envelope" %} {{ org.email }}</a>
+                                {% endif %}
+                                {% if org.phone_number %}
+                                    <a class="btn btn-outline-primary" href="tel:{{ org.phone_number }}">{% svg "icons/phone" %} {{ org.phone_number }}</a>
+                                {% endif %}
+                                {% if user|has_group:org.admin_group %}
+                                    <div class="btn-group">
+                                        <!-- Actions -->
+                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            {% trans "Actions" %}
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="{% url "orgunit-edit-users" org.slug %}">{% svg "icons/users" %} {% trans "Manage members" %}</a>
+                                                <a class="dropdown-item" href="{% url "orgunit-edit" org.slug %}">{% svg "icons/pencil" %} {% trans "Edit" %}</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
