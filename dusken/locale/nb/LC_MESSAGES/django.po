@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-07 16:40+0100\n"
-"PO-Revision-Date: 2018-01-07 16:41+0100\n"
+"PO-Revision-Date: 2018-01-07 16:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -684,7 +684,7 @@ msgstr "Kontaktinformasjone og medlemslister"
 
 #: templates/dusken/home_volunteer.html:34
 msgid "Show organizational units"
-msgstr "Vis foreningslisten"
+msgstr "Vis foreningsoversikten"
 
 #: templates/dusken/home_volunteer.html:43
 msgid "Your organizations"
