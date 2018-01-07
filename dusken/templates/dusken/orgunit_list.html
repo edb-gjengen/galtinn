@@ -17,12 +17,12 @@
                         <div class="col-sm">
                             <div class="btn-group">
                                 {% if org.email %}
-                                    <a class="btn btn-outline-primary" href="mailto:{{ org.email }}">{% svg "icons/envelope" %} {{ org.email }}</a>
+                                    <a class="btn btn-outline-primary" href="mailto:{{ org.email }}">{% svg "icons/envelope" %} {% trans "Send email" %}</a>
                                 {% endif %}
                                 {% if org.phone_number %}
-                                    <a class="btn btn-outline-primary" href="tel:{{ org.phone_number }}">{% svg "icons/phone" %} {{ org.phone_number }}</a>
+                                    <a class="btn btn-outline-primary" href="tel:{{ org.phone_number }}">{% svg "icons/phone" %} {% trans "Call" %}</a>
                                 {% endif %}
-                                {% if user|has_group:org.admin_group %}
+                                {% if user|has_admin_group:org.admin_group %}
                                     <div class="btn-group">
                                         <!-- Actions -->
                                         <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

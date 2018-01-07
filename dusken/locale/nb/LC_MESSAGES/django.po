@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-07 16:40+0100\n"
-"PO-Revision-Date: 2018-01-07 16:43+0100\n"
+"POT-Creation-Date: 2018-01-07 16:46+0100\n"
+"PO-Revision-Date: 2018-01-07 16:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -823,6 +823,14 @@ msgstr "Fjern"
 #: templates/dusken/orgunit_list.html:5
 msgid "Organizational Units"
 msgstr "Foreninger"
+
+#: templates/dusken/orgunit_list.html:20
+msgid "Send email"
+msgstr "Send e-post"
+
+#: templates/dusken/orgunit_list.html:23
+msgid "Call"
+msgstr "Ring"
 
 #: templates/dusken/orgunit_list.html:29
 msgid "Actions"
