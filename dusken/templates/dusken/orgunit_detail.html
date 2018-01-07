@@ -23,6 +23,7 @@
         <br><h5>{% trans "Description:" %}</h5>
         <p>{{ orgunit.description|safe }}</p>
     {% endif %}
+    <br>
     <h5>{% trans "Members" %} ({{ orgunit.group.user_set.count|default:0 }})</h5>
     {% if user|has_admin_group:orgunit.admin_group %}
         <p><a class="btn btn-outline-primary btn-block" href="{% url "orgunit-edit-users" orgunit.slug %}">{%  trans "Manage members" %}</a></p>

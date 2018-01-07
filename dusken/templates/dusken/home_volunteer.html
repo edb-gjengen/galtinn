@@ -3,43 +3,73 @@
 {% load i18n user svg bootstrap4 %}
 {% block body %}
     <div class="home-volunteer">
-    <h2 class="card-title">{% svg "icons/apartment" %} {% trans "Volunteer" %}</h2>
+
+        <h2>{% svg "icons/apartment" %} {% trans "Volunteer" %}</h2>
+
     {% if not user.is_volunteer and not user.is_superuser %}
         <div class="alert alert-info">{% trans "This section is for active volunteers, but you are not registered in the volunteer group yet." %}</div>
         <p>{% trans "The effort of our active volunteers form The Norwegian Student Society, want to become a part of it?" %}</p>
         {% get_current_language as LANGUAGE_CODE %}
         <a class="btn btn-primary btn-lg" href="{% if LANGUAGE_CODE == 'nb' %}https://studentersamfundet.no/bli-aktiv/{% else %}https://studentersamfundet.no/bli-aktiv/become-a-volunteer/{% endif %}">{% trans "Read more" %}</a>
     {% else %}
-        <ul>
-            <li><a href="{% url "orgunit-list" %}">{% trans "List of organizational units" %}</a></li>
-        </ul>
-        <h4>{% svg "icons/user" %} {% trans "Find users" %}</h4><p>
-        {% bootstrap_form user_search %}
-        <button class="btn btn-primary" onclick="view_user();">{% trans "View" %}</button>
-        </p>
-        {% if user.groups %}
-            <h4>{% svg "icons/users" %} {% trans "Your organizations" %}</h4>
-            <ul class="list-group">
-            {% for group in user.groups.all %}
-                {% for org in group.member_orgunits.all %}
-                    <li class="list-group-item justify-content-between">
-                        <span class="pt-1 pb-1"><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a></span>
-                        {% if user|has_admin_group:org.admin_group %}
-                            <span><a class="btn btn-outline-primary btn-block pt-1 pb-1" href="{% url "orgunit-edit-users" org.slug %}">{%  trans "Manage members" %}</a></span>
-                            <span><a class="btn btn-outline-primary btn-block pt-1 pb-1" href="{% url "orgunit-edit" org.slug %}">{%  trans "Edit" %}</a></span>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            {% endfor %}
-            </ul>
-        {% endif %}
-        {% if user.is_superuser %}
-            <div class="stats">
-                <br>
-                <h3>{% trans "Statistics" %}</h3>
-                <a href="{% url "stats" %}">{% trans "Membership statistics" %}</a>
+        <h6 class="text-muted">{% trans "Section for active volunteers" %}</h6>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="card home-volunteer__user_search">
+                    <div class="card-body">
+                        <h4 class="card-title">{% svg "icons/magnifier" %} {% trans "Find users" %}</h4>
+                        {% bootstrap_form user_search %}
+                        <button class="btn btn-primary" onclick="view_user();">{% trans "View" %}</button>
+                    </div>
+                </div>
             </div>
+            <div class="col-md">
+                <div class="card home-volunteer__orgunit_list">
+                    <div class="card-body">
+                        <h4 class="card-title">{% trans "List of organizational units" %}</h4>
+                        <h6 class="card-subtitle text-muted">{% trans "Contact informaction and member lists" %}</h6>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url "orgunit-list" %}" class="btn btn-outline-primary">{% trans "Show organizational units" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% if user.groups %}
+        <div class="row">
+            <div class="col-md">
+                <h4 class="card-title">{% svg "icons/users" %} {% trans "Your organizations" %}</h4>
+                {% for group in user.groups.all %}
+                    {% for org in group.member_orgunits.all %}
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title"><a href="{% url "orgunit-detail" org.slug %}">{{ org }}</a></h4>
+                                {% if user|has_admin_group:org.admin_group %}
+                                    <a class="btn btn-outline-primary" href="{% url "orgunit-edit-users" org.slug %}">{% trans "Manage members" %}</a>
+                                    <a class="btn btn-outline-primary" href="{% url "orgunit-edit" org.slug %}">{% trans "Edit" %}</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
         {% endif %}
+
+        <div class="row">
+            <div class="col-md">
+                {% if user.is_superuser %}
+                    <div class="stats">
+                        <br>
+                        <h3>{% trans "Statistics" %}</h3>
+                        <a href="{% url "stats" %}">{% trans "Membership statistics" %}</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     {% endif %}
     </div>
 {% endblock %}

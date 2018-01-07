@@ -9,7 +9,6 @@
     "jquery": "^3.2.1",
     "lodash": "4.17.4",
     "moment": "2.19.2",
-    "popper.js": "^1.12.9",
     "select2": "^4.0.5",
     "select2-bootstrap-theme": "https://github.com/angel-vladov/select2-bootstrap-theme"
   },

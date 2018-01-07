@@ -10,8 +10,7 @@ const reload = browserSync.reload;
 
 const vendorJS = [
     'node_modules/jquery/dist/jquery.min.js',
-    'node_modules/tether/dist/**/*.min.js',
-    'node_modules/bootstrap/dist/**/*.min.js',
+    'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
     'node_modules/lodash/lodash.min.js',
     'node_modules/select2/dist/js/select2.min.js',
     'node_modules/moment/min/moment.min.js',
