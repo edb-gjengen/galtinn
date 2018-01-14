@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% load i18n bootstrap4 %}
 {% block body %}
-    {% if user == userobj or user.is_superuser %}
-        <form method="post">
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-        </form>
-    {% else %}
-        You have no right to edit this user
-    {% endif %}
+    <div class="form-page">
+        {% if user == userobj or user.is_superuser %}
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+            </form>
+        {% else %}
+            You have no right to edit this user
+        {% endif %}
+    </div>
 {% endblock %}
