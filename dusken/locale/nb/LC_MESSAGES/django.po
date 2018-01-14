@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-07 16:46+0100\n"
-"PO-Revision-Date: 2018-01-07 16:47+0100\n"
+"POT-Creation-Date: 2018-01-14 16:19+0100\n"
+"PO-Revision-Date: 2018-01-14 16:26+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -51,9 +51,65 @@ msgstr "Mobilnummeret er i bruk"
 msgid "Email already in use"
 msgstr "E-postadressen er i bruk"
 
-#: api/views/memberships.py:122 api/views/memberships.py:145
-msgid "Your card has been declined"
-msgstr "Bankkortet ditt ble avvist"
+#: api/views/memberships.py:27
+msgid "The card number is incorrect."
+msgstr "Kortnummeret er ikke riktig."
+
+#: api/views/memberships.py:28
+msgid "The card number is not a valid credit card number."
+msgstr "Kortnummeret er ikke et gyldig nummer."
+
+#: api/views/memberships.py:29
+msgid "The card's expiration month is invalid."
+msgstr "Utløpsdatoen stemmer ikke."
+
+#: api/views/memberships.py:30
+msgid "The card's expiration year is invalid."
+msgstr "Utløpsdatoen stemmer ikke."
+
+#: api/views/memberships.py:31
+msgid "The card's security code is invalid."
+msgstr "Sikkerhetskoden (CVC) stemmer ikke."
+
+#: api/views/memberships.py:32
+msgid "The card has expired."
+msgstr "Bankkortet har utløpt."
+
+#: api/views/memberships.py:33
+msgid "The card's security code is incorrect."
+msgstr "Sikkerhetskoden (CVC) stemmer ikke."
+
+#: api/views/memberships.py:34
+msgid "The card's zip code failed validation."
+msgstr "Kortet sitt postnummer stemmer ikke"
+
+#: api/views/memberships.py:35
+msgid "The card was declined."
+msgstr "Bankkortet ble avvist."
+
+#: api/views/memberships.py:36
+msgid "There is no card on a customer that is being charged."
+msgstr "Det finnes ikke noe kort på kunden som belastes."
+
+#: api/views/memberships.py:37
+msgid "An error occurred while processing the card."
+msgstr "Det oppstod en feil når vi skulle behandle bankkortet."
+
+#: api/views/memberships.py:38
+msgid ""
+"An error occurred due to requests hitting the API too quickly. Please let us "
+"know if you're consistently running into this error."
+msgstr ""
+"Det oppstod en feil fordi for mange bruker Stripe sitt API. Gi beskjed om "
+"denne feilen gjentar seg."
+
+#: api/views/memberships.py:134 api/views/memberships.py:176
+msgid "Stripe charge failed with API error."
+msgstr "Feil med Stripe (leverandøren av betalingstjenesten) sitt API."
+
+#: api/views/memberships.py:140 api/views/memberships.py:163
+msgid "Your card has been declined."
+msgstr "Bankkortet ditt ble avvist."
 
 #: api/views/orgunits.py:15 api/views/orgunits.py:50
 msgid "Error"

@@ -242,3 +242,50 @@ GRAPHENE = {
     'SCHEMA_OUTPUT': 'dusken/static/schema.json',
     'SCHEMA_INDENT': 2,
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'root': {
+        'level': 'INFO',
+        'handlers': ['console', 'sentry'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'sentry': {
+            'level': 'WARNING',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'raven': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'stripe': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    },
+}

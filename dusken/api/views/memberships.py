@@ -18,7 +18,25 @@ from dusken.api.serializers.orders import (KassaOrderSerializer,
 from dusken.models import Membership
 from dusken.utils import InlineClass
 from django.utils.translation import ugettext_lazy as _
+
+
 logger = logging.getLogger(__name__)
+
+
+STRIPE_ERRORS = {
+  'incorrect_number': _("The card number is incorrect."),
+  'invalid_number': _("The card number is not a valid credit card number."),
+  'invalid_expiry_month': _("The card's expiration month is invalid."),
+  'invalid_expiry_year': _("The card's expiration year is invalid."),
+  'invalid_cvc': _("The card's security code is invalid."),
+  'expired_card': _("The card has expired."),
+  'incorrect_cvc': _("The card's security code is incorrect."),
+  'incorrect_zip': _("The card's zip code failed validation."),
+  'card_declined': _("The card was declined."),
+  'missing': _("There is no card on a customer that is being charged."),
+  'processing_error': _("An error occurred while processing the card."),
+  'rate_limit': _("An error occurred due to requests hitting the API too quickly. Please let us know if you're consistently running into this error.")
+}
 
 
 class MembershipFilter(FilterSet):
@@ -113,13 +131,13 @@ class MembershipChargeView(GenericAPIView):
             if settings.DEBUG:
                 raise APIException(e)
 
-            raise APIException('Stripe charge failed with API error.')
+            raise APIException(_('Stripe charge failed with API error.'))
         except stripe.error.CardError as e:
-            logger.warning('stripe.Customer.create did not succeed: %s', e)
+            logger.info('stripe.Customer.create did not succeed: %s', e)
             if settings.DEBUG:
                 raise APIException(e)
 
-            raise APIException(_('Your card has been declined'))
+            raise APIException(STRIPE_ERRORS.get(e.code, _('Your card has been declined.')))
 
     def _create_stripe_charge(self, customer, amount, description):
         if settings.TESTING:
@@ -138,11 +156,11 @@ class MembershipChargeView(GenericAPIView):
 
             raise APIException('Stripe charge failed with API error.')
         except stripe.error.CardError as e:
-            logger.warning('stripe.Charge.create did not succeed: %s', e)
+            logger.info('stripe.Charge.create did not succeed: %s', e)
             if settings.DEBUG:
                 raise APIException(e)
 
-            raise APIException(_('Your card has been declined'))
+            raise APIException(STRIPE_ERRORS.get(e.code, _('Your card has been declined.')))
 
     def _get_stripe_customer(self, stripe_customer_id):
         if settings.TESTING:
@@ -155,4 +173,4 @@ class MembershipChargeView(GenericAPIView):
             if settings.DEBUG:
                 raise APIException(e)
 
-            raise APIException('Stripe charge failed with API error.')
+            raise APIException(_('Stripe charge failed with API error.'))
