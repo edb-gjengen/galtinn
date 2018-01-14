@@ -58,9 +58,9 @@ class SetUsernameForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
         if self.instance.__class__.objects.exclude(pk=self.instance.pk).filter(username__iexact=username).exists():
-            raise ValidationError(_('Username {value} is taken', params={'value': username}))
+            raise ValidationError(_('Username {value} is taken'), params={'value': username})
 
         if ldap_username_exists(username):
-            raise ValidationError(_('Username {value} is taken', params={'value': username}))
+            raise ValidationError(_('Username {value} is taken'), params={'value': username})
 
         return username
