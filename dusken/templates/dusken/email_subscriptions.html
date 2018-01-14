@@ -23,7 +23,7 @@
         <p>{% trans "Upcoming events and announcements. Maximum one email per week." %}</p>
         {% trans "You are" %} <span class="js-mailchimp-status" data-text-subscribed="{% trans "subscribed" %}" data-text-unsubscribed="{% trans "unsubscribed" %}">{% if newsletter_subscription.show_checked %}{% trans "subscribed" %} ✅{% else %}{% trans "unsubscribed" %} ❌{% endif %}</span>
             <a href="#"
-               class="btn btn-outline-primary newsletter-btn js-toggle-mailchimp-subscription{% if newsletter_subscription.show_checked %} active{% endif %}"
+               class="btn btn-outline-primary newsletter-btn js-toggle-mailchimp-subscription{% if newsletter_subscription.show_checked %} subscribed{% endif %}"
                data-text-subscribe="{% trans "Subscribe" %}"
                data-text-unsubscribe="{% trans "Unsubscribe" %}">
                 {% if newsletter_subscription.show_checked %}{% trans "Unsubscribe" %}{% else %}{% trans "Subscribe" %}{% endif %}
@@ -49,7 +49,7 @@
                 </td>
                 <td class="mailing-list-table__actions">
                     <a href="#"
-                       class="btn btn-outline-primary js-toggle-mailman-subscription {% if list_attrs.is_member %} active{% endif %}"
+                       class="btn btn-outline-primary js-toggle-mailman-subscription {% if list_attrs.is_member %} subscribed{% endif %}"
                         data-text-subscribe="{% trans "Subscribe" %}"
                         data-text-unsubscribe="{% trans "Unsubscribe" %}"
                         data-list-name="{{ list_name }}"

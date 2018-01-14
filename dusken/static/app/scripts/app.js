@@ -233,7 +233,7 @@ $(document).ready(function() {
         $mailchimpSub.on('click', (e) => {
             e.preventDefault();
 
-            const shouldSubscribe = !$mailchimpSub.hasClass('active');
+            const shouldSubscribe = !$mailchimpSub.hasClass('subscribed');
             const data = {
                 status: shouldSubscribe ? 'subscribed' : 'unsubscribed',
                 email: config.userEmail
@@ -253,9 +253,9 @@ $(document).ready(function() {
                  $subStatus.text(newStatusText);
 
                  if(shouldSubscribe) {
-                     $mailchimpSub.addClass('active');
+                     $mailchimpSub.addClass('subscribed');
                  } else {
-                     $mailchimpSub.removeClass('active');
+                     $mailchimpSub.removeClass('subscribed');
                  }
              })
              .fail(function() {
@@ -271,7 +271,7 @@ $(document).ready(function() {
             const $thisList = $(e.target);
             const $thisStatus = $('.js-mailman-status[data-list-name="'+ $thisList.attr('data-list-name') +'"]');
 
-            const shouldSubscribe = !$thisList.hasClass('active');
+            const shouldSubscribe = !$thisList.hasClass('subscribed');
             const url = $thisList.attr('data-url');
             const method = shouldSubscribe ? 'PUT' : 'DELETE';
 
@@ -289,9 +289,9 @@ $(document).ready(function() {
                  $thisStatus.text(newStatusText);
 
                   if(shouldSubscribe) {
-                     $thisList.addClass('active');
+                     $thisList.addClass('subscribed');
                   } else {
-                      $thisList.removeClass('active');
+                      $thisList.removeClass('subscribed');
                   }
              })
              .fail(function() {
