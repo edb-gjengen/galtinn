@@ -10,10 +10,6 @@
         <li class="list-group-item"><span>{% svg "icons/envelope" %} {% trans "Email" %}:
             <strong><a href="mailto:{{ orgunit.email }}">{{ orgunit.email }}</a></strong></span></li>
         {% endif %}
-        {% if orgunit.phone_number %}
-        <li class="list-group-item"><span>{% svg "icons/phone" %} {% trans "Phone number" %}:
-            <strong>{{ orgunit.phone_number }}</strong></span></li>
-        {% endif %}
         {% if orgunit.website %}
         <li class="list-group-item"><span>{% svg "icons/earth" %} {% trans "Website" %}:
             <strong><a href="{{ orgunit.website }}">{{ orgunit.website }}</a></strong></span></li>

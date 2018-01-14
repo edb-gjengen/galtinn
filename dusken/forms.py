@@ -40,7 +40,7 @@ class OrgUnitEditForm(forms.ModelForm):
 
     class Meta:
         model = OrgUnit
-        fields = ['name', 'short_name', 'email', 'phone_number', 'website', 'description', 'contact_person']
+        fields = ['name', 'short_name', 'email', 'website', 'description', 'contact_person']
 
 
 class DuskenUserForm(forms.ModelForm):

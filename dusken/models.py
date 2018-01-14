@@ -383,7 +383,6 @@ class OrgUnit(MPTTModel, BaseModel):
 
     # Contact
     email = models.EmailField(_('email'), blank=True, default='')
-    phone_number = PhoneNumberField(_('phone number'), blank=True, default='')
     contact_person = models.ForeignKey(
         'dusken.DuskenUser', models.SET_NULL, verbose_name=_('contact person'), blank=True, null=True)
     website = models.URLField(_('website'), blank=True, default='')
