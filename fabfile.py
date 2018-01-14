@@ -83,3 +83,7 @@ def install():
 def serve():
     with lcd('dusken/static/'):
         local('gulp serve')
+
+
+def celery():
+    local('DJANGO_SETTINGS_MODULE=duskensite.settings.dev celery -B -A duskensite worker')

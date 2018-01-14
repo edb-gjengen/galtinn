@@ -13,13 +13,15 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     python manage.py migrate
     python manage.py loaddata testdata
     python manage.py runserver
-    celery -A duskensite worker -B  # In a new tab
     
     # Frontend
     npm install -g gulp-cli
     fab install  # cd dusken/static && yarn && gulp build
     fab serve
     
+    # Celery worker
+    fab celery
+
     # Add Stripe keys in duskensite/local_settings.py
     # Note: get this from your account on stripe.com
 

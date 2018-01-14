@@ -11,6 +11,8 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext as _
 import dns.resolver
 
+from dusken.tasks import send_mail_task
+
 logger = logging.getLogger(__name__)
 
 
@@ -49,7 +51,14 @@ def send_validation_email(user):
     message = render_to_string('dusken/emails/validation_email.txt', context)
     html_message = render_to_string('dusken/emails/validation_email.html', context)
 
-    user.email_user(_('Confirm your email address at Chateau Neuf'), message, html_message=html_message)
+    from_email = settings.DEFAULT_FROM_EMAIL
+
+    send_mail_task.delay(
+        _('Confirm your email address at Chateau Neuf'),
+        from_email,
+        message,
+        [user.email],
+        html_message=html_message)
 
 
 def create_email_key():
