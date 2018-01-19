@@ -35,13 +35,13 @@ def set_ldap_password(username, raw_password):
 def ldap_user_group_exists(username):
     from .models import LdapGroup
 
-    return LdapGroup.objects.filter(name=username).exists()
+    return bool(LdapGroup.objects.filter(name=username))
 
 
 def ldap_username_exists(username):
     from .models import LdapUser
 
-    return LdapUser.objects.filter(username=username).exists()
+    return bool(LdapUser.objects.filter(username=username))
 
 
 def create_ldap_user(user, dry_run=False):
