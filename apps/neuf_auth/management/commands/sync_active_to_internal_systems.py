@@ -27,7 +27,7 @@ class Command(BaseCommand):
             default=False,
             help='Toggle if group memberships syncronization should delete or not')
 
-    DIFF_ATTRIBUTES = ['first_name', 'last_name', 'email']
+    DIFF_ATTRIBUTES = ['first_name', 'last_name', 'email', 'ldap_password']
     SYNC_GROUP_PREFIX = 'dns-'
     COUNTS = dict(create=0, update=0, in_sync=0)
     options = {}
