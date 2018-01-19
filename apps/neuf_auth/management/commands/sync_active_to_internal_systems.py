@@ -91,6 +91,7 @@ class Command(BaseCommand):
 
             ldap_users_diffable[u.username] = {
                 'username': u.username,
+                'ldap_password': u.password,
                 'first_name': u.first_name,
                 'last_name': u.last_name,
                 'email': u.email,

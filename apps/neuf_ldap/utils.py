@@ -127,8 +127,8 @@ def create_ldap_user(user, dry_run=False):
 def ldap_update_user_details(dusken_user, dry_run=False):
     from .models import LdapUser
     ldap_user = LdapUser.objects.get(username=dusken_user['username'])
-
     ldap_user.email = dusken_user['email']
+    ldap_user.password = dusken_user['ldap_password']
 
     name_changed = dusken_user['first_name'] != ldap_user.first_name or dusken_user['last_name'] != ldap_user.last_name
     if name_changed:
