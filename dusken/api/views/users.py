@@ -2,9 +2,11 @@ import django_filters
 from phonenumber_field.modelfields import PhoneNumberField
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets, filters, permissions
+from rest_framework.authentication import BasicAuthentication
 from rest_framework.generics import RetrieveAPIView, CreateAPIView
 
 from dusken.api.serializers.users import DuskenUserSerializer, DuskenUserRegisterSerializer
+from dusken.authentication import UsernameBasicAuthentication
 from dusken.models import DuskenUser
 from django.http import JsonResponse, HttpResponseForbidden
 
@@ -59,3 +61,9 @@ def user_pk_to_uuid(request):
         'uuid': user.uuid
     }
     return JsonResponse(data)
+
+
+class BasicAuthCurrentUserView(CurrentUserView):
+    authentication_classes = [UsernameBasicAuthentication]
+    # FIXME: Rate limit per custom auth-user-ip header (from galtinn)
+    # throttle_classes = (UserRateThrottle,)

@@ -10,7 +10,8 @@ from dusken.api.views.memberships import (MembershipViewSet,
                                           MembershipChargeView,
                                           KassaMembershipView)
 from dusken.api.views.stats import membership_stats
-from dusken.api.views.users import DuskenUserViewSet, CurrentUserView, user_pk_to_uuid, RegisterUserView
+from dusken.api.views.users import (DuskenUserViewSet, CurrentUserView, user_pk_to_uuid, RegisterUserView,
+                                    BasicAuthCurrentUserView)
 from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.orgunits import remove_user, add_user
 
@@ -24,6 +25,7 @@ urlpatterns = router.urls
 urlpatterns += [
     # Current user
     url(r'me/$', CurrentUserView.as_view(), name='user-current'),
+    url(r'me/basic/$', BasicAuthCurrentUserView.as_view(), name='user-current-basic-auth'),
 
     # Stripe
     url(r'membership/charge/$', MembershipChargeView.as_view(),
