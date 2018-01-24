@@ -1,8 +1,12 @@
 image: nikolaik/python-nodejs:latest
 
+services:
+  - redis:latest
+
 variables:
   POSTGRES_DB: dusken
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
+  CELERY_BROKER_URL: "redis://redis:6379/0"
 
 cache:
   paths:
