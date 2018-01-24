@@ -1,6 +1,8 @@
 machine:
   python:
     version: 3.5.2
+services:
+  - redis:latest
 dependencies:
   pre:
     - sudo apt update; sudo apt install libsasl2-dev libldap2-dev -y
