@@ -65,10 +65,8 @@ class IncomingWebhook(TestCase):
 
 @override_settings(MAILCHIMP_LIST_ID=MAILCHIMP_TEST_LIST_ID)
 class MailchimpAPI(TestCase):
-    # FIXME: Debug CI hang, matbe because of requests_mock?
     fixtures = ['mailchimp']
 
-    @skip("Hangs on CI")
     def test_subscribe(self):
         email = 'yolo@example.com'
         self._user = DuskenUser.objects.create(email=email, username='yolo')
@@ -90,7 +88,6 @@ class MailchimpAPI(TestCase):
         self.assertEqual(res.status_code, 201)
         self.assertEqual(res.json()['status'], status)
 
-    @skip("Hangs on CI")
     def test_unsubscribe(self):
         email = 'espen@example.com'
         self._user = DuskenUser.objects.create(email=email, username='yolo2')
