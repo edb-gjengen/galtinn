@@ -1,0 +1,37 @@
+# https://circleci.com/docs/2.0/language-python/ for more details
+version: 2
+jobs:
+  build:
+    working_directory: ~/dusken
+    docker:
+      - image: circleci/python:3.5  # base image
+      - image: redis:latest
+    steps:
+      - checkout
+      - run:
+          name: Remove venv (needed when running locally)
+          command: rm -rf ~/dusken/venv
+      - restore_cache:
+          key: v1-deps-{{ checksum "requirements.txt" }}
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt update; sudo apt install libsasl2-dev libldap2-dev -y
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -U pip wheel setuptools
+            pip install -r requirements.txt
+            pip install codecov
+      - save_cache:
+          key: v1-deps-{{ checksum "requirements.txt" }}
+          paths: "venv"
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            coverage run --source=dusken,apps manage.py test -v 2
+      - run:
+          name: Upload coverage data
+          command: |
+            . venv/bin/activate
+            bash <(curl -s https://codecov.io/bash)
