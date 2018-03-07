@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n svg static %}
+{% load i18n svg static mobile_app %}
 {% block nav %}{% include "nav.html" with active='home' %}{% endblock %}
 {% block body %}
     <script>
@@ -23,11 +23,12 @@
                 </div>
                 <ul class="list-group list-group-flush">
                 {% with user.last_membership as ms %}
-                    {% if ms != null and ms.is_valid %}
+                    {% if ms != null and ms.is_valid %}
                         {% if ms.expires_in_less_than_one_month %}
                             <li class="list-group-item list-group-item-warning"><span>{% svg "icons/warning" %} {% trans "Your membership is expiring in less than one month" %} </span></li>
                         {% else %}
                             <li class="list-group-item list-group-item-success"><span><span class="lnr lnr-thumbs-up"></span> {% trans "You have a valid membership" %} </span></li>
+                            {% show_app_download %}
                         {% endif %}
                     {% else %}
                         {% if user.unclaimed_orders %}
@@ -44,9 +45,9 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if ms.is_valid %}
+                    {% if ms.is_valid %}
                         <li class="list-group-item membership"><span>
-                            {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</strong>
+                            {% if ms.is_valid %}{% trans "Valid until" %}{% else %}{% trans "Expired" %}{% endif %}: <strong>{% if ms.end_date %}{{ ms.end_date }}{% else %}{% trans "Lifelong" %}{% endif %}</strong>
                         </span></li>
                         {% if ms.order %}
                             <li class="list-group-item payment"><span>
@@ -55,7 +56,7 @@
                         {% endif %}
                     {% endif %}
                 </ul>
-                {% if ms.is_valid and not ms.expires_in_less_than_one_month %}
+                {% if ms.is_valid and not ms.expires_in_less_than_one_month %}
                     {% if ms.order %}
                         <div class="card-body">
                             <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>

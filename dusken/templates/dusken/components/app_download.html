@@ -1,0 +1,13 @@
+{% load i18n %}
+{% if show_app_download %}
+    <li class="list-group-item app-download">
+    <p>{% trans "Download our app! You'll get access to your proof of membership and the latest events" %}</p>
+    {% if user_os == 'unknown' %}
+        {# Show both #}
+        <a href="{{ app_resources.android.app_url }}"><img src="{{ app_resources.android.app_image }}" alt="{% trans "Download mobile app from Google Play" %}" class="app-download__image android" /></a>
+        <a href="{{ app_resources.ios.app_url }}"><img src="{{ app_resources.ios.app_image }}" alt="{% trans "Download mobile app from App Store" %}" class="app-download__image ios" /></a>
+    {% else %}
+        <a href="{{ app_url }}"><img src="{{ app_image }}" alt="{% trans "Download mobile app" %}" class="app-download__image app-download-{{ user_os }}" /></a>
+    {% endif %}
+    </li>
+{% endif %}
