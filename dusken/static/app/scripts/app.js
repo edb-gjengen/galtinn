@@ -67,11 +67,10 @@ function onStripeToken(token) {
         dataType: 'json',
         type: 'post'
     }).done(function(data) {
-        // TODO: with success message
         console.log(data);
 
         // redirect to profile
-        location.href = urls.profile;
+        location.href = urls.profile + '?payment_success=✔';
     }).fail(function(data) {
         console.log('failed', data);
         $('.js-validation-errors').addClass('alert alert-danger');

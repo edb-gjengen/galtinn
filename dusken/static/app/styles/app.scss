@@ -17,6 +17,9 @@ $footer-height: 140px;
 @import "footer";
 @import "icons";
 
+/* Components */
+@import "components/app_download";
+
 /* Pages */
 @import "pages";
 @import "pages/home";
@@ -26,3 +29,4 @@ $footer-height: 140px;
 
 /* Select2 */
 @import "select2";
+
