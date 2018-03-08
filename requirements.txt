@@ -7,6 +7,7 @@ django-extensions==2.0.2
 django-filter==1.1.0
 django-inline-svg==0.1.1
 django-jsonfield==1.0.1
+django-ldapdb==1.0.0
 django-mptt==0.9.0
 django-oauth2-provider==0.2.6.1
 django-phonenumber-field==2.0.0
@@ -30,4 +31,3 @@ raven==6.6.0
 requests==2.18.4
 requests-mock==1.4.0
 stripe==1.79.1
--e git+https://github.com/nikolaik/django-ldapdb@fix-django2-minimal#egg=ldapdb
