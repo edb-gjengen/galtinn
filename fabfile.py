@@ -77,12 +77,12 @@ def deploy():
 def install():
     with lcd('dusken/static/'):
         local('yarn')
-        local('gulp')
+        local('yarn build')
 
 
 def serve():
     with lcd('dusken/static/'):
-        local('gulp serve')
+        local('yarn gulp serve')
 
 
 def celery():

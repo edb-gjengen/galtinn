@@ -4,6 +4,7 @@ import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import del from 'del';
+import imagemin from 'gulp-imagemin';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -62,7 +63,9 @@ gulp.task('lint', () => {
 
 gulp.task('images', () => {
     return gulp.src('app/images/**/*')
-        .pipe($.cache($.imagemin()))
+        .pipe(imagemin([
+          imagemin.svgo({plugins: [{removeViewBox: false}]})
+        ]))
         .pipe(gulp.dest('dist/images'));
 });
 

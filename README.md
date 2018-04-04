@@ -16,7 +16,7 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     
     # Frontend
     npm install -g gulp-cli
-    fab install  # cd dusken/static && yarn && gulp build
+    fab install  # cd dusken/static && yarn && yarn build
     fab serve
     
     # Celery worker
