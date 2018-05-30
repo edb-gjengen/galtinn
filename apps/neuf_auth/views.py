@@ -26,5 +26,8 @@ class NeufPasswordResetConfirmView(PasswordResetConfirmView):
     def form_valid(self, form):
         form.user.log(message='Password changed via password reset', changed_by=self.user)
 
+        # Mark the e-mail as confirmed since the reset link is sent to the users current email
+        form.user.confirm_email()
+
         messages.success(self.request, '{} 😎'.format(_('Password changed')))
         return super().form_valid(form)
