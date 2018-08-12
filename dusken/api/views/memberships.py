@@ -11,6 +11,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.response import Response
+from stripe.error import InvalidRequestError, CardError
 
 from dusken.api.serializers.memberships import MembershipSerializer
 from dusken.api.serializers.orders import (KassaOrderSerializer,
@@ -126,13 +127,13 @@ class MembershipChargeView(GenericAPIView):
             return stripe.Customer.create(
                 email=stripe_token['email'],
                 card=stripe_token['id'])
-        except stripe.error.InvalidRequestError as e:
+        except InvalidRequestError as e:
             logger.warning('Invalid Stripe request! %s', str(e))
             if settings.DEBUG:
                 raise APIException(e)
 
             raise APIException(_('Stripe charge failed with API error.'))
-        except stripe.error.CardError as e:
+        except CardError as e:
             logger.info('stripe.Customer.create did not succeed: %s', e)
             if settings.DEBUG:
                 raise APIException(e)
@@ -149,13 +150,13 @@ class MembershipChargeView(GenericAPIView):
                 amount=amount,
                 currency=self.CURRENCY,
                 description=description)
-        except stripe.error.InvalidRequestError as e:
+        except InvalidRequestError as e:
             logger.warning('Invalid Stripe request! %s', str(e))
             if settings.DEBUG:
                 raise APIException(e)
 
             raise APIException('Stripe charge failed with API error.')
-        except stripe.error.CardError as e:
+        except CardError as e:
             logger.info('stripe.Charge.create did not succeed: %s', e)
             if settings.DEBUG:
                 raise APIException(e)
@@ -168,7 +169,7 @@ class MembershipChargeView(GenericAPIView):
 
         try:
             return stripe.Customer.retrieve(stripe_customer_id)
-        except stripe.error.InvalidRequestError as e:
+        except InvalidRequestError as e:
             logger.warning('Invalid Stripe request! %s', str(e))
             if settings.DEBUG:
                 raise APIException(e)
