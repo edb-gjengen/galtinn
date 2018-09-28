@@ -99,6 +99,7 @@ class MembershipChargeView(GenericAPIView):
         if request.user.stripe_customer_id:
             # Existing
             customer = self._get_stripe_customer(request.user.stripe_customer_id)
+            self._update_stripe_customer(customer, request.data.get('stripe_token'))
         else:
             # New
             customer = self._create_stripe_customer(request.data.get('stripe_token'))
@@ -135,6 +136,28 @@ class MembershipChargeView(GenericAPIView):
             raise APIException(_('Stripe charge failed with API error.'))
         except CardError as e:
             logger.info('stripe.Customer.create did not succeed: %s', e)
+            if settings.DEBUG:
+                raise APIException(e)
+
+            raise APIException(STRIPE_ERRORS.get(e.code, _('Your card has been declined.')))
+
+    def _update_stripe_customer(self, customer, stripe_token):
+        if settings.TESTING:
+            return InlineClass({'id': 'someid'})
+
+        try:
+            return stripe.Customer.modify(
+                customer.id,
+                email=stripe_token['email'],
+                source=stripe_token['id'])
+        except InvalidRequestError as e:
+            logger.warning('Invalid Stripe request! %s', str(e))
+            if settings.DEBUG:
+                raise APIException(e)
+
+            raise APIException(_('Stripe charge failed with API error.'))
+        except CardError as e:
+            logger.info('stripe.Customer.modify did not succeed: %s', e)
             if settings.DEBUG:
                 raise APIException(e)
 
