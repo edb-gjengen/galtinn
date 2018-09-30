@@ -5,12 +5,12 @@ services:
 
 variables:
   POSTGRES_DB: dusken
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
   CELERY_BROKER_URL: "redis://redis:6379/0"
+  PIPENV_VENV_IN_PROJECT: 1
 
 cache:
   paths:
-    - "$CI_PROJECT_DIR/pip-cache"
+    - "$CI_PROJECT_DIR/.venv"
     - "$CI_PROJECT_DIR/dusken/static/node_modules"
   key: "$CI_PROJECT_ID"
 
@@ -20,11 +20,10 @@ before_script:
   - node -v
   - npm install -g gulp-cli
   - cd dusken/static; yarn && gulp; cd ../..
-  - pip install -r requirements.txt
-  - pip install coverage
+  - pipenv install --sync
 
 test:
   script:
-    - coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* manage.py test -v2
-    - coverage report
+    - pipenv run coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* manage.py test -v2
+    - pipenv coverage report
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'

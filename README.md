@@ -5,11 +5,9 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
 
 ## Install
     sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev libssl-dev ldap-utils redis-server
-    python3 -m venv venv
-    . venv/bin/activate
-    pip install -U pip wheel
-    pip install -r requirements.txt
-    pip install -r requirements-dev.txt
+    # brew install pipenv
+    pipenv shell  # Start a pipenv shell creating a virtual environment.
+    pipenv install
     python manage.py migrate
     python manage.py loaddata testdata
     python manage.py runserver

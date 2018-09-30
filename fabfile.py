@@ -8,7 +8,6 @@ env.use_ssh_config = True
 env.hosts = ['dreamcast.neuf.no']
 env.project_path = '/var/www/neuf.no/dusken'
 env.user = 'gitdeploy'
-env.activate = 'source {}/venv/bin/activate'.format(env.project_path)
 
 LOCALES = ['nb']
 LOCAL_APPS = ['common', 'hooks', 'mailchimp', 'mailman', 'neuf_auth', 'neuf_ldap']
@@ -36,13 +35,6 @@ def _lrun_locale_task(command, limit=None):
             local(run_cmd)
 
 
-@_contextmanager
-def virtualenv():
-    with cd(env.project_path):
-        with prefix(env.activate):
-            yield
-
-
 def makemessages(limit=None):
     _lrun_locale_task('makemessages', limit=limit)
 
@@ -58,15 +50,15 @@ def poedit(app):
 
 
 def deploy():
-    with virtualenv():
+    with cd(env.project_path):
         run('git pull')  # Get source
-        run('pip install -r requirements.txt')  # install deps in virtualenv
+        run('pipenv install')  # install deps in virtualenv
         with cd('dusken/static'):  # install and compile frontend deps
             run('yarn')
             run('gulp')
         with shell_env(DJANGO_SETTINGS_MODULE='duskensite.settings.prod'):
-            run('python manage.py collectstatic --noinput -i node_modules')  # Collect static
-            run('python manage.py migrate')  # Run DB migrations
+            run('umask 022; pipenv run python manage.py collectstatic --noinput -i node_modules')  # Collect static
+            run('pipenv run python manage.py migrate')  # Run DB migrations
 
     # Reload gunicorn
     sudo('/usr/bin/supervisorctl pid galtinn.neuf.no | xargs kill -HUP', shell=False)
