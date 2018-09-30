@@ -52,7 +52,7 @@ def poedit(app):
 def deploy():
     with cd(env.project_path):
         run('git pull')  # Get source
-        run('pipenv install')  # install deps in virtualenv
+        run('pipenv sync')  # install deps in virtualenv
         with cd('dusken/static'):  # install and compile frontend deps
             run('yarn')
             run('gulp')
