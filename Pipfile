@@ -41,6 +41,3 @@ Markdown = "==2.6.11"
 
 [dev-packages]
 codecov = "*"
-
-[requires]
-python_version = "3.6"

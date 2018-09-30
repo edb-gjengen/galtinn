@@ -20,7 +20,7 @@ before_script:
   - node -v
   - npm install -g gulp-cli
   - cd dusken/static; yarn && gulp; cd ../..
-  - pipenv install --sync
+  - pipenv sync --dev
 
 test:
   script:
