@@ -25,5 +25,5 @@ before_script:
 test:
   script:
     - pipenv run coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* manage.py test -v2
-    - pipenv coverage report
+    - pipenv run coverage report
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
