@@ -13,7 +13,6 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     python manage.py runserver
     
     # Frontend
-    npm install -g gulp-cli
     fab install  # cd dusken/static && yarn && yarn build
     fab serve
     

@@ -55,7 +55,7 @@ def deploy():
         run('pipenv sync')  # install deps in virtualenv
         with cd('dusken/static'):  # install and compile frontend deps
             run('yarn')
-            run('gulp')
+            run('yarn build')
         with shell_env(DJANGO_SETTINGS_MODULE='duskensite.settings.prod'):
             run('umask 022; pipenv run python manage.py collectstatic --noinput -i node_modules')  # Collect static
             run('pipenv run python manage.py migrate')  # Run DB migrations
@@ -74,7 +74,7 @@ def install():
 
 def serve():
     with lcd('dusken/static/'):
-        local('yarn gulp serve')
+        local('yarn start')
 
 
 def celery():

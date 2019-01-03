@@ -1,3 +1,7 @@
+import _ from 'lodash';
+import moment from 'moment';
+import Chart from 'chart.js';
+
 const chartColors = {
 	app: 'rgb(255, 99, 132)',
 	cash_register: 'rgb(255, 159, 64)',

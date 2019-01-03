@@ -178,7 +178,7 @@ RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', TEST_PRIVATE_KEY)
 NOCAPTCHA = True
 
 SVG_DIRS = [
-    os.path.join(BASE_DIR, 'dusken/static/dist/images')
+    os.path.join(BASE_DIR, 'dusken/static/app/images')
 ]
 
 # neuf_auth

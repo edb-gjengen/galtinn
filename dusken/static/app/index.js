@@ -1,5 +1,11 @@
-'use strict';
-var urls, csrfToken;
+import $ from 'jquery'
+import 'select2';
+
+import './styles/app.scss'
+
+window.$ = window.jQuery = $;
+
+let urls, csrfToken;
 
 function getCookie(name) {
     var cookieValue = null;
