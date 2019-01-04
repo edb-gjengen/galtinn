@@ -92,98 +92,6 @@ function formatMessage(message, alert) {
         '</div>';
 }
 
-function remove_member(user, orgunit, confirm_text) {
-    if (confirm(confirm_text)) {
-        remove_user(user, orgunit, 'member');
-    }
-}
-
-function remove_admin(user, orgunit) {
-    remove_user(user, orgunit, 'admin');
-}
-
-function remove_user(user, orgunit, type) {
-    $.ajax({
-        url: '/api/orgunit/remove/user/',
-        data: {
-            'user': user,
-            'orgunit': orgunit,
-            'type': type
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.success) {
-                if (type == 'admin') {
-                    location.reload()
-                } else {
-                    $('#user_remove_' + user).parent().parent().slideUp();
-                }
-            } else {
-                alert(response.error);
-            }
-        },
-        error: function () {
-            alert('Failed to contact server');
-        }
-    });
-}
-
-function add_selected_user(orgunit, type) {
-    let user = null;
-    try {
-        user = $('#id_user').select2('data')[0].id;
-    }
-    catch(err) {
-        return
-    }
-    add_user(user, orgunit, type);
-}
-
-function add_user(user, orgunit, type) {
-    $.ajax({
-        url: '/api/orgunit/add/user/',
-        data: {
-            'user': user,
-            'orgunit': orgunit,
-            'type': type
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.success) {
-                location.reload()
-            } else {
-                alert(response.error);
-            }
-        },
-        error: function() {
-            alert('Failed to contact server');
-        }
-    });
-}
-
-function view_user() {
-    let user = null;
-    try {
-        user = $('#id_user').select2('data')[0].id;
-    }
-    catch(err) {
-        return
-    }
-    $.ajax({
-        url: '/api/user/pk/to/uuid/',
-        data: {
-            'user': user,
-        },
-        dataType: 'json',
-        success: function (response) {
-            window.location.href = '/users/' + response.uuid;
-        },
-        error: function() {
-            alert('Failed view user');
-        }
-    });
-}
-
 $(document).ready(function() {
     const $membershipPurchase = $('#membership-purchase-form');
     const $mailchimpSub = $('.js-toggle-mailchimp-subscription');
@@ -304,6 +212,105 @@ $(document).ready(function() {
                  $messages.html(formatMessage('Could not change subscription status, please try again later...', 'danger'));
              });
         })
+    }
+
+    /* View user (from select2 dropdown) */
+    $('.js-view-user').on('click', () => {
+        let user = null;
+        try {
+            user = $('#id_user').select2('data')[0].id;
+        }
+        catch(err) {
+            return
+        }
+        $.ajax({
+            url: '/api/user/pk/to/uuid/',
+            data: {
+                'user': user,
+            },
+            dataType: 'json',
+            success: function (response) {
+                window.location.href = '/users/' + response.uuid;
+            },
+            error: function() {
+                alert('Failed view user');
+            }
+        });
+    });
+
+    /* Orgunit: Add member */
+    $('.js-orgunit-add-member').on('click', (e) => {
+        const orgunit = $(e.target).data('orgunitSlug');
+        const type = $(e.target).data('orgunitAction');
+        let user = $(e.target).data('userId');
+
+        if (!user) {
+            try {
+                user = $('#id_user').select2('data')[0].id;
+            }
+            catch(err) {
+                return
+            }
+        }
+
+        $.ajax({
+            url: '/api/orgunit/add/user/',
+            data: {
+                'user': user,
+                'orgunit': orgunit,
+                'type': type
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    location.reload()
+                } else {
+                    alert(response.error);
+                }
+            },
+            error: function() {
+                alert('Failed to contact server');
+            }
+        });
+    });
+
+    /* Orgunit: Remove member */
+    // TODO: you are here
+    function remove_user(user, orgunit, type) {
+        $.ajax({
+            url: '/api/orgunit/remove/user/',
+            data: {
+                'user': user,
+                'orgunit': orgunit,
+                'type': type
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    if (type === 'admin') {
+                        location.reload()
+                    } else {
+                        $('#user_remove_' + user).parent().parent().slideUp();
+                    }
+                } else {
+                    alert(response.error);
+                }
+            },
+            error: function () {
+                alert('Failed to contact server');
+            }
+        });
+    }
+
+
+    function remove_member(user, orgunit, confirm_text) {
+        if (confirm(confirm_text)) {
+            remove_user(user, orgunit, 'member');
+        }
+    }
+
+    function remove_admin(user, orgunit) {
+        remove_user(user, orgunit, 'admin');
     }
 
 });
