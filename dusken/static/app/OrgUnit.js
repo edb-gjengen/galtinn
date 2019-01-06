@@ -8,7 +8,6 @@ $(document).ready(function() {
         const type = $el.data('orgunitAction');
         let user = $el.data('userId');
 
-        console.log(orgunit, type, user);
         if (!user) {
             try {
                 user = $('#id_user').select2('data')[0].id;
