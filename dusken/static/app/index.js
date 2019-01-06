@@ -1,9 +1,12 @@
 import $ from 'jquery'
+window.$ = window.jQuery = $;
+
 import 'select2';
+
+import './OrgUnit';
 
 import './styles/app.scss'
 
-window.$ = window.jQuery = $;
 
 let urls, csrfToken;
 
@@ -237,80 +240,4 @@ $(document).ready(function() {
             }
         });
     });
-
-    /* Orgunit: Add member */
-    $('.js-orgunit-add-member').on('click', (e) => {
-        const orgunit = $(e.target).data('orgunitSlug');
-        const type = $(e.target).data('orgunitAction');
-        let user = $(e.target).data('userId');
-
-        if (!user) {
-            try {
-                user = $('#id_user').select2('data')[0].id;
-            }
-            catch(err) {
-                return
-            }
-        }
-
-        $.ajax({
-            url: '/api/orgunit/add/user/',
-            data: {
-                'user': user,
-                'orgunit': orgunit,
-                'type': type
-            },
-            dataType: 'json',
-            success: function (response) {
-                if (response.success) {
-                    location.reload()
-                } else {
-                    alert(response.error);
-                }
-            },
-            error: function() {
-                alert('Failed to contact server');
-            }
-        });
-    });
-
-    /* Orgunit: Remove member */
-    // TODO: you are here
-    function remove_user(user, orgunit, type) {
-        $.ajax({
-            url: '/api/orgunit/remove/user/',
-            data: {
-                'user': user,
-                'orgunit': orgunit,
-                'type': type
-            },
-            dataType: 'json',
-            success: function (response) {
-                if (response.success) {
-                    if (type === 'admin') {
-                        location.reload()
-                    } else {
-                        $('#user_remove_' + user).parent().parent().slideUp();
-                    }
-                } else {
-                    alert(response.error);
-                }
-            },
-            error: function () {
-                alert('Failed to contact server');
-            }
-        });
-    }
-
-
-    function remove_member(user, orgunit, confirm_text) {
-        if (confirm(confirm_text)) {
-            remove_user(user, orgunit, 'member');
-        }
-    }
-
-    function remove_admin(user, orgunit) {
-        remove_user(user, orgunit, 'admin');
-    }
-
 });
