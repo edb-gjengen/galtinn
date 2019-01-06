@@ -8,9 +8,9 @@
         {% bootstrap_form user_search %}
         <div>
             {% if orgunit.group != orgunit.admin_group %}
-                <button class="btn btn-primary" onclick="add_selected_user('{{ orgunit.slug }}', 'member');">{% trans "Add member" %}</button>
+                <button class="btn btn-primary js-orgunit-add-member" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="member">{% trans "Add member" %}</button>
             {% endif %}
-            <button class="btn btn-primary" onclick="add_selected_user('{{ orgunit.slug }}', 'admin');">{% trans "Add admin" %}</button>
+            <button class="btn btn-primary js-orgunit-add-member" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="admin">{% trans "Add admin" %}</button>
         </div>
         <br>
         <ul class="list-group" id="user_list">
@@ -30,8 +30,8 @@
                         {% endif %}
                         &ndash; <span title="{% trans "Membership" %}">
                             {% with user.last_membership as ms %}
-                                {% if ms != null %}
-                                    {% if ms.is_valid %}
+                                {% if ms != null %}
+                                    {% if ms.is_valid %}
                                         <span class="badge badge-success">
                                             {% if ms.end_date %}
                                                 {{ ms.end_date }}
@@ -52,17 +52,17 @@
                     <div class="col-xl-2 col-lg-3 col-sm-6">
                         {% if orgunit.group != orgunit.admin_group %}
                             {% if user|has_group:orgunit.admin_group %}
-                                <button class="btn btn-outline-primary btn-block" id="user_remove_{{ user.uuid }}"
-                                        onclick="remove_admin('{{ user.uuid }}', '{{ orgunit.slug }}');">{% trans "Make member" %}</button>
+                                <button class="btn btn-outline-primary btn-block js-orgunit-remove-user" id="user_remove_{{ user.uuid }}"
+                                        data-user-id="{{ user.uuid }}" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="admin">{% trans "Make member" %}</button>
                             {% else %}
-                                <button class="btn btn-outline-primary btn-block" id="user_remove_{{ user.uuid }}"
-                                        onclick="add_user('{{ user.uuid }}', '{{ orgunit.slug }}', 'admin_uuid');">{% trans "Make admin" %}</button>
+                                <button class="btn btn-outline-primary btn-block js-orgunit-add-member" id="user_remove_{{ user.uuid }}"
+                                        data-user-id="{{ user.uuid }}" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="admin_uuid">{% trans "Make admin" %}</button>
                             {% endif %}
                         {% endif %}
                     </div>
                     <div class="col-xl-2 col-lg-2 col-sm-6">
-                        <button class="btn btn-outline-primary btn-block" id="user_remove_{{ user.uuid }}"
-                                onclick="remove_member('{{ user.uuid }}', '{{ orgunit.slug }}', '{% trans "Remove User?" %}');">{% trans "Remove" %}</button>
+                        <button class="btn btn-outline-primary btn-block js-orgunit-remove-user" id="user_remove_{{ user.uuid }}"
+                                data-user-id="{{ user.uuid }}" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="member" data-text-remove-user="{% trans "Remove User?" %}">{% trans "Remove" %}</button>
                     </div>
                     </div>
                 </li>

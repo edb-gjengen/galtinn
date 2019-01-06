@@ -15,11 +15,10 @@ cache:
   key: "$CI_PROJECT_ID"
 
 before_script:
-  - apt update && apt install libsasl2-dev libldap2-dev -y
+  - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
   - python -V
   - node -v
-  - npm install -g gulp-cli
-  - cd dusken/static; yarn && gulp; cd ../..
+  - cd dusken/static; yarn && yarn build; cd ../..
   - pipenv sync --dev
 
 test:

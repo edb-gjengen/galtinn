@@ -2,7 +2,7 @@ $icon-font-path: '../fonts/';
 
 $brand-primary: #0277bd;
 
-@import "bootstrap";
+@import "~bootstrap/scss/bootstrap";
 
 $color-orange: #f58220;
 $grid-max-width: 1140px;

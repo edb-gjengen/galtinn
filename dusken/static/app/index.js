@@ -1,5 +1,14 @@
-'use strict';
-var urls, csrfToken;
+import $ from 'jquery'
+window.$ = window.jQuery = $;
+
+import 'select2';
+
+import './OrgUnit';
+
+import './styles/app.scss'
+
+
+let urls, csrfToken;
 
 function getCookie(name) {
     var cookieValue = null;
@@ -84,98 +93,6 @@ function formatMessage(message, alert) {
        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
         message +
         '</div>';
-}
-
-function remove_member(user, orgunit, confirm_text) {
-    if (confirm(confirm_text)) {
-        remove_user(user, orgunit, 'member');
-    }
-}
-
-function remove_admin(user, orgunit) {
-    remove_user(user, orgunit, 'admin');
-}
-
-function remove_user(user, orgunit, type) {
-    $.ajax({
-        url: '/api/orgunit/remove/user/',
-        data: {
-            'user': user,
-            'orgunit': orgunit,
-            'type': type
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.success) {
-                if (type == 'admin') {
-                    location.reload()
-                } else {
-                    $('#user_remove_' + user).parent().parent().slideUp();
-                }
-            } else {
-                alert(response.error);
-            }
-        },
-        error: function () {
-            alert('Failed to contact server');
-        }
-    });
-}
-
-function add_selected_user(orgunit, type) {
-    let user = null;
-    try {
-        user = $('#id_user').select2('data')[0].id;
-    }
-    catch(err) {
-        return
-    }
-    add_user(user, orgunit, type);
-}
-
-function add_user(user, orgunit, type) {
-    $.ajax({
-        url: '/api/orgunit/add/user/',
-        data: {
-            'user': user,
-            'orgunit': orgunit,
-            'type': type
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.success) {
-                location.reload()
-            } else {
-                alert(response.error);
-            }
-        },
-        error: function() {
-            alert('Failed to contact server');
-        }
-    });
-}
-
-function view_user() {
-    let user = null;
-    try {
-        user = $('#id_user').select2('data')[0].id;
-    }
-    catch(err) {
-        return
-    }
-    $.ajax({
-        url: '/api/user/pk/to/uuid/',
-        data: {
-            'user': user,
-        },
-        dataType: 'json',
-        success: function (response) {
-            window.location.href = '/users/' + response.uuid;
-        },
-        error: function() {
-            alert('Failed view user');
-        }
-    });
 }
 
 $(document).ready(function() {
@@ -300,4 +217,27 @@ $(document).ready(function() {
         })
     }
 
+    /* View user (from select2 dropdown) */
+    $('.js-view-user').on('click', () => {
+        let user = null;
+        try {
+            user = $('#id_user').select2('data')[0].id;
+        }
+        catch(err) {
+            return
+        }
+        $.ajax({
+            url: '/api/user/pk/to/uuid/',
+            data: {
+                'user': user,
+            },
+            dataType: 'json',
+            success: function (response) {
+                window.location.href = '/users/' + response.uuid;
+            },
+            error: function() {
+                alert('Failed view user');
+            }
+        });
+    });
 });
