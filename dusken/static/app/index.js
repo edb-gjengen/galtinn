@@ -3,6 +3,9 @@ window.$ = window.jQuery = $;
 
 import 'select2';
 
+import 'bootstrap/js/dist/util';
+import 'bootstrap/js/dist/collapse';
+
 import './OrgUnit';
 
 import './styles/app.scss'
