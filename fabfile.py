@@ -1,7 +1,6 @@
 import os
-from contextlib import contextmanager as _contextmanager
 
-from fabric.api import run, sudo, env, cd, prefix, lcd, local
+from fabric.api import run, sudo, env, cd, lcd, local
 from fabric.context_managers import shell_env
 
 env.use_ssh_config = True
@@ -52,7 +51,8 @@ def poedit(app):
 def deploy():
     with cd(env.project_path):
         run('git pull')  # Get source
-        run('pipenv sync')  # install deps in virtualenv
+        with shell_env(PIPENV_NOSPIN='1'):
+            run('pipenv sync')  # install deps in virtualenv
         with cd('dusken/static'):  # install and compile frontend deps
             run('yarn')
             run('yarn build')
