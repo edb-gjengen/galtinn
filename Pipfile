@@ -34,7 +34,7 @@ requests = ">=2.20.0"
 stripe = "==2.4.0"
 "argon2_cffi" = "==18.1.0"
 "Django-Select2" = "==6.3.1"
-Django = "==2.0.10"
+Django = "==2.0.13"
 "Fabric3" = "*"
 Markdown = "==2.6.11"
 
