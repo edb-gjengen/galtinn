@@ -41,3 +41,6 @@ Markdown = "==2.6.11"
 [dev-packages]
 codecov = "*"
 requests-mock = "*"
+
+[requires]
+python_version = "3.6"
