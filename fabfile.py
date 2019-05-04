@@ -79,3 +79,6 @@ def serve():
 
 def celery():
     local('DJANGO_SETTINGS_MODULE=duskensite.settings.dev celery -B -A duskensite worker')
+
+def redis():
+    local('docker run -p 6379:6379 redis')

@@ -17,6 +17,7 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     fab serve
     
     # Celery worker
+    fab redis
     fab celery
 
     # Add Stripe keys in duskensite/local_settings.py
@@ -26,7 +27,7 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     # As: RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY
 
 
-### Useful local_settings.py
+### Useful kindly/settings/local.py
 
     AUTH_PASSWORD_VALIDATORS = []
 
