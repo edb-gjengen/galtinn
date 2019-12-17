@@ -223,6 +223,12 @@ class Membership(BaseModel):
             return False
         return self.end_date < (timezone.now().date() + timedelta(days=30))
 
+    @property
+    def expires_in_less_than_one_year(self):
+        if not self.end_date:
+            return False
+        return self.end_date < (timezone.now().date() + timedelta(days=365))
+
     def __str__(self):
         name = self.__class__.__name__
         if self.end_date is None:

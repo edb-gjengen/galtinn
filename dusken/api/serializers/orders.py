@@ -47,9 +47,9 @@ class BaseMembershipOrder:
         if user.is_lifelong_member:
             raise ValidationError('Cannot renew a lifelong membership')
         elif user.is_member:
-            if not user.last_membership.expires_in_less_than_one_month:
+            if not user.last_membership.expires_in_less_than_one_year:
                 raise ValidationError(
-                    'Cannot renew a membership that expires in more than one month')
+                   'Cannot renew a membership that expires in more than one year')
 
 
 class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
@@ -122,9 +122,9 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
             self._validate_user_can_renew(user)
         else:
             last_order = Order.objects.unclaimed(phone_number, member_card).first()
-            if last_order and not last_order.product.expires_in_less_than_one_month:
+            if last_order and not last_order.product.expires_in_less_than_one_year:
                 raise ValidationError(
-                    'Cannot renew a membership that expires in more than one month')
+                    'Cannot renew a membership that expires in more than one year')
         return data
 
     def create(self, validated_data, **kwargs):
