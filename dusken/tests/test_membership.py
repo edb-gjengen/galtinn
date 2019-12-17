@@ -240,10 +240,10 @@ class KassaMembershipTest(APITestCase):
         response = self.client.post(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
 
-    def test_kassa_cannot_renew_if_expires_in_more_than_one_month(self):
+    def test_kassa_cannot_renew_if_expires_in_more_than_one_year(self):
         Membership.objects.create(
             start_date=datetime.date.today(),
-            end_date=datetime.date.today() + datetime.timedelta(days=31),
+            end_date=datetime.date.today() + datetime.timedelta(days=370),
             membership_type=self.membership_type,
             user=self.user)
         url = reverse('kassa-membership')
