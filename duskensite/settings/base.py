@@ -4,7 +4,6 @@
 import os
 import sys
 
-from captcha.constants import TEST_PUBLIC_KEY, TEST_PRIVATE_KEY
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
@@ -29,7 +28,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
-    'raven.contrib.django.raven_compat',
     'rest_framework',
     'rest_framework.authtoken',
     'mptt',
@@ -172,9 +170,14 @@ PHONENUMBER_DEFAULT_REGION = 'NO'
 TEKSTMELDING_API_URL = 'https://tekstmelding.neuf.no/'
 TEKSTMELDING_API_KEY = os.getenv('TEKSTMELDING_API_KEY', '')
 
+# Fallback keys from # from captcha.constants import TEST_PUBLIC_KEY, TEST_PRIVATE_KEY
+TEST_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
 RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', TEST_PUBLIC_KEY)
+TEST_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', TEST_PRIVATE_KEY)
 NOCAPTCHA = True
+
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error'] if RECAPTCHA_PUBLIC_KEY == TEST_PUBLIC_KEY else []
 
 SVG_DIRS = [
     os.path.join(BASE_DIR, 'dusken/static/app/images')
@@ -248,7 +251,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'root': {
         'level': 'INFO',
-        'handlers': ['console', 'sentry'],
+        'handlers': ['console'],
     },
     'formatters': {
         'verbose': {
@@ -256,10 +259,6 @@ LOGGING = {
         },
     },
     'handlers': {
-        'sentry': {
-            'level': 'WARNING',
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -269,16 +268,6 @@ LOGGING = {
     'loggers': {
         'django.db.backends': {
             'level': 'ERROR',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'raven': {
-            'level': 'WARNING',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'sentry.errors': {
-            'level': 'WARNING',
             'handlers': ['console'],
             'propagate': False,
         },

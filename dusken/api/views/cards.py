@@ -24,7 +24,7 @@ class MemberCardViewSet(viewsets.ModelViewSet):
     queryset = MemberCard.objects.all().order_by('pk')
     serializer_class = MemberCardSerializer
     filter_backends = (DjangoFilterBackend, )
-    filter_class = MemberCardFilter
+    filterset_class = MemberCardFilter
     lookup_field = 'card_number'
 
     def get_queryset(self):
@@ -38,7 +38,7 @@ class KassaMemberCardUpdateView(UpdateAPIView):
     permission_classes = (DjangoModelPermissions, )
     serializer_class = KassaMemberCardUpdateSerializer
 
-    def patch(self, request):
+    def patch(self, request, *args, **kwargs):
         # Validate
         serializer = self.serializer_class(data=self.request.data)
         serializer.is_valid(raise_exception=True)

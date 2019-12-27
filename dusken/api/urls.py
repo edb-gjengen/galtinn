@@ -16,10 +16,10 @@ from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.orgunits import remove_user, add_user
 
 router = DefaultRouter()
-router.register(r'users', DuskenUserViewSet, base_name='user-api')
-router.register(r'cards', MemberCardViewSet, base_name='membercard-api')
-router.register(r'memberships', MembershipViewSet, base_name='membership-api')
-router.register(r'orders', OrderViewSet, base_name='order-api')
+router.register(r'users', DuskenUserViewSet, basename='user-api')
+router.register(r'cards', MemberCardViewSet, basename='membercard-api')
+router.register(r'memberships', MembershipViewSet, basename='membership-api')
+router.register(r'orders', OrderViewSet, basename='order-api')
 urlpatterns = router.urls
 
 urlpatterns += [

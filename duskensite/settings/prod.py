@@ -1,8 +1,10 @@
 import dj_database_url
-import os
-import logging
-import raven
+import sentry_sdk
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
+from dusken.fetch_git_sha import fetch_git_sha, InvalidGitRepository
 from .base import *
 
 DATABASES['default'] = dj_database_url.config(conn_max_age=600)
@@ -23,14 +25,17 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') if os.getenv('ALLOWED_HOST
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Sentry
-RAVEN_CONFIG = {
-    'dsn': os.getenv('SENTRY_DSN'),
-    'release': raven.fetch_git_sha(BASE_DIR),
-    'CELERY_LOGLEVEL': logging.WARNING,
-    'environment': os.getenv('SENTRY_ENVIRONMENT', 'production')
-}
+try:
+    release = fetch_git_sha(BASE_DIR)
+except InvalidGitRepository:
+    release = "N/A"
 
-MIDDLEWARE.insert(0, 'raven.contrib.django.middleware.SentryResponseErrorIdMiddleware')
+sentry_sdk.init(
+    dsn=os.getenv('SENTRY_DSN'),
+    environment=os.getenv('SENTRY_ENVIRONMENT', 'production'),
+    release=release,
+    integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()]
+)
 
 # Cache (redis)
 CACHES = {

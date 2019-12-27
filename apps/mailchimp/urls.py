@@ -6,7 +6,7 @@ from .views import MailChimpIncoming, MailChimpSubscriptionViewSet
 app_name = 'mailchimp'
 
 router = routers.SimpleRouter()
-router.register(r'subscriptions', MailChimpSubscriptionViewSet, base_name='subscription')
+router.register(r'subscriptions', MailChimpSubscriptionViewSet, basename='subscription')
 urlpatterns = router.urls
 
 urlpatterns += [

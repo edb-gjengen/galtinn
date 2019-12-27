@@ -7,7 +7,7 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev libssl-dev ldap-utils redis-server
     # brew install pipenv
     pipenv shell  # Start a pipenv shell creating a virtual environment.
-    pipenv install
+    pipenv install --dev
     python manage.py migrate
     python manage.py loaddata testdata
     python manage.py runserver
@@ -27,12 +27,13 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
     # As: RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY
 
 
-### Useful kindly/settings/local.py
+### Useful duskensite/settings/local.py
 
     AUTH_PASSWORD_VALIDATORS = []
 
 ### Tests
 
+    # Make sure redis is running using `fab redis`
     python manage.py test
     # Run this for testing import from Inside (legacy)
     python manage.py test --testrunner apps.inside.tests.NoDbTestRunner apps.inside
@@ -54,7 +55,7 @@ Use this VISA card for testing: 4242 4242 4242 4242
     # Add testdata
     ldapadd -D "cn=admin,dc=neuf,dc=no" -w "toor" -f apps/neuf_ldap/tests/testdata.ldif  # Testdata
 
-    # Configure our LDAP database like so in local_settings.py:
+    # Configure our LDAP database like so in duskensite/settings/local.py:
     'ldap': {
         'ENGINE': 'ldapdb.backends.ldap',
         'NAME': 'ldap://localhost/',

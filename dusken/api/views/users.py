@@ -27,7 +27,7 @@ class DuskenUserViewSet(viewsets.ModelViewSet):
     queryset = DuskenUser.objects.all().order_by('id')
     serializer_class = DuskenUserSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, )
-    filter_class = DuskenUserFilter
+    filterset_class = DuskenUserFilter
     search_fields = ('first_name', 'last_name', 'email', 'member_cards__card_number', 'phone_number')
     lookup_field = 'id'
 

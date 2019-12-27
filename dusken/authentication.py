@@ -1,9 +1,8 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.backends import ModelBackend
 from django.utils.translation import ugettext as _
 from rest_framework import exceptions
 from rest_framework.authentication import BasicAuthentication
-from rest_framework.compat import authenticate
 
 UserModel = get_user_model()
 
