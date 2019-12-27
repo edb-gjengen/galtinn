@@ -1,4 +1,4 @@
-{% load static i18n raven flatpages google_analytics %}
+{% load static i18n flatpages google_analytics %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,8 +28,10 @@
 
     {% include "footer.html" %}
 
-    <script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
-    <script>Raven.config('{% sentry_public_dsn 'https' %}').install()</script>
+    {% if SENTRY_DSN %}
+        <script src="https://browser.sentry-cdn.com/5.10.2/bundle.min.js" integrity="sha384-ssBfXiBvlVC7bdA/VX03S88B5MwXQWdnpJRbUYFPgswlOBwETwTp6F3SMUNpo9M9" crossorigin="anonymous"></script>
+        <script>Sentry.init({ dsn: '{{ SENTRY_DSN }}', environment: '{{ SENTRY_ENVIRONMENT }}' });</script>
+    {% endif %}
     <script type="text/javascript" src="{% static 'dist/app.js' %}"></script>
     <script type="text/javascript" src="{% static 'django_select2/django_select2.js' %}"></script>
     {% block tailinc %}{% endblock %}

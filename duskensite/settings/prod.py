@@ -30,9 +30,11 @@ try:
 except InvalidGitRepository:
     release = "N/A"
 
+SENTRY_DSN = os.getenv('SENTRY_DSN', 'https://0f0067c4548445a6867a471e2b69a419@sentry.neuf.no/2')
+SENTRY_ENVIRONMENT = os.getenv('SENTRY_ENVIRONMENT', 'production')
 sentry_sdk.init(
-    dsn=os.getenv('SENTRY_DSN'),
-    environment=os.getenv('SENTRY_ENVIRONMENT', 'production'),
+    dsn=SENTRY_DSN,
+    environment=SENTRY_ENVIRONMENT,
     release=release,
     integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()]
 )
