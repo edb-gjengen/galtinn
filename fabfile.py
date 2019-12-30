@@ -1,11 +1,8 @@
 import os
-from pprint import pprint
 
-from fabric import task
+from fabric import Connection
+from invoke import task
 
-my_hosts = ['dreamcast.neuf.no']
-project_path = '/var/www/neuf.no/dusken'
-# env.user = 'gitdeploy'
 
 LOCALES = ['nb']
 LOCAL_APPS = ['common', 'hooks', 'mailchimp', 'mailman', 'neuf_auth', 'neuf_ldap']
@@ -48,23 +45,17 @@ def poedit(c, app):
     c.run('poedit {}'.format(po_path))
 
 
-DJANGO_SETTINGS_MODULE = 'duskensite.settings.prod'
-
-
-@task(hosts=my_hosts)
+@task()
 def deploy(c):
     """
-    Deploy galtinn
+    Deploy galtinn.
 
-    Needs the following in ~/.ssh/config:
-
-    Host dreamcast.neuf.no
-        User gitdeploy
-        ForwardAgent yes
-        ProxyCommand ssh -W %h:%p login.neuf.no -l <username>
-
+    Make sure proxy_user is set to your neuf username.
     """
-    django_env = {'DJANGO_SETTINGS_MODULE': DJANGO_SETTINGS_MODULE}
+    proxy_user = os.getenv('DEPLOY_USER', os.getenv('USER'))
+    c = Connection(host='gitdeploy@dreamcast.neuf.no', gateway=Connection('login.neuf.no', user=proxy_user))
+    django_env = {'DJANGO_SETTINGS_MODULE': 'duskensite.settings.prod'}
+    project_path = '/var/www/neuf.no/dusken'
 
     with c.cd(project_path):
         c.run('git pull')  # Get source
