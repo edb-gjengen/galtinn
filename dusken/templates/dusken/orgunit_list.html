@@ -22,12 +22,12 @@
                                 {% if user|has_admin_group:org.admin_group %}
                                     <div class="btn-group">
                                         <!-- Actions -->
-                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ org.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             {% trans "Actions" %}
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="{% url "orgunit-edit-users" org.slug %}">{% svg "icons/users" %} {% trans "Manage members" %}</a>
-                                                <a class="dropdown-item" href="{% url "orgunit-edit" org.slug %}">{% svg "icons/pencil" %} {% trans "Edit" %}</a>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ org.pk }}">
+                                            <a class="dropdown-item" href="{% url "orgunit-edit-users" org.slug %}">{% svg "icons/users" %} {% trans "Manage members" %}</a>
+                                            <a class="dropdown-item" href="{% url "orgunit-edit" org.slug %}">{% svg "icons/pencil" %} {% trans "Edit" %}</a>
                                         </div>
                                     </div>
                                 {% endif %}

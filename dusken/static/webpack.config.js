@@ -82,9 +82,11 @@ module.exports = (env, argv) => {
             },
             require.resolve('postcss-loader'),
               {loader: require.resolve('sass-loader'),
-                  options: {
-                  precision: 8,
-                  }
+                options: {
+                  sassOptions: {
+                    precision: 8
+                  },
+                }
               }
           ],
         },
