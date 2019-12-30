@@ -56,7 +56,7 @@ class DuskenUserAPITestCase(APITestCase):
     def test_user_can_register(self):
         data = {
             'email': 'appuser@example.com',
-            'password': 'mypassword',
+            'password': 'myuncommonpassword',
             'first_name': 'yo',
             'last_name': 'lo',
             'phone_number': '48105885'
