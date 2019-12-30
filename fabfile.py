@@ -62,8 +62,8 @@ def deploy(c):
         c.run('source ~/.profile && pipenv sync', env={'PIPENV_NOSPIN': '1'})  # install deps in virtualenv
 
         with c.cd('dusken/static'):  # install and compile frontend deps
-            c.run('yarn')
-            c.run('yarn build')
+            c.run('npm i')
+            c.run('npm run build')
 
         # Collect static
         c.run(
@@ -82,14 +82,14 @@ def deploy(c):
 @task
 def install(c):
     local_static_path = 'dusken/static/'
-    c.run(f'cd {local_static_path} && yarn')
-    c.run(f'cd {local_static_path} && yarn build')
+    c.run(f'cd {local_static_path} && npm i')
+    c.run(f'cd {local_static_path} && npm run build')
 
 
 @task
 def serve(c):
     local_static_path = 'dusken/static/'
-    c.run(f'cd {local_static_path} && yarn start')
+    c.run(f'cd {local_static_path} && npm start')
 
 
 @task
