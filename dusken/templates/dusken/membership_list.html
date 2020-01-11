@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n svg %}
+{% block preinc %}<script src="https://checkout.stripe.com/checkout.js"></script>{% endblock %}
 {% block nav %}{% include "nav.html" with active='membership-list' %}{% endblock %}
 {% block body %}
     <h2>{% svg "icons/license" %} {% trans "Memberships" %}</h2>

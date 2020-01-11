@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n svg static mobile_app %}
+{% block preinc %}<script src="https://checkout.stripe.com/checkout.js"></script>{% endblock %}
 {% block nav %}{% include "nav.html" with active='home' %}{% endblock %}
 {% block body %}
     <script>
