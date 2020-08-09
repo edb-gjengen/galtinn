@@ -18,7 +18,7 @@ before_script:
   - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
   - python -V
   - node -v
-  - cd dusken/static; yarn && yarn build; cd ../..
+  - cd dusken/static; npm i && npm run build; cd ../..
   - pipenv sync --dev
 
 test:
