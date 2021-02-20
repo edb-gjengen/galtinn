@@ -163,4 +163,4 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('user', 'membership_type', 'phone_number', 'member_card', 'transaction_id')
+        fields = ('id', 'user', 'membership_type', 'phone_number', 'member_card', 'transaction_id')

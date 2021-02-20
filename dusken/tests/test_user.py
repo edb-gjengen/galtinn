@@ -251,8 +251,7 @@ class DuskenUserDelete(TestCase):
 
         response = self.client.post(url, {'confirm_username': self.user.username})
 
-        # FIXME: This segfaults on 3.7.0
-        # self.assertRedirects(response, reverse('index'))
+        self.assertRedirects(response, reverse('index'))
 
         self.assertFalse(DuskenUser.objects.filter(pk=self.user.pk).exists())
         self.assertEqual(DuskenUser.objects.filter(username__in=['mrclean1', 'mrclean2']).count(), 2)

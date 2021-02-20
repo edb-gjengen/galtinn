@@ -213,14 +213,17 @@ class KassaMembershipTest(APITestCase):
             'member_card': None
         }
         response = self.client.post(url, payload, format='json')
+
         expected_start_date = today + datetime.timedelta(days=10+1)
         expected_end_date = expected_start_date + self.membership_type.duration
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
         self.assertEqual(response.data.get('phone_number'), payload.get('phone_number'))
         self.assertEqual(Order.objects.count(), 2)
         self.assertEqual(Membership.objects.count(), 2)
-        self.assertEqual(Membership.objects.get(pk=2).start_date, expected_start_date)
-        self.assertEqual(Membership.objects.get(pk=2).end_date, expected_end_date)
+        new_membership = Order.objects.get(pk=response.data.get('id')).product
+        self.assertEqual(Membership.objects.get(pk=new_membership.pk).start_date, expected_start_date)
+        self.assertEqual(Membership.objects.get(pk=new_membership.pk).end_date, expected_end_date)
 
     def test_kassa_cannot_renew_lifelong(self):
         lifelong_type = MembershipType.objects.create(
