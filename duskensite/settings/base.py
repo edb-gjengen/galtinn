@@ -111,10 +111,10 @@ LANGUAGES = [
     ('en', _('English')),
 ]
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
+# Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend", "dist")]
 
 SITE_ID = 1
 
@@ -181,7 +181,7 @@ NOCAPTCHA = True
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error'] if RECAPTCHA_PUBLIC_KEY == TEST_PUBLIC_KEY else []
 
 SVG_DIRS = [
-    os.path.join(BASE_DIR, 'dusken/static/app/images')
+    os.path.join(BASE_DIR, 'frontend/app/images')
 ]
 
 # neuf_auth
@@ -243,7 +243,7 @@ WP_LOAD_PATHS = [
 
 GRAPHENE = {
     'SCHEMA': 'dusken.api.graphql.schema',
-    'SCHEMA_OUTPUT': 'dusken/static/schema.json',
+    'SCHEMA_OUTPUT': 'frontend/schema.json',
     'SCHEMA_INDENT': 2,
 }
 

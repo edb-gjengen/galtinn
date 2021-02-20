@@ -61,7 +61,7 @@ def deploy(c):
         c.run('git pull')  # Get source
         c.run('source ~/.profile && pipenv sync', env={'PIPENV_NOSPIN': '1'})  # install deps in virtualenv
 
-        with c.cd('dusken/static'):  # install and compile frontend deps
+        with c.cd('frontend'):  # install and compile frontend deps
             c.run('npm i')
             c.run('npm run build')
 
@@ -81,14 +81,14 @@ def deploy(c):
 
 @task
 def install(c):
-    local_static_path = 'dusken/static/'
+    local_static_path = 'frontend/'
     c.run(f'cd {local_static_path} && npm i')
     c.run(f'cd {local_static_path} && npm run build')
 
 
 @task
 def serve(c):
-    local_static_path = 'dusken/static/'
+    local_static_path = 'frontend/'
     c.run(f'cd {local_static_path} && npm start')
 
 
