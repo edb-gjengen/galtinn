@@ -1,4 +1,4 @@
-image: nikolaik/python-nodejs:python3.6-nodejs10
+image: nikolaik/python-nodejs:python3.8-nodejs12
 
 services:
   - redis:latest
