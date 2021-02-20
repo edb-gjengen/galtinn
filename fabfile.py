@@ -67,7 +67,7 @@ def deploy(c):
 
         # Collect static
         c.run(
-            'source ~/.profile && umask 022; pipenv run python manage.py collectstatic --noinput -i node_modules -c',
+            'source ~/.profile && umask 022; DJANGO_SETTINGS_MODULE=duskensite.settings.prod pipenv run python manage.py collectstatic --noinput -i node_modules -c',
             env=django_env
         )
         # Run migrations

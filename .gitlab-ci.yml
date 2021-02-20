@@ -11,14 +11,14 @@ variables:
 cache:
   paths:
     - "$CI_PROJECT_DIR/.venv"
-    - "$CI_PROJECT_DIR/dusken/static/node_modules"
+    - "$CI_PROJECT_DIR/frontend/node_modules"
   key: "$CI_PROJECT_ID"
 
 before_script:
   - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
   - python -V
   - node -v
-  - cd dusken/static; npm i && npm run build; cd ../..
+  - cd frontend; npm i && npm run build; cd ../..
   - pipenv sync --dev
 
 test:

@@ -1,20 +1,14 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
-
-const plugins = (env) => {
-    return env === 'production' ? [
-        new MiniCssExtractPlugin(),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    ] : [
-        new MiniCssExtractPlugin(),
-    ];
-};
+const CopyPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const baseStyleLoader = (env) => env === 'production' ? MiniCssExtractPlugin.loader : require.resolve('style-loader');
 const devtool = (env) => env === 'production' ? 'source-map' : 'cheap-module-eval-source-map';
 
 module.exports = (env, argv) => {
+  const isProduction = env === 'production';
   return {
     entry: {
         app: path.resolve(__dirname, 'app'),
@@ -28,7 +22,18 @@ module.exports = (env, argv) => {
       extensions: ['.jsx', '.js', '.json', '.scss', '.css'],
       modules: ['node_modules'],
     },
-    plugins: plugins(env),
+    plugins: [
+      new MiniCssExtractPlugin(),
+      new CopyPlugin({
+        patterns: [
+          "app/favicon.ico",
+          {from: "app/images", to: "images"},
+          {from: "app/fonts", to: "fonts"},
+        ]
+      }),
+      new CleanWebpackPlugin(),
+      isProduction && new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    ].filter(Boolean),
     devServer: {
       contentBase: path.resolve(__dirname, 'dist'),
       historyApiFallback: true,
