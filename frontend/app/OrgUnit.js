@@ -1,6 +1,6 @@
-import $ from "jquery";
+import $ from 'jquery';
 
-$(document).ready(function() {
+$(document).ready(function () {
     /* Orgunit: Add member */
     $('.js-orgunit-add-member').on('click', (e) => {
         const $el = $(e.target);
@@ -12,28 +12,28 @@ $(document).ready(function() {
             try {
                 user = $('#id_user').select2('data')[0].id;
             } catch (err) {
-                return
+                return;
             }
         }
 
         $.ajax({
             url: '/api/orgunit/add/user/',
             data: {
-                'user': user,
-                'orgunit': orgunit,
-                'type': type
+                user: user,
+                orgunit: orgunit,
+                type: type,
             },
             dataType: 'json',
             success: function (response) {
                 if (response.success) {
-                    location.reload()
+                    location.reload();
                 } else {
                     alert(response.error);
                 }
             },
             error: function () {
                 alert('Failed to contact server');
-            }
+            },
         });
     });
 
@@ -52,9 +52,9 @@ $(document).ready(function() {
         $.ajax({
             url: '/api/orgunit/remove/user/',
             data: {
-                'user': user,
-                'orgunit': orgunit,
-                'type': type
+                user: user,
+                orgunit: orgunit,
+                type: type,
             },
             dataType: 'json',
             success: function (response) {
@@ -62,7 +62,11 @@ $(document).ready(function() {
                     if (type === 'admin') {
                         location.reload();
                     } else {
-                        $('#user_remove_' + user).parent().parent().parent().slideUp();
+                        $('#user_remove_' + user)
+                            .parent()
+                            .parent()
+                            .parent()
+                            .slideUp();
                     }
                 } else {
                     alert(response.error);
@@ -70,7 +74,7 @@ $(document).ready(function() {
             },
             error: function () {
                 alert('Failed to contact server');
-            }
+            },
         });
     });
 });
