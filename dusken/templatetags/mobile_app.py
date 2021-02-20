@@ -14,11 +14,11 @@ def show_app_download(context):
     app_resources = {
         'android': {
             'app_url': 'market://details?id=no.neuf.chateau',
-            'app_image': static('app/images/google_play_{}_badge_web_generic.png'.format(language_code)),
+            'app_image': static('images/google_play_{}_badge_web_generic.png'.format(language_code)),
         },
         'ios': {
             'app_url': 'https://itunes.apple.com/us/app/chateau-neuf/id1262532938?ls=1&mt=8',
-            'app_image': static('app/images/app_store_badge_{}.svg'.format(language_code)),
+            'app_image': static('images/app_store_badge_{}.svg'.format(language_code)),
         },
     }
     os = 'unknown'
