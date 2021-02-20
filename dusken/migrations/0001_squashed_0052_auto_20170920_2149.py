@@ -15,7 +15,6 @@ import django.utils.timezone
 import django_countries.fields
 import dusken.managers
 import dusken.utils
-import jsonfield.fields
 import mptt.fields
 import phonenumber_field.modelfields
 import uuid
@@ -206,11 +205,6 @@ class Migration(migrations.Migration):
             model_name='duskenuser',
             name='username',
             field=models.CharField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=30, unique=True, validators=[django.core.validators.RegexValidator('^[\\w.@+-]+$', 'Enter a valid username. This value may contain only letters, numbers and @/./+/-/_ characters.')], verbose_name='username'),
-        ),
-        migrations.AddField(
-            model_name='membership',
-            name='extra_data',
-            field=jsonfield.fields.JSONField(blank=True, default=dict),
         ),
         migrations.CreateModel(
             name='MemberCard',
@@ -443,10 +437,6 @@ class Migration(migrations.Migration):
             field=models.IntegerField(help_text='Price in øre'),
         ),
         migrations.RemoveField(
-            model_name='membership',
-            name='extra_data',
-        ),
-        migrations.RemoveField(
             model_name='membershiptype',
             name='does_not_expire',
         ),
@@ -454,11 +444,6 @@ class Migration(migrations.Migration):
             model_name='membershiptype',
             name='expiry_type',
             field=models.CharField(choices=[('duration', 'Duration'), ('never', 'Never'), ('end_of_year', 'End of year')], default='duration', max_length=254),
-        ),
-        migrations.AddField(
-            model_name='order',
-            name='extra_data',
-            field=jsonfield.fields.JSONField(blank=True, default=dict, help_text='f.ex phone_number, card_number, one time code, etc'),
         ),
         migrations.AlterField(
             model_name='order',
@@ -605,10 +590,6 @@ class Migration(migrations.Migration):
         migrations.AlterModelOptions(
             name='membercard',
             options={'default_permissions': ('add', 'change', 'delete', 'view'), 'verbose_name': 'Member card'},
-        ),
-        migrations.RemoveField(
-            model_name='order',
-            name='extra_data',
         ),
         migrations.AddField(
             model_name='order',

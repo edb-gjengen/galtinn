@@ -9,7 +9,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext as _
-import dns.resolver
 
 from dusken.tasks import send_mail_task
 
@@ -112,12 +111,3 @@ def email_exists(email):
 def phone_number_exist(phone_number):
     from dusken.models import DuskenUser
     return DuskenUser.objects.filter(phone_number=phone_number).exists()
-
-
-def mx_record_exists(domain):
-    """True if the domain exists and if it has an MX record, False otherwise"""
-    try:
-        dns.resolver.query(domain, 'MX')
-        return True
-    except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
-        return False
