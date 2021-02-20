@@ -1,0 +1,38 @@
+version: '3'
+services:
+    redis:
+        image: redis
+        ports:
+            - 6379:6379
+        volumes:
+            - rdata:/data
+    ldap:
+        image: osixia/openldap:1.5.0
+        ports:
+            - 389:389
+            - 636:636
+        environment:
+            - LDAP_ORGANISATION="Neuf"
+            - LDAP_DOMAIN="neuf.no"
+            - LDAP_ADMIN_PASSWORD="toor"
+        volumes:
+            - ldapdata:/var/lib/ldap
+    postgres:
+        image: postgres:12
+        environment:
+            POSTGRES_DB: dusken
+            POSTGRES_PASSWORD: dusken
+        ports:
+            - 5432:5432
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+
+
+networks:
+    default:
+        driver: bridge
+
+volumes:
+  pgdata:
+  ldapdata:
+  rdata:
