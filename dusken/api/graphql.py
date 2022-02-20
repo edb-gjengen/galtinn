@@ -14,6 +14,7 @@ def convert_stream_field_to_string(field, registry=None):
 
 class MembershipTypeType(DjangoObjectType):
     """MembershipType"""
+
     class Meta:
         model = MembershipType
 
@@ -24,12 +25,13 @@ class DuskenQuery:
     def resolve_membership_types(self, info, is_default=None):
         query = {}
         if is_default is not None:
-            query['is_default'] = is_default
+            query["is_default"] = is_default
         return MembershipType.objects.filter(**query)
 
 
 class Query(DuskenQuery, graphene.ObjectType):
     """This class can inherit from multiple queries if we want add more apps to the project"""
+
     # TODO: Add opening hours and other static app info from a separate app
 
 

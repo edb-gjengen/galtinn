@@ -13,6 +13,7 @@ default:
       - .cache/pip
       - .venv
       - frontend/node_modules
+  # FIXME this is run on all jobs
   before_script:
     - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
     - poetry config virtualenvs.in-project true

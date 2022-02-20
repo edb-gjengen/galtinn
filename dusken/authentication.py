@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.utils.translation import ugettext as _
 from rest_framework import exceptions
@@ -8,10 +8,11 @@ UserModel = get_user_model()
 
 
 class UsernameModelBackend(ModelBackend):
-    """ Lookup user on UserModel.username vs on UserModel.USERNAME_FIELD """
+    """Lookup user on UserModel.username vs on UserModel.USERNAME_FIELD"""
+
     def authenticate(self, request, username=None, password=None, **kwargs):
         if username is None:
-            username = kwargs.get('username')
+            username = kwargs.get("username")
         try:
             user = UserModel.objects.get(username=username)
         except UserModel.DoesNotExist:
@@ -30,15 +31,15 @@ class UsernameBasicAuthentication(BasicAuthentication):
         with optional request for context.
         """
         credentials = {
-            'username': userid,  # Note: Use 'username' keyword, overriding super class behaviour
-            'password': password
+            "username": userid,  # Note: Use 'username' keyword, overriding super class behaviour
+            "password": password,
         }
         user = authenticate(request=request, **credentials)
 
         if user is None:
-            raise exceptions.AuthenticationFailed(_('Invalid username/password.'))
+            raise exceptions.AuthenticationFailed(_("Invalid username/password."))
 
         if not user.is_active:
-            raise exceptions.AuthenticationFailed(_('User inactive or deleted.'))
+            raise exceptions.AuthenticationFailed(_("User inactive or deleted."))
 
         return (user, None)

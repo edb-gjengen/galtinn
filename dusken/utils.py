@@ -1,8 +1,8 @@
+import logging
 import random
 import re
-import requests
-import logging
 
+import requests
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
@@ -16,15 +16,15 @@ logger = logging.getLogger(__name__)
 
 
 def generate_username(first_name, last_name):
-    """ Generate a fairly unique username based on first and last name.
-        Example: nikolakr1234
+    """Generate a fairly unique username based on first and last name.
+    Example: nikolakr1234
     """
-    whitespace_re = re.compile(r'\s')
-    first_name = first_name.encode('ascii', 'ignore').lower()[:6].decode('utf-8')
-    last_name = last_name.encode('ascii', 'ignore').lower()[:2].decode('utf-8')
+    whitespace_re = re.compile(r"\s")
+    first_name = first_name.encode("ascii", "ignore").lower()[:6].decode("utf-8")
+    last_name = last_name.encode("ascii", "ignore").lower()[:2].decode("utf-8")
     random_number = random.randint(1, 9999)
-    username = '{}{}{:04d}'.format(first_name, last_name, random_number)
-    username = whitespace_re.sub('', username)
+    username = "{}{}{:04d}".format(first_name, last_name, random_number)
+    username = whitespace_re.sub("", username)
     return username
 
 
@@ -39,25 +39,22 @@ def send_validation_email(user):
         return
 
     site = Site.objects.get(pk=settings.SITE_ID)
-    url_kwargs = {'slug': str(user.uuid), 'email_key': user.email_key}
+    url_kwargs = {"slug": str(user.uuid), "email_key": user.email_key}
 
     context = {
-        'user': user,
-        'validation_url': 'https://{}{}'.format(site.domain, reverse('user-email-validate', kwargs=url_kwargs)),
-        'site_name': site.name
+        "user": user,
+        "validation_url": "https://{}{}".format(site.domain, reverse("user-email-validate", kwargs=url_kwargs)),
+        "site_name": site.name,
     }
 
-    message = render_to_string('dusken/emails/validation_email.txt', context)
-    html_message = render_to_string('dusken/emails/validation_email.html', context)
+    message = render_to_string("dusken/emails/validation_email.txt", context)
+    html_message = render_to_string("dusken/emails/validation_email.html", context)
 
     from_email = settings.DEFAULT_FROM_EMAIL
 
     send_mail_task.delay(
-        _('Confirm your email address at Chateau Neuf'),
-        from_email,
-        message,
-        [user.email],
-        html_message=html_message)
+        _("Confirm your email address at Chateau Neuf"), from_email, message, [user.email], html_message=html_message
+    )
 
 
 def create_email_key():
@@ -67,20 +64,15 @@ def create_email_key():
 def send_sms(to, message):
     if settings.TESTING:
         return True
-    url = '{}send'.format(settings.TEKSTMELDING_API_URL)
-    payload = {
-        'to': str(to),
-        'message': message
-    }
-    headers = {
-        'Authorization': 'Token ' + settings.TEKSTMELDING_API_KEY
-    }
+    url = "{}send".format(settings.TEKSTMELDING_API_URL)
+    payload = {"to": str(to), "message": message}
+    headers = {"Authorization": "Token " + settings.TEKSTMELDING_API_KEY}
     response = requests.post(url, json=payload, headers=headers)
     if response.status_code != 200:
-        logger.warning('Failed to send SMS, status_code={} payload={}'.format(response.status_code, payload))
+        logger.warning("Failed to send SMS, status_code={} payload={}".format(response.status_code, payload))
         return
 
-    return response.json().get('outgoing_id')
+    return response.json().get("outgoing_id")
 
 
 def send_validation_sms(user):
@@ -93,21 +85,23 @@ def send_validation_sms(user):
         user.phone_number_key = create_phone_key()
         user.save()
 
-    message = _('Confirm your phone number at Chateau Neuf with this code:')
-    message = message + ' ' + user.phone_number_key
+    message = _("Confirm your phone number at Chateau Neuf with this code:")
+    message = message + " " + user.phone_number_key
 
     return send_sms(to=user.phone_number, message=message)
 
 
 def create_phone_key(length=6):
-    return ''.join([random.choice('0123456789') for i in range(length)])
+    return "".join([random.choice("0123456789") for i in range(length)])
 
 
 def email_exists(email):
     from dusken.models import DuskenUser
+
     return DuskenUser.objects.filter(email=email).exists()
 
 
 def phone_number_exist(phone_number):
     from dusken.models import DuskenUser
+
     return DuskenUser.objects.filter(phone_number=phone_number).exists()

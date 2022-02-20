@@ -8,12 +8,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailchimp', '0001_initial'),
+        ("mailchimp", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='mailchimpsubscription',
-            options={'verbose_name': 'mailchimp subscription', 'verbose_name_plural': 'mailchimp subscriptions'},
+            name="mailchimpsubscription",
+            options={"verbose_name": "mailchimp subscription", "verbose_name_plural": "mailchimp subscriptions"},
         ),
     ]

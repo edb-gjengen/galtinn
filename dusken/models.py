@@ -5,10 +5,11 @@ from datetime import timedelta
 from itertools import chain
 
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group as DjangoGroup
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
-from django.contrib.auth.models import Group as DjangoGroup
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -18,8 +19,8 @@ from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.mixins import BaseModel
-from apps.neuf_ldap.utils import ldap_create_password, delete_ldap_user
-from dusken.managers import DuskenUserManager, OrderManager, MembershipManager
+from apps.neuf_ldap.utils import delete_ldap_user, ldap_create_password
+from dusken.managers import DuskenUserManager, MembershipManager, OrderManager
 from dusken.utils import create_email_key, send_validation_email
 
 logger = logging.getLogger(__name__)
@@ -28,32 +29,33 @@ logger = logging.getLogger(__name__)
 class DuskenUser(AbstractUser):
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
-    first_name = models.CharField(_('first name'), max_length=254, blank=True)
-    last_name = models.CharField(_('last name'), max_length=254, blank=True)
-    email = models.EmailField(_('email address'), unique=True)
+    first_name = models.CharField(_("first name"), max_length=254, blank=True)
+    last_name = models.CharField(_("last name"), max_length=254, blank=True)
+    email = models.EmailField(_("email address"), unique=True)
     email_confirmed_at = models.DateTimeField(blank=True, null=True)
     email_key = models.CharField(max_length=40, default=create_email_key)
-    phone_number = PhoneNumberField(_('phone number'), blank=True, default='')
+    phone_number = PhoneNumberField(_("phone number"), blank=True, default="")
     phone_number_key = models.CharField(max_length=40, blank=True, null=True)
     phone_number_confirmed = models.BooleanField(default=False)
     phone_number_confirmed_at = models.DateTimeField(blank=True, null=True)
-    date_of_birth = models.DateField(_('date of birth'), null=True, blank=True)
+    date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
 
     # Address
-    street_address = models.CharField(_('street address'), max_length=255, null=True, blank=True)
-    street_address_two = models.CharField(_('street address 2'), max_length=255, null=True, blank=True)
-    postal_code = models.CharField(_('postal code'), max_length=10, null=True, blank=True)
-    city = models.CharField(_('city'), max_length=100, null=True, blank=True)
-    country = CountryField(_('country'), default='NO', blank=True)
+    street_address = models.CharField(_("street address"), max_length=255, null=True, blank=True)
+    street_address_two = models.CharField(_("street address 2"), max_length=255, null=True, blank=True)
+    postal_code = models.CharField(_("postal code"), max_length=10, null=True, blank=True)
+    city = models.CharField(_("city"), max_length=100, null=True, blank=True)
+    country = CountryField(_("country"), default="NO", blank=True)
 
     place_of_study = models.ForeignKey(
-        'dusken.PlaceOfStudy', models.SET_NULL, verbose_name=_('place of study'), blank=True, null=True)
-    legacy_id = models.IntegerField(_('legacy id'), null=True, blank=True)
+        "dusken.PlaceOfStudy", models.SET_NULL, verbose_name=_("place of study"), blank=True, null=True
+    )
+    legacy_id = models.IntegerField(_("legacy id"), null=True, blank=True)
 
-    stripe_customer_id = models.CharField(_('stripe customer id'), max_length=254, null=True, blank=True)
+    stripe_customer_id = models.CharField(_("stripe customer id"), max_length=254, null=True, blank=True)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
     objects = DuskenUserManager()
 
@@ -75,7 +77,7 @@ class DuskenUser(AbstractUser):
                 self.save()
 
     def get_absolute_url(self):
-        return reverse('user-detail', kwargs={'slug': self.uuid})
+        return reverse("user-detail", kwargs={"slug": self.uuid})
 
     @property
     def active_member_card(self):
@@ -88,6 +90,7 @@ class DuskenUser(AbstractUser):
     @property
     def has_set_username(self):
         from apps.neuf_auth.models import AuthProfile
+
         return AuthProfile.objects.filter(user=self, username_updated__isnull=False).exists()
 
     @property
@@ -96,7 +99,7 @@ class DuskenUser(AbstractUser):
 
     @property
     def is_lifelong_member(self):
-        return bool(self.last_membership and self.last_membership.membership_type.expiry_type == 'never')
+        return bool(self.last_membership and self.last_membership.membership_type.expiry_type == "never")
 
     def has_group(self, group):
         if type(group) is not Group:
@@ -105,7 +108,7 @@ class DuskenUser(AbstractUser):
 
     @property
     def last_membership(self):
-        return self.memberships.order_by('-start_date').first()
+        return self.memberships.order_by("-start_date").first()
 
     @property
     def unclaimed_orders(self):
@@ -133,7 +136,7 @@ class DuskenUser(AbstractUser):
         super().save(**kwargs)
 
     def delete(self, **kwargs):
-        logger.info('Deleting user with username {}'.format(self.username))
+        logger.info("Deleting user with username {}".format(self.username))
         # Before deleting, remove phone number from user orders to prevent leaking related user data
         # with a recycled phone number (ie. membership and order data).
         self.orders.update(phone_number=None)
@@ -145,6 +148,7 @@ class DuskenUser(AbstractUser):
 
     def set_ldap_hash(self, raw_password):
         from apps.neuf_auth.models import AuthProfile
+
         ap, _ = AuthProfile.objects.get_or_create(user=self)
         ap.ldap_password = ldap_create_password(raw_password)
         ap.save()
@@ -176,38 +180,34 @@ class DuskenUser(AbstractUser):
 
     def get_full_address(self):
         address_part = [str(self.street_address), str(self.street_address_two)]
-        address_part = ' '.join(x for x in address_part if x != 'None')
+        address_part = " ".join(x for x in address_part if x != "None")
         zip_code_part = [str(self.postal_code), str(self.city)]
-        zip_code_part = ' '.join(x for x in zip_code_part if x != 'None')
-        country = self.country.name if self.country else ''
+        zip_code_part = " ".join(x for x in zip_code_part if x != "None")
+        country = self.country.name if self.country else ""
 
-        return '{}{}, {}'.format(address_part + ', ' if address_part else '', zip_code_part, country)
+        return "{}{}, {}".format(address_part + ", " if address_part else "", zip_code_part, country)
 
     def have_address(self):
-        return any((self.street_address,
-                   self.street_address_two,
-                   self.postal_code,
-                   self.city))
+        return any((self.street_address, self.street_address_two, self.postal_code, self.city))
 
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:
-            return '{first} {last} ({username})'.format(
-                first=self.first_name,
-                last=self.last_name,
-                username=self.username)
+            return "{first} {last} ({username})".format(
+                first=self.first_name, last=self.last_name, username=self.username
+            )
         return "{username}".format(username=self.username)
 
     class Meta:
-        verbose_name = _('User')
-        verbose_name_plural = _('Users')
-        default_permissions = ('add', 'change', 'delete', 'view')
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+        default_permissions = ("add", "change", "delete", "view")
 
 
 class Membership(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
-    membership_type = models.ForeignKey('dusken.MembershipType', models.CASCADE)
-    user = models.ForeignKey('dusken.DuskenUser', models.SET_NULL, null=True, blank=True, related_name='memberships')
+    membership_type = models.ForeignKey("dusken.MembershipType", models.CASCADE)
+    user = models.ForeignKey("dusken.DuskenUser", models.SET_NULL, null=True, blank=True, related_name="memberships")
 
     objects = MembershipManager()
 
@@ -232,38 +232,39 @@ class Membership(BaseModel):
     def __str__(self):
         name = self.__class__.__name__
         if self.end_date is None:
-            return '{}: Life long'.format(name)
-        end_date = ' - {}'.format(self.end_date) if self.end_date is not None else 'N/A'
+            return "{}: Life long".format(name)
+        end_date = " - {}".format(self.end_date) if self.end_date is not None else "N/A"
         return "{}: {}{}".format(name, self.start_date, end_date)
 
     class Meta:
-        verbose_name = _('Membership')
-        verbose_name_plural = _('Memberships')
-        default_permissions = ('add', 'change', 'delete', 'view')
+        verbose_name = _("Membership")
+        verbose_name_plural = _("Memberships")
+        default_permissions = ("add", "change", "delete", "view")
 
 
 class MembershipType(BaseModel):
-    """ Type of membership
+    """Type of membership
 
     A membership expires in different ways
      - EXPIRY_DURATION: Expires after n time has past, specified by the duration field
      - EXPIRY_NEVER: Never expires
      - EXPIRY_END_OF_YEAR: Expiry is set to the first day of the year after the current year
     """
-    EXPIRY_DURATION = 'duration'
-    EXPIRY_NEVER = 'never'
-    EXPIRY_END_OF_YEAR = 'end_of_year'
+
+    EXPIRY_DURATION = "duration"
+    EXPIRY_NEVER = "never"
+    EXPIRY_END_OF_YEAR = "end_of_year"
     EXPIRY_TYPES = (
-        (EXPIRY_DURATION, _('Duration')),
-        (EXPIRY_NEVER, _('Never')),
-        (EXPIRY_END_OF_YEAR, _('End of year')),
+        (EXPIRY_DURATION, _("Duration")),
+        (EXPIRY_NEVER, _("Never")),
+        (EXPIRY_END_OF_YEAR, _("End of year")),
     )
 
     name = models.CharField(max_length=254)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
-    price = models.IntegerField(default=0, help_text=_('Price in øre'))
+    price = models.IntegerField(default=0, help_text=_("Price in øre"))
     is_default = models.BooleanField(default=False)
     duration = models.DurationField(default=timedelta(days=365), null=True, blank=True)
     expiry_type = models.CharField(max_length=254, choices=EXPIRY_TYPES, default=EXPIRY_DURATION)
@@ -299,21 +300,22 @@ class MembershipType(BaseModel):
         try:
             return cls.objects.get(is_default=True)
         except cls.DoesNotExist:
-            raise ImproperlyConfigured('Error: At least one MembershipType must have is_default set')
+            raise ImproperlyConfigured("Error: At least one MembershipType must have is_default set")
         except cls.MultipleObjectsReturned:
-            raise ImproperlyConfigured('Error: Only one MembershipType can have is_default set')
+            raise ImproperlyConfigured("Error: Only one MembershipType can have is_default set")
 
     class Meta:
-        verbose_name = _('Membership type')
-        verbose_name_plural = _('Membership types')
+        verbose_name = _("Membership type")
+        verbose_name_plural = _("Membership types")
 
 
 class MemberCard(BaseModel):
-    card_number = models.IntegerField(_('card number'), unique=True)
-    registered = models.DateTimeField(_('registered'), null=True, blank=True)
-    is_active = models.BooleanField(_('is active'), default=True)
-    user = models.ForeignKey('dusken.DuskenUser', models.SET_NULL, verbose_name=_('user'), null=True, blank=True,
-                             related_name='member_cards')
+    card_number = models.IntegerField(_("card number"), unique=True)
+    registered = models.DateTimeField(_("registered"), null=True, blank=True)
+    is_active = models.BooleanField(_("is active"), default=True)
+    user = models.ForeignKey(
+        "dusken.DuskenUser", models.SET_NULL, verbose_name=_("user"), null=True, blank=True, related_name="member_cards"
+    )
 
     def register(self, user=None, order=None):
         assert not (user and order)
@@ -333,33 +335,33 @@ class MemberCard(BaseModel):
         return "{}".format(self.card_number)
 
     class Meta:
-        verbose_name = _('Member card')
-        verbose_name_plural = _('Member cards')
-        default_permissions = ('add', 'change', 'delete', 'view')
+        verbose_name = _("Member card")
+        verbose_name_plural = _("Member cards")
+        default_permissions = ("add", "change", "delete", "view")
 
 
 class GroupProfile(BaseModel):
     """
     django.contrib.auth.model.Group extended with additional fields.
     """
-    TYPE_VOLUNTEERS = 'volunteers'
-    TYPE_STANDARD = ''
 
-    TYPES = (
-        (TYPE_VOLUNTEERS, _('Volunteers')),
-        (TYPE_STANDARD, _('Standard'))
-    )
+    TYPE_VOLUNTEERS = "volunteers"
+    TYPE_STANDARD = ""
+
+    TYPES = ((TYPE_VOLUNTEERS, _("Volunteers")), (TYPE_STANDARD, _("Standard")))
     type = models.CharField(max_length=255, choices=TYPES, default=TYPE_STANDARD, blank=True)
 
-    posix_name = models.CharField(max_length=255, blank=True, default='')
-    description = models.TextField(blank=True, default='')
-    group = models.OneToOneField(DjangoGroup, models.CASCADE, related_name='profile')
+    posix_name = models.CharField(max_length=255, blank=True, default="")
+    description = models.TextField(blank=True, default="")
+    group = models.OneToOneField(DjangoGroup, models.CASCADE, related_name="profile")
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if self.posix_name != '' and self.__class__.objects.filter(
-                posix_name=self.posix_name).exclude(id=self.id).exists():
-            raise ValidationError(_('Posix name must be unique or empty'))
+        if (
+            self.posix_name != ""
+            and self.__class__.objects.filter(posix_name=self.posix_name).exclude(id=self.id).exists()
+        ):
+            raise ValidationError(_("Posix name must be unique or empty"))
 
     def save(self, **kwargs):
         # Only one can be the volunteer group
@@ -372,8 +374,8 @@ class GroupProfile(BaseModel):
         return "{}".format(self.posix_name)
 
     class Meta:
-        verbose_name = _('Group profile')
-        verbose_name_plural = _('Group profiles')
+        verbose_name = _("Group profile")
+        verbose_name_plural = _("Group profiles")
 
 
 class OrgUnit(MPTTModel, BaseModel):
@@ -381,61 +383,70 @@ class OrgUnit(MPTTModel, BaseModel):
     Association, comittee or similar
     """
 
-    name = models.CharField(_('name'), max_length=255)
-    slug = models.SlugField(_('slug'), unique=True, max_length=255, blank=True)
-    short_name = models.CharField(_('short name'), max_length=128, blank=True)
-    is_active = models.BooleanField(_('is active'), default=True)
-    description = models.TextField(_('description'), blank=True, default='')
+    name = models.CharField(_("name"), max_length=255)
+    slug = models.SlugField(_("slug"), unique=True, max_length=255, blank=True)
+    short_name = models.CharField(_("short name"), max_length=128, blank=True)
+    is_active = models.BooleanField(_("is active"), default=True)
+    description = models.TextField(_("description"), blank=True, default="")
 
     # Contact
-    email = models.EmailField(_('email'), blank=True, default='')
+    email = models.EmailField(_("email"), blank=True, default="")
     contact_person = models.ForeignKey(
-        'dusken.DuskenUser', models.SET_NULL, verbose_name=_('contact person'), blank=True, null=True)
-    website = models.URLField(_('website'), blank=True, default='')
+        "dusken.DuskenUser", models.SET_NULL, verbose_name=_("contact person"), blank=True, null=True
+    )
+    website = models.URLField(_("website"), blank=True, default="")
 
     # Member and permission groups
     group = models.ForeignKey(
-        DjangoGroup, models.SET_NULL, verbose_name=_('group'), blank=True, null=True, related_name='member_orgunits')
-    admin_group = models.ForeignKey(DjangoGroup, models.SET_NULL, verbose_name=_('admin group'), blank=True, null=True,
-                                    related_name='admin_orgunits')
+        DjangoGroup, models.SET_NULL, verbose_name=_("group"), blank=True, null=True, related_name="member_orgunits"
+    )
+    admin_group = models.ForeignKey(
+        DjangoGroup,
+        models.SET_NULL,
+        verbose_name=_("admin group"),
+        blank=True,
+        null=True,
+        related_name="admin_orgunits",
+    )
 
     # Hierarchical :-)
-    parent = TreeForeignKey('self', models.SET_NULL, verbose_name=_('parent'), null=True, blank=True,
-                            related_name='children', db_index=True)
+    parent = TreeForeignKey(
+        "self", models.SET_NULL, verbose_name=_("parent"), null=True, blank=True, related_name="children", db_index=True
+    )
 
     @property
     def users(self):
-        order_fields = ['first_name', 'last_name', 'username']
+        order_fields = ["first_name", "last_name", "username"]
         admins = self.admin_group.user_set.order_by(*order_fields)
         users = self.group.user_set.order_by(*order_fields).exclude(pk__in=admins)
         return chain(admins, users)
 
     def add_user(self, user_obj, changed_by):
         self.group.user_set.add(user_obj)
-        self.log('Added user {}'.format(user_obj), changed_by)
-        user_obj.log('Added to {} OrgUnit'.format(self), changed_by)
+        self.log("Added user {}".format(user_obj), changed_by)
+        user_obj.log("Added to {} OrgUnit".format(self), changed_by)
         user_obj.update_volunteer_status()
 
     def add_admin(self, user_obj, changed_by):
         self.group.user_set.add(user_obj)
         self.admin_group.user_set.add(user_obj)
-        self.log('Added admin {}'.format(user_obj), changed_by)
-        user_obj.log('Added to {} OrgUnit as admin'.format(self), changed_by)
+        self.log("Added admin {}".format(user_obj), changed_by)
+        user_obj.log("Added to {} OrgUnit as admin".format(self), changed_by)
         user_obj.update_volunteer_status()
 
     def remove_user(self, user_obj, changed_by):
         self.group.user_set.remove(user_obj)
         self.admin_group.user_set.remove(user_obj)
-        self.log('Removed user {}'.format(user_obj), changed_by)
-        user_obj.log('Removed from {} OrgUnit'.format(self), changed_by)
+        self.log("Removed user {}".format(user_obj), changed_by)
+        user_obj.log("Removed from {} OrgUnit".format(self), changed_by)
         user_obj.update_volunteer_status()
 
     def remove_admin(self, user_obj, changed_by):
         if self.admin_group == self.group:
             return
         self.admin_group.user_set.remove(user_obj)
-        self.log('Removed {} from admin'.format(user_obj), changed_by)
-        user_obj.log('No longer admin in {} OrgUnit'.format(self), changed_by)
+        self.log("Removed {} from admin".format(user_obj), changed_by)
+        user_obj.log("No longer admin in {} OrgUnit".format(self), changed_by)
 
     def log(self, message, changed_by):
         OrgUnitLogMessage(org_unit=self, message=message, changed_by=changed_by).save()
@@ -447,33 +458,34 @@ class OrgUnit(MPTTModel, BaseModel):
         return "{}".format(self.name)
 
     class MPTTMeta:
-        order_insertion_by = ['name']
+        order_insertion_by = ["name"]
 
     class Meta:
-        verbose_name = _('Org unit')
-        verbose_name_plural = _('Org units')
+        verbose_name = _("Org unit")
+        verbose_name_plural = _("Org units")
 
 
 class Order(BaseModel):
-    """ Simple order model which only supports one product per order """
-    BY_CARD = 'card'
-    BY_SMS = 'sms'
-    BY_APP = 'app'
-    BY_CASH_REGISTER = 'cash_register'
-    PAYMENT_METHOD_OTHER = 'other'
+    """Simple order model which only supports one product per order"""
+
+    BY_CARD = "card"
+    BY_SMS = "sms"
+    BY_APP = "app"
+    BY_CASH_REGISTER = "cash_register"
+    PAYMENT_METHOD_OTHER = "other"
     PAYMENT_METHODS = (
-        (BY_APP, _('Mobile app')),
-        (BY_SMS, _('SMS')),
-        (BY_CARD, _('Credit card')),
-        (BY_CASH_REGISTER, _('Cash register')),
-        (PAYMENT_METHOD_OTHER, _('Other')),
+        (BY_APP, _("Mobile app")),
+        (BY_SMS, _("SMS")),
+        (BY_CARD, _("Credit card")),
+        (BY_CASH_REGISTER, _("Cash register")),
+        (PAYMENT_METHOD_OTHER, _("Other")),
     )
 
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
-    price_nok = models.IntegerField(help_text=_('Price in øre'))
+    price_nok = models.IntegerField(help_text=_("Price in øre"))
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL, related_name='orders', null=True, blank=True)
-    product = models.OneToOneField('dusken.Membership', models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL, related_name="orders", null=True, blank=True)
+    product = models.OneToOneField("dusken.Membership", models.SET_NULL, null=True, blank=True)
 
     # Payment
     payment_method = models.CharField(max_length=254, choices=PAYMENT_METHODS, default=PAYMENT_METHOD_OTHER)
@@ -481,11 +493,11 @@ class Order(BaseModel):
         max_length=254,
         null=True,
         blank=True,
-        help_text=_('Stripe charge ID, Kassa event ID, SMS event ID or App event ID')
+        help_text=_("Stripe charge ID, Kassa event ID, SMS event ID or App event ID"),
     )
 
     phone_number = PhoneNumberField(blank=True, null=True)
-    member_card = models.ForeignKey('dusken.MemberCard', models.SET_NULL, related_name='orders', null=True, blank=True)
+    member_card = models.ForeignKey("dusken.MemberCard", models.SET_NULL, related_name="orders", null=True, blank=True)
 
     objects = OrderManager()
 
@@ -496,49 +508,51 @@ class Order(BaseModel):
         return "{}".format(self.uuid)
 
     class Meta:
-        verbose_name = _('Order')
-        verbose_name_plural = _('Orders')
-        default_permissions = ('add', 'change', 'delete', 'view')
+        verbose_name = _("Order")
+        verbose_name_plural = _("Orders")
+        default_permissions = ("add", "change", "delete", "view")
 
 
 class PlaceOfStudy(BaseModel):
-    name = models.CharField(_('name'), max_length=255)
-    short_name = models.CharField(_('short name'), max_length=16, default='', blank=True)
+    name = models.CharField(_("name"), max_length=255)
+    short_name = models.CharField(_("short name"), max_length=16, default="", blank=True)
 
     def __str__(self):
         if not self.short_name:
             return self.name
 
-        return '{} ({})'.format(self.name, self.short_name)
+        return "{} ({})".format(self.name, self.short_name)
 
     class Meta:
-        verbose_name = _('Place of study')
-        verbose_name_plural = _('Places of study')
+        verbose_name = _("Place of study")
+        verbose_name_plural = _("Places of study")
 
 
 class UserLogMessage(BaseModel):
-    user = models.ForeignKey('dusken.DuskenUser', models.CASCADE, related_name='log_messages')
+    user = models.ForeignKey("dusken.DuskenUser", models.CASCADE, related_name="log_messages")
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        'dusken.DuskenUser', on_delete=models.SET_NULL, related_name='user_changes', blank=True, null=True)
+        "dusken.DuskenUser", on_delete=models.SET_NULL, related_name="user_changes", blank=True, null=True
+    )
 
     def __str__(self):
-        return '{}: {} ({})'.format(self.__class__.__name__, self.message, self.user_id)
+        return "{}: {} ({})".format(self.__class__.__name__, self.message, self.user_id)
 
     class Meta:
-        verbose_name = _('User log message')
-        verbose_name_plural = _('User log messages')
+        verbose_name = _("User log message")
+        verbose_name_plural = _("User log messages")
 
 
 class OrgUnitLogMessage(BaseModel):
-    org_unit = models.ForeignKey('dusken.OrgUnit', models.CASCADE, related_name='log_messages')
+    org_unit = models.ForeignKey("dusken.OrgUnit", models.CASCADE, related_name="log_messages")
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        'dusken.DuskenUser', on_delete=models.SET_NULL, related_name='org_unit_changes', blank=True, null=True)
+        "dusken.DuskenUser", on_delete=models.SET_NULL, related_name="org_unit_changes", blank=True, null=True
+    )
 
     def __str__(self):
-        return '{}: {} ({})'.format(self.__class__.__name__, self.message, self.org_unit_id)
+        return "{}: {} ({})".format(self.__class__.__name__, self.message, self.org_unit_id)
 
     class Meta:
-        verbose_name = _('Org unit log message')
-        verbose_name_plural = _('Org unit log messages')
+        verbose_name = _("Org unit log message")
+        verbose_name_plural = _("Org unit log messages")

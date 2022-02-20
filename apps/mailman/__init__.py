@@ -1,1 +1,1 @@
-default_app_config = 'apps.mailman.apps.MailmanConfig'
+default_app_config = "apps.mailman.apps.MailmanConfig"
