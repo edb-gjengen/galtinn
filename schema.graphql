@@ -1,0 +1,9 @@
+type MembershipType {
+  id: ID!
+  slug: String!
+  price: Int!
+}
+
+type Query {
+  resolveMembershipTypes(isDefault: Boolean = null): [MembershipType!]!
+}
