@@ -1,0 +1,64 @@
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "duskensite.settings.dev"
+
+[tool.black]
+line-length = 120
+target_version = ['py38']
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.poetry]
+name = "galtinn"
+version = "0.1.0"
+description = ""
+authors = ["EDB <edb@neuf.no>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "~3.8"
+django-bootstrap4 = "1.1.*"
+psycopg2 = "2.8.*"
+coreapi = "2.3.*"
+dj-database-url = "0.5.*"
+django-countries = "7.0"
+django-extensions = "3.1.*"
+django-filter = "2.4.*"
+django-inline-svg = "0.1.*"
+django-ldapdb = "1.5.*"
+django-mptt = "0.11.*"
+django-phonenumber-field = "5.0.*"
+django-recaptcha = "2.0.*"
+django-redis = "4.12.*"
+django-signal-disabler = "0.1.*"
+djangorestframework = "3.12.*"
+graphene-django = "2.15.*"
+gunicorn = "20.0.*"
+mysqlclient = "2.0.*"
+passlib = "1.7.*"
+phonenumbers = "8.12.*"
+redis = "3.5.*"
+requests = "2.25.*"
+sentry-sdk = "0.20.*"
+stripe = "2.55.*"
+celery = "5.2.*"
+django-select2 = "7.6.*"
+Django = "2.2.*"
+argon2-cffi = "20.1.*"
+fabric = "2.5.*"
+Markdown = "3.3.*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+black = "22.1.0"
+pytest-django = "*"
+pre-commit = "*"
+isort = "*"
+codecov = "2.1.*"
+requests-mock = "1.8.*"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

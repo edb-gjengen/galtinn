@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SRC_DIR="dusken duskensite apps"
+
+black --check $SRC_DIR
+isort --diff $SRC_DIR

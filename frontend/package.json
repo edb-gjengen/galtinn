@@ -61,6 +61,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=16",
+    "npm": ">=8"
   }
 }

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+python manage.py export_schema
+cd frontend && npm run generate
