@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n bootstrap4 user svg %}
+{% load i18n django_bootstrap5 user svg %}
 {% block body %}
     <h4>
         {% svg "icons/users" %} <a href="{% url "orgunit-detail" orgunit.slug %}">{{ orgunit.name }}</a>

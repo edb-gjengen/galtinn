@@ -16,14 +16,14 @@
     "defaults"
   ],
   "dependencies": {
-    "bootstrap": "^4.6.1",
+    "bootstrap": "^5.1.3",
     "chart.js": "^2.9.4",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "popper.js": "^1.16.1",
+    "@popperjs/core": "^2.11.2",
     "select2": "^4.0.13",
-    "select2-theme-bootstrap4": "^0.2.0-beta.6"
+    "select2-bootstrap-5-theme": "^1.2.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
