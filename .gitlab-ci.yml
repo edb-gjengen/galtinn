@@ -14,16 +14,15 @@ default:
       - .venv
       - frontend/node_modules
   before_script:
+    - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
     - poetry config virtualenvs.in-project true
     - poetry install
 
 
-before_script:
-  - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
-  - python -V
-  - node -v
-  - cd frontend; npm i && npm run build; cd ..
-  - pipenv sync --dev
+build_frontend:
+  stage: build
+  script:
+    - bin/build-frontend
 
 django-checks:
   stage: build
