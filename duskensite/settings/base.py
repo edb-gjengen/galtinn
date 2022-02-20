@@ -264,3 +264,5 @@ LOGGING = {
 }
 SENTRY_DSN = None
 SENTRY_ENVIRONMENT = "dev"
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

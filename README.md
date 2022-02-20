@@ -96,3 +96,6 @@ To indentify users as volunteers exactly one `GroupProfile` has to have `type` s
 - Set up a webhook with unsubscribes using [this guide](http://kb.mailchimp.com/integrations/api-integrations/how-to-set-up-webhooks) (via API should be unchecked).
 - The webhook URL path is: `/mailchimp/incoming/?secret=WEBHOOK_SECRET/`.
 
+# TODO
+
+- django-bootstrap5
