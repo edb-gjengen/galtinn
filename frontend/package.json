@@ -16,9 +16,9 @@
     "defaults"
   ],
   "dependencies": {
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^4.6.1",
     "chart.js": "^2.9.4",
-    "jquery": "^3.5.1",
+    "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "popper.js": "^1.16.1",
@@ -40,7 +40,7 @@
     "eslint-config-prettier": "^8.4.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^7.0.0",
+    "husky": "^7.0.4",
     "lint-staged": "^12.3.4",
     "mini-css-extract-plugin": "^2.5.3",
     "postcss": "^8.4.6",
