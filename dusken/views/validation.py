@@ -10,31 +10,29 @@ from dusken.utils import send_validation_sms
 
 
 class UserEmailValidateView(TemplateView):
-    template_name = 'dusken/user_email_confirm.html'
-    success_url = reverse_lazy('home')
+    template_name = "dusken/user_email_confirm.html"
+    success_url = reverse_lazy("home")
 
     def get(self, request, *args, **kwargs):
         form = UserEmailValidateForm(kwargs)
         if form.is_valid():
             return self.form_valid(form, request)
 
-        context = {
-            'errors': form.errors
-        }
+        context = {"errors": form.errors}
         return render(request, self.template_name, context)
 
     def form_valid(self, form, request):
-        user = form.cleaned_data.get('user')
+        user = form.cleaned_data.get("user")
         user.confirm_email()
-        messages.success(request, _('Success!'))
+        messages.success(request, _("Success!"))
 
         return redirect(self.success_url)
 
 
 class UserPhoneValidateView(LoginRequiredMixin, TemplateView):
     form_class = UserPhoneValidateForm
-    template_name = 'dusken/user_phone_confirm.html'
-    success_url = reverse_lazy('home')
+    template_name = "dusken/user_phone_confirm.html"
+    success_url = reverse_lazy("home")
 
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -42,11 +40,7 @@ class UserPhoneValidateView(LoginRequiredMixin, TemplateView):
         if user.phone_number and not user.phone_number_confirmed and not user.phone_number_key:
             send_validation_sms(user)
             code_sent = True
-        context = {
-            'form': self.form_class(),
-            'user': user,
-            'code_sent': code_sent
-        }
+        context = {"form": self.form_class(), "user": user, "code_sent": code_sent}
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -55,11 +49,11 @@ class UserPhoneValidateView(LoginRequiredMixin, TemplateView):
             return self.form_valid(form, request)
 
         context = self.get_context_data()
-        context['form'] = form
+        context["form"] = form
         return render(request, self.template_name, context)
 
     def form_valid(self, form, request):
         request.user.confirm_phone_number()
-        messages.success(request, _('Success!'))
+        messages.success(request, _("Success!"))
 
         return redirect(self.success_url)

@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('neuf_auth', '0002_auto_20170803_1607'),
+        ("neuf_auth", "0002_auto_20170803_1607"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='authprofile',
-            name='username_updated',
+            model_name="authprofile",
+            name="username_updated",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

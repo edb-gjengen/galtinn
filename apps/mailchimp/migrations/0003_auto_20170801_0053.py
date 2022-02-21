@@ -8,17 +8,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailchimp', '0002_auto_20170801_0012'),
+        ("mailchimp", "0002_auto_20170801_0012"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='mailchimpsubscription',
-            name='mailchimp_id',
+            model_name="mailchimpsubscription",
+            name="mailchimp_id",
         ),
         migrations.AlterField(
-            model_name='mailchimpsubscription',
-            name='status',
-            field=models.CharField(choices=[('subscribed', 'subscribed'), ('pending', 'pending'), ('unsubscribed', 'unsubscribed'), ('cleaned', 'cleaned')], default='subscribed', max_length=15, verbose_name='status'),
+            model_name="mailchimpsubscription",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("subscribed", "subscribed"),
+                    ("pending", "pending"),
+                    ("unsubscribed", "unsubscribed"),
+                    ("cleaned", "cleaned"),
+                ],
+                default="subscribed",
+                max_length=15,
+                verbose_name="status",
+            ),
         ),
     ]

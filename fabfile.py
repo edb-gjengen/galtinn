@@ -1,9 +1,8 @@
 import os
 
-from fabric import Connection
 from invoke import task
 
-
+# FIXME: rewrite without fabric
 LOCALES = ['nb']
 LOCAL_APPS = ['common', 'hooks', 'mailchimp', 'mailman', 'neuf_auth', 'neuf_ldap']
 
@@ -43,60 +42,3 @@ def poedit(c, app):
     app_path = os.path.join('apps', app) if app != 'dusken' else 'dusken'
     po_path = os.path.join(app_path, 'locale/nb/LC_MESSAGES/django.po')
     c.run('poedit {}'.format(po_path))
-
-
-@task()
-def deploy(c):
-    """
-    Deploy galtinn.
-
-    Make sure proxy_user is set to your neuf username.
-    """
-    proxy_user = os.getenv('DEPLOY_USER', os.getenv('USER'))
-    c = Connection(host='gitdeploy@dreamcast.neuf.no', gateway=Connection('login.neuf.no', user=proxy_user))
-    django_env = {'DJANGO_SETTINGS_MODULE': 'duskensite.settings.prod'}
-    project_path = '/var/www/neuf.no/dusken'
-
-    with c.cd(project_path):
-        c.run('git pull')  # Get source
-        c.run('source ~/.profile && pipenv sync', env={'PIPENV_NOSPIN': '1'})  # install deps in virtualenv
-
-        with c.cd('frontend'):  # install and compile frontend deps
-            c.run('npm i')
-            c.run('npm run build')
-
-        # Collect static
-        c.run(
-            'source ~/.profile && umask 022; DJANGO_SETTINGS_MODULE=duskensite.settings.prod pipenv run python manage.py collectstatic --noinput -i node_modules -c',
-            env=django_env
-        )
-        # Run migrations
-        c.run('source ~/.profile && pipenv run python manage.py migrate', env=django_env)
-
-    # Reload gunicorn
-    c.sudo('/usr/bin/supervisorctl pid galtinn.neuf.no | xargs kill -HUP', shell=False)
-    # Reload celery
-    c.sudo('/usr/bin/supervisorctl pid galtinn.neuf.no-celery | xargs kill -HUP', shell=False)
-
-
-@task
-def install(c):
-    local_static_path = 'frontend/'
-    c.run(f'cd {local_static_path} && npm i')
-    c.run(f'cd {local_static_path} && npm run build')
-
-
-@task
-def serve(c):
-    local_static_path = 'frontend/'
-    c.run(f'cd {local_static_path} && npm start')
-
-
-@task
-def celery(c):
-    c.run('DJANGO_SETTINGS_MODULE=duskensite.settings.dev celery -B -A duskensite worker')
-
-
-@task
-def redis(c):
-    c.run('docker run -p 6379:6379 redis')

@@ -1,6 +1,7 @@
 from celery import shared_task
 
-from apps.mailman.api import subscribe as subscribe_sync, unsubscribe as unsubscribe_sync
+from apps.mailman.api import subscribe as subscribe_sync
+from apps.mailman.api import unsubscribe as unsubscribe_sync
 
 
 @shared_task

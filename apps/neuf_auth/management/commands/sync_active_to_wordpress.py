@@ -10,7 +10,7 @@ from dusken.models import DuskenUser, GroupProfile
 
 class Command(BaseCommand):
     # TODO: Replace this weird stuff with https://developer.wordpress.org/rest-api/reference/users/#create-a-user
-    help = 'Syncs users from Dusken to our Wordpress installations (to allow SSO)'
+    help = "Syncs users from Dusken to our Wordpress installations (to allow SSO)"
 
     def __init__(self):
         super().__init__()
@@ -29,12 +29,10 @@ class Command(BaseCommand):
 
         for load_path in settings.WP_LOAD_PATHS:
             cmd = "php {0} {1} {2}".format(
-                os.path.join(settings.WP_PHP_SCRIPT_PATH, "import_users.php"),
-                settings.WP_OUT_FILENAME,
-                load_path
+                os.path.join(settings.WP_PHP_SCRIPT_PATH, "import_users.php"), settings.WP_OUT_FILENAME, load_path
             )
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
             script_response = proc.stdout.read()
 
             if len(script_response) != 0:
-                self.stdout.write(script_response.decode('utf-8'))
+                self.stdout.write(script_response.decode("utf-8"))

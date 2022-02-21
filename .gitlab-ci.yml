@@ -1,28 +1,62 @@
-image: nikolaik/python-nodejs:python3.8-nodejs12
+variables:
+  PIP_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/pip"
+  POSTGRES_DB: dusken
+  CELERY_BROKER_URL: "redis://redis:6379/0"
 
 services:
   - redis:latest
 
-variables:
-  POSTGRES_DB: dusken
-  CELERY_BROKER_URL: "redis://redis:6379/0"
-  PIPENV_VENV_IN_PROJECT: 1
+default:
+  image: nikolaik/python-nodejs:python3.8-nodejs16
+  cache:
+    paths:
+      - .cache/pip
+      - .venv
+      - frontend/node_modules
+  # FIXME this is run on all jobs
+  before_script:
+    - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
+    - poetry config virtualenvs.in-project true
+    - poetry install
 
-cache:
-  paths:
-    - "$CI_PROJECT_DIR/.venv"
-    - "$CI_PROJECT_DIR/frontend/node_modules"
-  key: "v1-$CI_PROJECT_ID"
 
-before_script:
-  - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
-  - python -V
-  - node -v
-  - cd frontend; npm i && npm run build; cd ..
-  - pipenv sync --dev
-
-test:
+build_frontend:
+  stage: build
   script:
-    - pipenv run coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* manage.py test -v2
-    - pipenv run coverage report
+    - bin/build-frontend
+
+django-checks:
+  stage: build
+  script:
+    - poetry run python manage.py migrate
+    - poetry run python manage.py check
+
+tests:
+  stage: test
+  script:
+    - poetry run coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* manage.py test -v2
+    - poetry run coverage report
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+
+lint:
+  stage: test
+  script:
+    - poetry run bin/lint
+
+deploy:
+  stage: deploy
+  before_script:
+     # Install ssh if not already
+     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+     - eval $(ssh-agent -s)
+     # Make SSH key available
+     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+     - mkdir -p ~/.ssh
+     - chmod 700 ~/.ssh
+     # Add known host keys
+     - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+     - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh gitdeploy@dreamcast.neuf.no "$(< bin/deploy)"
+  only:
+    - main

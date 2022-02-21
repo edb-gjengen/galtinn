@@ -1,5 +1,6 @@
 # coding: utf-8
 import datetime
+
 import phonenumbers
 
 
@@ -8,7 +9,7 @@ def format_phone_number(number):
         return number
 
     try:
-        p = phonenumbers.parse(number, region='NO')
+        p = phonenumbers.parse(number, region="NO")
     except phonenumbers.NumberParseException:
         return number
 

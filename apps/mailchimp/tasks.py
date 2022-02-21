@@ -1,4 +1,5 @@
 from celery import shared_task
+
 from .api import update_list_subscription as update_list_subscription_sync
 
 
