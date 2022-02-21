@@ -14,8 +14,9 @@
         }
     }
 }
+
 #main-navigation {
-    padding: 0 1rem;
+    padding: 0;
 
     a.nav-link {
         color: white;
@@ -48,6 +49,7 @@
         display: none;
     }
 }
+
 .navbar-toggler {
     svg {
         top: 1px;
