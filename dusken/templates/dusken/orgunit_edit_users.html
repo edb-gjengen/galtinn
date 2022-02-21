@@ -52,16 +52,16 @@
                     <div class="col-xl-2 col-lg-3 col-sm-6">
                         {% if orgunit.group != orgunit.admin_group %}
                             {% if user|has_group:orgunit.admin_group %}
-                                <button class="btn btn-outline-primary btn-block js-orgunit-remove-user" id="user_remove_{{ user.uuid }}"
+                                <button class="btn btn-outline-primary js-orgunit-remove-user" id="user_remove_{{ user.uuid }}"
                                         data-user-id="{{ user.uuid }}" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="admin">{% trans "Make member" %}</button>
                             {% else %}
-                                <button class="btn btn-outline-primary btn-block js-orgunit-add-member" id="user_remove_{{ user.uuid }}"
+                                <button class="btn btn-outline-primary js-orgunit-add-member" id="user_remove_{{ user.uuid }}"
                                         data-user-id="{{ user.uuid }}" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="admin_uuid">{% trans "Make admin" %}</button>
                             {% endif %}
                         {% endif %}
                     </div>
                     <div class="col-xl-2 col-lg-2 col-sm-6">
-                        <button class="btn btn-outline-primary btn-block js-orgunit-remove-user" id="user_remove_{{ user.uuid }}"
+                        <button class="btn btn-outline-primary js-orgunit-remove-user" id="user_remove_{{ user.uuid }}"
                                 data-user-id="{{ user.uuid }}" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="member" data-text-remove-user="{% trans "Remove User?" %}">{% trans "Remove" %}</button>
                     </div>
                     </div>

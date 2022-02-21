@@ -6,7 +6,9 @@
         <form method="post" id="user-form">
             {% csrf_token %}
             {% bootstrap_form form %}
-            <button id="register-button" type="submit" class="btn btn-primary btn-lg btn-block">{% trans "Register" %}</button>
+            <div class="d-grid">
+                <button id="register-button" type="submit" class="btn btn-primary btn-lg">{% trans "Register" %}</button>
+            </div>
         </form>
     </section>
 {% endblock %}

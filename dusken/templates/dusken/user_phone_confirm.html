@@ -4,7 +4,9 @@
 
 {% if user.phone_number_confirmed %}
     <h1>{% trans "Your phone number is already confirmed" %}</h1>
-    <a href="{% url "home" %}" class="btn btn-primary btn-block">{% trans "Go home" %}</a>
+    <div class="d-grid">
+        <a href="{% url "home" %}" class="btn btn-primary">{% trans "Go home" %}</a>
+    </div>
 {% else %}
     <section class="user-phone-validate">
         <h4>{% trans "Confirm your phone number" %}</h4>
@@ -19,7 +21,9 @@
         <form method="post" id="user-phone-validate-form">
             {% csrf_token %}
             {% bootstrap_form form %}
-            <button id="phone-confirm-button" type="submit" class="btn btn-primary btn-lg btn-block">{% trans "Confirm" %}</button>
+            <div class="d-grid">
+                <button id="phone-confirm-button" type="submit" class="btn btn-primary btn-lg">{% trans "Confirm" %}</button>
+            </div>
         </form>
     </section>
 {% endif %}
