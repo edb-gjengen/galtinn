@@ -1,5 +1,5 @@
 def is_routed_model(model):
-    return hasattr(model, 'connection_name')
+    return hasattr(model, "connection_name")
 
 
 class Router(object):
@@ -13,13 +13,13 @@ class Router(object):
 
     def allow_syncdb(self, db, model):
         """Do not create tables on the default db for models on $./manage.py sync,
-         but this function maybe used know which db a model is on"""
+        but this function maybe used know which db a model is on"""
         if is_routed_model(model):
             return db == model.connection_name
-        return db == 'default'
+        return db == "default"
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
-        model = hints.get('model')
+        model = hints.get("model")
         if is_routed_model(model):
             return db == model.connection_name
         return None

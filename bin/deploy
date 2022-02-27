@@ -1,0 +1,23 @@
+#!/bin/bash
+set -eu
+
+export DJANGO_SETTINGS_MODULE=duskensite.settings.prod
+PROJECT_PATH=/var/www/neuf.no/dusken
+PROCESS_NAME="galtinn.neuf.no"
+
+echo "Deploying bbs to ${PROJECT_PATH}"
+cd "$PROJECT_PATH" || exit 1
+git pull
+
+# Backend
+poetry install
+umask 022; pipenv run python manage.py collectstatic --noinput -i node_modules -c  # Collect static
+poetry run python manage.py migrate  # Run DB migrations
+
+# Frontend
+bin/build-frontend
+
+# Reload backend
+echo "Reloading supervisor processes ${PROCESS_NAME} ${PROCESS_NAME}-celery"
+sudo /usr/bin/supervisorctl pid "$PROCESS_NAME" | xargs kill -HUP
+sudo /usr/bin/supervisorctl pid "$PROCESS_NAME-celery" | xargs kill -HUP

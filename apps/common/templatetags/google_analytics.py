@@ -19,6 +19,6 @@ def google_analytics_tag():
 
     property_id = settings.GOOGLE_ANALYTICS_PROPERTY_ID
     if not property_id:
-        return ''
+        return ""
 
     return mark_safe(ga_script_tag % property_id)

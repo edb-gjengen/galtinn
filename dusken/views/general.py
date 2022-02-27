@@ -5,16 +5,16 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.dateparse import parse_date
-from django.views.generic import FormView, DetailView, TemplateView
+from django.views.generic import DetailView, FormView, TemplateView
 
-from dusken.models import Order, MembershipType
-from dusken.forms import MembershipPurchaseForm, DuskenAuthenticationForm, UserWidgetForm
+from dusken.forms import DuskenAuthenticationForm, MembershipPurchaseForm, UserWidgetForm
+from dusken.models import MembershipType, Order
 
 
 class IndexView(FormView):
     form_class = DuskenAuthenticationForm
-    template_name = 'dusken/index.html'
-    success_url = reverse_lazy('home')
+    template_name = "dusken/index.html"
+    success_url = reverse_lazy("home")
 
     def form_valid(self, form):
         # Log in and redirect
@@ -30,7 +30,7 @@ class IndexView(FormView):
 
 
 class HomeView(LoginRequiredMixin, DetailView):
-    template_name = 'dusken/home.html'
+    template_name = "dusken/home.html"
 
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     membership_type = None
@@ -40,42 +40,38 @@ class HomeView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         self.membership_type = MembershipType.get_default()
-        self.membership_purchase_form = MembershipPurchaseForm(
-            initial={'email': self.request.user.email})
+        self.membership_purchase_form = MembershipPurchaseForm(initial={"email": self.request.user.email})
         return super().get_context_data(**kwargs)
 
 
 class HomeVolunteerView(LoginRequiredMixin, DetailView):
-    template_name = 'dusken/home_volunteer.html'
+    template_name = "dusken/home_volunteer.html"
 
     def get_object(self, queryset=None):
         return self.request.user
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_search'] = UserWidgetForm()
+        context["user_search"] = UserWidgetForm()
         return context
 
 
 class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
-    slug_field = 'uuid'
+    slug_field = "uuid"
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
 
 class StatsView(LoginRequiredMixin, TemplateView):
-    template_name = 'dusken/stats.html'
+    template_name = "dusken/stats.html"
 
     def get_context_data(self, **kwargs):
-        start_date = self.request.GET.get('start_date', None)
+        start_date = self.request.GET.get("start_date", None)
         if not start_date:
             start_date = timezone.now().date().replace(month=8, day=1)
         else:
             start_date = parse_date(start_date)
 
-        return {
-            **super().get_context_data(**kwargs),
-            'start_date': start_date
-        }
+        return {**super().get_context_data(**kwargs), "start_date": start_date}

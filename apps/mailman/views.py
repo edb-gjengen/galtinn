@@ -1,7 +1,6 @@
 import logging
 
 import requests
-
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -18,7 +17,7 @@ class MailmanMembership(APIView):
     permission_classes = (IsAuthenticated,)
 
     def put(self, request, list_name, address):
-        full_name = self.request.query_params.get('full_name')
+        full_name = self.request.query_params.get("full_name")
         if not full_name:
             full_name = self.request.user.get_full_name()
 
@@ -27,10 +26,10 @@ class MailmanMembership(APIView):
         except requests.exceptions.HTTPError as e:
             logger.info(e)
             msg = str(e)
-            code = 'error'
+            code = "error"
             if e.response.status_code == status.HTTP_409_CONFLICT:
-                msg = _('Email already subscribed')
-                code = 'duplicate'
+                msg = _("Email already subscribed")
+                code = "duplicate"
 
             raise ValidationError(msg, code=code)
 
@@ -42,10 +41,10 @@ class MailmanMembership(APIView):
         except requests.exceptions.HTTPError as e:
             logger.info(e)
             msg = str(e)
-            code = 'error'
+            code = "error"
             if e.response.status_code == status.HTTP_404_NOT_FOUND:
-                msg = _('Email {} not on list').format(address)
-                code = 'not_found'
+                msg = _("Email {} not on list").format(address)
+                code = "not_found"
 
             raise ValidationError(msg, code=code)
 

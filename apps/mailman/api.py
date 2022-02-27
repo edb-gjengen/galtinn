@@ -9,11 +9,11 @@ def _get_auth():
 
 
 def get_list_url(list_name):
-    return urljoin(settings.MAILMAN_API_URL, '/{}'.format(list_name))
+    return urljoin(settings.MAILMAN_API_URL, "/{}".format(list_name))
 
 
 def get_lists_by_email(email):
-    params = {'address': email}
+    params = {"address": email}
     r = requests.get(settings.MAILMAN_API_URL, params=params, auth=_get_auth())
 
     if r.status_code == 404:
@@ -21,23 +21,19 @@ def get_lists_by_email(email):
 
     r.raise_for_status()  # requests.exceptions.HTTPError
 
-    return r.json()['lists']
+    return r.json()["lists"]
 
 
 def subscribe(list_name, email, full_name, digest=False):
-    params = {
-        'address': email,
-        'fullname': full_name,
-        'digest': digest
-    }
+    params = {"address": email, "fullname": full_name, "digest": digest}
     r = requests.put(get_list_url(list_name), params=params, auth=_get_auth())
 
     r.raise_for_status()  # requests.exceptions.HTTPError
 
-    return {'success': r.json()}
+    return {"success": r.json()}
 
 
 def unsubscribe(list_name, email):
-    r = requests.delete(get_list_url(list_name), params={'address': email}, auth=_get_auth())
+    r = requests.delete(get_list_url(list_name), params={"address": email}, auth=_get_auth())
 
     r.raise_for_status()  # requests.exceptions.HTTPError

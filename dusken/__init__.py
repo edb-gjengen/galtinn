@@ -1,1 +1,1 @@
-default_app_config = 'dusken.apps.DuskenAppConfig'
+default_app_config = "dusken.apps.DuskenAppConfig"
