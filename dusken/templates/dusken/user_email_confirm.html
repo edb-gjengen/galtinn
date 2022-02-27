@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-{% load i18n bootstrap4 %}
+{% load i18n django_bootstrap5 %}
 {% block body %}
     {% for error in errors %}
         {{ error }}<br>
     {% endfor %}
-    <a href="{% url "home" %}" class="btn btn-primary btn-block">{% trans "Go home" %}</a>
+    <div class="d-grid">
+        <a href="{% url "home" %}" class="btn btn-primary">{% trans "Go home" %}</a>
+    </div>
 {% endblock %}

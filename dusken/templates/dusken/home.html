@@ -59,8 +59,8 @@
                 </ul>
                 {% if ms.is_valid and not ms.expires_in_less_than_one_month %}
                     {% if ms.order %}
-                        <div class="card-body">
-                            <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary btn-block">{% trans "See reciept" %}</a>
+                        <div class="card-body d-grid">
+                            <a href="{% url "payment-detail" ms.order.uuid %}" class="btn btn-outline-primary">{% trans "See reciept" %}</a>
                         </div>
                     {% endif %}
                 {% else %}
@@ -119,8 +119,8 @@
                         {% endif %}{% endcomment %}
                     </li>
                 </ul>
-                <div class="card-body">
-                    <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit your profile" %}</a>
+                <div class="card-body d-grid">
+                    <a href="{% url "user-update-me" %}" class="btn btn-outline-primary">{% svg "icons/pencil" %} {% trans "Edit your profile" %}</a>
                 </div>
             </div>
 
@@ -135,8 +135,8 @@
                         <h4 class="card-title">{% svg "icons/envelope" %} {% trans "Email subscriptions" %}</h4>
                         <h6 class="card-subtitle text-muted">{% trans "Newsletter and mailing lists" %}</h6>
                     </div>
-                    <div class="card-body">
-                        <a href="{% url "email-subscriptions" %}" class="btn btn-outline-primary btn-block">{% trans "Change subscriptions" %}</a>
+                    <div class="card-body d-grid">
+                        <a href="{% url "email-subscriptions" %}" class="btn btn-outline-primary">{% trans "Change subscriptions" %}</a>
                     </div>
                 </div>
             </div>
@@ -147,8 +147,8 @@
                         <h4 class="card-title">{% trans "Password" %}</h4>
                         <h6 class="card-subtitle text-muted">{% trans "Change it if you want to" %}</h6>
                     </div>
-                    <div class="card-body">
-                        <a href="{% url "password_change" %}" class="btn btn-outline-primary btn-block">{% trans "Change password" %}</a>
+                    <div class="card-body d-grid">
+                        <a href="{% url "password_change" %}" class="btn btn-outline-primary">{% trans "Change password" %}</a>
                     </div>
                 </div>
             </div>
@@ -159,8 +159,8 @@
                         <h4 class="card-title">{% trans "Set a username" %}</h4>
                         <h6 class="card-subtitle text-muted">{% trans "Needed to get access to internal systems" %}</h6>
                     </div>
-                    <div class="card-body">
-                        <a href="{% url "user-update-username" %}" class="btn btn-outline-primary btn-block">{% trans "Set username" %}</a>
+                    <div class="card-body d-grid">
+                        <a href="{% url "user-update-username" %}" class="btn btn-outline-primary">{% trans "Set username" %}</a>
                     </div>
                 </div>
             </div>

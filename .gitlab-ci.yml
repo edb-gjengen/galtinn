@@ -13,35 +13,27 @@ default:
       - .cache/pip
       - .venv
       - frontend/node_modules
-  # FIXME this is run on all jobs
-  before_script:
-    - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
-    - poetry config virtualenvs.in-project true
-    - poetry install
-
 
 build_frontend:
-  stage: build
+  stage: test
   script:
     - bin/build-frontend
 
-django-checks:
-  stage: build
-  script:
-    - poetry run python manage.py migrate
-    - poetry run python manage.py check
-
 tests:
   stage: test
+  before_script:
+    - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
+    - poetry config virtualenvs.in-project true
+    - poetry run pip install -U pip wheel
+    - poetry install
   script:
+    - bin/ensure-python-deps.sh
+    - poetry run python manage.py migrate
+    - poetry run python manage.py check
     - poetry run coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* manage.py test -v2
     - poetry run coverage report
-  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
-
-lint:
-  stage: test
-  script:
     - poetry run bin/lint
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
 deploy:
   stage: deploy

@@ -414,9 +414,9 @@ python-versions = ">=3.6"
 django = "*"
 
 [[package]]
-name = "django-bootstrap4"
-version = "21.2"
-description = "Bootstrap 4 for Django"
+name = "django-bootstrap5"
+version = "21.3"
+description = "Bootstrap 5 for Django"
 category = "main"
 optional = false
 python-versions = ">=3.7"
@@ -1361,7 +1361,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.8"
-content-hash = "5d0fce71f6d42f09544c02b9d71fafbda4dd16d3c1356b4537ef9337dc957a60"
+content-hash = "7ffa386e3d4a415e5749fd0043011667f5d313b7a31c74a7b1dfcef6f695d137"
 
 [metadata.files]
 amqp = [
@@ -1642,9 +1642,9 @@ django-appconf = [
     {file = "django-appconf-1.0.5.tar.gz", hash = "sha256:be3db0be6c81fa84742000b89a81c016d70ae66a7ccb620cdef592b1f1a6aaa4"},
     {file = "django_appconf-1.0.5-py3-none-any.whl", hash = "sha256:ae9f864ee1958c815a965ed63b3fba4874eec13de10236ba063a788f9a17389d"},
 ]
-django-bootstrap4 = [
-    {file = "django-bootstrap4-21.2.tar.gz", hash = "sha256:0b9eeafecd132c0e6af8688493816fc2ae172d2eb3d98e66dc5eb48757da65df"},
-    {file = "django_bootstrap4-21.2-py3-none-any.whl", hash = "sha256:46f9ea3789bc1a2fa5db94b9439e2a755cca582af06af0c6cfc76d70b6e5702c"},
+django-bootstrap5 = [
+    {file = "django-bootstrap5-21.3.tar.gz", hash = "sha256:35086341881780a44b2e27255894f6029fc5ef75e5a0ec8ebd82f47a5184fa73"},
+    {file = "django_bootstrap5-21.3-py3-none-any.whl", hash = "sha256:c7a686420aa98692f15bd16e61a90dc6a3607e441a4dea37af840b83d4820cac"},
 ]
 django-countries = [
     {file = "django-countries-7.2.1.tar.gz", hash = "sha256:26878b54d36bedff30b4535ceefcb8af6784741a8b30b1b8a662fb14a936a4ab"},

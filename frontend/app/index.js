@@ -3,7 +3,6 @@ window.$ = window.jQuery = $;
 
 import 'select2';
 
-import 'bootstrap/js/dist/util';
 import 'bootstrap/js/dist/collapse';
 import 'bootstrap/js/dist/dropdown';
 
@@ -14,11 +13,11 @@ import './styles/app.scss';
 let urls, csrfToken;
 
 function getCookie(name) {
-    var cookieValue = null;
+    let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = jQuery.trim(cookies[i]);
             // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === name + '=') {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -69,7 +68,7 @@ function openStripe(email) {
 function onStripeToken(token) {
     // Use the token to create the charge with a server-side script.
     // You can access the token ID with `token.id` and user email with `token.email`
-    var postData = {
+    const postData = {
         stripe_token: token,
         membership_type: stripe_config.membership_type,
     };
