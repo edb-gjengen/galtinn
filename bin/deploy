@@ -11,7 +11,7 @@ git pull
 
 # Backend
 poetry install
-umask 022; pipenv run python manage.py collectstatic --noinput -i node_modules -c  # Collect static
+umask 022; poetry run python manage.py collectstatic --noinput -i node_modules -c  # Collect static
 poetry run python manage.py migrate  # Run DB migrations
 
 # Frontend
