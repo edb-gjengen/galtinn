@@ -9,13 +9,13 @@ echo "Deploying bbs to ${PROJECT_PATH}"
 cd "$PROJECT_PATH" || exit 1
 git pull
 
-# Backend
-poetry install
-umask 022; poetry run python manage.py collectstatic --noinput -i node_modules -c  # Collect static
-poetry run python manage.py migrate  # Run DB migrations
-
 # Frontend
 bin/build-frontend
+
+# Backend
+poetry install
+umask 022; poetry run python manage.py collectstatic --noinput -i node_modules -c  # Collect static (including frontend)
+poetry run python manage.py migrate  # Run DB migrations
 
 # Reload backend
 echo "Reloading supervisor processes ${PROCESS_NAME} ${PROCESS_NAME}-celery"
