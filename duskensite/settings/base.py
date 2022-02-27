@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     "django_select2",
     "captcha",
     "svg",
-    "graphene_django",
 ]
 INSTALLED_APPS += [
     "dusken",
@@ -231,12 +230,6 @@ GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv("GOOGLE_ANALYTICS_PROPERTY_ID", "")
 WP_PHP_SCRIPT_PATH = os.path.join(BASE_DIR, "scripts")
 WP_OUT_FILENAME = os.path.join(WP_PHP_SCRIPT_PATH, "users_in_group_active.json")
 WP_LOAD_PATHS = ["/var/www/studentersamfundet.no/www/wp/wp-load.php", "/var/www/neuf.no/aktivweb/wp/wp-load.php"]
-
-GRAPHENE = {
-    "SCHEMA": "dusken.api.graphql.schema",
-    "SCHEMA_OUTPUT": "frontend/schema.json",
-    "SCHEMA_INDENT": 2,
-}
 
 LOGGING = {
     "version": 1,

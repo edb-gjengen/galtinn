@@ -1,8 +1,10 @@
 from django.conf.urls import url
+from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
-from graphene_django.views import GraphQLView
+from strawberry.django.views import GraphQLView
 from rest_framework.routers import DefaultRouter
 
+from dusken.api.graphql import schema
 from dusken.api.views import ResendValidationEmailView
 from dusken.api.views.cards import KassaMemberCardUpdateView, MemberCardViewSet
 from dusken.api.views.memberships import KassaMembershipView, MembershipChargeView, MembershipViewSet
@@ -43,5 +45,5 @@ urlpatterns += [
     # Stats
     url(r"stats/$", membership_stats, name="membership-stats"),
     # GraphQL API
-    url(r"^graphql/$", csrf_exempt(GraphQLView.as_view(graphiql=True)), name="graphql"),
+    path("graphql", csrf_exempt(GraphQLView.as_view(schema=schema)), name="graphql"),
 ]

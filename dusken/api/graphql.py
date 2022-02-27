@@ -1,38 +1,26 @@
-import graphene
-from django.db.models import DurationField
-from graphene_django.converter import convert_django_field
-from graphene_django.types import DjangoObjectType
+from typing import List, Optional
 
-from dusken.models import MembershipType
+import strawberry.django
+from strawberry_django import auto
 
-
-@convert_django_field.register(DurationField)
-def convert_stream_field_to_string(field, registry=None):
-    # This serializes MembershipType.duration as a string
-    return graphene.String()
+from dusken import models
 
 
-class MembershipTypeType(DjangoObjectType):
-    """MembershipType"""
-
-    class Meta:
-        model = MembershipType
-
-
-class DuskenQuery:
-    membership_types = graphene.List(MembershipTypeType, is_default=graphene.Boolean())
-
-    def resolve_membership_types(self, info, is_default=None):
-        query = {}
-        if is_default is not None:
-            query["is_default"] = is_default
-        return MembershipType.objects.filter(**query)
+@strawberry.django.type(models.MembershipType)
+class MembershipType:
+    id: auto
+    slug: auto
+    price: auto
 
 
-class Query(DuskenQuery, graphene.ObjectType):
-    """This class can inherit from multiple queries if we want add more apps to the project"""
+@strawberry.type
+class Query:
+    @strawberry.field()
+    def resolve_membership_types(self, info, is_default: Optional[bool] = None) -> List[MembershipType]:
+        query = {} if is_default is None else {"is_default": is_default}
+        return models.MembershipType.objects.filter(**query)
 
     # TODO: Add opening hours and other static app info from a separate app
 
 
-schema = graphene.Schema(query=Query)
+schema = strawberry.Schema(query=Query)
