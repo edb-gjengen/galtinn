@@ -1,8 +1,8 @@
 from django.conf.urls import url
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
-from strawberry.django.views import GraphQLView
 from rest_framework.routers import DefaultRouter
+from strawberry.django.views import GraphQLView
 
 from dusken.api.graphql import schema
 from dusken.api.views import ResendValidationEmailView

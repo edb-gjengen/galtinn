@@ -1,7 +1,7 @@
-/* Select2 with Bootstrap 4 theme */
+/* Select2 with Bootstrap 5 theme */
 
 @import "node_modules/select2/src/scss/core";
-@import "node_modules/select2-theme-bootstrap4/src/select2-bootstrap";
+@import "node_modules/select2-bootstrap-5-theme/src/include-all";
 
 /* Fix to make select fields responsive */
 .select2 {

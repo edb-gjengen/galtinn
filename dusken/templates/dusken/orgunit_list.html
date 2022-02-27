@@ -20,9 +20,9 @@
                                     <a class="btn btn-outline-primary" href="mailto:{{ org.email }}">{% svg "icons/envelope" %} {% trans "Send email" %}</a>
                                 {% endif %}
                                 {% if user|has_admin_group:org.admin_group %}
-                                    <div class="btn-group">
+                                    <div class="btn-group dropdown">
                                         <!-- Actions -->
-                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ org.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ org.pk }}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             {% trans "Actions" %}
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ org.pk }}">

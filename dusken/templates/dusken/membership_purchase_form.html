@@ -9,10 +9,10 @@
         charge_url: '{% url "membership-charge" %}'
     };
 </script>
-<form method="post" id="membership-purchase-form">
+<form method="post" id="membership-purchase-form d-grid">
     <div class="js-validation-errors"></div>
     {{ view.membership_purchase_form }}
-    <button id="purchase-button" type="submit" class="btn btn-primary btn-block">
+    <button id="purchase-button" type="submit" class="btn btn-primary">
     {% if ms == null %}
         {% trans "Buy membership" %}
     {% else %}

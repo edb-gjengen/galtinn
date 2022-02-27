@@ -103,11 +103,13 @@
         <li class="list-group-item"><em><span>{% trans "Last updated" %}: <strong title="{{ userobj.updated }}">{{ userobj.updated|naturaltime }}</strong></span></em></li>
     </ul>
     <br>
-    {% if userobj == user %}
-        <a href="{% url "user-update-me" %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit" %}</a>
-    {% elif user.is_superuser %}
-        <a href="{% url "user-update" userobj.uuid %}" class="btn btn-outline-primary btn-block">{% svg "icons/pencil" %} {% trans "Edit" %}</a>
-    {% endif %}
+    <div class="d-grid">
+        {% if userobj == user %}
+            <a href="{% url "user-update-me" %}" class="btn btn-outline-primary">{% svg "icons/pencil" %} {% trans "Edit" %}</a>
+        {% elif user.is_superuser %}
+            <a href="{% url "user-update" userobj.uuid %}" class="btn btn-outline-primary">{% svg "icons/pencil" %} {% trans "Edit" %}</a>
+        {% endif %}
+    </div>
     <br>
     <h5>{% trans "Organizations" %}</h5>
     <ul class="list-group">

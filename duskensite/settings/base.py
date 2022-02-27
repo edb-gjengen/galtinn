@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "mptt",
     "django_countries",
-    "bootstrap4",
+    "django_bootstrap5",
     "django_extensions",
     "django_filters",
     "django_select2",

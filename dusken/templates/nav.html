@@ -1,50 +1,52 @@
 {% load i18n svg %}
 <div class="nav-wrap">
     <nav id="main-navigation" class="navbar navbar-expand-lg">
-        <a class="navbar-brand" href="{% url 'index' %}">{% svg "galtinn-logo" %}</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{% trans "Toggle navigation" %}">
-            {% svg "icons/menu" %}
-        </button>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index' %}">{% svg "galtinn-logo" %}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{% trans "Toggle navigation" %}">
+                {% svg "icons/menu" %}
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="navbar-nav mr-auto">
-                {% if user.is_authenticated %}
-                    <a class="nav-item nav-link{% if active == "home" %} active{% endif %}" href="{% url "home" %}">
-                        {% svg "icons/home" %} {% trans "Home" %}
-                    </a>
-                    <a class="nav-item nav-link{% if active == "membership-list" %} active{% endif %}" href="{% url "membership-list" %}">
-                        {% svg "icons/license" %} {% trans "Membership" %}
-                    </a>
-                    <a class="nav-item nav-link{% if active == "home-volunteer" %} active{% endif %}" href="{% url "home-volunteer" %}">
-                        {% svg "icons/apartment" %} {% trans "Volunteer" %}
-                    </a>
-                {% endif %}
-            </div>
-            <div class="navbar-nav">
-                {% if user.is_authenticated %}
-                    <a class="nav-item nav-link{% if active == "user-detail-me" %} active{% endif %}" href="{% url "user-detail-me" %}" title="{% trans "Profile" %}">
-                        {% svg "icons/user" %} {{ user.get_full_name|default:user.username }}
-                    </a>
-                {% endif %}
-                {% get_current_language as LANGUAGE_CODE %}
-                {% get_available_languages as LANGUAGES %}
-                {% get_language_info_list for LANGUAGES as languages %}
-                <form class="form-inline" action="{% url "set_language" %}?next={{ request.path }}" method="post">{% csrf_token %}
-                    <select class="form-control language-select hidden" name="language" onchange="this.form.submit()">
-                        {% for language in languages %}
-                            <option value="{{ language.code }}"
-                                {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
-                                {{ language.name_local|capfirst }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                    <!-- TODO: Show selected language next to globe -->
-                    <a href="#" class="nav-link js-language-select-toggle" title="{% trans "Change language to..." %}">{% svg "icons/earth" %}</a>
-                </form>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="navbar-nav me-auto">
+                    {% if user.is_authenticated %}
+                        <a class="nav-item nav-link{% if active == "home" %} active{% endif %}" href="{% url "home" %}">
+                            {% svg "icons/home" %} {% trans "Home" %}
+                        </a>
+                        <a class="nav-item nav-link{% if active == "membership-list" %} active{% endif %}" href="{% url "membership-list" %}">
+                            {% svg "icons/license" %} {% trans "Membership" %}
+                        </a>
+                        <a class="nav-item nav-link{% if active == "home-volunteer" %} active{% endif %}" href="{% url "home-volunteer" %}">
+                            {% svg "icons/apartment" %} {% trans "Volunteer" %}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <a class="nav-item nav-link{% if active == "user-detail-me" %} active{% endif %}" href="{% url "user-detail-me" %}" title="{% trans "Profile" %}">
+                            {% svg "icons/user" %} {{ user.get_full_name|default:user.username }}
+                        </a>
+                    {% endif %}
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    <form class="d-flex" action="{% url "set_language" %}?next={{ request.path }}" method="post">{% csrf_token %}
+                        <select class="form-control language-select hidden" name="language" onchange="this.form.submit()">
+                            {% for language in languages %}
+                                <option value="{{ language.code }}"
+                                    {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+                                    {{ language.name_local|capfirst }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <!-- TODO: Show selected language next to globe -->
+                        <a href="#" class="nav-link js-language-select-toggle" title="{% trans "Change language to..." %}">{% svg "icons/earth" %}</a>
+                    </form>
 
-                {% if user.is_authenticated %}
-                    <a class="nav-item nav-link" href="{% url 'logout' %}">{% svg "icons/exit" %} {% trans "Log out" %}</a>
-                {% endif %}
+                    {% if user.is_authenticated %}
+                        <a class="nav-item nav-link" href="{% url 'logout' %}">{% svg "icons/exit" %} {% trans "Log out" %}</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
