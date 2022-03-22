@@ -10,7 +10,8 @@ import './OrgUnit';
 
 import './styles/app.scss';
 
-let urls, csrfToken;
+let urls;
+let csrfToken;
 
 function getCookie(name) {
     let cookieValue = null;
