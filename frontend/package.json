@@ -1,4 +1,5 @@
 {
+  "name": "galtinn",
   "private": true,
   "scripts": {
     "build": "webpack --env production --mode production",
