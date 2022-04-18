@@ -11,7 +11,6 @@ import './OrgUnit';
 import './styles/app.scss';
 
 let urls;
-let csrfToken;
 
 function getCookie(name) {
     let cookieValue = null;

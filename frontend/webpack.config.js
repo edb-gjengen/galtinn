@@ -5,7 +5,6 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const baseStyleLoader = (production) => (production ? MiniCssExtractPlugin.loader : require.resolve('style-loader'));
-const devtool = (production) => (production ? 'source-map' : 'cheap-module-source-map');
 
 module.exports = ({ production }, argv) => {
     return {
@@ -78,6 +77,6 @@ module.exports = ({ production }, argv) => {
                 },
             ],
         },
-        devtool: devtool(production),
+        devtool: production ? 'source-map' : 'cheap-module-source-map',
     };
 };

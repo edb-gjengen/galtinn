@@ -18,7 +18,7 @@ def create_home_dir(username, dry_run=False):
 
     This use fabric (SSH) for running the remote command
 
-    Ref: http://stackoverflow.com/questions/6741523/using-python-fabric-without-the-command-line-tool-fab
+    Ref: https://stackoverflow.com/questions/6741523/using-python-fabric-without-the-command-line-tool-fab
     """
     conn = get_connection()
     script_cmd = f"{settings.FILESERVER_CREATE_HOMEDIR_SCRIPT} {settings.FILESERVER_HOME_PATH} {username}"
