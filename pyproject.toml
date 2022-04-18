@@ -58,6 +58,7 @@ pre-commit = "*"
 isort = "*"
 codecov = "2.1.*"
 requests-mock = "1.9.*"
+pycln = "^1.3.1"
 
 
 [build-system]

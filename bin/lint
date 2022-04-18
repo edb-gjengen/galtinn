@@ -5,3 +5,4 @@ SRC_DIR="dusken duskensite apps"
 
 black --check $SRC_DIR
 isort --check --diff $SRC_DIR
+pycln --check $SRC_DIR

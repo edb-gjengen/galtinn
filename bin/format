@@ -4,3 +4,4 @@ SRC_DIR="dusken duskensite apps"
 
 black $SRC_DIR
 isort $SRC_DIR
+pycln $SRC_DIR

@@ -1,6 +1,5 @@
 import logging
 import os
-from pprint import pprint
 
 from django.conf import settings
 from fabric import Connection

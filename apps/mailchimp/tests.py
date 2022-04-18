@@ -1,5 +1,4 @@
 import json
-from unittest import skip
 
 import requests_mock
 from django.conf import settings
