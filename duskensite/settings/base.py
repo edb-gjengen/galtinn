@@ -158,7 +158,7 @@ REST_FRAMEWORK = {
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
 
-TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
+TESTING = any(m in sys.modules for m in ["pytest", "py.test"])
 
 PHONENUMBER_DB_FORMAT = "E164"
 PHONENUMBER_DEFAULT_REGION = "NO"
