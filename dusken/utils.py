@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.crypto import get_random_string
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from dusken.tasks import send_mail_task
 
@@ -57,8 +57,8 @@ def send_validation_email(user):
     )
 
 
-def create_email_key():
-    return get_random_string()
+def create_email_key(length=12):
+    return get_random_string(length=length)
 
 
 def send_sms(to, message):

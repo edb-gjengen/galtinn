@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.views import PasswordChangeView, PasswordResetConfirmView
 from django.urls import reverse_lazy
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from apps.neuf_auth.forms import NeufSetPasswordForm
 

@@ -2,7 +2,7 @@ import re
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 username_re = re.compile(r"^[a-z_][a-z0-9_-]{2,31}$")  # From 3-32 alphanum chars (man useradd), starting with a char
 LDAPUsernameValidator = RegexValidator(username_re, _("Enter a valid username."))

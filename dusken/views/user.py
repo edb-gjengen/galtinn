@@ -3,8 +3,8 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
-from django.utils.translation import ugettext_lazy as _
-from django.views.generic import DeleteView, DetailView, FormView, ListView, UpdateView
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import DetailView, FormView, ListView, UpdateView
 
 from apps.neuf_auth.forms import SetUsernameForm
 from dusken.forms import DuskenUserActivateForm, DuskenUserForm, DuskenUserUpdateForm, UserDeleteForm, UserWidgetForm
@@ -39,7 +39,7 @@ class UserActivateView(FormView):
     success_url = reverse_lazy("home")
 
     def get(self, request, *args, **kwargs):
-        phone_number = "+" + kwargs.get("phone", "")
+        phone_number = f'+{kwargs.get("phone", "")}'
         code = kwargs.get("code")
         self.valid_link = False
         try:
@@ -57,7 +57,7 @@ class UserActivateView(FormView):
 
     def get_initial(self):
         initial = super().get_initial()
-        initial["phone_number"] = "+" + self.kwargs.get("phone", "")
+        initial["phone_number"] = f'+{self.kwargs.get("phone", "")}'
         initial["code"] = self.kwargs.get("code")
         return initial
 

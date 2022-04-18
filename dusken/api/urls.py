@@ -1,4 +1,3 @@
-from django.conf.urls import url
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.routers import DefaultRouter
@@ -28,22 +27,22 @@ urlpatterns = router.urls
 
 urlpatterns += [
     # Current user
-    url(r"me/$", CurrentUserView.as_view(), name="user-current"),
-    url(r"me/basic/$", BasicAuthCurrentUserView.as_view(), name="user-current-basic-auth"),
+    path("me/", CurrentUserView.as_view(), name="user-current"),
+    path("me/basic/", BasicAuthCurrentUserView.as_view(), name="user-current-basic-auth"),
     # Stripe
-    url(r"membership/charge/$", MembershipChargeView.as_view(), name="membership-charge"),
+    path("membership/charge/", MembershipChargeView.as_view(), name="membership-charge"),
     # Kassa
-    url(r"kassa/membership/$", KassaMembershipView.as_view(), name="kassa-membership"),
-    url(r"kassa/card/$", KassaMemberCardUpdateView.as_view(), name="kassa-card-update"),
+    path("kassa/membership/", KassaMembershipView.as_view(), name="kassa-membership"),
+    path("kassa/card/", KassaMemberCardUpdateView.as_view(), name="kassa-card-update"),
     # Users
-    url(r"user/resend_validation_email/$", ResendValidationEmailView.as_view(), name="resend-validation-email"),
-    url(r"user/register/$", RegisterUserView.as_view(), name="user-api-register"),
-    url(r"user/pk/to/uuid/$", user_pk_to_uuid, name="user_pk_to_uuid"),
-    # OrgUnit
-    url(r"orgunit/remove/user/$", remove_user, name="remove_user"),
-    url(r"orgunit/add/user/$", add_user, name="add_user"),
+    path("user/resend_validation_email/", ResendValidationEmailView.as_view(), name="resend-validation-email"),
+    path("user/register/", RegisterUserView.as_view(), name="user-api-register"),
+    path("user/pk/to/uuid/", user_pk_to_uuid, name="user_pk_to_uuid"),
+    # Organizational Unit
+    path("orgunit/remove/user/", remove_user, name="remove_user"),
+    path("orgunit/add/user/", add_user, name="add_user"),
     # Stats
-    url(r"stats/$", membership_stats, name="membership-stats"),
+    path("stats/", membership_stats, name="membership-stats"),
     # GraphQL API
     path("graphql", csrf_exempt(GraphQLView.as_view(schema=schema)), name="graphql"),
 ]

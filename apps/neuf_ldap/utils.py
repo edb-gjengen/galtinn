@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def ldap_create_password(raw_password):
-    return ldap_salted_sha1.encrypt(raw_password)
+    return ldap_salted_sha1.hash(raw_password)
 
 
 def ldap_validate_password(raw_password, challenge_password):

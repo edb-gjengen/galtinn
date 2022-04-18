@@ -3,7 +3,7 @@ import logging
 import django_filters
 import stripe
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import status, viewsets
 from rest_framework.exceptions import APIException
