@@ -30,7 +30,7 @@ tests:
     - bin/ensure-python-deps.sh
     - poetry run python manage.py migrate
     - poetry run python manage.py check
-    - poetry run coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* manage.py test -v2
+    - poetry run coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* pytest -v
     - poetry run coverage report
     - poetry run bin/lint
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
