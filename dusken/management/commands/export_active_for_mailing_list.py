@@ -1,6 +1,6 @@
 import csv
-import sys
 import json
+import sys
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
