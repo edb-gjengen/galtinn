@@ -23,3 +23,11 @@ svg {
     font-weight: bold;
     font-size: 1.5em;
 }
+
+/* do not underline links unless hovered over */
+a:not([class*="btn"]) {
+    text-decoration: none;
+}
+a:not([class*="btn"]):hover {
+    text-decoration: underline;
+}
