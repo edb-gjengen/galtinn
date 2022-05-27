@@ -34,10 +34,12 @@ tests:
     - poetry run coverage report
     - poetry run coverage xml
     - poetry run bin/lint
-  coverage: '/^TOTAL.+?\d+\%$/'
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
-      cobertura: coverage.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
 
 deploy:
   stage: deploy
