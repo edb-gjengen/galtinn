@@ -5,5 +5,5 @@ type MembershipType {
 }
 
 type Query {
-  resolveMembershipTypes(isDefault: Boolean = null): [MembershipType!]!
+  membershipTypes(isDefault: Boolean = null): [MembershipType!]!
 }

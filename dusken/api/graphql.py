@@ -16,7 +16,7 @@ class MembershipType:
 @strawberry.type
 class Query:
     @strawberry.field()
-    def resolve_membership_types(self, info, is_default: Optional[bool] = None) -> List[MembershipType]:
+    def membership_types(self, info, is_default: Optional[bool] = None) -> List[MembershipType]:
         query = {} if is_default is None else {"is_default": is_default}
         return models.MembershipType.objects.filter(**query)
 
