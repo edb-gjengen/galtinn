@@ -44,5 +44,5 @@ urlpatterns += [
     # Stats
     path("stats/", membership_stats, name="membership-stats"),
     # GraphQL API
-    path("graphql", csrf_exempt(GraphQLView.as_view(schema=schema)), name="graphql"),
+    path("graphql/", csrf_exempt(GraphQLView.as_view(schema=schema)), name="graphql"),
 ]
