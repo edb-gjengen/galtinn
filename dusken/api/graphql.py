@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 import strawberry.django
-from strawberry_django import auto
+from strawberry import auto
 
 from dusken import models
 
