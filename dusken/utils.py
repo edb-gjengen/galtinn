@@ -23,12 +23,12 @@ def generate_username(first_name, last_name):
     first_name = first_name.encode("ascii", "ignore").lower()[:6].decode("utf-8")
     last_name = last_name.encode("ascii", "ignore").lower()[:2].decode("utf-8")
     random_number = random.randint(1, 9999)
-    username = "{}{}{:04d}".format(first_name, last_name, random_number)
+    username = f"{first_name}{last_name}{random_number:04d}"
     username = whitespace_re.sub("", username)
     return username
 
 
-class InlineClass(object):
+class InlineClass:
     def __init__(self, dictionary):
         self.__dict__ = dictionary
 
@@ -64,12 +64,12 @@ def create_email_key(length=12):
 def send_sms(to, message):
     if settings.TESTING:
         return True
-    url = "{}send".format(settings.TEKSTMELDING_API_URL)
+    url = f"{settings.TEKSTMELDING_API_URL}send"
     payload = {"to": str(to), "message": message}
     headers = {"Authorization": "Token " + settings.TEKSTMELDING_API_KEY}
     response = requests.post(url, json=payload, headers=headers)
     if response.status_code != 200:
-        logger.warning("Failed to send SMS, status_code={} payload={}".format(response.status_code, payload))
+        logger.warning(f"Failed to send SMS, status_code={response.status_code} payload={payload}")
         return
 
     return response.json().get("outgoing_id")

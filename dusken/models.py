@@ -1,4 +1,3 @@
-# coding: utf-8
 import logging
 import uuid
 from datetime import timedelta
@@ -136,7 +135,7 @@ class DuskenUser(AbstractUser):
         super().save(**kwargs)
 
     def delete(self, **kwargs):
-        logger.info("Deleting user with username {}".format(self.username))
+        logger.info(f"Deleting user with username {self.username}")
         # Before deleting, remove phone number from user orders to prevent leaking related user data
         # with a recycled phone number (ie. membership and order data).
         self.orders.update(phone_number=None)
@@ -195,7 +194,7 @@ class DuskenUser(AbstractUser):
             return "{first} {last} ({username})".format(
                 first=self.first_name, last=self.last_name, username=self.username
             )
-        return "{username}".format(username=self.username)
+        return f"{self.username}"
 
     class Meta:
         verbose_name = _("User")
@@ -232,9 +231,9 @@ class Membership(BaseModel):
     def __str__(self):
         name = self.__class__.__name__
         if self.end_date is None:
-            return "{}: Life long".format(name)
-        end_date = " - {}".format(self.end_date) if self.end_date is not None else "N/A"
-        return "{}: {}{}".format(name, self.start_date, end_date)
+            return f"{name}: Life long"
+        end_date = f" - {self.end_date}" if self.end_date is not None else "N/A"
+        return f"{name}: {self.start_date}{end_date}"
 
     class Meta:
         verbose_name = _("Membership")
@@ -274,7 +273,7 @@ class MembershipType(BaseModel):
         return int(self.price / 100)
 
     def __str__(self):
-        return "{}".format(self.name)
+        return f"{self.name}"
 
     def save(self, **kwargs):
         # Only one can be default
@@ -293,7 +292,7 @@ class MembershipType(BaseModel):
         elif self.expiry_type == self.EXPIRY_NEVER:
             return None
 
-        raise Exception("MembershipType object {} is configured incorrectly".format(self.__str__()))
+        raise Exception(f"MembershipType object {self.__str__()} is configured incorrectly")
 
     @classmethod
     def get_default(cls):
@@ -332,7 +331,7 @@ class MemberCard(BaseModel):
         self.save()
 
     def __str__(self):
-        return "{}".format(self.card_number)
+        return f"{self.card_number}"
 
     class Meta:
         verbose_name = _("Member card")
@@ -371,7 +370,7 @@ class GroupProfile(BaseModel):
         super().save(**kwargs)
 
     def __str__(self):
-        return "{}".format(self.posix_name)
+        return f"{self.posix_name}"
 
     class Meta:
         verbose_name = _("Group profile")
@@ -423,39 +422,39 @@ class OrgUnit(MPTTModel, BaseModel):
 
     def add_user(self, user_obj, changed_by):
         self.group.user_set.add(user_obj)
-        self.log("Added user {}".format(user_obj), changed_by)
-        user_obj.log("Added to {} OrgUnit".format(self), changed_by)
+        self.log(f"Added user {user_obj}", changed_by)
+        user_obj.log(f"Added to {self} OrgUnit", changed_by)
         user_obj.update_volunteer_status()
 
     def add_admin(self, user_obj, changed_by):
         self.group.user_set.add(user_obj)
         self.admin_group.user_set.add(user_obj)
-        self.log("Added admin {}".format(user_obj), changed_by)
-        user_obj.log("Added to {} OrgUnit as admin".format(self), changed_by)
+        self.log(f"Added admin {user_obj}", changed_by)
+        user_obj.log(f"Added to {self} OrgUnit as admin", changed_by)
         user_obj.update_volunteer_status()
 
     def remove_user(self, user_obj, changed_by):
         self.group.user_set.remove(user_obj)
         self.admin_group.user_set.remove(user_obj)
-        self.log("Removed user {}".format(user_obj), changed_by)
-        user_obj.log("Removed from {} OrgUnit".format(self), changed_by)
+        self.log(f"Removed user {user_obj}", changed_by)
+        user_obj.log(f"Removed from {self} OrgUnit", changed_by)
         user_obj.update_volunteer_status()
 
     def remove_admin(self, user_obj, changed_by):
         if self.admin_group == self.group:
             return
         self.admin_group.user_set.remove(user_obj)
-        self.log("Removed {} from admin".format(user_obj), changed_by)
-        user_obj.log("No longer admin in {} OrgUnit".format(self), changed_by)
+        self.log(f"Removed {user_obj} from admin", changed_by)
+        user_obj.log(f"No longer admin in {self} OrgUnit", changed_by)
 
     def log(self, message, changed_by):
         OrgUnitLogMessage(org_unit=self, message=message, changed_by=changed_by).save()
 
     def __str__(self):
         if self.short_name:
-            return "{} ({})".format(self.name, self.short_name)
+            return f"{self.name} ({self.short_name})"
 
-        return "{}".format(self.name)
+        return f"{self.name}"
 
     class MPTTMeta:
         order_insertion_by = ["name"]
@@ -505,7 +504,7 @@ class Order(BaseModel):
         return int(self.price_nok / 100)
 
     def __str__(self):
-        return "{}".format(self.uuid)
+        return f"{self.uuid}"
 
     class Meta:
         verbose_name = _("Order")
@@ -521,7 +520,7 @@ class PlaceOfStudy(BaseModel):
         if not self.short_name:
             return self.name
 
-        return "{} ({})".format(self.name, self.short_name)
+        return f"{self.name} ({self.short_name})"
 
     class Meta:
         verbose_name = _("Place of study")
@@ -536,7 +535,7 @@ class UserLogMessage(BaseModel):
     )
 
     def __str__(self):
-        return "{}: {} ({})".format(self.__class__.__name__, self.message, self.user_id)
+        return f"{self.__class__.__name__}: {self.message} ({self.user_id})"
 
     class Meta:
         verbose_name = _("User log message")
@@ -551,7 +550,7 @@ class OrgUnitLogMessage(BaseModel):
     )
 
     def __str__(self):
-        return "{}: {} ({})".format(self.__class__.__name__, self.message, self.org_unit_id)
+        return f"{self.__class__.__name__}: {self.message} ({self.org_unit_id})"
 
     class Meta:
         verbose_name = _("Org unit log message")

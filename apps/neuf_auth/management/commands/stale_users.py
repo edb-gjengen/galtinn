@@ -47,7 +47,7 @@ class Command(BaseCommand):
         users = users.values_list("username", flat=True)
 
         if self.options["verbosity"] == "3":
-            self.stdout.write("Found {} Dusken users".format(len(users)))
+            self.stdout.write(f"Found {len(users)} Dusken users")
 
         return set(users)
 
@@ -60,6 +60,6 @@ class Command(BaseCommand):
         ldap_users = ldap_users.values_list("username", flat=True)
 
         if self.options["verbosity"] == "3":
-            self.stdout.write("Found {} LDAP users".format(len(ldap_users)))
+            self.stdout.write(f"Found {len(ldap_users)} LDAP users")
 
         return set(ldap_users)

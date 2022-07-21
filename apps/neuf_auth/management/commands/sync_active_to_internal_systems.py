@@ -45,7 +45,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.options = options
         if int(self.options["verbosity"]) >= 2:
-            self.stdout.write("[{}] Started sync job".format(datetime.utcnow()))
+            self.stdout.write(f"[{datetime.utcnow()}] Started sync job")
 
         # Get all active user from Dusken
         dusken_users_diffable = self.get_dusken_users_diffable()
@@ -59,7 +59,7 @@ class Command(BaseCommand):
         self.log_totals()
 
         if int(self.options["verbosity"]) >= 2:
-            self.stdout.write("[{}] Finished sync job".format(datetime.utcnow()))
+            self.stdout.write(f"[{datetime.utcnow()}] Finished sync job")
 
         # Voila!
 
@@ -83,7 +83,7 @@ class Command(BaseCommand):
             }
 
         if self.options["verbosity"] == 3:
-            self.stdout.write("Found {} Dusken users".format(len(dusken_users_diffable)))
+            self.stdout.write(f"Found {len(dusken_users_diffable)} Dusken users")
 
         return dusken_users_diffable
 
@@ -104,7 +104,7 @@ class Command(BaseCommand):
                 "groups": ldap_groups,
             }
         if self.options["verbosity"] == 3:
-            self.stdout.write("Found {} LDAP users".format(len(ldap_users_diffable)))
+            self.stdout.write(f"Found {len(ldap_users_diffable)} LDAP users")
 
         return ldap_users_diffable
 
@@ -118,7 +118,7 @@ class Command(BaseCommand):
 
                 self.COUNTS["create"] += 1
                 if int(self.options["verbosity"]) >= 2:
-                    self.stdout.write("[CREATED] Dusken user {} is not in LDAP".format(username))
+                    self.stdout.write(f"[CREATED] Dusken user {username} is not in LDAP")
             elif not self.user_details_in_sync(user, ldap_users_diffable[username]) or not self.user_groups_in_sync(
                 user, ldap_users_diffable[username]
             ):
@@ -133,12 +133,12 @@ class Command(BaseCommand):
 
                 self.COUNTS["update"] += 1
                 if int(self.options["verbosity"]) >= 2:
-                    self.stdout.write("[UPDATED] Dusken user {} is out of sync with LDAP".format(username))
+                    self.stdout.write(f"[UPDATED] Dusken user {username} is out of sync with LDAP")
             else:
                 # In sync :-)
                 self.COUNTS["in_sync"] += 1
                 if int(self.options["verbosity"]) == 3:
-                    self.stdout.write("[OK] Dusken user {} is in sync with LDAP".format(username))
+                    self.stdout.write(f"[OK] Dusken user {username} is in sync with LDAP")
 
     def log_totals(self):
         if self.COUNTS["create"] > 0 or self.COUNTS["update"] > 0 or int(self.options["verbosity"]) >= 2:

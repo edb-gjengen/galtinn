@@ -108,7 +108,7 @@ class MembershipChargeView(GenericAPIView):
 
         # Charge
         membership_type = serializer.validated_data.get("membership_type")
-        description = "{}: {}".format(membership_type.name, membership_type.description)
+        description = f"{membership_type.name}: {membership_type.description}"
         charge = self._create_stripe_charge(customer, membership_type.price, description)
 
         # Winning, save new order, with user and stripe customer id :-)

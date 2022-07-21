@@ -30,7 +30,7 @@ class Command(BaseCommand):
                 exportable.append(
                     {
                         "email": member.email,
-                        "name": "{} {}".format(member.first_name, member.last_name),
+                        "name": f"{member.first_name} {member.last_name}",
                         "attributes": json.dumps({"user_id": member.id}),
                     }
                 )

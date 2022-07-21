@@ -6,4 +6,4 @@ register = template.Library()
 
 @register.simple_tag
 def get_language_page_prefix():
-    return "/{}/".format(get_language())
+    return f"/{get_language()}/"

@@ -9,6 +9,7 @@ DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
 sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev libssl-dev ldap-utils redis-server
 poetry shell  # Start a poetry shell creating a virtual environment.
 poetry install
+pre-commit install
 python manage.py migrate
 python manage.py loaddata testdata
 bin/run

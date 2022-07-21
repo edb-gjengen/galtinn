@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
@@ -181,9 +179,9 @@ SVG_DIRS = [os.path.join(BASE_DIR, "frontend/app/images")]
 
 # LDAP
 LDAP_BASE_DN = "dc=neuf,dc=no"
-LDAP_USER_DN = "ou=People,{}".format(LDAP_BASE_DN)
-LDAP_GROUP_DN = "ou=Groups,{}".format(LDAP_BASE_DN)
-LDAP_AUTOMOUNT_DN = "ou=Automount,{}".format(LDAP_BASE_DN)
+LDAP_USER_DN = f"ou=People,{LDAP_BASE_DN}"
+LDAP_GROUP_DN = f"ou=Groups,{LDAP_BASE_DN}"
+LDAP_AUTOMOUNT_DN = f"ou=Automount,{LDAP_BASE_DN}"
 
 LDAP_UID_MIN = 10000
 LDAP_UID_MAX = 100000

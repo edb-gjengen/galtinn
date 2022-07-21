@@ -22,7 +22,7 @@ def membership_stats(request):
     memberships_grouped = defaultdict(list)
 
     def _key_func(x):
-        return "{}{}".format(x.order.payment_method, x.order.created.date())
+        return f"{x.order.payment_method}{x.order.created.date()}"
 
     for key, values in groupby(memberships, key=_key_func):
         sales = list(values)

@@ -5,3 +5,4 @@ SRC_DIR="dusken duskensite apps"
 black $SRC_DIR
 isort $SRC_DIR
 pycln $SRC_DIR
+pyupgrade --py38-plus $(find $SRC_DIR -name '*.py')

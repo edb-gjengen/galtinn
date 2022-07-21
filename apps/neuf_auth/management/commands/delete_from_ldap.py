@@ -34,15 +34,15 @@ class Command(BaseCommand):
 
         filename = args[0]
         if not os.path.isfile(filename):
-            self.stderr.write("{} is not a file".format(filename))
+            self.stderr.write(f"{filename} is not a file")
             sys.exit()
 
         with open(filename) as f:
             usernames = f.read().strip().split()
-            self.stdout.write("Found {} usernames in file".format(len(usernames)))
+            self.stdout.write(f"Found {len(usernames)} usernames in file")
 
             ldap_users = LdapUser.objects.filter(username__in=usernames)
-            self.stdout.write("Matched {} PosixUser objects".format(ldap_users.count()))
+            self.stdout.write(f"Matched {ldap_users.count()} PosixUser objects")
             for user in ldap_users:
                 username = user.username
                 self.delete_automount_entry(username)
@@ -54,7 +54,7 @@ class Command(BaseCommand):
         if self.options["no_prompt"]:
             return True
 
-        val = input("Do you want to permanently remove {} '{}'? [y/N]".format(object_type, username))
+        val = input(f"Do you want to permanently remove {object_type} '{username}'? [y/N]")
         try:
             confirmed = strtobool(val)
         except ValueError:
@@ -79,7 +79,7 @@ class Command(BaseCommand):
                 if not self.options["dry_run"]:
                     g.members.remove(username)
                     g.save()
-                self.stdout.write("Removed PosixGroup membership in {} for '{}'".format(g.name, username))
+                self.stdout.write(f"Removed PosixGroup membership in {g.name} for '{username}'")
 
         else:
             self.stdout.write(
@@ -92,23 +92,23 @@ class Command(BaseCommand):
         if self._user_confirmes_deletion(username, "personal PosixGroup for"):
             if not self.options["dry_run"]:
                 LdapGroup.objects.filter(name=username).delete()
-            self.stdout.write("Removed personal PosixGroup for '{}'".format(username))
+            self.stdout.write(f"Removed personal PosixGroup for '{username}'")
         else:
-            self.stdout.write("Did nothing with personal PosixGroup for '{}'".format(username))
+            self.stdout.write(f"Did nothing with personal PosixGroup for '{username}'")
 
     def delete_automount_entry(self, username):
         if self._user_confirmes_deletion(username, "Automount entry for"):
             if not self.options["dry_run"]:
                 LdapAutomountHome.objects.filter(username=username).delete()
-            self.stdout.write("Removed automount for '{}'".format(username))
+            self.stdout.write(f"Removed automount for '{username}'")
         else:
-            self.stdout.write("Did nothing with automount for '{}'".format(username))
+            self.stdout.write(f"Did nothing with automount for '{username}'")
 
     def delete_ldap_user(self, user):
         username = user.username
         if self._user_confirmes_deletion(username, "PosixUser"):
             if not self.options["dry_run"]:
                 user.delete()
-            self.stdout.write("Removed '{}'".format(username))
+            self.stdout.write(f"Removed '{username}'")
         else:
-            self.stdout.write("Did nothing with '{}'".format(username))
+            self.stdout.write(f"Did nothing with '{username}'")

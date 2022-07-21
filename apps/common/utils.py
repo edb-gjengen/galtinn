@@ -10,7 +10,7 @@ def log_time(description):
             ret = func(*args, **kwargs)
 
             end = default_timer()
-            print(" {:.2f}s".format(end - start))
+            print(f" {end - start:.2f}s")
             return ret
 
         return __wrapper

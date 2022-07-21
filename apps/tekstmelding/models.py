@@ -20,7 +20,7 @@ class DeliveryReport(models.Model):
     delivered = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return "{}: {}".format(self.__class__.__name__, self.pk)
+        return f"{self.__class__.__name__}: {self.pk}"
 
     class Meta:
         managed = False
@@ -65,7 +65,7 @@ class TekstmeldingEvent(models.Model):
     activation_code = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return "{}: {}".format(self.__class__.__name__, self.pk)
+        return f"{self.__class__.__name__}: {self.pk}"
 
     class Meta:
         managed = False
@@ -93,7 +93,7 @@ class IncomingMessage(models.Model):
     ip = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return "{}: {}".format(self.__class__.__name__, self.pk)
+        return f"{self.__class__.__name__}: {self.pk}"
 
     class Meta:
         managed = False
@@ -121,7 +121,7 @@ class OutgoingMessage(models.Model):
     dcs = models.IntegerField()
 
     def __str__(self):
-        return "{}: {}".format(self.__class__.__name__, self.pk)
+        return f"{self.__class__.__name__}: {self.pk}"
 
     class Meta:
         managed = False
@@ -138,7 +138,7 @@ class OutgoingResponse(models.Model):
     error_message = models.TextField(db_column="ErrorMessage", blank=True, null=True)
 
     def __str__(self):
-        return "{}: {}".format(self.__class__.__name__, self.pk)
+        return f"{self.__class__.__name__}: {self.pk}"
 
     class Meta:
         managed = False

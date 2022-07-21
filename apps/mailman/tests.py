@@ -19,7 +19,7 @@ class MailmanAPI(TestCase):
         self.client.force_login(self._user)
 
         url = reverse("mailman:memberships", args=[list_name, address])
-        url = urljoin(url, "?{}".format(urlencode(params)))
+        url = urljoin(url, f"?{urlencode(params)}")
 
         with requests_mock.mock() as m:
             m.put(get_list_url(list_name), json=True)

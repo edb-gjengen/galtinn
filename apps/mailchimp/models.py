@@ -44,7 +44,7 @@ class MailChimpSubscription(BaseModel):
         return self.status == MailChimpSubscription.STATUS_SUBSCRIBED
 
     def __str__(self):
-        return "{} ({})".format(self.email, self.status)
+        return f"{self.email} ({self.status})"
 
     class Meta:
         verbose_name = _("mailchimp subscription")

@@ -23,9 +23,9 @@ def _lrun_locale_task(command, c, limit=None):
                 c.run('mkdir locale')
 
             if cur_path.endswith('dusken'):
-                run_cmd = '../manage.py {}{}{}'.format(command, param, locale_params)
+                run_cmd = f'../manage.py {command}{param}{locale_params}'
             else:
-                run_cmd = '../../manage.py {}{}{}'.format(command, param, locale_params)
+                run_cmd = f'../../manage.py {command}{param}{locale_params}'
             c.run(run_cmd)
 
 
@@ -41,4 +41,4 @@ def compilemessages(c, limit=None):
 def poedit(c, app):
     app_path = os.path.join('apps', app) if app != 'dusken' else 'dusken'
     po_path = os.path.join(app_path, 'locale/nb/LC_MESSAGES/django.po')
-    c.run('poedit {}'.format(po_path))
+    c.run(f'poedit {po_path}')

@@ -22,7 +22,7 @@ class Command(BaseCommand):
             if not row:
                 continue
 
-            lines.append("    '{}': '{}',\n".format(row[0], row[1]))  # f.ex '0559': 'OSLO',
+            lines.append(f"    '{row[0]}': '{row[1]}',\n")  # f.ex '0559': 'OSLO',
 
         with open(os.path.join(settings.BASE_DIR, "dusken/zip_to_city.py"), "w+") as out:
             out.write("ZIP_TO_CITY_MAP = {\n")

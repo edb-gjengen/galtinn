@@ -9,7 +9,7 @@ def _get_auth():
 
 
 def get_list_url(list_name):
-    return urljoin(settings.MAILMAN_API_URL, "/{}".format(list_name))
+    return urljoin(settings.MAILMAN_API_URL, f"/{list_name}")
 
 
 def get_lists_by_email(email):

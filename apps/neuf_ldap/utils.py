@@ -1,4 +1,3 @@
-# coding: utf-8
 import logging
 import os
 import pprint
@@ -30,7 +29,7 @@ def set_ldap_password(username, raw_password):
         user = LdapUser.objects.get(username=username)
         user.set_password(raw_password)
     except LdapUser.DoesNotExist:
-        logger.warning("Could not set password in LDAP for user with username {}".format(username))
+        logger.warning(f"Could not set password in LDAP for user with username {username}")
 
 
 def ldap_user_group_exists(username):
@@ -50,7 +49,7 @@ def create_ldap_user(user, dry_run=False):
 
     def _get_next_uid():
         # Get user id order desc by id
-        logger.debug("{} Getting next available UID".format(datetime.utcnow()))
+        logger.debug(f"{datetime.utcnow()} Getting next available UID")
         users = LdapUser.objects.order_by("-id").values_list("id", flat=True)
 
         if len(users) == 0:
@@ -62,7 +61,7 @@ def create_ldap_user(user, dry_run=False):
         return users[0] + 1
 
     def _get_next_user_gid():
-        logger.debug("{} Getting next available GID for user group".format(datetime.utcnow()))
+        logger.debug(f"{datetime.utcnow()} Getting next available GID for user group")
         # Get user group ids order desc by id
         user_groups = LdapGroup.objects.order_by("-gid").values_list("gid", flat=True)
 
@@ -104,7 +103,7 @@ def create_ldap_user(user, dry_run=False):
 
     if not dry_run:
         ldap_user.save()
-    logger.debug("User saved with data: {} and password type '{}'.".format(pprint.pformat(user_data), pwd_type))
+    logger.debug(f"User saved with data: {pprint.pformat(user_data)} and password type '{pwd_type}'.")
 
     # Add user group
     ldap_user_group = LdapGroup(name=user["username"], gid=user_data["group"], members=[user["username"]])
@@ -185,7 +184,7 @@ def create_ldap_automount(username, dry_run=False):
 
     if not dry_run:
         automount.save()
-    logger.debug("Automount {} added for user {}".format(automount.automountInformation, username))
+    logger.debug(f"Automount {automount.automountInformation} added for user {username}")
 
     return True
 
@@ -210,7 +209,7 @@ def delete_ldap_user(username):
     from .models import LdapGroup, LdapUser
 
     try:
-        logger.info("Deleting LDAP user {}".format(username))
+        logger.info(f"Deleting LDAP user {username}")
 
         if ldap_user_group_exists(username):
             LdapGroup.objects.filter(name=username).delete()
@@ -221,4 +220,4 @@ def delete_ldap_user(username):
         if ldap_username_exists(username):
             LdapUser.objects.filter(username=username).delete()
     except ConnectionDoesNotExist:
-        logger.warning("Skipping deletion of LDAP user {}, since the LDAP connection does not exist".format(username))
+        logger.warning(f"Skipping deletion of LDAP user {username}, since the LDAP connection does not exist")

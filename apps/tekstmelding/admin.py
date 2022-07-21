@@ -59,7 +59,7 @@ class TekstmeldingEventAdmin(admin.ModelAdmin):
         if not obj:
             return ""
 
-        url = reverse("admin:{}_change".format(model_name), args=[obj.pk])
+        url = reverse(f"admin:{model_name}_change", args=[obj.pk])
         return format_html("<a href='{url}'>{obj}</a>", url=url, obj=obj)
 
     def show_link_incoming(self, obj):

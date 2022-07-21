@@ -36,9 +36,9 @@ def create_home_dir(username, dry_run=False):
 def get_home_dirs():
     conn = get_connection()
 
-    separator = "\n{}".format(settings.FILESERVER_HOME_PATH)
+    separator = f"\n{settings.FILESERVER_HOME_PATH}"
     if settings.FILESERVER_HOME_PATH[-1] != "/":
-        separator = "{}/".format(separator)
+        separator = f"{separator}/"
 
     res = conn.run(f"find {settings.FILESERVER_HOME_PATH} -maxdepth 1 -type d", hide=True)
     return res.stdout.split(separator)[1:]
@@ -46,5 +46,5 @@ def get_home_dirs():
 
 def homedir_exists(username):
     conn = get_connection()
-    res = conn.run("ls {} &>/dev/null".format(os.path.join(settings.FILESERVER_HOME_PATH, username)), hide=True)
+    res = conn.run(f"ls {os.path.join(settings.FILESERVER_HOME_PATH, username)} &>/dev/null", hide=True)
     return res.ok

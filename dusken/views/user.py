@@ -81,7 +81,7 @@ class UserListView(VolunteerRequiredMixin, ListView):
     template_name = "dusken/user_list.html"
 
     def get_context_data(self, **kwargs):
-        context = super(UserListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["user_search"] = UserWidgetForm
         return context
 
@@ -138,7 +138,7 @@ class UserSetUsernameView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.save()
         username = form.cleaned_data["username"]
-        self.object.log("Username set to {username}".format(username=username))
+        self.object.log(f"Username set to {username}")
         messages.success(self.request, "{} 😎".format(_("Username set to {username}").format(username=username)))
 
         return redirect(self.success_url)
@@ -159,6 +159,6 @@ class UserDeleteView(LoginRequiredMixin, FormView):
         user = str(self.request.user)
         self.request.user.delete()
 
-        messages.success(self.request, _("So long {user} and good luck on your future travels 🚣".format(user=user)))
+        messages.success(self.request, _(f"So long {user} and good luck on your future travels 🚣"))
 
         return super().form_valid(form)

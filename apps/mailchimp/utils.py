@@ -11,4 +11,4 @@ def subscriber_hash(email):
 
 
 def get_list_member_url(list_id, email):
-    return urljoin(settings.MAILCHIMP_API_URL, "/3.0/lists/{}/members/{}".format(list_id, subscriber_hash(email)))
+    return urljoin(settings.MAILCHIMP_API_URL, f"/3.0/lists/{list_id}/members/{subscriber_hash(email)}")

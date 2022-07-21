@@ -28,7 +28,7 @@ class Command(BaseCommand):
             json.dump(users_out, out_file, ensure_ascii=False)
 
         for load_path in settings.WP_LOAD_PATHS:
-            cmd = "php {0} {1} {2}".format(
+            cmd = "php {} {} {}".format(
                 os.path.join(settings.WP_PHP_SCRIPT_PATH, "import_users.php"), settings.WP_OUT_FILENAME, load_path
             )
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)

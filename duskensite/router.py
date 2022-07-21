@@ -2,7 +2,7 @@ def is_routed_model(model):
     return hasattr(model, "connection_name")
 
 
-class Router(object):
+class Router:
     """
     A router to point database operations on models to the right db.
     Using the attribute connection_name referring to the

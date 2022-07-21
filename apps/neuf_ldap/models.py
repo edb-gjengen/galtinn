@@ -124,7 +124,7 @@ class LdapAutomountHome(ldapdb.models.Model):
     connection_name = "ldap"
 
     # LDAP meta-data
-    base_dn = "ou=auto.home,{}".format(settings.LDAP_AUTOMOUNT_DN)
+    base_dn = f"ou=auto.home,{settings.LDAP_AUTOMOUNT_DN}"
     object_classes = ["automount"]
 
     username = CharField(db_column="cn", primary_key=True)

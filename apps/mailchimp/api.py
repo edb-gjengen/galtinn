@@ -18,9 +18,7 @@ def _get_auth():
 
 def validate_mailchimp_settings(list_id):
     if not settings.MAILCHIMP_API_KEY or not list_id:
-        raise ValueError(
-            "API_KEY ({}) or LIST_ID ({}) not set. Check settings.py".format(settings.MAILCHIMP_API_KEY, list_id)
-        )
+        raise ValueError(f"API_KEY ({settings.MAILCHIMP_API_KEY}) or LIST_ID ({list_id}) not set. Check settings.py")
 
 
 def update_list_subscription(email, status, merge_data=None):
