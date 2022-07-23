@@ -1,5 +1,7 @@
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "dusken.settings.dev"
+# FIXME: https://github.com/django-extensions/django-extensions/pull/1741
+filterwarnings = "ignore::PendingDeprecationWarning:django.apps.registry.*"
 
 [tool.black]
 line-length = 120
