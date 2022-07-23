@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-export DJANGO_SETTINGS_MODULE=duskensite.settings.prod
+export DJANGO_SETTINGS_MODULE=dusken.settings.prod
 PROJECT_PATH=/var/www/neuf.no/dusken
 PROCESS_NAME="galtinn.neuf.no"
 

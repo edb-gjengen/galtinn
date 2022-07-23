@@ -1,4 +1,4 @@
 #!/bin/bash
 
-export DJANGO_SETTINGS_MODULE=duskensite.settings.dev
-celery -A duskensite worker -B
+export DJANGO_SETTINGS_MODULE=dusken.settings.dev
+celery -A dusken worker -B

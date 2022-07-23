@@ -24,13 +24,13 @@ docker-compose up
 bin/worker
 ```
 
-# Add Stripe keys in duskensite/local_settings.py
+# Add Stripe keys in dusken/settings/local.py
 # Note: get this from your account on stripe.com
 
-# Add reCAPTCHA keys in duskensite/local_settings.py
+# Add reCAPTCHA keys in dusken/settings/local.py
 # As: RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY
 
-### Useful duskensite/settings/local.py
+### Useful dusken/settings/local.py
 
 ```python
 AUTH_PASSWORD_VALIDATORS = []
@@ -66,7 +66,7 @@ docker run -e LDAP_DOMAIN=neuf.no -e LDAP_ORGANISATION="Neuf" -e LDAP_ADMIN_PWD=
 ldapadd -D "cn=admin,dc=neuf,dc=no" -w "toor" -f apps/neuf_ldap/tests/testdata.ldif  # Testdata
 ```
 
-Configure our LDAP database like so in `duskensite/settings/local.py`:
+Configure our LDAP database like so in `dusken/settings/local.py`:
 
 ```python
 DATABASES = {

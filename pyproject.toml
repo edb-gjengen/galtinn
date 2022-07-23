@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "duskensite.settings.dev"
+DJANGO_SETTINGS_MODULE = "dusken.settings.dev"
 
 [tool.black]
 line-length = 120

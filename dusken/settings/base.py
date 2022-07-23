@@ -59,7 +59,7 @@ MIDDLEWARE = [
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
 ]
 
-ROOT_URLCONF = "duskensite.urls"
+ROOT_URLCONF = "dusken.urls"
 
 TEMPLATES = [
     {
@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "duskensite.wsgi.application"
+WSGI_APPLICATION = "dusken.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
@@ -89,7 +89,7 @@ DATABASES = {
     }
 }
 # LDAP, Inside, Kassa and tekstmelding DB's
-DATABASE_ROUTERS = ["duskensite.router.Router"]
+DATABASE_ROUTERS = ["dusken.router.Router"]
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

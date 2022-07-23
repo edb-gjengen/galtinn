@@ -3,9 +3,9 @@
 .idea/
 venv/
 db.sqlite3
-duskensite/settings/local.py
-duskensite/local_settings.py
-duskensite/id_rsa*
+dusken/settings/local.py
+dusken/local_settings.py
+dusken/id_rsa*
 docs/_build
 staticfiles
 node_modules

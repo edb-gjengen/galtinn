@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dusken', '0003_remove_orgunit_phone_number'),
+        ("dusken", "0003_remove_orgunit_phone_number"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='orgunit',
-            name='level',
+            model_name="orgunit",
+            name="level",
             field=models.PositiveIntegerField(editable=False),
         ),
         migrations.AlterField(
-            model_name='orgunit',
-            name='lft',
+            model_name="orgunit",
+            name="lft",
             field=models.PositiveIntegerField(editable=False),
         ),
         migrations.AlterField(
-            model_name='orgunit',
-            name='rght',
+            model_name="orgunit",
+            name="rght",
             field=models.PositiveIntegerField(editable=False),
         ),
     ]
