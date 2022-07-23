@@ -123,7 +123,7 @@ class Command(BaseCommand):
                 if self.verbosity >= 2:
                     self.stdout.write(f"[CREATED] Dusken user {username} is not in LDAP")
             elif not self.user_details_in_sync(user, ldap_users_diffable[username]) or not self.user_groups_in_sync(
-                user, ldap_users_diffable[username]
+                user, ldap_users_diffable[username], delete_group_memberships
             ):
                 # Update
                 ldap_update_user_details(user, dry_run=self.dry_run)
@@ -164,11 +164,11 @@ class Command(BaseCommand):
 
         return True
 
-    def user_groups_in_sync(self, dusken_user, ldap_user):
+    def user_groups_in_sync(self, dusken_user, ldap_user, delete_group_memberships):
         # Compare set of group names
         dusken_groups = set(dusken_user["groups"])
         ldap_groups = set(ldap_user["groups"])
-        if self.options["delete_group_memberships"]:
+        if delete_group_memberships:
             in_sync = dusken_groups == ldap_groups
             if not in_sync and self.verbosity >= 2:
                 self.stdout.write(
