@@ -839,7 +839,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="membershiptype",
             name="slug",
-            field=models.SlugField(unique=True, null=True),
+            field=models.SlugField(unique=True),
         ),
         migrations.AddField(
             model_name="groupprofile",
