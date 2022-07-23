@@ -11,6 +11,27 @@ target_version = ['py38']
 profile = "black"
 line_length = 120
 
+[tool.mypy]
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+
+# Third party code without type stubs
+[[tool.mypy.overrides]]
+module = [
+    "captcha.*",
+    "dj_database_url.*",
+    "django_filters.*",
+    "django_select2.*",
+    "fabric.*",
+    "ldapdb.*",
+    "mptt.*",
+    "passlib.*",
+    "phonenumber_field.*",
+]
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "dusken.settings.dev"
+
 [tool.poetry]
 name = "galtinn"
 version = "0.1.0"
@@ -50,6 +71,7 @@ sentry-sdk = "1.7.*"
 stripe = "3.5.*"
 strawberry-graphql = "0.119.*"
 strawberry-graphql-django = "0.4.*"
+fabric = "^2.7.1"
 
 [tool.poetry.dev-dependencies]
 black = "22.6.0"
@@ -63,6 +85,12 @@ pytest-django = "*"
 pyupgrade = "^2.37.2"
 requests-mock = "1.9.*"
 django-upgrade = "^1.7.0"
+mypy = "^0.961"
+django-stubs = {extras = ["compatible-mypy"], version = "^1.12.0"}
+types-requests = "^2.28.3"
+djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^1.7.0"}
+celery-types = "^0.13.1"
+types-stripe = "^3.5.0"
 
 
 [build-system]
