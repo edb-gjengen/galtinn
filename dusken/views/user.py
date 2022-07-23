@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, FormView, ListView, UpdateView
 
-from apps.neuf_auth.forms import SetUsernameForm
+from dusken.apps.neuf_auth.forms import SetUsernameForm
 from dusken.forms import DuskenUserActivateForm, DuskenUserForm, DuskenUserUpdateForm, UserDeleteForm, UserWidgetForm
 from dusken.models import DuskenUser, Order
 from dusken.utils import generate_username

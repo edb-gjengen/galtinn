@@ -17,8 +17,8 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from phonenumber_field.modelfields import PhoneNumberField
 
-from apps.common.mixins import BaseModel
-from apps.neuf_ldap.utils import delete_ldap_user, ldap_create_password
+from dusken.apps.common.mixins import BaseModel
+from dusken.apps.neuf_ldap.utils import delete_ldap_user, ldap_create_password
 from dusken.managers import DuskenUserManager, MembershipManager, OrderManager
 from dusken.utils import create_email_key, send_validation_email
 
@@ -88,7 +88,7 @@ class DuskenUser(AbstractUser):
 
     @property
     def has_set_username(self):
-        from apps.neuf_auth.models import AuthProfile
+        from dusken.apps.neuf_auth.models import AuthProfile
 
         return AuthProfile.objects.filter(user=self, username_updated__isnull=False).exists()
 
@@ -146,7 +146,7 @@ class DuskenUser(AbstractUser):
         super().delete(**kwargs)
 
     def set_ldap_hash(self, raw_password):
-        from apps.neuf_auth.models import AuthProfile
+        from dusken.apps.neuf_auth.models import AuthProfile
 
         ap, _ = AuthProfile.objects.get_or_create(user=self)
         ap.ldap_password = ldap_create_password(raw_password)

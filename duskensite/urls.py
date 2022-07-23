@@ -4,10 +4,10 @@ from django.contrib.flatpages.views import flatpage
 from django.urls import include, path, re_path
 from rest_framework.authtoken.views import obtain_auth_token
 
-from apps.mailchimp import urls as mailchimp_urls
-from apps.mailman import urls as mailman_urls
-from apps.neuf_auth.views import NeufPasswordChangeView, NeufPasswordResetConfirmView
 from dusken import urls as dusken_urls
+from dusken.apps.mailchimp import urls as mailchimp_urls
+from dusken.apps.mailman import urls as mailman_urls
+from dusken.apps.neuf_auth.views import NeufPasswordChangeView, NeufPasswordResetConfirmView
 
 admin.autodiscover()
 

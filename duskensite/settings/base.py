@@ -37,14 +37,14 @@ INSTALLED_APPS = [
 ]
 INSTALLED_APPS += [
     "dusken",
-    "apps.neuf_ldap",
-    "apps.neuf_auth",
-    "apps.mailchimp",
-    "apps.mailman",
-    "apps.common",
+    "dusken.apps.neuf_ldap",
+    "dusken.apps.neuf_auth",
+    "dusken.apps.mailchimp",
+    "dusken.apps.mailman",
+    "dusken.apps.common",
     # FIXME Keep these for easy referencing in django admin for now
-    "apps.kassa",
-    "apps.tekstmelding",
+    "dusken.apps.kassa",
+    "dusken.apps.tekstmelding",
 ]
 
 MIDDLEWARE = [
