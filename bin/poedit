@@ -1,0 +1,10 @@
+#!/bin/bash
+APP=${1:-"dusken"}
+
+if [[ "$APP" != "dusken" ]]; then
+  APP_PATH="dusken/apps/${APP}"
+else
+  APP_PATH="dusken"
+fi
+
+poedit "${APP_PATH}/locale/nb/LC_MESSAGES/django.po"
