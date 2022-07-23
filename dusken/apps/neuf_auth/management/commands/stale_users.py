@@ -8,6 +8,7 @@ from dusken.models import DuskenUser, GroupProfile
 
 class Command(BaseCommand):
     help = "List stale LDAP users not in the Dusken volunteer group"
+    verbosity = 1
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -18,19 +19,16 @@ class Command(BaseCommand):
             help="Excludes users in the LDAP group dns-aktiv from the list",
         )
 
-    options = {}
-
     def __init__(self):
         super().__init__()
         self.group_profile = GroupProfile.objects.get(type=GroupProfile.TYPE_VOLUNTEERS)
 
     def handle(self, *args, **options):
-        self.options = options
-        # home_dirs = get_home_dirs()
+        self.verbosity = int(options["verbosity"])
+
         inside_users_active = self.get_dusken_users()
-        ldap_users_all = self.get_ldap_users()
+        ldap_users_all = self.get_ldap_users(options["exclude_existing"])
         stale_ldap_users = ldap_users_all - inside_users_active
-        # stale_homedirs = set(home_dirs) - inside_users_active
 
         self.stdout.write(
             "{} LDAP users not in group {} in Dusken:\n{}".format(
@@ -38,28 +36,25 @@ class Command(BaseCommand):
             )
         )
         self.stdout.write("")
-        # self.stdout.write('{} stale home directories:\n{}'.format(
-        #     len(stale_homedirs),
-        #     '\n'.join(stale_homedirs)))
 
     def get_dusken_users(self):
         users = DuskenUser.objects.filter(groups=self.group_profile.group, is_active=True, username__isnull=False)
         users = users.values_list("username", flat=True)
 
-        if self.options["verbosity"] == "3":
+        if self.verbosity == 3:
             self.stdout.write(f"Found {len(users)} Dusken users")
 
         return set(users)
 
-    def get_ldap_users(self):
-        # TODO: What about system users, should they be whitelisted?
+    def get_ldap_users(self, exclude_existing):
+        # TODO: What about system users, should they be allowlisted?
         ldap_users = LdapUser.objects.all()
-        if self.options["exclude_existing"]:
+        if exclude_existing:
             ldap_active_members = LdapGroup.objects.get(name=self.group_profile.posix_name).members
             ldap_users = ldap_users.exclude(username__in=ldap_active_members)
         ldap_users = ldap_users.values_list("username", flat=True)
 
-        if self.options["verbosity"] == "3":
+        if self.verbosity == 3:
             self.stdout.write(f"Found {len(ldap_users)} LDAP users")
 
         return set(ldap_users)

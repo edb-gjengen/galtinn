@@ -12,7 +12,8 @@ profile = "black"
 line_length = 120
 
 [tool.mypy]
-plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main", "strawberry.ext.mypy_plugin"]
+
 
 # Third party code without type stubs
 [[tool.mypy.overrides]]

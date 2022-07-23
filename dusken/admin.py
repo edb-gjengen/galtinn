@@ -52,24 +52,20 @@ class MembershipAdmin(admin.ModelAdmin):
     readonly_fields = ["show_user_link"]
     exclude = ["user"]
 
+    @admin.display(description=_("Payment method"), ordering="payment__payment_method")
     def get_payment_type(self, obj):
         if obj.order is None:
             return ""
 
         return obj.order.get_payment_method_display()
 
-    get_payment_type.short_description = _("Payment method")
-    get_payment_type.admin_order_field = "payment__payment_method"
-
+    @admin.display(description=_("User"))
     def show_user_link(self, obj):
         if obj.user is None:
             return ""
 
         url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
-
-    show_user_link.allow_tags = True
-    show_user_link.short_description = _("User")
 
 
 class OrgUnitAdmin(MPTTModelAdmin):
@@ -102,6 +98,7 @@ class OrderAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ["uuid", "product", "price_nok", "user", "payment_method", "transaction_id", "member_card"]
 
+    @admin.display(description=_("User"))
     def show_user_link(self, obj):
         if obj.user is None:
             return ""
@@ -109,9 +106,7 @@ class OrderAdmin(admin.ModelAdmin):
         url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
 
-    show_user_link.allow_tags = True
-    show_user_link.short_description = _("User")
-
+    @admin.display(description=_("Product"))
     def show_product_link(self, obj):
         if obj.user is None:
             return ""
@@ -119,18 +114,13 @@ class OrderAdmin(admin.ModelAdmin):
         url = reverse("admin:dusken_membership_change", args=[obj.product.pk])
         return format_html("<a href='{url}'>{product}</a>", url=url, product=obj.product)
 
-    show_product_link.allow_tags = True
-    show_product_link.short_description = _("Product")
-
+    @admin.display(description=_("Member card"))
     def show_member_card_link(self, obj):
         if obj.member_card is None:
             return ""
 
         url = reverse("admin:dusken_membercard_change", args=[obj.member_card.pk])
         return format_html("<a href='{url}'>{card}</a>", url=url, card=obj.member_card)
-
-    show_member_card_link.allow_tags = True
-    show_member_card_link.short_description = _("Member card")
 
 
 class DuskenUserChangeForm(UserChangeForm):
@@ -155,7 +145,8 @@ class DuskenUserAdmin(UserAdmin):
         "stripe_customer_id",
     )
 
-    fieldsets = UserAdmin.fieldsets + ((_("Dusken fields"), {"fields": _extra_fields}),)
+    def get_fieldsets(self, *args):
+        return self.fieldsets + ((_("Dusken fields"), {"fields": self._extra_fields}),)
 
     def __init__(self, model, admin_site):
         super().__init__(model, admin_site)
@@ -174,15 +165,13 @@ class MemberCardAdmin(admin.ModelAdmin):
     readonly_fields = ["card_number", "show_user_link"]
     exclude = ["user"]
 
+    @admin.display(description=_("User"))
     def show_user_link(self, obj):
         if obj.user is None:
             return ""
 
         url = reverse("admin:dusken_duskenuser_change", args=[obj.user.pk])
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
-
-    show_user_link.allow_tags = True
-    show_user_link.short_description = _("User")
 
 
 class UserLogMessageAdmin(admin.ModelAdmin):

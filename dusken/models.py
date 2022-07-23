@@ -25,7 +25,8 @@ from dusken.utils import create_email_key, send_validation_email
 logger = logging.getLogger(__name__)
 
 
-class DuskenUser(AbstractUser):
+# FIXME: We can't seem use the django-stubs type plugin to infer types from OrgUnit, since MPTTModel is untyped/any
+class DuskenUser(AbstractUser):  # type: ignore
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     first_name = models.CharField(_("first name"), max_length=254, blank=True)
@@ -377,7 +378,8 @@ class GroupProfile(BaseModel):
         verbose_name_plural = _("Group profiles")
 
 
-class OrgUnit(MPTTModel, BaseModel):
+# FIXME: We can't seem use the django-stubs type plugin to infer types from BaseModel, since MPTTModel is untyped/any
+class OrgUnit(MPTTModel, BaseModel):  # type: ignore
     """
     Association, comittee or similar
     """

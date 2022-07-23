@@ -36,15 +36,18 @@ class Command(BaseCommand):
     DIFF_ATTRIBUTES = ["first_name", "last_name", "email", "ldap_password"]
     SYNC_GROUP_PREFIX = "dns-"
     COUNTS = dict(create=0, update=0, in_sync=0)
-    options = {}
+    verbosity = 1
+    dry_run = False
 
     def __init__(self):
         super().__init__()
         self.volunteer_group = GroupProfile.objects.get(type=GroupProfile.TYPE_VOLUNTEERS).group
 
     def handle(self, *args, **options):
-        self.options = options
-        if int(self.options["verbosity"]) >= 2:
+        self.verbosity = int(options["verbosity"])
+        self.dry_run = bool(options["dry_run"])
+
+        if self.verbosity >= 2:
             self.stdout.write(f"[{datetime.utcnow()}] Started sync job")
 
         # Get all active user from Dusken
@@ -54,11 +57,11 @@ class Command(BaseCommand):
         ldap_users_diffable = self.get_all_ldap_users_diffable()
 
         # Do actual sync
-        self.sync_users(dusken_users_diffable, ldap_users_diffable)
+        self.sync_users(dusken_users_diffable, ldap_users_diffable, options["delete_group_memberships"])
 
         self.log_totals()
 
-        if int(self.options["verbosity"]) >= 2:
+        if self.verbosity >= 2:
             self.stdout.write(f"[{datetime.utcnow()}] Finished sync job")
 
         # Voila!
@@ -82,7 +85,7 @@ class Command(BaseCommand):
                 "groups": dusken_groups,
             }
 
-        if self.options["verbosity"] == 3:
+        if self.verbosity == 3:
             self.stdout.write(f"Found {len(dusken_users_diffable)} Dusken users")
 
         return dusken_users_diffable
@@ -103,45 +106,45 @@ class Command(BaseCommand):
                 "email": u.email,
                 "groups": ldap_groups,
             }
-        if self.options["verbosity"] == 3:
+        if self.verbosity == 3:
             self.stdout.write(f"Found {len(ldap_users_diffable)} LDAP users")
 
         return ldap_users_diffable
 
-    def sync_users(self, dusken_users_diffable, ldap_users_diffable):
+    def sync_users(self, dusken_users_diffable, ldap_users_diffable, delete_group_memberships):
         for username, user in dusken_users_diffable.items():
             if username not in ldap_users_diffable:
                 # Create
-                create_ldap_user(user, dry_run=self.options["dry_run"])
-                create_home_dir(user["username"], dry_run=self.options["dry_run"])
-                create_ldap_automount(user["username"], dry_run=self.options["dry_run"])
+                create_ldap_user(user, dry_run=self.dry_run)
+                create_home_dir(user["username"], dry_run=self.dry_run)
+                create_ldap_automount(user["username"], dry_run=self.dry_run)
 
                 self.COUNTS["create"] += 1
-                if int(self.options["verbosity"]) >= 2:
+                if self.verbosity >= 2:
                     self.stdout.write(f"[CREATED] Dusken user {username} is not in LDAP")
             elif not self.user_details_in_sync(user, ldap_users_diffable[username]) or not self.user_groups_in_sync(
                 user, ldap_users_diffable[username]
             ):
                 # Update
-                ldap_update_user_details(user, dry_run=self.options["dry_run"])
+                ldap_update_user_details(user, dry_run=self.dry_run)
                 ldap_update_user_groups(
                     user,
                     ldap_users_diffable[username],
-                    dry_run=self.options["dry_run"],
-                    delete_group_memberships=self.options["delete_group_memberships"],
+                    dry_run=self.dry_run,
+                    delete_group_memberships=delete_group_memberships,
                 )
 
                 self.COUNTS["update"] += 1
-                if int(self.options["verbosity"]) >= 2:
+                if self.verbosity >= 2:
                     self.stdout.write(f"[UPDATED] Dusken user {username} is out of sync with LDAP")
             else:
                 # In sync :-)
                 self.COUNTS["in_sync"] += 1
-                if int(self.options["verbosity"]) == 3:
+                if self.verbosity == 3:
                     self.stdout.write(f"[OK] Dusken user {username} is in sync with LDAP")
 
     def log_totals(self):
-        if self.COUNTS["create"] > 0 or self.COUNTS["update"] > 0 or int(self.options["verbosity"]) >= 2:
+        if self.COUNTS["create"] > 0 or self.COUNTS["update"] > 0 or self.verbosity >= 2:
             self.stdout.write(
                 "Totals: created {}, updated {}, in sync: {}".format(
                     self.COUNTS["create"], self.COUNTS["update"], self.COUNTS["in_sync"]
@@ -151,7 +154,7 @@ class Command(BaseCommand):
     def user_details_in_sync(self, dusken_user, ldap_user):
         for attr in self.DIFF_ATTRIBUTES:
             if dusken_user[attr] != ldap_user[attr]:
-                if int(self.options["verbosity"]) >= 2:
+                if self.verbosity >= 2:
                     self.stdout.write(
                         "{}: {} (Dusken) != {} (LDAP)".format(
                             dusken_user["username"], dusken_user[attr], ldap_user[attr]
@@ -167,7 +170,7 @@ class Command(BaseCommand):
         ldap_groups = set(ldap_user["groups"])
         if self.options["delete_group_memberships"]:
             in_sync = dusken_groups == ldap_groups
-            if not in_sync and int(self.options["verbosity"]) >= 2:
+            if not in_sync and self.verbosity >= 2:
                 self.stdout.write(
                     "{}: {} (Dusken) != {} (LDAP)".format(
                         dusken_user["username"], ",".join(dusken_groups), ",".join(ldap_groups)
@@ -176,7 +179,7 @@ class Command(BaseCommand):
         else:
             missing_groups = dusken_groups.difference(ldap_groups)
             in_sync = len(missing_groups) == 0
-            if not in_sync and int(self.options["verbosity"]) >= 2:
+            if not in_sync and self.verbosity >= 2:
                 self.stdout.write(
                     "{}: Not in LDAP groups: {}".format(dusken_user["username"], ",".join(missing_groups))
                 )

@@ -32,6 +32,7 @@ class OutgoingMessageAdmin(admin.ModelAdmin):
     ]
     list_filter = ["timestamp", "pricegroup", "content_type_id"]
 
+    @admin.display(description=_("Incoming message"))
     def show_incoming_link(self, obj):
         if not obj.ext_id:
             return ""
@@ -39,8 +40,13 @@ class OutgoingMessageAdmin(admin.ModelAdmin):
         url = reverse("admin:tekstmelding_incomingmessage_change", args=[obj.ext_id])
         return format_html("<a href='{url}'>{incoming}</a>", url=url, incoming=obj.ext_id)
 
-    show_incoming_link.allow_tags = True
-    show_incoming_link.short_description = _("Incoming message")
+
+def _show_link(obj, model_name):
+    if not obj:
+        return ""
+
+    url = reverse(f"admin:{model_name}_change", args=[obj.pk])
+    return format_html("<a href='{url}'>{obj}</a>", url=url, obj=obj)
 
 
 class TekstmeldingEventAdmin(admin.ModelAdmin):
@@ -55,36 +61,21 @@ class TekstmeldingEventAdmin(admin.ModelAdmin):
     ]
     list_filter = ["timestamp", "action"]
 
-    def _show_link(self, obj, model_name):
-        if not obj:
-            return ""
-
-        url = reverse(f"admin:{model_name}_change", args=[obj.pk])
-        return format_html("<a href='{url}'>{obj}</a>", url=url, obj=obj)
-
+    @admin.display(description=_("Incoming message"))
     def show_link_incoming(self, obj):
-        return self._show_link(obj.incoming, "tekstmelding_incomingmessage")
+        return _show_link(obj.incoming, "tekstmelding_incomingmessage")
 
-    show_link_incoming.allow_tags = True
-    show_link_incoming.short_description = _("Incoming message")
-
+    @admin.display(description=_("Outgoing message"))
     def show_link_outgoing(self, obj):
-        return self._show_link(obj.outgoing, "tekstmelding_outgoingmessage")
+        return _show_link(obj.outgoing, "tekstmelding_outgoingmessage")
 
-    show_link_outgoing.allow_tags = True
-    show_link_outgoing.short_description = _("Outgoing message")
-
+    @admin.display(description=_("Delivery report"))
     def show_link_dlr(self, obj):
-        return self._show_link(obj.dlr, "tekstmelding_deliveryreport")
+        return _show_link(obj.dlr, "tekstmelding_deliveryreport")
 
-    show_link_dlr.allow_tags = True
-    show_link_dlr.short_description = _("Delivery report")
-
+    @admin.display(description=_("Inside user"))
     def show_link_user(self, obj):
-        return self._show_link(obj.user, "inside_insideuser")
-
-    show_link_user.allow_tags = True
-    show_link_user.short_description = _("Inside user")
+        return _show_link(obj.user, "inside_insideuser")
 
 
 admin.site.register(DeliveryReport)

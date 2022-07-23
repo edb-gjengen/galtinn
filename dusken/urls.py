@@ -63,10 +63,7 @@ urlpatterns = [
     path("email/subscriptions/", EmailSubscriptions.as_view(), name="email-subscriptions"),
     # Stats
     path("stats/", StatsView.as_view(), name="stats"),
-]
-
-# Other apps
-urlpatterns += [
+    # Other apps
     path("admin/", admin.site.urls),
     path("api/", include(api_urls)),
     path("mailchimp/", include(mailchimp_urls, namespace="mailchimp")),
@@ -74,10 +71,7 @@ urlpatterns += [
     # Language selection
     path("i18n/", include("django.conf.urls.i18n")),
     path("select2/", include("django_select2.urls")),
-]
-
-# Authentication
-urlpatterns += [
+    # Authentication
     re_path(r"^auth/password_change/$", NeufPasswordChangeView.as_view(), name="password_change"),
     re_path(
         r"^auth/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
@@ -88,9 +82,6 @@ urlpatterns += [
     path("auth/", include(auth_urls)),
     # API auth
     re_path(r"^auth/obtain-token/", obtain_auth_token, name="obtain-auth-token"),
-]
-
-# Flatpages
-urlpatterns += [
+    # Flatpages
     re_path(r"^(?P<url>.*/)$", flatpage),
 ]

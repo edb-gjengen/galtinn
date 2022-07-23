@@ -1,6 +1,7 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+from typing import List
 
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -10,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: List[str] = []
 SECRET_KEY = os.getenv("SECRET_KEY", "insecure_default")
 
 # Application definition
@@ -253,7 +254,7 @@ LOGGING = {
         },
     },
 }
-SENTRY_DSN = None
+SENTRY_DSN = ""
 SENTRY_ENVIRONMENT = "dev"
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from django.conf import settings
-from django.core.management import BaseCommand, CommandParser
+from django.core.management.base import BaseCommand, CommandParser
 from strawberry.printer import print_schema
 
 from dusken.api.graphql import schema as schema_symbol

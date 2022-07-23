@@ -44,7 +44,7 @@ class DuskenUserSerializer(serializers.ModelSerializer):
 
 
 class DuskenUserRegisterSerializer(serializers.ModelSerializer):
-    auth_token = serializers.SlugRelatedField(read_only=True, slug_field="key")
+    auth_token = serializers.SlugRelatedField(read_only=True, slug_field="key")  # type: ignore
     active_member_card = MemberCardSerializer(read_only=True)
     last_membership = MembershipSerializer(read_only=True)
 

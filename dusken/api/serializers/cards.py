@@ -5,7 +5,7 @@ from dusken.models import DuskenUser, MemberCard, Order
 
 
 class MemberCardSerializer(serializers.ModelSerializer):
-    orders = serializers.SlugRelatedField(read_only=True, many=True, slug_field="uuid")
+    orders = serializers.SlugRelatedField(read_only=True, many=True, slug_field="uuid")  # type: ignore
 
     class Meta:
         model = MemberCard

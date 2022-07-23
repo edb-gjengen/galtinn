@@ -19,7 +19,8 @@ class Query:
     @strawberry.field()
     def membership_types(self, info: Info, is_default: Optional[bool] = None) -> List[MembershipType]:
         query = {} if is_default is None else {"is_default": is_default}
-        return models.MembershipType.objects.filter(**query)
+        # FIXME: How to allow using django types here?
+        return models.MembershipType.objects.filter(**query)  # type: ignore
 
     # TODO: Add opening hours and other static app info from a separate app
 
