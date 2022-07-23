@@ -3,21 +3,19 @@ from __future__ import annotations
 from typing import List, Optional
 
 import strawberry.django
-from strawberry import auto
 from strawberry.types import Info  # noqa: TCH002
 
 from dusken import models
-
-
-@strawberry.django.type(models.MembershipType)
-class MembershipType:
-    id: auto
-    slug: auto
-    price: auto
+from dusken.api.auth import IsAuthenticated
+from dusken.api.types import MembershipType, User  # noqa: TCH001
 
 
 @strawberry.type
 class Query:
+    @strawberry.field(permission_classes=[IsAuthenticated])
+    def me(self, info: Info) -> User:
+        return info.context.request.user
+
     @strawberry.field()
     def membership_types(self, _info: Info, is_default: Optional[bool] = None) -> List[MembershipType]:
         query = {} if is_default is None else {"is_default": is_default}
