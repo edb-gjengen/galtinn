@@ -6,4 +6,4 @@ class MailchimpConfig(AppConfig):
     label = "mailchimp"
 
     def ready(self):
-        import apps.mailchimp.signals
+        import apps.mailchimp.signals  # noqa
