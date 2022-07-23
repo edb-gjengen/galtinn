@@ -562,6 +562,17 @@ python-versions = "*"
 django = "*"
 
 [[package]]
+name = "django-upgrade"
+version = "1.7.0"
+description = "Automatically upgrade your Django projects."
+category = "dev"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+tokenize-rt = ">=4.1.0"
+
+[[package]]
 name = "djangorestframework"
 version = "3.13.1"
 description = "Web APIs for Django, made easy."
@@ -1353,7 +1364,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.8"
-content-hash = "1215237459b9fb0dd143c229d2b80dca5a61d58106266552e6562c34fccc576f"
+content-hash = "d09dc35db6bf367a90132140998c1ec8f2cfd0e5a7bb43fac3419318ddd26d60"
 
 [metadata.files]
 amqp = [
@@ -1513,6 +1524,7 @@ django-select2 = [
 django-signal-disabler = [
     {file = "django-signal-disabler-0.1.1.tar.gz", hash = "sha256:c1121f2d6a747eb2f387f3b3184c63c56db1b5ba5229c974a72867973f50773a"},
 ]
+django-upgrade = []
 djangorestframework = [
     {file = "djangorestframework-3.13.1-py3-none-any.whl", hash = "sha256:24c4bf58ed7e85d1fe4ba250ab2da926d263cd57d64b03e8dcef0ac683f8b1aa"},
     {file = "djangorestframework-3.13.1.tar.gz", hash = "sha256:0c33407ce23acc68eca2a6e46424b008c9c02eceb8cf18581921d0092bc1f2ee"},

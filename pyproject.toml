@@ -62,6 +62,7 @@ pytest-cov = "^3.0.0"
 pytest-django = "*"
 pyupgrade = "^2.37.2"
 requests-mock = "1.9.*"
+django-upgrade = "^1.7.0"
 
 
 [build-system]
