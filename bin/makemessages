@@ -1,0 +1,5 @@
+#!/bin/bash
+set -eu
+
+cd dusken
+python ../manage.py makemessages -l nb

@@ -2,9 +2,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import TemplateView
 
-from apps.mailchimp.api import get_list_subscription
-from apps.mailchimp.models import MailChimpSubscription
-from apps.mailman.api import get_lists_by_email
+from dusken.apps.mailchimp.api import get_list_subscription
+from dusken.apps.mailchimp.models import MailChimpSubscription
+from dusken.apps.mailman.api import get_lists_by_email
 
 
 class EmailSubscriptions(LoginRequiredMixin, TemplateView):
