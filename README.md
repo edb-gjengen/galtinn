@@ -1,4 +1,6 @@
-DUSKEN - Dårlig Utrustet Studentsystem som Kommer til å Endre Norge.
+# Galtinn
+
+Membership system ++ for DNS / Chateau Neuf.
 
 [![Build Status](https://circleci.com/gh/edb-gjengen/dusken.png)](https://circleci.com/gh/edb-gjengen/dusken)
 [![codecov](https://codecov.io/gh/edb-gjengen/dusken/branch/master/graph/badge.svg)](https://codecov.io/gh/edb-gjengen/dusken)
@@ -22,15 +24,14 @@ bin/run-frontend
 docker-compose up
 # start Celery worker
 bin/worker
-```
 
 # Add Stripe keys in dusken/settings/local.py
 # Note: get this from your account on stripe.com
+# Add reCAPTCHA keys in dusken/settings/local.py as:
+# RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY
+```
 
-# Add reCAPTCHA keys in dusken/settings/local.py
-# As: RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY
-
-### Useful dusken/settings/local.py
+## Useful dusken/settings/local.py
 
 ```python
 AUTH_PASSWORD_VALIDATORS = []
@@ -44,16 +45,17 @@ bin/test
 # Run this for testing import from Inside (legacy)
 python manage.py test --testrunner apps.inside.tests.NoDbTestRunner apps.inside
 ```
+
 ## Development
 
-Font icons are from: https://linearicons.com/free
+Font icons are from: <https://linearicons.com/free>
 
 ### Card payments
 
 Dusken supports Stripe for card payments. The Stripe APIs are documented here:
 
-* Stripe Checkout (JS): https://stripe.com/docs/checkout
-* Stripe API (Python): https://stripe.com/docs/api?lang=python
+* Stripe Checkout (JS): <https://stripe.com/docs/checkout>
+* Stripe API (Python): <https://stripe.com/docs/api?lang=python>
 
 Use this VISA card for testing: 4242 4242 4242 4242
 
@@ -80,6 +82,7 @@ DATABASES = {
 ```
 
 ### Translations
+
 ```bash
 # Generate .po files based on translation strings in code and template files
 fab makemessages
@@ -95,6 +98,16 @@ To indentify users as volunteers exactly one `GroupProfile` has to have `type` s
 
 ## Mailchimp
 
-- Settings: `MAILCHIMP_LIST_ID`, `MAILCHIMP_WEBHOOK_SECRET`, `MAILCHIMP_API_KEY`, `MAILCHIMP_API_URL`
-- Set up a webhook with unsubscribes using [this guide](http://kb.mailchimp.com/integrations/api-integrations/how-to-set-up-webhooks) (via API should be unchecked).
-- The webhook URL path is: `/mailchimp/incoming/?secret=WEBHOOK_SECRET/`.
+* Settings: `MAILCHIMP_LIST_ID`, `MAILCHIMP_WEBHOOK_SECRET`, `MAILCHIMP_API_KEY`, `MAILCHIMP_API_URL`
+* Set up a webhook with unsubscribes using [this guide](http://kb.mailchimp.com/integrations/api-integrations/how-to-set-up-webhooks) (via API should be unchecked).
+* The webhook URL path is: `/mailchimp/incoming/?secret=WEBHOOK_SECRET/`.
+
+## Dusken
+
+Galtinn was called DUSKEN during development - _Dårlig Utrustet Studentsystem som Kommer til å Endre Norge._
+
+## TODO
+
+* [ ] Replace user queries with graphql
+* [ ] Delete user mutation
+* [ ] Membership payment API v2
