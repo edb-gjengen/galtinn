@@ -26,7 +26,7 @@
         <li class="list-group-item justify-content-between"><span>
             {% trans "Username" %}: <strong>{{ userobj.username }}</strong>
             {% if user.is_superuser and not userobj.has_set_username %}
-                <span class="badge badge-info">{% trans "Not set" %}</span>
+                <span class="badge bg-info">{% trans "Not set" %}</span>
             {% endif %}
         </span>
             {% if userobj == user and not userobj.has_set_username %}
@@ -37,9 +37,9 @@
             <span>
                 {% svg "icons/envelope" %} {% trans "Email" %}: <strong>{{ userobj.email }}</strong>
                 {% if userobj.email_is_confirmed %}
-                    <span class="badge badge-success">{% trans "Validated" %}</span>
+                    <span class="badge bg-success">{% trans "Validated" %}</span>
                 {% else %}
-                    <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                    <span class="badge bg-warning">{% trans "Not validated" %}</span>
                 {% endif %}
             </span>
             {% if userobj == user and not userobj.email_is_confirmed %}
@@ -50,9 +50,9 @@
             <span>
                 {% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ userobj.phone_number }}</strong>
                 {% if userobj.phone_number_confirmed %}
-                    <span class="badge badge-success">{% trans "Validated" %}</span>
+                    <span class="badge bg-success">{% trans "Validated" %}</span>
                 {% else %}
-                    <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                    <span class="badge bg-warning">{% trans "Not validated" %}</span>
                 {% endif %}
             </span>
             {% if userobj == user and not userobj.phone_number_confirmed %}
@@ -85,13 +85,13 @@
                             {% endif %}
                         </strong>
                         {% if ms.is_valid %}
-                            <span class="badge badge-success">{% trans "Valid" %}</span>
+                            <span class="badge bg-success">{% trans "Valid" %}</span>
                         {% else %}
-                            <span class="badge badge-danger">{% trans "Expired" %}</span>
+                            <span class="badge bg-danger">{% trans "Expired" %}</span>
                         {% endif %}
                     {% else %}
                         <strong>{% trans "None" %}</strong>
-                        <span class="badge badge-danger">{% trans "Expired" %}</span>
+                        <span class="badge bg-danger">{% trans "Expired" %}</span>
                     {% endif %}
                 {% endwith %}
             </span>

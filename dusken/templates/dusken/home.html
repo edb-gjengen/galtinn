@@ -91,9 +91,9 @@
                         <span>
                             {% svg "icons/envelope" %} {% trans "Email" %}: <strong>{{ user.email }}</strong>
                             {% if user.email_is_confirmed %}
-                                <span class="badge badge-success">{% trans "Validated" %}</span>
+                                <span class="badge bg-success">{% trans "Validated" %}</span>
                             {% else %}
-                                <span class="badge badge-warning">{% trans "Not validated" %}</span>
+                                <span class="badge bg-warning">{% trans "Not validated" %}</span>
                             {% endif %}
                         </span>
                         {% if not user.email_is_confirmed %}
@@ -105,12 +105,12 @@
                             {% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ user.phone_number }}</strong>
                             {% if user.phone_number %}
                                 {% if user.phone_number_confirmed %}
-                                    <span class="badge badge-success">{% trans "Validated" %}</span>
+                                    <span class="badge bg-success">{% trans "Validated" %}</span>
                                 {% comment %}{% else %}
-                                    <span class="badge badge-warning">{% trans "Not validated" %}</span>{% endcomment %}
+                                    <span class="badge bg-warning">{% trans "Not validated" %}</span>{% endcomment %}
                                 {% endif %}
                             {% else %}
-                                <span class="badge badge-danger">{% trans "Missing" %}</span>
+                                <span class="badge bg-danger">{% trans "Missing" %}</span>
                             {% endif %}
 
                         </span>
