@@ -14,6 +14,9 @@ ignore = [
   "TD",   # Allow TODOs
   "FIX"   # Allow TODOs and FIXMEs
 ]
+[tool.ruff.per-file-ignores]
+"dusken/tests/*.py" = ["S101"]
+"**/test_*.py" = ["S101"]
 
 [tool.mypy]
 plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main", "strawberry.ext.mypy_plugin"]

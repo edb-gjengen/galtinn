@@ -37,22 +37,22 @@ class DuskenUserAPITestCase(APITestCase):
         response = self.client.post(url, data, format="json")
 
         # Check if the response even makes sense:
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        assert response.status_code == status.HTTP_200_OK
         token = response.data.get("token", None)
 
         # Check if the returned login token is correct:
-        self.assertIsNotNone(token, "No token was returned in response")
-        self.assertEqual(token, self.token, "Token from login and real token are not the same!")
+        assert token is not None, "No token was returned in response"
+        assert token == self.token, "Token from login and real token are not the same!"
 
     def test_user_can_only_view_self(self):
-        self.assertEqual(DuskenUser.objects.count(), 2)
+        assert DuskenUser.objects.count() == 2
         self.client.force_login(self.user)
         url = reverse("user-api-list")
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["id"], self.user.pk)
-        self.assertIsNone(response.data.get("password", None))
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["count"] == 1
+        assert response.data["results"][0]["id"] == self.user.pk
+        assert response.data.get("password", None) is None
 
     def test_user_can_register(self):
         data = {
@@ -66,11 +66,11 @@ class DuskenUserAPITestCase(APITestCase):
         response = self.client.post(url, data, format="json")
 
         # Check if the response even makes sense:
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        assert response.status_code == status.HTTP_201_CREATED, response.data
         # Do not return a password:
-        self.assertIsNone(response.data.get("password", None))
+        assert response.data.get("password", None) is None
         # Check if the returned login token is correct:
-        self.assertIsNotNone(response.data.get("auth_token"), "No token was returned in response")
+        assert response.data.get("auth_token") is not None, "No token was returned in response"
 
 
 class DuskenUserPhoneValidationTestCase(TestCase):
@@ -87,22 +87,22 @@ class DuskenUserPhoneValidationTestCase(TestCase):
 
     def test_user_phone_number_confirmation_valid_key(self):
         self.client.force_login(self.user)
-        self.assertFalse(self.user.phone_number_confirmed)
-        self.assertTrue(self.user.phone_number_key.isdigit())
+        assert not self.user.phone_number_confirmed
+        assert self.user.phone_number_key.isdigit()
         url = reverse("user-phone-validate")
         data = {"phone_key": self.user.phone_number_key}
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(response.url, reverse("home"))
-        self.assertTrue(DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed)
+        assert response.status_code == status.HTTP_302_FOUND
+        assert response.url == reverse("home")
+        assert DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed
 
     def test_user_phone_number_confirmation_invalid_key(self):
         self.client.force_login(self.user)
         url = reverse("user-phone-validate")
         data = {"phone_key": "hello"}
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertFalse(DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed)
+        assert response.status_code == status.HTTP_200_OK
+        assert not DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed
 
 
 class DuskenUserActivateTestCase(TestCase):
@@ -156,23 +156,23 @@ class DuskenUserActivateTestCase(TestCase):
         url = reverse("user-activate", kwargs=kwargs)
         response = self.client.post(url)
         # Very clever.
-        self.assertTrue(b"the link is invalid" in response.content)
+        assert b"the link is invalid" in response.content
 
     def test_invalid_post_data_does_not_render_form(self):
         kwargs = {"phone": "4712345678", "code": "12345678"}
         url = reverse("user-activate", kwargs=kwargs)
         response = self.client.post(url, self.user_data)
         # Very clever.
-        self.assertTrue(b"the link is invalid" in response.content)
+        assert b"the link is invalid" in response.content
 
     def test_right_combination_confirms_phone_number_and_claims_order(self):
         kwargs = {"phone": str(self.order.phone_number).replace("+", ""), "code": self.order.transaction_id[:8]}
         url = reverse("user-activate", kwargs=kwargs)
         response = self.client.post(url, self.user_data)
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)  # redirect to home
+        assert response.status_code == status.HTTP_302_FOUND  # redirect to home
         user = DuskenUser.objects.get(email=self.user_data.get("email"))
-        self.assertTrue(user.phone_number_confirmed)
-        self.assertTrue(user.is_member)
+        assert user.phone_number_confirmed
+        assert user.is_member
 
     def test_right_combination_works_for_foreign_phone(self):
         kwargs = {
@@ -182,10 +182,10 @@ class DuskenUserActivateTestCase(TestCase):
         self.user_data["code"] = self.order_foreign.transaction_id[:8]
         url = reverse("user-activate", kwargs=kwargs)
         response = self.client.post(url, self.user_data)
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)  # redirect to home
+        assert response.status_code == status.HTTP_302_FOUND  # redirect to home
         user = DuskenUser.objects.get(email=self.user_data.get("email"))
-        self.assertTrue(user.phone_number_confirmed)
-        self.assertTrue(user.is_member)
+        assert user.phone_number_confirmed
+        assert user.is_member
 
 
 class DuskenUserMembershipTestCase(TestCase):
@@ -200,8 +200,8 @@ class DuskenUserMembershipTestCase(TestCase):
         )
 
     def test_has_membership(self):
-        self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 0)
-        self.assertFalse(self.user.is_member)
+        assert DuskenUser.objects.with_valid_membership().count() == 0
+        assert not self.user.is_member
 
         m = Membership.objects.create(
             user=self.user,
@@ -209,15 +209,15 @@ class DuskenUserMembershipTestCase(TestCase):
             end_date=self.now + timedelta(days=365),
             membership_type=MembershipType.objects.first(),
         )
-        self.assertTrue(self.user.is_member)
-        self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 1)
+        assert self.user.is_member
+        assert DuskenUser.objects.with_valid_membership().count() == 1
 
         m.end_date = None
         m.save()
-        self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 1)
+        assert DuskenUser.objects.with_valid_membership().count() == 1
 
         m.delete()
-        self.assertEqual(DuskenUser.objects.with_valid_membership().count(), 0)
+        assert DuskenUser.objects.with_valid_membership().count() == 0
 
 
 class DuskenUtilTests(TestCase):
@@ -225,8 +225,8 @@ class DuskenUtilTests(TestCase):
         first_name = "ole remi"
         last_name = "nordmann"
         generated = generate_username(first_name, last_name)
-        self.assertGreater(len(generated), 0)
-        self.assertNotIn(" ", generated)
+        assert len(generated) > 0
+        assert " " not in generated
 
 
 class DuskenUserDelete(TestCase):
@@ -257,11 +257,11 @@ class DuskenUserDelete(TestCase):
 
         self.assertRedirects(response, reverse("index"))
 
-        self.assertFalse(DuskenUser.objects.filter(pk=self.user.pk).exists())
-        self.assertEqual(DuskenUser.objects.filter(username__in=["mrclean1", "mrclean2"]).count(), 2)
+        assert not DuskenUser.objects.filter(pk=self.user.pk).exists()
+        assert DuskenUser.objects.filter(username__in=["mrclean1", "mrclean2"]).count() == 2
 
-        self.assertTrue(Order.objects.filter(pk=self.order.pk).exists())
+        assert Order.objects.filter(pk=self.order.pk).exists()
         self.order.refresh_from_db()
-        self.assertEqual(self.order.phone_number, None)
+        assert self.order.phone_number == None
 
         self.membership.refresh_from_db()  # Will trigger DoesNotExists if was deleted

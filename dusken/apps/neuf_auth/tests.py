@@ -15,8 +15,8 @@ class SSHTestCase(TestCase):
         ):
             username = "nikolark"
             res = create_home_dir(username)
-            self.assertTrue(res)
-            self.assertTrue(homedir_exists(username))
+            assert res
+            assert homedir_exists(username)
 
     def test_list_homedirs(self):
         with self.settings(
@@ -25,7 +25,7 @@ class SSHTestCase(TestCase):
             FILESERVER_SSH_USER="nikolark",
         ):
             homedirs = get_home_dirs()
-            self.assertTrue(homedirs)
+            assert homedirs
 
     def test_homedir_exists(self):
         with self.settings(
@@ -33,4 +33,4 @@ class SSHTestCase(TestCase):
             FILESERVER_SSH_KEY_PATH="/home/nikolark/.ssh/id_rsa",
             FILESERVER_SSH_USER="nikolark",
         ):
-            self.assertTrue(homedir_exists(".X11-unix"))
+            assert homedir_exists(".X11-unix")

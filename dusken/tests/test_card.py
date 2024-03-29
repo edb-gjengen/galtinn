@@ -18,17 +18,17 @@ class CardTestCase(APITestCase):
         url = reverse("membercard-api-list")
         data = {"card_number": self.card.card_number}
         res = self.client.get(url, data)
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data["results"][0]["card_number"], self.card.card_number)
-        self.assertEqual(res.data["results"][0]["user"], self.user.pk)
+        assert res.status_code == status.HTTP_200_OK
+        assert res.data["results"][0]["card_number"] == self.card.card_number
+        assert res.data["results"][0]["user"] == self.user.pk
 
     def test_find_by_user(self):
         url = reverse("membercard-api-list")
         data = {"user": self.user.pk}
         res = self.client.get(url, data)
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data["results"][0]["card_number"], self.card.card_number)
-        self.assertEqual(res.data["results"][0]["user"], self.user.pk)
+        assert res.status_code == status.HTTP_200_OK
+        assert res.data["results"][0]["card_number"] == self.card.card_number
+        assert res.data["results"][0]["user"] == self.user.pk
 
 
 class KassaCardUpdateTestCase(APITestCase):
@@ -56,11 +56,11 @@ class KassaCardUpdateTestCase(APITestCase):
             "transaction_id": transaction_id,
         }
         response = self.client.patch(url, payload, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.data)
-        self.assertTrue(Order.objects.get(pk=order.pk).member_card.pk, self.blank_card.pk)
-        self.assertEqual(Order.objects.get(pk=order.pk).transaction_id, transaction_id)
-        self.assertTrue(MemberCard.objects.get(pk=self.blank_card.pk).is_active)
-        self.assertTrue(MemberCard.objects.get(pk=self.blank_card.pk).registered is not None)
+        assert response.status_code == status.HTTP_200_OK, response.data
+        assert Order.objects.get(pk=order.pk).member_card.pk, self.blank_card.pk
+        assert Order.objects.get(pk=order.pk).transaction_id == transaction_id
+        assert MemberCard.objects.get(pk=self.blank_card.pk).is_active
+        assert MemberCard.objects.get(pk=self.blank_card.pk).registered is not None
 
     def test_kassa_cannot_set_card_owned_by_user_on_order(self):
         order = Order.objects.create(price_nok=0, phone_number="+4794430002")
@@ -71,7 +71,7 @@ class KassaCardUpdateTestCase(APITestCase):
             "member_card": self.user_card.card_number,
         }
         response = self.client.patch(url, payload, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST, response.data
 
     def test_kassa_can_set_blank_card_on_user(self):
         url = reverse("kassa-card-update")
@@ -81,10 +81,10 @@ class KassaCardUpdateTestCase(APITestCase):
             "member_card": self.blank_card.card_number,
         }
         response = self.client.patch(url, payload, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK, response.data)
-        self.assertTrue(MemberCard.objects.get(pk=self.blank_card.pk).is_active)
-        self.assertTrue(MemberCard.objects.get(pk=self.blank_card.pk).registered is not None)
-        self.assertFalse(MemberCard.objects.get(pk=self.user_card.pk).is_active)
+        assert response.status_code == status.HTTP_200_OK, response.data
+        assert MemberCard.objects.get(pk=self.blank_card.pk).is_active
+        assert MemberCard.objects.get(pk=self.blank_card.pk).registered is not None
+        assert not MemberCard.objects.get(pk=self.user_card.pk).is_active
 
     def test_kassa_cannot_set_card_associated_with_order_on_user(self):
         Order.objects.create(price_nok=0, phone_number="+4794430002", member_card=self.order_card)
@@ -95,4 +95,4 @@ class KassaCardUpdateTestCase(APITestCase):
             "member_card": self.order_card.card_number,
         }
         response = self.client.patch(url, payload, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST, response.data

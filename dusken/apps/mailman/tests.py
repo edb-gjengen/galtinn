@@ -25,8 +25,8 @@ class MailmanAPI(TestCase):
             m.put(get_list_url(list_name), json=True)
             res = self.client.put(url, params, content_type="application/json", format="json")
 
-        self.assertEqual(res.status_code, 201)
-        self.assertEqual(res.json(), {"success": True})
+        assert res.status_code == 201
+        assert res.json() == {"success": True}
 
     def test_unsubscribe(self):
         address = "yolo@example.com"
@@ -40,4 +40,4 @@ class MailmanAPI(TestCase):
             m.delete(get_list_url(list_name), status_code=status.HTTP_204_NO_CONTENT)
             res = self.client.delete(url, content_type="application/json", format="json")
 
-        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        assert res.status_code == status.HTTP_204_NO_CONTENT
