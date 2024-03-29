@@ -72,7 +72,7 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("select2/", include("django_select2.urls")),
     # Authentication
-    re_path(r"^auth/password_change/$", NeufPasswordChangeView.as_view(), name="password_change"),
+    path("auth/password_change/", NeufPasswordChangeView.as_view(), name="password_change"),
     re_path(
         r"^auth/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
         NeufPasswordResetConfirmView.as_view(),

@@ -45,6 +45,7 @@ class StartDateYearListFilter(admin.SimpleListFilter):
             return queryset.filter(start_date__gte=date(year, 1, 1), start_date__lte=date(year, 12, 31))
 
 
+@admin.register(Membership)
 class MembershipAdmin(admin.ModelAdmin):
     list_display = ["pk", "show_user_link", "membership_type", "start_date", "end_date", "get_payment_type", "created"]
     list_filter = ["membership_type", "order__payment_method", StartDateYearListFilter]
@@ -68,6 +69,7 @@ class MembershipAdmin(admin.ModelAdmin):
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
 
 
+@admin.register(OrgUnit)
 class OrgUnitAdmin(MPTTModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_display = ["name", "contact_person", "is_active"]
@@ -75,6 +77,7 @@ class OrgUnitAdmin(MPTTModelAdmin):
     readonly_fields = ["contact_person"]
 
 
+@admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "uuid",
@@ -128,6 +131,7 @@ class DuskenUserChangeForm(UserChangeForm):
         model = DuskenUser
 
 
+@admin.register(DuskenUser)
 class DuskenUserAdmin(UserAdmin):
     form = DuskenUserChangeForm
 
@@ -153,6 +157,7 @@ class DuskenUserAdmin(UserAdmin):
         self.readonly_fields += ("uuid", "legacy_id", "stripe_customer_id")
 
 
+@admin.register(MemberCard)
 class MemberCardAdmin(admin.ModelAdmin):
     list_display = ["card_number", "show_user_link", "registered", "created", "is_active"]
     list_filter = ["is_active", "registered"]
@@ -174,6 +179,7 @@ class MemberCardAdmin(admin.ModelAdmin):
         return format_html("<a href='{url}'>{user}</a>", url=url, user=obj.user)
 
 
+@admin.register(UserLogMessage)
 class UserLogMessageAdmin(admin.ModelAdmin):
     list_display = ["user", "message", "changed_by", "created"]
     list_filter = ["created"]
@@ -181,6 +187,7 @@ class UserLogMessageAdmin(admin.ModelAdmin):
     readonly_fields = ["user", "message", "changed_by"]
 
 
+@admin.register(OrgUnitLogMessage)
 class OrgUnitLogMessageAdmin(admin.ModelAdmin):
     list_display = ["org_unit", "message", "changed_by", "created"]
     list_filter = ["created"]
@@ -188,17 +195,10 @@ class OrgUnitLogMessageAdmin(admin.ModelAdmin):
     readonly_fields = ["org_unit", "message", "changed_by"]
 
 
+@admin.register(GroupProfile)
 class GroupProfileAdmin(admin.ModelAdmin):
     list_display = ["pk", "group", "posix_name", "description"]
 
 
-admin.site.register(DuskenUser, DuskenUserAdmin)
-admin.site.register(GroupProfile, GroupProfileAdmin)
-admin.site.register(MemberCard, MemberCardAdmin)
-admin.site.register(Membership, MembershipAdmin)
 admin.site.register(MembershipType)
-admin.site.register(OrgUnit, OrgUnitAdmin)
-admin.site.register(OrgUnitLogMessage, OrgUnitLogMessageAdmin)
-admin.site.register(Order, OrderAdmin)
 admin.site.register(PlaceOfStudy)
-admin.site.register(UserLogMessage, UserLogMessageAdmin)
