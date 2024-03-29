@@ -7,6 +7,8 @@ from rest_framework.test import APITestCase
 
 from dusken.models import DuskenUser, MemberCard, Membership, MembershipType, Order
 
+today = datetime.datetime.now(tz=datetime.timezone.utc).date()
+
 
 class MembershipTest(APITestCase):
     """Membership/order functionality for regular users."""
@@ -40,7 +42,6 @@ class MembershipTest(APITestCase):
         assert Membership.objects.count() == 1
 
     def test_stripe_renewing_valid_membership_gives_proper_start_date(self):
-        today = datetime.date.today()
         old_membership_ends = today + datetime.timedelta(days=10)
         new_membership_starts = old_membership_ends + datetime.timedelta(days=1)
         Membership.objects.create(
@@ -60,8 +61,8 @@ class MembershipTest(APITestCase):
 
     def test_cannot_create_membership_directly(self):
         membership_data = {
-            "start_date": datetime.date.today().isoformat(),
-            "end_date": (datetime.date.today() + self.membership_type.duration).isoformat(),
+            "start_date": today.isoformat(),
+            "end_date": (today + self.membership_type.duration).isoformat(),
             "user": self.user.pk,
             "membership_type": self.membership_type.slug,
             "order": Order.objects.create(price_nok=self.membership_type.price, user=self.user).pk,
@@ -81,7 +82,6 @@ class MembershipTest(APITestCase):
         assert response.status_code == status.HTTP_403_FORBIDDEN, response.data
 
     def test_confirming_phone_number_claims_orders(self):
-        today = datetime.datetime.now().date()
         membership = Membership.objects.create(
             start_date=today - datetime.timedelta(days=10),
             end_date=today + datetime.timedelta(days=10),
@@ -97,7 +97,6 @@ class MembershipTest(APITestCase):
         assert not self.user.unclaimed_orders.exists()
 
     def test_disallow_claiming_orders_from_deleted_users(self):
-        today = datetime.datetime.now().date()
         membership_from_deleted_user = Membership.objects.create(
             start_date=today - datetime.timedelta(days=10),
             end_date=today + datetime.timedelta(days=10),
@@ -136,8 +135,8 @@ class KassaMembershipTest(APITestCase):
 
     def test_create(self):
         membership_data = {
-            "start_date": datetime.date.today().isoformat(),
-            "end_date": (datetime.date.today() + self.membership_type.duration).isoformat(),
+            "start_date": today.isoformat(),
+            "end_date": (today + self.membership_type.duration).isoformat(),
             "user": self.user.pk,
             "membership_type": self.membership_type.slug,
             "order": Order.objects.create(price_nok=self.membership_type.price, user=self.user).pk,
@@ -191,7 +190,6 @@ class KassaMembershipTest(APITestCase):
         assert Membership.objects.count() == 1
 
     def test_kassa_renew_for_non_user_without_card(self):
-        today = datetime.datetime.now().date()
         membership = Membership.objects.create(
             start_date=today - datetime.timedelta(days=10),
             end_date=today + datetime.timedelta(days=10),
@@ -225,7 +223,7 @@ class KassaMembershipTest(APITestCase):
             expiry_type="never",
         )
         Membership.objects.create(
-            start_date=datetime.date.today(),
+            start_date=today,
             end_date=None,
             membership_type=lifelong_type,
             user=self.user,
@@ -240,8 +238,8 @@ class KassaMembershipTest(APITestCase):
 
     def test_kassa_cannot_renew_if_expires_in_more_than_one_year(self):
         Membership.objects.create(
-            start_date=datetime.date.today(),
-            end_date=datetime.date.today() + datetime.timedelta(days=370),
+            start_date=today,
+            end_date=today + datetime.timedelta(days=370),
             membership_type=self.membership_type,
             user=self.user,
         )
@@ -254,7 +252,6 @@ class KassaMembershipTest(APITestCase):
         assert response.status_code == status.HTTP_400_BAD_REQUEST, response.data
 
     def test_kassa_renewing_valid_membership_gives_proper_start_date(self):
-        today = datetime.date.today()
         old_membership_ends = today + datetime.timedelta(days=10)
         new_membership_starts = old_membership_ends + datetime.timedelta(days=1)
         Membership.objects.create(

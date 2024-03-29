@@ -236,7 +236,11 @@ class DuskenUserDelete(TestCase):
         self.user = DuskenUser.objects.create_user("mrclean", email="mrclean@example.com", password="mypassword")
 
         mt = MembershipType.objects.first()
-        self.membership = Membership.objects.create(start_date=datetime.now(), membership_type=mt, user=self.user)
+        self.membership = Membership.objects.create(
+            start_date=datetime.now(tz=timezone.utc),
+            membership_type=mt,
+            user=self.user,
+        )
         self.order = Order.objects.create(
             user=self.user,
             product=self.membership,
@@ -262,6 +266,6 @@ class DuskenUserDelete(TestCase):
 
         assert Order.objects.filter(pk=self.order.pk).exists()
         self.order.refresh_from_db()
-        assert self.order.phone_number == None
+        assert self.order.phone_number is None
 
         self.membership.refresh_from_db()  # Will trigger DoesNotExists if was deleted
