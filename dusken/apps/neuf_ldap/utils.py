@@ -74,7 +74,7 @@ def create_ldap_user(user, dry_run=False):
         return user_groups[0] + 1
 
     # User
-    full_name = "{} {}".format(user["first_name"], user["last_name"])
+    full_name = f'{user["first_name"]} {user["last_name"]}'
     user_data = {
         "first_name": user["first_name"],
         "last_name": user["last_name"],
@@ -98,7 +98,7 @@ def create_ldap_user(user, dry_run=False):
         pwd_type = "hashed"
     else:
         # No password
-        logger.error("User {} has no ldap_password (hashed) or password (unhashed), bailing!".format(user["username"]))
+        logger.error(f"User {user['username']} has no ldap_password (hashed) or password (unhashed), bailing!")
         return False
 
     if not dry_run:
@@ -109,7 +109,7 @@ def create_ldap_user(user, dry_run=False):
     ldap_user_group = LdapGroup(name=user["username"], gid=user_data["group"], members=[user["username"]])
     if not dry_run:
         ldap_user_group.save()
-    logger.debug("User group {} created".format(user["username"]))
+    logger.debug(f"User group {user['username']} created")
 
     # Add groups
     ldap_groups = LdapGroup.objects.filter(name__in=user["groups"])
@@ -118,7 +118,7 @@ def create_ldap_user(user, dry_run=False):
             g.members.append(user["username"])
             if not dry_run:
                 g.save()
-            logger.debug("User {} added to group {}".format(user["username"], g.name))
+            logger.debug(f"User {user['username']} added to group {g.name}")
 
     # Finito!
     return True
@@ -145,7 +145,7 @@ def ldap_update_user_details(dusken_user, dry_run=False):
 
     if not dry_run:
         ldap_user.save()
-    logger.debug("User details updated for {}".format(dusken_user["username"]))
+    logger.debug(f"User details updated for {dusken_user['username']}")
 
 
 def ldap_update_user_groups(dusken_user, ldap_user_diffable, dry_run=False, delete_group_memberships=False):
@@ -166,10 +166,10 @@ def ldap_update_user_groups(dusken_user, ldap_user_diffable, dry_run=False, dele
                 g.save()
 
     if len(missing_groups) > 0:
-        logger.debug("Group memberships added: {}".format(",".join(missing_groups)))
+        logger.debug(f"Group memberships added: {','.join(missing_groups)}")
 
     if len(stale_groups) > 0 and delete_group_memberships:
-        logger.debug("Group memberships removed: {}".format(",".join(stale_groups)))
+        logger.debug(f"Group memberships removed: {','.join(stale_groups)}")
 
 
 def create_ldap_automount(username, dry_run=False):
