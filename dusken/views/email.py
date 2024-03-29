@@ -47,6 +47,6 @@ class EmailSubscriptions(LoginRequiredMixin, TemplateView):
         api_sub = get_list_subscription(self.request.user.email)
 
         if api_sub is None:
-            return
+            return None
 
         return MailChimpSubscription.objects.create(email=email, status=api_sub["status"])

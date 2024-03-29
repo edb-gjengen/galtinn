@@ -103,7 +103,9 @@ class DuskenUserUpdateForm(forms.ModelForm):
     email = fields.EmailField(label=_("Email"), widget=forms.EmailInput(attrs={"placeholder": _("Email")}))
     phone_number = PhoneNumberField(label=_("Phone number"))
     date_of_birth = fields.DateField(
-        label=_("Date of birth"), required=False, widget=forms.DateInput(attrs={"type": "date"})
+        label=_("Date of birth"),
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date"}),
     )
 
     class Meta:
@@ -174,7 +176,7 @@ class DuskenAuthenticationForm(AuthenticationForm):
                 "autocorrect": "off",
                 "autocapitalize": "off",
                 "spellcheck": "false",
-            }
+            },
         ),
     )
 

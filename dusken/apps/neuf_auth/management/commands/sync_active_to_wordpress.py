@@ -29,7 +29,9 @@ class Command(BaseCommand):
 
         for load_path in settings.WP_LOAD_PATHS:
             cmd = "php {} {} {}".format(
-                os.path.join(settings.WP_PHP_SCRIPT_PATH, "import_users.php"), settings.WP_OUT_FILENAME, load_path
+                os.path.join(settings.WP_PHP_SCRIPT_PATH, "import_users.php"),
+                settings.WP_OUT_FILENAME,
+                load_path,
             )
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
             script_response = proc.stdout.read()

@@ -34,7 +34,8 @@ class MailChimpIncoming(APIView):
 
     def get(self, request):
         """Note: Mailchimp webhook URL validator sends a
-        GET request and expects HTTP status code 200."""
+        GET request and expects HTTP status code 200.
+        """
         self._validate_secret()
         return Response()
 

@@ -36,8 +36,9 @@ class KassaCardUpdateTestCase(APITestCase):
         self.user = DuskenUser.objects.create_user("olanord", email="olanord@example.com", password="mypassword")
         self.user.user_permissions.add(
             Permission.objects.get(
-                content_type=ContentType.objects.get_for_model(MemberCard), codename="change_membercard"
-            )
+                content_type=ContentType.objects.get_for_model(MemberCard),
+                codename="change_membercard",
+            ),
         )
         self.client.force_login(self.user)
         self.user_card = MemberCard.objects.create(card_number=111111111, registered=timezone.now(), user=self.user)

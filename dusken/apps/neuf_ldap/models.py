@@ -8,8 +8,7 @@ from .utils import ldap_create_password, ldap_validate_password
 
 
 class LdapUser(ldapdb.models.Model):
-    """
-    Represents an LDAP posixAccount, inetOrgPerson, shadowAccount entry.
+    """Represents an LDAP posixAccount, inetOrgPerson, shadowAccount entry.
     Ref: http://www.zytrax.com/books/ldap/apa/types.html
     """
 
@@ -94,8 +93,7 @@ class LdapGroup(ldapdb.models.Model):
 
 
 class LdapAutomountMap(ldapdb.models.Model):
-    """
-    Represents an LDAP automountMap
+    """Represents an LDAP automountMap
     Ref: http://www.openldap.org/faq/data/cache/599.html
     """
 
@@ -115,8 +113,7 @@ class LdapAutomountMap(ldapdb.models.Model):
 
 
 class LdapAutomountHome(ldapdb.models.Model):
-    """
-    Represents an LDAP automount with hardcoded 'auto.home' in the base_dn (!)
+    """Represents an LDAP automount with hardcoded 'auto.home' in the base_dn (!)
     Ref: http://www.openldap.org/faq/data/cache/599.html
     Ref: http://lists.bolloretelecom.eu/pipermail/django-ldapdb/2012-April/000113.html
     """
@@ -131,9 +128,7 @@ class LdapAutomountHome(ldapdb.models.Model):
     automountInformation = CharField(db_column="automountInformation")
 
     def set_automount_info(self, username=None):
-        krb5_automount_info = "-fstype=nfs4,rw,sec=krb5 {}:{}/{}".format(
-            settings.FILESERVER_HOST, settings.FILESERVER_HOME_PATH, username if username is not None else self.username
-        )
+        krb5_automount_info = f"-fstype=nfs4,rw,sec=krb5 {settings.FILESERVER_HOST}:{settings.FILESERVER_HOME_PATH}/{username if username is not None else self.username}"
 
         self.automountInformation = krb5_automount_info
 

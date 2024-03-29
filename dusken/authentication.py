@@ -26,8 +26,7 @@ class UsernameModelBackend(ModelBackend):
 
 class UsernameBasicAuthentication(BasicAuthentication):
     def authenticate_credentials(self, userid, password, request=None):
-        """
-        Authenticate the userid and password against username and password
+        """Authenticate the userid and password against username and password
         with optional request for context.
         """
         credentials = {

@@ -23,7 +23,11 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
-            "--no-prompt", action="store_true", dest="no_prompt", default=False, help="Does not prompt for deletion"
+            "--no-prompt",
+            action="store_true",
+            dest="no_prompt",
+            default=False,
+            help="Does not prompt for deletion",
         )
 
     def handle(self, *args, **options):

@@ -6,8 +6,7 @@ class InvalidGitRepository(Exception):
 
 
 def fetch_git_sha(path, head=None):
-    """
-    >>> fetch_git_sha(os.path.dirname(__file__))
+    """>>> fetch_git_sha(os.path.dirname(__file__))
 
     This is vendored from raven.fetch_git_sha
     """

@@ -53,7 +53,11 @@ def send_validation_email(user):
     from_email = settings.DEFAULT_FROM_EMAIL
 
     send_mail_task.delay(
-        _("Confirm your email address at Chateau Neuf"), from_email, message, [user.email], html_message=html_message
+        _("Confirm your email address at Chateau Neuf"),
+        from_email,
+        message,
+        [user.email],
+        html_message=html_message,
     )
 
 
@@ -70,7 +74,7 @@ def send_sms(to, message):
     response = requests.post(url, json=payload, headers=headers)
     if response.status_code != 200:
         logger.warning(f"Failed to send SMS, status_code={response.status_code} payload={payload}")
-        return
+        return None
 
     return response.json().get("outgoing_id")
 
@@ -78,7 +82,7 @@ def send_sms(to, message):
 def send_validation_sms(user):
     if user.phone_number_confirmed:
         # Bail
-        return
+        return None
 
     # Create a key if needed
     if not user.phone_number_key:

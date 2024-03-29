@@ -35,7 +35,7 @@ class SetUsernameForm(forms.Form):
         label=_("Username"),
         initial="",
         help_text=_(
-            "Between 3 and 32 characters. Lowercase letters, digits and - or _ only. It must start with a letter."
+            "Between 3 and 32 characters. Lowercase letters, digits and - or _ only. It must start with a letter.",
         ),
         validators=[LDAPUsernameValidator, blacklist_validator],
     )

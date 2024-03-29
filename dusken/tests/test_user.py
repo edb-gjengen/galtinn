@@ -16,7 +16,9 @@ class DuskenUserAPITestCase(APITestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user("olanord", email="olanord@example.com", password="mypassword")
         self.other_user = DuskenUser.objects.create_user(
-            "karinord", email="karinord@example.com", password="mypassword"
+            "karinord",
+            email="karinord@example.com",
+            password="mypassword",
         )
         self.token = Token.objects.create(user=self.user).key
 
@@ -76,7 +78,10 @@ class DuskenUserPhoneValidationTestCase(TestCase):
         from dusken.utils import send_validation_sms
 
         self.user = DuskenUser.objects.create_user(
-            "olanord", email="olanord@example.com", password="mypassword", phone_number="+4794430002"
+            "olanord",
+            email="olanord@example.com",
+            password="mypassword",
+            phone_number="+4794430002",
         )
         send_validation_sms(self.user)
 
@@ -103,7 +108,10 @@ class DuskenUserPhoneValidationTestCase(TestCase):
 class DuskenUserActivateTestCase(TestCase):
     def setUp(self):
         self.membership_type = MembershipType.objects.create(
-            name="Cool Club Membership", slug="standard", duration=timedelta(days=365), is_default=True
+            name="Cool Club Membership",
+            slug="standard",
+            duration=timedelta(days=365),
+            is_default=True,
         )
         today = timezone.now().date()
         self.membership = Membership.objects.create(
@@ -185,7 +193,10 @@ class DuskenUserMembershipTestCase(TestCase):
         self.user = DuskenUser.objects.create_user("olanord", email="olanord@example.com")
         self.now = timezone.now().date()
         self.membership_type = MembershipType.objects.create(
-            name="Cool Club Membership", slug="standard", duration=timedelta(days=365), is_default=True
+            name="Cool Club Membership",
+            slug="standard",
+            duration=timedelta(days=365),
+            is_default=True,
         )
 
     def test_has_membership(self):
@@ -227,7 +238,10 @@ class DuskenUserDelete(TestCase):
         mt = MembershipType.objects.first()
         self.membership = Membership.objects.create(start_date=datetime.now(), membership_type=mt, user=self.user)
         self.order = Order.objects.create(
-            user=self.user, product=self.membership, phone_number="48105885", price_nok=mt.price
+            user=self.user,
+            product=self.membership,
+            phone_number="48105885",
+            price_nok=mt.price,
         )
 
         self.user_2 = DuskenUser.objects.create_user("mrclean1", email="mrclean1@example.com", password="mypassword")

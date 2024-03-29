@@ -34,7 +34,7 @@ STRIPE_ERRORS = {
     "missing": _("There is no card on a customer that is being charged."),
     "processing_error": _("An error occurred while processing the card."),
     "rate_limit": _(
-        "An error occurred due to requests hitting the API too quickly. Please let us know if you're consistently running into this error."
+        "An error occurred due to requests hitting the API too quickly. Please let us know if you're consistently running into this error.",
     ),
 }
 
@@ -160,7 +160,10 @@ class MembershipChargeView(GenericAPIView):
 
         try:
             return stripe.Charge.create(
-                customer=customer.id, amount=amount, currency=self.CURRENCY, description=description
+                customer=customer.id,
+                amount=amount,
+                currency=self.CURRENCY,
+                description=description,
             )
         except InvalidRequestError as e:
             logger.warning("Invalid Stripe request! %s", str(e))

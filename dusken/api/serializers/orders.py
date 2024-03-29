@@ -86,7 +86,9 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
         with transaction.atomic():
             membership = self._create_membership(user=user, start_date=start_date, membership_type=membership_type)
             order = self._create_order(
-                membership=membership, payment_method=payment_method, transaction_id=transaction_id
+                membership=membership,
+                payment_method=payment_method,
+                transaction_id=transaction_id,
             )
 
         return order
@@ -140,7 +142,9 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
 
         with transaction.atomic():
             membership = self._create_membership(
-                user=user, start_date=membership_start_date, membership_type=validated_data.get("membership_type")
+                user=user,
+                start_date=membership_start_date,
+                membership_type=validated_data.get("membership_type"),
             )
             order = self._create_order(
                 membership=membership,

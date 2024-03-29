@@ -4,8 +4,7 @@ from datetime import timedelta
 from itertools import chain
 
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import AbstractUser, Group
 from django.contrib.auth.models import Group as DjangoGroup
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
@@ -48,7 +47,11 @@ class DuskenUser(AbstractUser):  # type: ignore
     country = CountryField(_("country"), default="NO", blank=True)
 
     place_of_study = models.ForeignKey(
-        "dusken.PlaceOfStudy", models.SET_NULL, verbose_name=_("place of study"), blank=True, null=True
+        "dusken.PlaceOfStudy",
+        models.SET_NULL,
+        verbose_name=_("place of study"),
+        blank=True,
+        null=True,
     )
     legacy_id = models.IntegerField(_("legacy id"), null=True, blank=True)
 
@@ -192,9 +195,7 @@ class DuskenUser(AbstractUser):  # type: ignore
 
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:
-            return "{first} {last} ({username})".format(
-                first=self.first_name, last=self.last_name, username=self.username
-            )
+            return f"{self.first_name} {self.last_name} ({self.username})"
         return f"{self.username}"
 
     class Meta:
@@ -284,7 +285,6 @@ class MembershipType(BaseModel):
 
     def get_expiry_date(self):
         """Get the correct end date for this membership type."""
-
         now = timezone.now()
         if self.expiry_type == self.EXPIRY_DURATION:
             return (now + self.duration).date()
@@ -314,7 +314,12 @@ class MemberCard(BaseModel):
     registered = models.DateTimeField(_("registered"), null=True, blank=True)
     is_active = models.BooleanField(_("is active"), default=True)
     user = models.ForeignKey(
-        "dusken.DuskenUser", models.SET_NULL, verbose_name=_("user"), null=True, blank=True, related_name="member_cards"
+        "dusken.DuskenUser",
+        models.SET_NULL,
+        verbose_name=_("user"),
+        null=True,
+        blank=True,
+        related_name="member_cards",
     )
 
     def register(self, user=None, order=None):
@@ -341,9 +346,7 @@ class MemberCard(BaseModel):
 
 
 class GroupProfile(BaseModel):
-    """
-    django.contrib.auth.model.Group extended with additional fields.
-    """
+    """django.contrib.auth.model.Group extended with additional fields."""
 
     TYPE_VOLUNTEERS = "volunteers"
     TYPE_STANDARD = ""
@@ -380,9 +383,7 @@ class GroupProfile(BaseModel):
 
 # FIXME: We can't seem use the django-stubs type plugin to infer types from BaseModel, since MPTTModel is untyped/any
 class OrgUnit(MPTTModel, BaseModel):  # type: ignore
-    """
-    Association, comittee or similar
-    """
+    """Association, comittee or similar"""
 
     name = models.CharField(_("name"), max_length=255)
     slug = models.SlugField(_("slug"), unique=True, max_length=255, blank=True)
@@ -393,13 +394,22 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
     # Contact
     email = models.EmailField(_("email"), blank=True, default="")
     contact_person = models.ForeignKey(
-        "dusken.DuskenUser", models.SET_NULL, verbose_name=_("contact person"), blank=True, null=True
+        "dusken.DuskenUser",
+        models.SET_NULL,
+        verbose_name=_("contact person"),
+        blank=True,
+        null=True,
     )
     website = models.URLField(_("website"), blank=True, default="")
 
     # Member and permission groups
     group = models.ForeignKey(
-        DjangoGroup, models.SET_NULL, verbose_name=_("group"), blank=True, null=True, related_name="member_orgunits"
+        DjangoGroup,
+        models.SET_NULL,
+        verbose_name=_("group"),
+        blank=True,
+        null=True,
+        related_name="member_orgunits",
     )
     admin_group = models.ForeignKey(
         DjangoGroup,
@@ -412,7 +422,13 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
 
     # Hierarchical :-)
     parent = TreeForeignKey(
-        "self", models.SET_NULL, verbose_name=_("parent"), null=True, blank=True, related_name="children", db_index=True
+        "self",
+        models.SET_NULL,
+        verbose_name=_("parent"),
+        null=True,
+        blank=True,
+        related_name="children",
+        db_index=True,
     )
 
     @property
@@ -533,7 +549,11 @@ class UserLogMessage(BaseModel):
     user = models.ForeignKey("dusken.DuskenUser", models.CASCADE, related_name="log_messages")
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        "dusken.DuskenUser", on_delete=models.SET_NULL, related_name="user_changes", blank=True, null=True
+        "dusken.DuskenUser",
+        on_delete=models.SET_NULL,
+        related_name="user_changes",
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
@@ -548,7 +568,11 @@ class OrgUnitLogMessage(BaseModel):
     org_unit = models.ForeignKey("dusken.OrgUnit", models.CASCADE, related_name="log_messages")
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        "dusken.DuskenUser", on_delete=models.SET_NULL, related_name="org_unit_changes", blank=True, null=True
+        "dusken.DuskenUser",
+        on_delete=models.SET_NULL,
+        related_name="org_unit_changes",
+        blank=True,
+        null=True,
     )
 
     def __str__(self):

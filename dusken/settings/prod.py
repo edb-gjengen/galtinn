@@ -1,6 +1,7 @@
+import os
+
 import dj_database_url
 import sentry_sdk
-import os
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
@@ -49,7 +50,7 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-    }
+    },
 }
 
 

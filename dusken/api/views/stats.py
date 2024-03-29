@@ -32,7 +32,7 @@ def membership_stats(request):
                 "sales": len(sales),
                 "date": str(sales[0].order.created.date()),
                 "payment_method": sales[0].order.payment_method,
-            }
+            },
         )
 
     data = {

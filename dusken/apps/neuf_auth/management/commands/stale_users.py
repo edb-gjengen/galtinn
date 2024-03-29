@@ -32,8 +32,10 @@ class Command(BaseCommand):
 
         self.stdout.write(
             "{} LDAP users not in group {} in Dusken:\n{}".format(
-                len(stale_ldap_users), self.group_profile.posix_name, "\n".join(stale_ldap_users)
-            )
+                len(stale_ldap_users),
+                self.group_profile.posix_name,
+                "\n".join(stale_ldap_users),
+            ),
         )
         self.stdout.write("")
 

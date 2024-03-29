@@ -13,8 +13,7 @@ def get_connection():
 
 
 def create_home_dir(username, dry_run=False):
-    """
-    Create homedir for username via shell script on fileserver host
+    """Create homedir for username via shell script on fileserver host
 
     This use fabric (SSH) for running the remote command
 

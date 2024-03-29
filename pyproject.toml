@@ -6,6 +6,15 @@ filterwarnings = "ignore::PendingDeprecationWarning:django.apps.registry.*"
 [tool.ruff]
 line-length = 120
 
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "D", # pydocstyle: Allow undocumented code
+  "ANN",  # flake8-annotations: Allow untyped code
+  "TD",   # Allow TODOs
+  "FIX"   # Allow TODOs and FIXMEs
+]
+
 [tool.mypy]
 plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main", "strawberry.ext.mypy_plugin"]
 

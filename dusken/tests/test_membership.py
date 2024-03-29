@@ -13,11 +13,17 @@ class MembershipTest(APITestCase):
 
     def setUp(self):
         self.user = DuskenUser.objects.create_user(
-            "olanord", email="olanord@example.com", password="mypassword", phone_number="+4794430002"
+            "olanord",
+            email="olanord@example.com",
+            password="mypassword",
+            phone_number="+4794430002",
         )
         self.client.force_login(self.user)
         self.membership_type = MembershipType.objects.create(
-            name="Cool Club Membership", slug="standard", duration=datetime.timedelta(days=365), is_default=True
+            name="Cool Club Membership",
+            slug="standard",
+            duration=datetime.timedelta(days=365),
+            is_default=True,
         )
 
     def test_stripe_create_charge(self):
@@ -38,7 +44,10 @@ class MembershipTest(APITestCase):
         old_membership_ends = today + datetime.timedelta(days=10)
         new_membership_starts = old_membership_ends + datetime.timedelta(days=1)
         Membership.objects.create(
-            start_date=today, end_date=old_membership_ends, membership_type=self.membership_type, user=self.user
+            start_date=today,
+            end_date=old_membership_ends,
+            membership_type=self.membership_type,
+            user=self.user,
         )
         url = reverse("membership-charge")
         payload = {
@@ -95,7 +104,10 @@ class MembershipTest(APITestCase):
             membership_type=self.membership_type,
         )
         Order.objects.create(
-            payment_method=Order.BY_APP, product=membership_from_deleted_user, price_nok=0, phone_number=None
+            payment_method=Order.BY_APP,
+            product=membership_from_deleted_user,
+            price_nok=0,
+            phone_number=None,
         )
 
         self.assertEqual(Order.objects.filter(phone_number__isnull=True).count(), 1)
@@ -115,7 +127,10 @@ class KassaMembershipTest(APITestCase):
         self.user.user_permissions.add(Permission.objects.get(codename="add_membership"))
         self.client.force_login(self.user)
         self.membership_type = MembershipType.objects.create(
-            name="Cool Club Membership", slug="standard", duration=datetime.timedelta(days=365), is_default=True
+            name="Cool Club Membership",
+            slug="standard",
+            duration=datetime.timedelta(days=365),
+            is_default=True,
         )
         self.member_card = MemberCard.objects.create(card_number=123456789)
 
@@ -205,10 +220,15 @@ class KassaMembershipTest(APITestCase):
 
     def test_kassa_cannot_renew_lifelong(self):
         lifelong_type = MembershipType.objects.create(
-            name="Forever Cool Club Membership", slug="lifelong", expiry_type="never"
+            name="Forever Cool Club Membership",
+            slug="lifelong",
+            expiry_type="never",
         )
         Membership.objects.create(
-            start_date=datetime.date.today(), end_date=None, membership_type=lifelong_type, user=self.user
+            start_date=datetime.date.today(),
+            end_date=None,
+            membership_type=lifelong_type,
+            user=self.user,
         )
         url = reverse("kassa-membership")
         payload = {
@@ -238,7 +258,10 @@ class KassaMembershipTest(APITestCase):
         old_membership_ends = today + datetime.timedelta(days=10)
         new_membership_starts = old_membership_ends + datetime.timedelta(days=1)
         Membership.objects.create(
-            start_date=today, end_date=old_membership_ends, membership_type=self.membership_type, user=self.user
+            start_date=today,
+            end_date=old_membership_ends,
+            membership_type=self.membership_type,
+            user=self.user,
         )
         url = reverse("kassa-membership")
         payload = {
