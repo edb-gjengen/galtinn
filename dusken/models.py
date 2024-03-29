@@ -34,16 +34,16 @@ class DuskenUser(AbstractUser):  # type: ignore
     email_confirmed_at = models.DateTimeField(blank=True, null=True)
     email_key = models.CharField(max_length=40, default=create_email_key)
     phone_number = PhoneNumberField(_("phone number"), blank=True, default="")
-    phone_number_key = models.CharField(max_length=40, blank=True, null=True)
+    phone_number_key = models.CharField(max_length=40, blank=True, null=True)  # noqa: DJ001
     phone_number_confirmed = models.BooleanField(default=False)
     phone_number_confirmed_at = models.DateTimeField(blank=True, null=True)
     date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
 
     # Address
-    street_address = models.CharField(_("street address"), max_length=255, null=True, blank=True)
-    street_address_two = models.CharField(_("street address 2"), max_length=255, null=True, blank=True)
-    postal_code = models.CharField(_("postal code"), max_length=10, null=True, blank=True)
-    city = models.CharField(_("city"), max_length=100, null=True, blank=True)
+    street_address = models.CharField(_("street address"), max_length=255, null=True, blank=True)  # noqa: DJ001
+    street_address_two = models.CharField(_("street address 2"), max_length=255, null=True, blank=True)  # noqa: DJ001
+    postal_code = models.CharField(_("postal code"), max_length=10, null=True, blank=True)  # noqa: DJ001
+    city = models.CharField(_("city"), max_length=100, null=True, blank=True)  # noqa: DJ001
     country = CountryField(_("country"), default="NO", blank=True)
 
     place_of_study = models.ForeignKey(
@@ -55,7 +55,7 @@ class DuskenUser(AbstractUser):  # type: ignore
     )
     legacy_id = models.IntegerField(_("legacy id"), null=True, blank=True)
 
-    stripe_customer_id = models.CharField(_("stripe customer id"), max_length=254, null=True, blank=True)
+    stripe_customer_id = models.CharField(_("stripe customer id"), max_length=254, null=True, blank=True)  # noqa: DJ001
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
@@ -506,7 +506,7 @@ class Order(BaseModel):
 
     # Payment
     payment_method = models.CharField(max_length=254, choices=PAYMENT_METHODS, default=PAYMENT_METHOD_OTHER)
-    transaction_id = models.CharField(
+    transaction_id = models.CharField(  # noqa: DJ001
         max_length=254,
         null=True,
         blank=True,

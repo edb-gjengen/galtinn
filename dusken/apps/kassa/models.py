@@ -24,7 +24,7 @@ class KassaEvent(models.Model):
     event = models.CharField(max_length=255, choices=EVENT_CHOICES)
     card_number = models.IntegerField(null=True, blank=True)
     user_inside_id = models.IntegerField(null=True, blank=True)
-    user_phone_number = models.CharField(max_length=100, null=True, blank=True)
+    user_phone_number = models.CharField(max_length=100, null=True, blank=True)  # noqa: DJ001
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
