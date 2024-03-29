@@ -20,5 +20,3 @@ class LdapUserAdmin(admin.ModelAdmin):
 @admin.register(LdapAutomountHome)
 class LdapAutomountHomeAdmin(admin.ModelAdmin):
     search_fields = ["username"]
-
-

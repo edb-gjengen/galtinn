@@ -3,7 +3,6 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework import filters, permissions, viewsets
-from rest_framework.authentication import BasicAuthentication
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 
 from dusken.api.serializers.users import DuskenUserRegisterSerializer, DuskenUserSerializer

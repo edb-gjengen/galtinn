@@ -1,14 +1,15 @@
 import dj_database_url
 import sentry_sdk
+import os
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
 from dusken.fetch_git_sha import InvalidGitRepository, fetch_git_sha
 
-from .base import *
+from .base import *  # noqa: F403
 
-DATABASES["default"] = dj_database_url.config(conn_max_age=600)
+DATABASES["default"] = dj_database_url.config(conn_max_age=600)  # noqa: F405
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -27,7 +28,7 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 # Sentry
 try:
-    release = fetch_git_sha(BASE_DIR)
+    release = fetch_git_sha(BASE_DIR)  # noqa: F405
 except InvalidGitRepository:
     release = "N/A"
 

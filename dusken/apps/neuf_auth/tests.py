@@ -28,7 +28,6 @@ class SSHTestCase(TestCase):
             self.assertTrue(homedirs)
 
     def test_homedir_exists(self):
-
         with self.settings(
             FILESERVER_HOST="localhost",
             FILESERVER_SSH_KEY_PATH="/home/nikolark/.ssh/id_rsa",
