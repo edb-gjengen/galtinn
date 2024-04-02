@@ -45,7 +45,7 @@ def update_list_subscription(email, status, merge_data=None):
     try:
         r.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        raise MailchimpAPIException(e)
+        raise MailchimpAPIException(e) from e
 
     return r.json()
 
@@ -63,6 +63,6 @@ def get_list_subscription(email):
     try:
         r.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        raise MailchimpAPIException(e)
+        raise MailchimpAPIException(e) from e
 
     return r.json()

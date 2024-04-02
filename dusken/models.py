@@ -293,16 +293,16 @@ class MembershipType(BaseModel):
         elif self.expiry_type == self.EXPIRY_NEVER:
             return None
 
-        raise Exception(f"MembershipType object {self.__str__()} is configured incorrectly")
+        raise ImproperlyConfigured(f"MembershipType object {self.__str__()} is configured incorrectly")
 
     @classmethod
     def get_default(cls):
         try:
             return cls.objects.get(is_default=True)
-        except cls.DoesNotExist:
-            raise ImproperlyConfigured("Error: At least one MembershipType must have is_default set")
-        except cls.MultipleObjectsReturned:
-            raise ImproperlyConfigured("Error: Only one MembershipType can have is_default set")
+        except cls.DoesNotExist as err:
+            raise ImproperlyConfigured("Error: At least one MembershipType must have is_default set") from err
+        except cls.MultipleObjectsReturned as err:
+            raise ImproperlyConfigured("Error: Only one MembershipType can have is_default set") from err
 
     class Meta:
         verbose_name = _("Membership type")

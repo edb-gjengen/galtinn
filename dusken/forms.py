@@ -137,8 +137,8 @@ class UserEmailValidateForm(forms.Form):
         user_uuid = self.cleaned_data.get("slug")
         try:
             user = DuskenUser.objects.get(uuid=user_uuid)
-        except DuskenUser.DoesNotExist:
-            raise ValidationError(_("User does not exist"))
+        except DuskenUser.DoesNotExist as err:
+            raise ValidationError(_("User does not exist")) from err
 
         if user.email_key != self.cleaned_data.get("email_key"):
             raise ValidationError(_("Invalid email key for user"))

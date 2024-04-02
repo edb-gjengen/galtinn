@@ -10,15 +10,15 @@ target-version = "py38"
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-  "D",      # pydocstyle: Allow undocumented code
-  "ANN",    # flake8-annotations: Allow untyped code
-  "TD",     # Allow TODOs
-  "FIX",    # Allow TODOs and FIXMEs
-  "RUF012", # FIXME: Fix later https://docs.astral.sh/ruff/rules/mutable-class-default/
-  "FBT002", # Allow boolean args
-  "G004",   # Allow logging using f-string
-  "EM101",  # Allow string in exceptions (prioritice code readability vs exception time readability)
-  "TRY003", # Allow long exception messages
+  "D",               # pydocstyle: Allow undocumented code
+  "ANN",             # flake8-annotations: Allow untyped code
+  "TD", "FIX",       # Allow TODOs and FIXMEs
+  "RUF012",          # FIXME: Fix later https://docs.astral.sh/ruff/rules/mutable-class-default/
+  "FBT002",          # Allow boolean args
+  "G004",            # Allow logging using f-string
+  "EM101", "EM102",  # Allow string in exceptions (prioritice code readability vs exception time readability)
+  "TRY003",          # Allow long exception messages
+  "E501",            # Allow long lines
 ]
 
 [tool.ruff.lint.per-file-ignores]

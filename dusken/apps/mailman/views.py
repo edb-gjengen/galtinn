@@ -31,7 +31,7 @@ class MailmanMembership(APIView):
                 msg = _("Email already subscribed")
                 code = "duplicate"
 
-            raise ValidationError(msg, code=code)
+            raise ValidationError(msg, code=code) from e
 
         return Response(ret, status=status.HTTP_201_CREATED)
 
@@ -46,6 +46,6 @@ class MailmanMembership(APIView):
                 msg = _("Email {} not on list").format(address)
                 code = "not_found"
 
-            raise ValidationError(msg, code=code)
+            raise ValidationError(msg, code=code) from e
 
         return Response(status=status.HTTP_204_NO_CONTENT)

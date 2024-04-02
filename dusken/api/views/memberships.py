@@ -125,15 +125,15 @@ class MembershipChargeView(GenericAPIView):
         except InvalidRequestError as e:
             logger.warning("Invalid Stripe request! %s", str(e))
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(_("Stripe charge failed with API error."))
+            raise APIException(_("Stripe charge failed with API error.")) from e
         except CardError as e:
             logger.info("stripe.Customer.create did not succeed: %s", e)
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined.")))
+            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined."))) from e
 
     def _update_stripe_customer(self, customer, stripe_token):
         if settings.TESTING:
@@ -144,15 +144,15 @@ class MembershipChargeView(GenericAPIView):
         except InvalidRequestError as e:
             logger.warning("Invalid Stripe request! %s", str(e))
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(_("Stripe charge failed with API error."))
+            raise APIException(_("Stripe charge failed with API error.")) from e
         except CardError as e:
             logger.info("stripe.Customer.modify did not succeed: %s", e)
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined.")))
+            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined."))) from e
 
     def _create_stripe_charge(self, customer, amount, description):
         if settings.TESTING:
@@ -168,15 +168,15 @@ class MembershipChargeView(GenericAPIView):
         except InvalidRequestError as e:
             logger.warning("Invalid Stripe request! %s", str(e))
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException("Stripe charge failed with API error.")
+            raise APIException("Stripe charge failed with API error.") from e
         except CardError as e:
             logger.info("stripe.Charge.create did not succeed: %s", e)
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined.")))
+            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined."))) from e
 
     def _get_stripe_customer(self, stripe_customer_id):
         if settings.TESTING:
@@ -187,6 +187,6 @@ class MembershipChargeView(GenericAPIView):
         except InvalidRequestError as e:
             logger.warning("Invalid Stripe request! %s", str(e))
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(_("Stripe charge failed with API error."))
+            raise APIException(_("Stripe charge failed with API error.")) from e
