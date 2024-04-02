@@ -19,12 +19,12 @@ class DeliveryReport(models.Model):
     sent = models.TextField(blank=True, null=True)
     delivered = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.__class__.__name__}: {self.pk}"
-
     class Meta:
         managed = False
         db_table = "dlr"
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: {self.pk}"
 
 
 class TekstmeldingEvent(models.Model):
@@ -68,12 +68,12 @@ class TekstmeldingEvent(models.Model):
     user = models.IntegerField(blank=True, null=True)
     activation_code = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.__class__.__name__}: {self.pk}"
-
     class Meta:
         managed = False
         db_table = "event"
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: {self.pk}"
 
 
 class IncomingMessage(models.Model):
@@ -96,12 +96,12 @@ class IncomingMessage(models.Model):
     registered = models.TextField(blank=True, null=True)
     ip = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.__class__.__name__}: {self.pk}"
-
     class Meta:
         managed = False
         db_table = "incoming"
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: {self.pk}"
 
 
 class OutgoingMessage(models.Model):
@@ -124,12 +124,12 @@ class OutgoingMessage(models.Model):
     pid = models.IntegerField()
     dcs = models.IntegerField()
 
-    def __str__(self):
-        return f"{self.__class__.__name__}: {self.pk}"
-
     class Meta:
         managed = False
         db_table = "outgoing"
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: {self.pk}"
 
 
 class OutgoingResponse(models.Model):
@@ -141,9 +141,9 @@ class OutgoingResponse(models.Model):
     error_number = models.IntegerField(db_column="ErrorNumber")
     error_message = models.TextField(db_column="ErrorMessage", blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.__class__.__name__}: {self.pk}"
-
     class Meta:
         managed = False
         db_table = "outgoing_response"
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: {self.pk}"
