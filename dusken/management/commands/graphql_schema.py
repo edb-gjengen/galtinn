@@ -20,4 +20,4 @@ class Command(BaseCommand):
                 fp.write(schema_output)
             self.stdout.write(self.style.SUCCESS("OK"))
         else:
-            print(schema_output)
+            print(schema_output)  # noqa: T201
