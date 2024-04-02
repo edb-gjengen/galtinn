@@ -41,7 +41,7 @@ def update_list_subscription(email, status, merge_data=None):
     logger.info("Update subscription %s on list %s", email, list_id)
 
     # Create or update (with PUT)
-    r = requests.put(get_list_member_url(list_id, email), auth=_get_auth(), json=data)
+    r = requests.put(get_list_member_url(list_id, email), auth=_get_auth(), json=data, timeout=10)
 
     try:
         r.raise_for_status()
@@ -56,7 +56,7 @@ def get_list_subscription(email):
     validate_mailchimp_settings(list_id)
 
     # Get subscription status
-    r = requests.get(get_list_member_url(list_id, email), auth=_get_auth())
+    r = requests.get(get_list_member_url(list_id, email), auth=_get_auth(), timeout=10)
 
     if r.status_code == HTTPStatus.NOT_FOUND:
         return None

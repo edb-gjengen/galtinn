@@ -72,7 +72,7 @@ def send_sms(to, message):
     url = f"{settings.TEKSTMELDING_API_URL}send"
     payload = {"to": str(to), "message": message}
     headers = {"Authorization": "Token " + settings.TEKSTMELDING_API_KEY}
-    response = requests.post(url, json=payload, headers=headers)
+    response = requests.post(url, json=payload, headers=headers, timeout=10)
     if response.status_code != HTTPStatus.OK:
         logger.warning(f"Failed to send SMS, status_code={response.status_code} payload={payload}")
         return None
