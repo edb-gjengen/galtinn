@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class ResendValidationEmailView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request, format=None):
+    def post(self, request, **__):
         send_validation_email(request.user)
         return Response({"response": "success"})
 

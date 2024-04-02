@@ -5,6 +5,7 @@ filterwarnings = "ignore::PendingDeprecationWarning:django.apps.registry.*"
 
 [tool.ruff]
 line-length = 120
+target-version = "py38"
 
 [tool.ruff.lint]
 select = ["ALL"]
@@ -16,7 +17,10 @@ ignore = [
   "RUF012", # FIXME: Fix later https://docs.astral.sh/ruff/rules/mutable-class-default/
   "FBT002", # Allow boolean args
   "G004",   # Allow logging using f-string
+  "EM101",  # Allow string in exceptions (prioritice code readability vs exception time readability)
+  "TRY003", # Allow long exception messages
 ]
+
 [tool.ruff.lint.per-file-ignores]
 # Testing code can deviate a bit more
 "dusken/tests/*.py" = ["S101", "S106", "PLR2004"]
