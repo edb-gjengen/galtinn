@@ -91,10 +91,10 @@ def create_ldap_user(user, dry_run=False):
     # User password
     if user.get("password") is not None:
         ldap_user.set_password(user["password"], commit=False)  # Raw
-        pwd_type = "raw"
+        pwd_type = "raw"  # noqa: S105
     elif user.get("ldap_password") is not None:
         ldap_user.set_password(user["ldap_password"], commit=False, prehashed=True)  # Hashed
-        pwd_type = "hashed"
+        pwd_type = "hashed"  # noqa: S105
     else:
         # No password
         logger.error(f"User {user['username']} has no ldap_password (hashed) or password (unhashed), bailing!")

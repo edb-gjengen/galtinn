@@ -1,5 +1,4 @@
 import json
-import os
 import subprocess
 
 from django.conf import settings
@@ -28,12 +27,13 @@ class Command(BaseCommand):
             json.dump(users_out, out_file, ensure_ascii=False)
 
         for load_path in settings.WP_LOAD_PATHS:
-            cmd = "php {} {} {}".format(
+            cmd = [
+                "php",
                 settings.WP_PHP_SCRIPT_PATH / "import_users.php",
                 settings.WP_OUT_FILENAME,
                 load_path,
-            )
-            proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+            ]
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)  # noqa: S603
             script_response = proc.stdout.read()
 
             if len(script_response) != 0:
