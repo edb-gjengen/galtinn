@@ -63,4 +63,3 @@ def user_pk_to_uuid(request):
 class BasicAuthCurrentUserView(CurrentUserView):
     authentication_classes = [UsernameBasicAuthentication]
     # FIXME: Rate limit per custom auth-user-ip header (from galtinn)
-    # throttle_classes = (UserRateThrottle,)

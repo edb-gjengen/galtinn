@@ -42,7 +42,7 @@ sentry_sdk.init(
     integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()],
 )
 
-# Cache (redis)
+# Cache with Redis
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
