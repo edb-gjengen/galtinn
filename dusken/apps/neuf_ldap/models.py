@@ -38,13 +38,13 @@ class LdapUser(ldapdb.models.Model):
 
     # shadowAccount
     password = CharField(db_column="userPassword")
-    shadowLastChange = IntegerField(db_column="shadowLastChange", default=settings.LDAP_SHADOW_LAST_CHANGE)
-    shadowMin = IntegerField(db_column="shadowMin", default=settings.LDAP_SHADOW_MIN)
-    shadowMax = IntegerField(db_column="shadowMax", default=settings.LDAP_SHADOW_MAX)
-    shadowWarning = IntegerField(db_column="shadowWarning", default=settings.LDAP_SHADOW_WARNING)
-    shadowInactive = IntegerField(db_column="shadowInactive")
-    shadowExpire = IntegerField(db_column="shadowExpire", default=settings.LDAP_SHADOW_EXPIRE)
-    shadowFlag = IntegerField(db_column="shadowFlag", default=settings.LDAP_SHADOW_FLAG)
+    shadowLastChange = IntegerField(db_column="shadowLastChange", default=settings.LDAP_SHADOW_LAST_CHANGE)  # noqa: N815
+    shadowMin = IntegerField(db_column="shadowMin", default=settings.LDAP_SHADOW_MIN)  # noqa: N815
+    shadowMax = IntegerField(db_column="shadowMax", default=settings.LDAP_SHADOW_MAX)  # noqa: N815
+    shadowWarning = IntegerField(db_column="shadowWarning", default=settings.LDAP_SHADOW_WARNING)  # noqa: N815
+    shadowInactive = IntegerField(db_column="shadowInactive")  # noqa: N815
+    shadowExpire = IntegerField(db_column="shadowExpire", default=settings.LDAP_SHADOW_EXPIRE)  # noqa: N815
+    shadowFlag = IntegerField(db_column="shadowFlag", default=settings.LDAP_SHADOW_FLAG)  # noqa: N815
 
     # core
     description = CharField(db_column="description")
@@ -125,7 +125,7 @@ class LdapAutomountHome(ldapdb.models.Model):
     object_classes = ["automount"]
 
     username = CharField(db_column="cn", primary_key=True)
-    automountInformation = CharField(db_column="automountInformation")
+    automountInformation = CharField(db_column="automountInformation")  # noqa: N815
 
     def set_automount_info(self, username=None):
         krb5_automount_info = f"-fstype=nfs4,rw,sec=krb5 {settings.FILESERVER_HOST}:{settings.FILESERVER_HOME_PATH}/{username if username is not None else self.username}"
