@@ -1,6 +1,6 @@
-import os
 import sys
 from distutils.util import strtobool
+from pathlib import Path
 
 from django.core.management.base import BaseCommand
 
@@ -39,11 +39,11 @@ class Command(BaseCommand):
             sys.exit()
 
         filename = args[0]
-        if not os.path.isfile(filename):
+        if not Path(filename).is_file():
             self.stderr.write(f"{filename} is not a file")
             sys.exit()
 
-        with open(filename) as f:
+        with Path(filename).open() as f:
             usernames = f.read().strip().split()
             self.stdout.write(f"Found {len(usernames)} usernames in file")
 

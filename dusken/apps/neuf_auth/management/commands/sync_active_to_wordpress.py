@@ -1,5 +1,6 @@
 import json
 import subprocess
+from pathlib import Path
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -23,7 +24,7 @@ class Command(BaseCommand):
         active_users = self.get_active_users()
         users_out = [[u.username, u.first_name, u.last_name, u.email] for u in active_users]
 
-        with open(settings.WP_OUT_FILENAME, "w+", encoding="utf-8") as out_file:
+        with Path(settings.WP_OUT_FILENAME).open("w+", encoding="utf-8") as out_file:
             json.dump(users_out, out_file, ensure_ascii=False)
 
         for load_path in settings.WP_LOAD_PATHS:
