@@ -25,7 +25,8 @@ def validate_mailchimp_settings(list_id):
 def update_list_subscription(email, status, merge_data=None):
     from dusken.apps.mailchimp.models import MailChimpSubscription
 
-    assert status in dict(MailChimpSubscription.STATUS_CHOICES).keys()
+    if status not in dict(MailChimpSubscription.STATUS_CHOICES):
+        raise ValueError(f"Invalid mailchimp status {status}")
 
     list_id = settings.MAILCHIMP_LIST_ID
     validate_mailchimp_settings(list_id)

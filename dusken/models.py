@@ -323,7 +323,8 @@ class MemberCard(BaseModel):
     )
 
     def register(self, user=None, order=None):
-        assert not (user and order)
+        if user is None and order is None:
+            raise ValueError("Cannot register without neither user nor order")
         if user or (order and not self.registered):
             self.registered = timezone.now()
             self.is_active = True
@@ -331,7 +332,8 @@ class MemberCard(BaseModel):
             user.member_cards.filter(is_active=True).update(is_active=False)
             self.user = user
         if order:
-            assert not order.member_card
+            if order.member_card:
+                raise ValueError("Member card already registered to order")
             order.member_card = self
             order.save()
         self.save()
