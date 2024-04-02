@@ -96,12 +96,6 @@ To sell memberships exactly one `MembershipType` has to have the `is_default` fl
 
 To indentify users as volunteers exactly one `GroupProfile` has to have `type` set to `GroupProfile.TYPE_VOLUNTEERS`.
 
-## Mailchimp
-
-* Settings: `MAILCHIMP_LIST_ID`, `MAILCHIMP_WEBHOOK_SECRET`, `MAILCHIMP_API_KEY`, `MAILCHIMP_API_URL`
-* Set up a webhook with unsubscribes using [this guide](http://kb.mailchimp.com/integrations/api-integrations/how-to-set-up-webhooks) (via API should be unchecked).
-* The webhook URL path is: `/mailchimp/incoming/?secret=WEBHOOK_SECRET/`.
-
 ## Dusken
 
 Galtinn was called DUSKEN during development - _Dårlig Utrustet Studentsystem som Kommer til å Endre Norge._

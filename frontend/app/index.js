@@ -104,7 +104,6 @@ function formatMessage(message, alert) {
 
 $(document).ready(function () {
     const $membershipPurchase = $('#membership-purchase-form');
-    const $mailchimpSub = $('.js-toggle-mailchimp-subscription');
     const $mailmanSub = $('.js-toggle-mailman-subscription');
     const $messages = $('.messages');
 
@@ -143,59 +142,6 @@ $(document).ready(function () {
     });
 
     /* Page: Newsletter and mailing lists */
-    if ($mailchimpSub.length) {
-        const $subStatus = $('.js-mailchimp-status');
-
-        let url = config.mailChimpSubscriptionListURL;
-        let method = 'POST';
-        const sub = config.mailChimpSubscription;
-        if (sub) {
-            url = config.mailChimpSubscriptionDetailURL;
-            method = 'PATCH';
-        }
-        $mailchimpSub.on('click', (e) => {
-            e.preventDefault();
-
-            const shouldSubscribe = !$mailchimpSub.hasClass('subscribed');
-            const data = {
-                status: shouldSubscribe ? 'subscribed' : 'unsubscribed',
-                email: config.userEmail,
-            };
-            const newButtonText = shouldSubscribe
-                ? $mailchimpSub.attr('data-text-unsubscribe')
-                : $mailchimpSub.attr('data-text-subscribe');
-            const newStatusText = shouldSubscribe
-                ? $subStatus.attr('data-text-subscribed') + ' ✅'
-                : $subStatus.attr('data-text-unsubscribed') + ' ❌';
-
-            $.ajax({
-                url: url,
-                data: JSON.stringify(data),
-                method: method,
-                contentType: 'application/json',
-                dataType: 'json',
-            })
-                .done(function () {
-                    $mailchimpSub.text(newButtonText);
-                    $subStatus.text(newStatusText);
-
-                    if (shouldSubscribe) {
-                        $mailchimpSub.addClass('subscribed');
-                    } else {
-                        $mailchimpSub.removeClass('subscribed');
-                    }
-                })
-                .fail(function () {
-                    $messages.html(
-                        formatMessage(
-                            'Could not change newsletter subscription status, please try again later...',
-                            'danger'
-                        )
-                    );
-                });
-        });
-    }
-
     if ($mailmanSub.length) {
         $mailmanSub.on('click', (e) => {
             e.preventDefault();

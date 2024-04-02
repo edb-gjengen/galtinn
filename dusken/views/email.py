@@ -2,8 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import TemplateView
 
-from dusken.apps.mailchimp.api import get_list_subscription
-from dusken.apps.mailchimp.models import MailChimpSubscription
 from dusken.apps.mailman.api import get_lists_by_email
 
 
@@ -17,7 +15,6 @@ class EmailSubscriptions(LoginRequiredMixin, TemplateView):
         # FIXME: Remove this context data from view and move to AJAX views
         return {
             **super().get_context_data(),
-            "newsletter_subscription": self._get_subscription(email),
             "mailing_lists": self._get_mailinglists(email),
         }
 
@@ -35,18 +32,3 @@ class EmailSubscriptions(LoginRequiredMixin, TemplateView):
             }
 
         return visible_lists_with_status
-
-    def _get_subscription(self, email):
-        sub = MailChimpSubscription.objects.filter(email=email).first()
-        if not sub:
-            # If no local subscription, try fetching it
-            sub = self._get_subscription_from_api(email)
-        return sub
-
-    def _get_subscription_from_api(self, email):
-        api_sub = get_list_subscription(self.request.user.email)
-
-        if api_sub is None:
-            return None
-
-        return MailChimpSubscription.objects.create(email=email, status=api_sub["status"])
