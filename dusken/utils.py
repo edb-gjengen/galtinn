@@ -1,6 +1,7 @@
 import logging
 import random
 import re
+from http import HTTPStatus
 
 import requests
 from django.conf import settings
@@ -22,10 +23,9 @@ def generate_username(first_name, last_name):
     whitespace_re = re.compile(r"\s")
     first_name = first_name.encode("ascii", "ignore").lower()[:6].decode("utf-8")
     last_name = last_name.encode("ascii", "ignore").lower()[:2].decode("utf-8")
-    random_number = random.randint(1, 9999)
+    random_number = random.randint(1, 9999)  # noqa: S311
     username = f"{first_name}{last_name}{random_number:04d}"
-    username = whitespace_re.sub("", username)
-    return username
+    return whitespace_re.sub("", username)
 
 
 class InlineClass:
@@ -53,7 +53,11 @@ def send_validation_email(user):
     from_email = settings.DEFAULT_FROM_EMAIL
 
     send_mail_task.delay(
-        _("Confirm your email address at Chateau Neuf"), from_email, message, [user.email], html_message=html_message
+        _("Confirm your email address at Chateau Neuf"),
+        from_email,
+        message,
+        [user.email],
+        html_message=html_message,
     )
 
 
@@ -67,10 +71,10 @@ def send_sms(to, message):
     url = f"{settings.TEKSTMELDING_API_URL}send"
     payload = {"to": str(to), "message": message}
     headers = {"Authorization": "Token " + settings.TEKSTMELDING_API_KEY}
-    response = requests.post(url, json=payload, headers=headers)
-    if response.status_code != 200:
+    response = requests.post(url, json=payload, headers=headers, timeout=10)
+    if response.status_code != HTTPStatus.OK:
         logger.warning(f"Failed to send SMS, status_code={response.status_code} payload={payload}")
-        return
+        return None
 
     return response.json().get("outgoing_id")
 
@@ -78,7 +82,7 @@ def send_sms(to, message):
 def send_validation_sms(user):
     if user.phone_number_confirmed:
         # Bail
-        return
+        return None
 
     # Create a key if needed
     if not user.phone_number_key:
@@ -92,7 +96,7 @@ def send_validation_sms(user):
 
 
 def create_phone_key(length=6):
-    return "".join([random.choice("0123456789") for i in range(length)])
+    return "".join([random.choice("0123456789") for i in range(length)])  # noqa: S311
 
 
 def email_exists(email):

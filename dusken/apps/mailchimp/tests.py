@@ -37,8 +37,8 @@ class IncomingWebhook(TestCase):
 
         url = "{}?secret={}".format(reverse("mailchimp:incoming"), settings.MAILCHIMP_WEBHOOK_SECRET)
         res = self.client.post(url, data)
-        self.assertEqual(res.status_code, 200, res.data)
-        self.assertEqual(MailChimpSubscription.objects.first().status, MailChimpSubscription.STATUS_UNSUBSCRIBED)
+        assert res.status_code == 200, res.data
+        assert MailChimpSubscription.objects.first().status == MailChimpSubscription.STATUS_UNSUBSCRIBED
 
     @override_settings(MAILCHIMP_LIST_ID=MAILCHIMP_TEST_LIST_ID)
     def test_subscribe(self):
@@ -58,8 +58,8 @@ class IncomingWebhook(TestCase):
 
         url = "{}?secret={}".format(reverse("mailchimp:incoming"), settings.MAILCHIMP_WEBHOOK_SECRET)
         res = self.client.post(url, data)
-        self.assertEqual(res.status_code, 200, res.data)
-        self.assertEqual(MailChimpSubscription.objects.first().status, MailChimpSubscription.STATUS_SUBSCRIBED)
+        assert res.status_code == 200, res.data
+        assert MailChimpSubscription.objects.first().status == MailChimpSubscription.STATUS_SUBSCRIBED
 
 
 @override_settings(MAILCHIMP_LIST_ID=MAILCHIMP_TEST_LIST_ID)
@@ -81,8 +81,8 @@ class MailchimpAPI(TestCase):
             m.put(get_list_member_url(list_id, email), json={"status": status})
             res = self.client.post(url, content_type="application/json", data=json.dumps(data), format="json")
 
-        self.assertEqual(res.status_code, 201)
-        self.assertEqual(res.json()["status"], status)
+        assert res.status_code == 201
+        assert res.json()["status"] == status
 
     def test_unsubscribe(self):
         email = "espen@example.com"
@@ -96,11 +96,11 @@ class MailchimpAPI(TestCase):
 
         data = {"status": status}
 
-        self.assertNotEqual(subscription.status, status)
+        assert subscription.status != status
 
         with requests_mock.mock() as m:
             m.put(get_list_member_url(list_id, email), json={"status": status})
             res = self.client.patch(url, content_type="application/json", data=json.dumps(data), format="json")
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.json()["status"], status)
+        assert res.status_code == 200
+        assert res.json()["status"] == status

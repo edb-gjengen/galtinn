@@ -21,7 +21,6 @@ import dusken.utils
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -57,7 +56,7 @@ class Migration(migrations.Migration):
                                 "^[\\w.@+-]+$",
                                 "Enter a valid username. This value may contain only letters, numbers and @/./+/-/_ characters.",
                                 "invalid",
-                            )
+                            ),
                         ],
                         verbose_name="username",
                     ),
@@ -282,7 +281,7 @@ class Migration(migrations.Migration):
                     django.core.validators.RegexValidator(
                         "^[\\w.@+-]+$",
                         "Enter a valid username. This value may contain only letters, numbers and @/./+/-/_ characters.",
-                    )
+                    ),
                 ],
                 verbose_name="username",
             ),
@@ -386,13 +385,18 @@ class Migration(migrations.Migration):
                 (
                     "product",
                     models.OneToOneField(
-                        blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="dusken.Membership"
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="dusken.Membership",
                     ),
                 ),
                 (
                     "user",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, related_name="orders", to=settings.AUTH_USER_MODEL
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="orders",
+                        to=settings.AUTH_USER_MODEL,
                     ),
                 ),
             ],
@@ -438,7 +442,9 @@ class Migration(migrations.Migration):
             model_name="duskenuser",
             name="phone_number",
             field=phonenumber_field.modelfields.PhoneNumberField(
-                blank=True, max_length=128, verbose_name="phone number"
+                blank=True,
+                max_length=128,
+                verbose_name="phone number",
             ),
         ),
         migrations.AlterField(
@@ -581,7 +587,10 @@ class Migration(migrations.Migration):
             model_name="duskenuser",
             name="phone_number",
             field=phonenumber_field.modelfields.PhoneNumberField(
-                blank=True, default="", max_length=128, verbose_name="phone number"
+                blank=True,
+                default="",
+                max_length=128,
+                verbose_name="phone number",
             ),
         ),
         migrations.AlterField(
@@ -705,7 +714,9 @@ class Migration(migrations.Migration):
             model_name="userlogmessage",
             name="user",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, related_name="log_messages", to=settings.AUTH_USER_MODEL
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="log_messages",
+                to=settings.AUTH_USER_MODEL,
             ),
         ),
         migrations.AddField(
@@ -733,7 +744,10 @@ class Migration(migrations.Migration):
             model_name="orgunit",
             name="phone_number",
             field=phonenumber_field.modelfields.PhoneNumberField(
-                blank=True, default="", max_length=128, verbose_name="phone number"
+                blank=True,
+                default="",
+                max_length=128,
+                verbose_name="phone number",
             ),
         ),
         migrations.AddField(
@@ -761,7 +775,9 @@ class Migration(migrations.Migration):
                 (
                     "org_unit",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, related_name="log_messages", to="dusken.OrgUnit"
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="log_messages",
+                        to="dusken.OrgUnit",
                     ),
                 ),
             ],
@@ -844,14 +860,19 @@ class Migration(migrations.Migration):
             model_name="groupprofile",
             name="type",
             field=models.CharField(
-                blank=True, choices=[("volunteers", "Volunteers"), ("", "Standard")], default="", max_length=255
+                blank=True,
+                choices=[("volunteers", "Volunteers"), ("", "Standard")],
+                default="",
+                max_length=255,
             ),
         ),
         migrations.AlterField(
             model_name="groupprofile",
             name="group",
             field=models.OneToOneField(
-                on_delete=django.db.models.deletion.CASCADE, related_name="profile", to="auth.Group"
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="profile",
+                to="auth.Group",
             ),
         ),
         migrations.AlterField(

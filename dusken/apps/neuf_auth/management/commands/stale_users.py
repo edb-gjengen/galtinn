@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand
 
 from dusken.apps.neuf_ldap.models import LdapGroup, LdapUser
-
-# from neuf_auth.ssh import get_home_dirs
 from dusken.models import DuskenUser, GroupProfile
 
 
@@ -23,7 +21,7 @@ class Command(BaseCommand):
         super().__init__()
         self.group_profile = GroupProfile.objects.get(type=GroupProfile.TYPE_VOLUNTEERS)
 
-    def handle(self, *args, **options):
+    def handle(self, *_args, **options):
         self.verbosity = int(options["verbosity"])
 
         inside_users_active = self.get_dusken_users()
@@ -32,8 +30,10 @@ class Command(BaseCommand):
 
         self.stdout.write(
             "{} LDAP users not in group {} in Dusken:\n{}".format(
-                len(stale_ldap_users), self.group_profile.posix_name, "\n".join(stale_ldap_users)
-            )
+                len(stale_ldap_users),
+                self.group_profile.posix_name,
+                "\n".join(stale_ldap_users),
+            ),
         )
         self.stdout.write("")
 
@@ -41,7 +41,7 @@ class Command(BaseCommand):
         users = DuskenUser.objects.filter(groups=self.group_profile.group, is_active=True, username__isnull=False)
         users = users.values_list("username", flat=True)
 
-        if self.verbosity == 3:
+        if self.verbosity == 3:  # noqa: PLR2004
             self.stdout.write(f"Found {len(users)} Dusken users")
 
         return set(users)
@@ -54,7 +54,7 @@ class Command(BaseCommand):
             ldap_users = ldap_users.exclude(username__in=ldap_active_members)
         ldap_users = ldap_users.values_list("username", flat=True)
 
-        if self.verbosity == 3:
+        if self.verbosity == 3:  # noqa: PLR2004
             self.stdout.write(f"Found {len(ldap_users)} LDAP users")
 
         return set(ldap_users)

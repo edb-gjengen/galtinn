@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import ldapdb.models
 from django.conf import settings
@@ -8,8 +8,7 @@ from .utils import ldap_create_password, ldap_validate_password
 
 
 class LdapUser(ldapdb.models.Model):
-    """
-    Represents an LDAP posixAccount, inetOrgPerson, shadowAccount entry.
+    """Represents an LDAP posixAccount, inetOrgPerson, shadowAccount entry.
     Ref: http://www.zytrax.com/books/ldap/apa/types.html
     """
 
@@ -39,20 +38,20 @@ class LdapUser(ldapdb.models.Model):
 
     # shadowAccount
     password = CharField(db_column="userPassword")
-    shadowLastChange = IntegerField(db_column="shadowLastChange", default=settings.LDAP_SHADOW_LAST_CHANGE)
-    shadowMin = IntegerField(db_column="shadowMin", default=settings.LDAP_SHADOW_MIN)
-    shadowMax = IntegerField(db_column="shadowMax", default=settings.LDAP_SHADOW_MAX)
-    shadowWarning = IntegerField(db_column="shadowWarning", default=settings.LDAP_SHADOW_WARNING)
-    shadowInactive = IntegerField(db_column="shadowInactive")
-    shadowExpire = IntegerField(db_column="shadowExpire", default=settings.LDAP_SHADOW_EXPIRE)
-    shadowFlag = IntegerField(db_column="shadowFlag", default=settings.LDAP_SHADOW_FLAG)
+    shadowLastChange = IntegerField(db_column="shadowLastChange", default=settings.LDAP_SHADOW_LAST_CHANGE)  # noqa: N815
+    shadowMin = IntegerField(db_column="shadowMin", default=settings.LDAP_SHADOW_MIN)  # noqa: N815
+    shadowMax = IntegerField(db_column="shadowMax", default=settings.LDAP_SHADOW_MAX)  # noqa: N815
+    shadowWarning = IntegerField(db_column="shadowWarning", default=settings.LDAP_SHADOW_WARNING)  # noqa: N815
+    shadowInactive = IntegerField(db_column="shadowInactive")  # noqa: N815
+    shadowExpire = IntegerField(db_column="shadowExpire", default=settings.LDAP_SHADOW_EXPIRE)  # noqa: N815
+    shadowFlag = IntegerField(db_column="shadowFlag", default=settings.LDAP_SHADOW_FLAG)  # noqa: N815
 
     # core
     description = CharField(db_column="description")
 
     @staticmethod
     def _days_since_epoch():
-        return (datetime.utcnow() - datetime(1970, 1, 1)).days
+        return (datetime.now(tz=timezone.utc) - datetime(1970, 1, 1, tzinfo=timezone.utc)).days
 
     def set_password(self, raw_password, commit=True, prehashed=False):
         self.password = raw_password if prehashed else ldap_create_password(raw_password)
@@ -94,8 +93,7 @@ class LdapGroup(ldapdb.models.Model):
 
 
 class LdapAutomountMap(ldapdb.models.Model):
-    """
-    Represents an LDAP automountMap
+    """Represents an LDAP automountMap
     Ref: http://www.openldap.org/faq/data/cache/599.html
     """
 
@@ -115,8 +113,7 @@ class LdapAutomountMap(ldapdb.models.Model):
 
 
 class LdapAutomountHome(ldapdb.models.Model):
-    """
-    Represents an LDAP automount with hardcoded 'auto.home' in the base_dn (!)
+    """Represents an LDAP automount with hardcoded 'auto.home' in the base_dn (!)
     Ref: http://www.openldap.org/faq/data/cache/599.html
     Ref: http://lists.bolloretelecom.eu/pipermail/django-ldapdb/2012-April/000113.html
     """
@@ -128,12 +125,10 @@ class LdapAutomountHome(ldapdb.models.Model):
     object_classes = ["automount"]
 
     username = CharField(db_column="cn", primary_key=True)
-    automountInformation = CharField(db_column="automountInformation")
+    automountInformation = CharField(db_column="automountInformation")  # noqa: N815
 
     def set_automount_info(self, username=None):
-        krb5_automount_info = "-fstype=nfs4,rw,sec=krb5 {}:{}/{}".format(
-            settings.FILESERVER_HOST, settings.FILESERVER_HOME_PATH, username if username is not None else self.username
-        )
+        krb5_automount_info = f"-fstype=nfs4,rw,sec=krb5 {settings.FILESERVER_HOST}:{settings.FILESERVER_HOME_PATH}/{username if username is not None else self.username}"
 
         self.automountInformation = krb5_automount_info
 

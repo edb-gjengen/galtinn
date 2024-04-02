@@ -1,4 +1,5 @@
 import logging
+from http import HTTPStatus
 
 import requests
 from django.conf import settings
@@ -24,7 +25,8 @@ def validate_mailchimp_settings(list_id):
 def update_list_subscription(email, status, merge_data=None):
     from dusken.apps.mailchimp.models import MailChimpSubscription
 
-    assert status in dict(MailChimpSubscription.STATUS_CHOICES).keys()
+    if status not in dict(MailChimpSubscription.STATUS_CHOICES):
+        raise ValueError(f"Invalid mailchimp status {status}")
 
     list_id = settings.MAILCHIMP_LIST_ID
     validate_mailchimp_settings(list_id)
@@ -40,12 +42,12 @@ def update_list_subscription(email, status, merge_data=None):
     logger.info("Update subscription %s on list %s", email, list_id)
 
     # Create or update (with PUT)
-    r = requests.put(get_list_member_url(list_id, email), auth=_get_auth(), json=data)
+    r = requests.put(get_list_member_url(list_id, email), auth=_get_auth(), json=data, timeout=10)
 
     try:
         r.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        raise MailchimpAPIException(e)
+        raise MailchimpAPIException(e) from e
 
     return r.json()
 
@@ -55,14 +57,14 @@ def get_list_subscription(email):
     validate_mailchimp_settings(list_id)
 
     # Get subscription status
-    r = requests.get(get_list_member_url(list_id, email), auth=_get_auth())
+    r = requests.get(get_list_member_url(list_id, email), auth=_get_auth(), timeout=10)
 
-    if r.status_code == 404:
+    if r.status_code == HTTPStatus.NOT_FOUND:
         return None
 
     try:
         r.raise_for_status()
     except requests.exceptions.HTTPError as e:
-        raise MailchimpAPIException(e)
+        raise MailchimpAPIException(e) from e
 
     return r.json()

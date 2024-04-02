@@ -1,36 +1,13 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
-- repo: local
-  hooks:
-  - id: black
-    name: black
-    entry: black
-    args: [--check]
-    language: system
-    require_serial: true
-    types: [python]
-  - id: isort
-    name: isort
-    entry: isort
-    args: [--check]
-    language: system
-    types: [python]
-  - id: pycln
-    name: pycln
-    entry: pycln
-    args: [--check]
-    language: system
-    types: [python]
-  - id: pyupgrade
-    name: pyupgrade
-    entry: pyupgrade
-    args: [--py38-plus]
-    language: system
-    types: [python]
-  - id: django-upgrade
-    name: django-upgrade
-    entry: django-upgrade
-    language: system
-    types: [python]
-    args: [--target-version, "3.2"]
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: 'v0.3.3'
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: "1.16.0"
+    hooks:
+      - id: django-upgrade

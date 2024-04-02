@@ -24,7 +24,7 @@ def membership_stats(request):
     def _key_func(x):
         return f"{x.order.payment_method}{x.order.created.date()}"
 
-    for key, values in groupby(memberships, key=_key_func):
+    for _, values in groupby(memberships, key=_key_func):
         sales = list(values)
         method = sales[0].order.payment_method
         memberships_grouped[method].append(
@@ -32,7 +32,7 @@ def membership_stats(request):
                 "sales": len(sales),
                 "date": str(sales[0].order.created.date()),
                 "payment_method": sales[0].order.payment_method,
-            }
+            },
         )
 
     data = {

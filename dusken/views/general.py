@@ -35,7 +35,7 @@ class HomeView(LoginRequiredMixin, DetailView):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     membership_type = None
 
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
     def get_context_data(self, **kwargs):
@@ -47,7 +47,7 @@ class HomeView(LoginRequiredMixin, DetailView):
 class HomeVolunteerView(LoginRequiredMixin, DetailView):
     template_name = "dusken/home_volunteer.html"
 
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
     def get_context_data(self, **kwargs):
@@ -67,11 +67,12 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 class StatsView(LoginRequiredMixin, TemplateView):
     template_name = "dusken/stats.html"
 
-    def get_context_data(self, **kwargs):
+    def _parse_start_date(self):
         start_date = self.request.GET.get("start_date", None)
         if not start_date:
-            start_date = timezone.now().date().replace(month=8, day=1)
-        else:
-            start_date = parse_date(start_date)
+            return timezone.now().date().replace(month=8, day=1)
 
-        return {**super().get_context_data(**kwargs), "start_date": start_date}
+        return parse_date(start_date)
+
+    def get_context_data(self, **kwargs):
+        return {**super().get_context_data(**kwargs), "start_date": self._parse_start_date()}

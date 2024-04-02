@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("neuf_auth", "0002_auto_20170803_1607"),
     ]

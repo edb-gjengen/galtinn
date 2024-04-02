@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class MailmanMembership(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def put(self, request, list_name, address):
+    def put(self, _request, list_name, address):
         full_name = self.request.query_params.get("full_name")
         if not full_name:
             full_name = self.request.user.get_full_name()
@@ -31,11 +31,11 @@ class MailmanMembership(APIView):
                 msg = _("Email already subscribed")
                 code = "duplicate"
 
-            raise ValidationError(msg, code=code)
+            raise ValidationError(msg, code=code) from e
 
         return Response(ret, status=status.HTTP_201_CREATED)
 
-    def delete(self, request, list_name, address):
+    def delete(self, _request, list_name, address):
         try:
             unsubscribe(list_name, address)
         except requests.exceptions.HTTPError as e:
@@ -46,6 +46,6 @@ class MailmanMembership(APIView):
                 msg = _("Email {} not on list").format(address)
                 code = "not_found"
 
-            raise ValidationError(msg, code=code)
+            raise ValidationError(msg, code=code) from e
 
         return Response(status=status.HTTP_204_NO_CONTENT)

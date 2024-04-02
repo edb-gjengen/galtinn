@@ -34,7 +34,7 @@ STRIPE_ERRORS = {
     "missing": _("There is no card on a customer that is being charged."),
     "processing_error": _("An error occurred while processing the card."),
     "rate_limit": _(
-        "An error occurred due to requests hitting the API too quickly. Please let us know if you're consistently running into this error."
+        "An error occurred due to requests hitting the API too quickly. Please let us know if you're consistently running into this error.",
     ),
 }
 
@@ -68,7 +68,7 @@ class KassaMembershipView(GenericAPIView):
     permission_classes = (DjangoModelPermissions,)
     serializer_class = KassaOrderSerializer
 
-    def post(self, request):
+    def post(self, _request):
         # Validate
         serializer = self.serializer_class(data=self.request.data)
         serializer.is_valid(raise_exception=True)
@@ -125,15 +125,15 @@ class MembershipChargeView(GenericAPIView):
         except InvalidRequestError as e:
             logger.warning("Invalid Stripe request! %s", str(e))
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(_("Stripe charge failed with API error."))
+            raise APIException(_("Stripe charge failed with API error.")) from e
         except CardError as e:
             logger.info("stripe.Customer.create did not succeed: %s", e)
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined.")))
+            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined."))) from e
 
     def _update_stripe_customer(self, customer, stripe_token):
         if settings.TESTING:
@@ -144,15 +144,15 @@ class MembershipChargeView(GenericAPIView):
         except InvalidRequestError as e:
             logger.warning("Invalid Stripe request! %s", str(e))
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(_("Stripe charge failed with API error."))
+            raise APIException(_("Stripe charge failed with API error.")) from e
         except CardError as e:
             logger.info("stripe.Customer.modify did not succeed: %s", e)
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined.")))
+            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined."))) from e
 
     def _create_stripe_charge(self, customer, amount, description):
         if settings.TESTING:
@@ -160,20 +160,23 @@ class MembershipChargeView(GenericAPIView):
 
         try:
             return stripe.Charge.create(
-                customer=customer.id, amount=amount, currency=self.CURRENCY, description=description
+                customer=customer.id,
+                amount=amount,
+                currency=self.CURRENCY,
+                description=description,
             )
         except InvalidRequestError as e:
             logger.warning("Invalid Stripe request! %s", str(e))
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException("Stripe charge failed with API error.")
+            raise APIException("Stripe charge failed with API error.") from e
         except CardError as e:
             logger.info("stripe.Charge.create did not succeed: %s", e)
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined.")))
+            raise APIException(STRIPE_ERRORS.get(e.code, _("Your card has been declined."))) from e
 
     def _get_stripe_customer(self, stripe_customer_id):
         if settings.TESTING:
@@ -184,6 +187,6 @@ class MembershipChargeView(GenericAPIView):
         except InvalidRequestError as e:
             logger.warning("Invalid Stripe request! %s", str(e))
             if settings.DEBUG:
-                raise APIException(e)
+                raise APIException(e) from e
 
-            raise APIException(_("Stripe charge failed with API error."))
+            raise APIException(_("Stripe charge failed with API error.")) from e

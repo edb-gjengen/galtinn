@@ -10,7 +10,7 @@ UserModel = get_user_model()
 class UsernameModelBackend(ModelBackend):
     """Lookup user on UserModel.username vs on UserModel.USERNAME_FIELD"""
 
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(self, _request, username=None, password=None, **kwargs):
         if username is None:
             username = kwargs.get("username")
         try:
@@ -26,8 +26,7 @@ class UsernameModelBackend(ModelBackend):
 
 class UsernameBasicAuthentication(BasicAuthentication):
     def authenticate_credentials(self, userid, password, request=None):
-        """
-        Authenticate the userid and password against username and password
+        """Authenticate the userid and password against username and password
         with optional request for context.
         """
         credentials = {

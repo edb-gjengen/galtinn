@@ -38,7 +38,7 @@ class KassaMemberCardUpdateView(UpdateAPIView):
     permission_classes = (DjangoModelPermissions,)
     serializer_class = KassaMemberCardUpdateSerializer
 
-    def patch(self, request, *args, **kwargs):
+    def patch(self, _request, *_args, **_kwargs):
         # Validate
         serializer = self.serializer_class(data=self.request.data)
         serializer.is_valid(raise_exception=True)

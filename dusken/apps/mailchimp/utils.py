@@ -5,7 +5,7 @@ from django.conf import settings
 
 
 def subscriber_hash(email):
-    m = hashlib.md5()
+    m = hashlib.md5()  # noqa: S324
     m.update(email.lower().encode())
     return m.hexdigest()
 

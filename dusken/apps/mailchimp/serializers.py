@@ -5,7 +5,8 @@ from dusken.apps.mailchimp.models import MailChimpSubscription
 
 class MailChimpSubscriptionSerializer(serializers.ModelSerializer):
     status = serializers.ChoiceField(
-        default=MailChimpSubscription.STATUS_DEFAULT, choices=MailChimpSubscription.STATUS_CHOICES
+        default=MailChimpSubscription.STATUS_DEFAULT,
+        choices=MailChimpSubscription.STATUS_CHOICES,
     )
 
     class Meta:
@@ -14,7 +15,8 @@ class MailChimpSubscriptionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         sub, created = MailChimpSubscription.objects.get_or_create(
-            email=validated_data.get("email"), defaults={"status": MailChimpSubscription.STATUS_DEFAULT}
+            email=validated_data.get("email"),
+            defaults={"status": MailChimpSubscription.STATUS_DEFAULT},
         )
 
         if not created:

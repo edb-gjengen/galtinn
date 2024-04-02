@@ -21,4 +21,4 @@ def google_analytics_tag():
     if not property_id:
         return ""
 
-    return mark_safe(ga_script_tag % property_id)
+    return mark_safe(ga_script_tag % property_id)  # noqa: S308

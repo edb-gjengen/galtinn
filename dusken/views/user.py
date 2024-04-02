@@ -31,6 +31,9 @@ class UserRegisterView(FormView):
         return redirect(self.get_success_url())
 
 
+CODE_LENGTH = 8
+
+
 class UserActivateView(FormView):
     """Registration via link sent by SMS."""
 
@@ -46,7 +49,7 @@ class UserActivateView(FormView):
             user = DuskenUser.objects.get(phone_number=phone_number)
         except DuskenUser.DoesNotExist:
             user = None
-        if not user and len(code) == 8:
+        if not user and len(code) == CODE_LENGTH:
             self.valid_link = Order.objects.filter(phone_number=phone_number, transaction_id__startswith=code).exists()
         return super().get(request, *args, **kwargs)
 
@@ -99,7 +102,7 @@ class UserDetailMeView(LoginRequiredMixin, DetailView):
     slug_field = "uuid"
     context_object_name = "userobj"
 
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
 
@@ -112,7 +115,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class UserUpdateMeView(UserUpdateView):
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
     def get_success_url(self):
@@ -125,14 +128,13 @@ class UserSetUsernameView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("home")
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            if request.user.has_set_username:
-                messages.error(self.request, _("Username can only be set once"))
-                return redirect(self.success_url)
+        if request.user.is_authenticated and request.user.has_set_username:
+            messages.error(self.request, _("Username can only be set once"))
+            return redirect(self.success_url)
 
         return super().dispatch(request, *args, **kwargs)
 
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
     def form_valid(self, form):
@@ -159,6 +161,6 @@ class UserDeleteView(LoginRequiredMixin, FormView):
         user = str(self.request.user)
         self.request.user.delete()
 
-        messages.success(self.request, _(f"So long {user} and good luck on your future travels 🚣"))
+        messages.success(self.request, _("So long %s and good luck on your future travels 🚣") % user)
 
         return super().form_valid(form)

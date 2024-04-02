@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("dusken", "0001_squashed_0052_auto_20170920_2149"),
     ]
@@ -62,7 +61,10 @@ class Migration(migrations.Migration):
             model_name="order",
             name="product",
             field=models.OneToOneField(
-                blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to="dusken.Membership"
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="dusken.Membership",
             ),
         ),
         migrations.AlterField(

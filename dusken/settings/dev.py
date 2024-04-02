@@ -1,6 +1,6 @@
-from .base import *
+import contextlib
 
-try:
-    from .local import *  # noqa
-except ImportError:
-    pass
+from .base import *  # noqa: F403
+
+with contextlib.suppress(ImportError):
+    from .local import *  # noqa: F403

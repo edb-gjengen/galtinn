@@ -1,3 +1,6 @@
+import contextlib
+import os
+
 import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -6,9 +9,9 @@ from sentry_sdk.integrations.redis import RedisIntegration
 
 from dusken.fetch_git_sha import InvalidGitRepository, fetch_git_sha
 
-from .base import *
+from .base import *  # noqa: F403
 
-DATABASES["default"] = dj_database_url.config(conn_max_age=600)
+DATABASES["default"] = dj_database_url.config(conn_max_age=600)  # noqa: F405
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -27,7 +30,7 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 # Sentry
 try:
-    release = fetch_git_sha(BASE_DIR)
+    release = fetch_git_sha(BASE_DIR)  # noqa: F405
 except InvalidGitRepository:
     release = "N/A"
 
@@ -40,7 +43,7 @@ sentry_sdk.init(
     integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()],
 )
 
-# Cache (redis)
+# Cache with Redis
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -48,11 +51,9 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-    }
+    },
 }
 
 
-try:
-    from .local import *  # noqa
-except ImportError:
-    pass
+with contextlib.suppress(ImportError):
+    from .local import *  # noqa: F403

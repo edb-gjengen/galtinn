@@ -19,7 +19,7 @@ def format_phone_number(number):
 
 
 def is_autumn():
-    today = datetime.date.today()
+    today = datetime.datetime.now(tz=datetime.timezone.utc).date()
     _min = datetime.date(year=today.year, month=8, day=1)
     _max = datetime.date(year=today.year + 1, month=1, day=1)
     return _min <= today < _max

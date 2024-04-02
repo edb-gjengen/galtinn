@@ -10,8 +10,8 @@ def phone_number_validator(phone_number):
 
     try:
         validate_international_phonenumber(phone_number)
-    except ValidationError:
-        raise ValidationError(_("Phone number is invalid"))
+    except ValidationError as err:
+        raise ValidationError(_("Phone number is invalid")) from err
 
 
 def email_validator(email):
@@ -20,5 +20,5 @@ def email_validator(email):
 
     try:
         validators.validate_email(email)
-    except ValidationError:
-        raise ValidationError(_("Email is invalid."))
+    except ValidationError as err:
+        raise ValidationError(_("Email is invalid.")) from err

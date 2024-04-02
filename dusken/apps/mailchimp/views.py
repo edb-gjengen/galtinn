@@ -32,13 +32,14 @@ class MailChimpIncoming(APIView):
         "unsubscribe": MailChimpSubscription.STATUS_UNSUBSCRIBED,
     }
 
-    def get(self, request):
+    def get(self, _request):
         """Note: Mailchimp webhook URL validator sends a
-        GET request and expects HTTP status code 200."""
+        GET request and expects HTTP status code 200.
+        """
         self._validate_secret()
         return Response()
 
-    def post(self, request):
+    def post(self, _request):
         self._validate_secret()
         self._validate_type()
         self._validate_list_id()

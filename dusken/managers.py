@@ -6,7 +6,7 @@ from django.utils import timezone
 class DuskenUserQuerySet(QuerySet):
     def get_membership_query(self):
         return Q(memberships__isnull=False, memberships__end_date__isnull=True) | Q(
-            memberships__end_date__gt=timezone.now().date()
+            memberships__end_date__gt=timezone.now().date(),
         )
 
     def with_valid_membership(self):
@@ -42,7 +42,7 @@ class OrderQuerySet(QuerySet):
             & (
                 Q(phone_number__isnull=False, phone_number=phone_number)
                 | Q(member_card__isnull=False, member_card=member_card)
-            )
+            ),
         ).order_by("-created")
 
 
@@ -60,7 +60,8 @@ class MembershipQuerySet(QuerySet):
 
         is_lifelong = Q(membership_type__expiry_type=MembershipType.EXPIRY_NEVER, end_date__isnull=True)
         is_valid_duration = Q(
-            membership_type__expiry_type=MembershipType.EXPIRY_DURATION, end_date__gte=timezone.now().date()
+            membership_type__expiry_type=MembershipType.EXPIRY_DURATION,
+            end_date__gte=timezone.now().date(),
         )
         query = is_lifelong | is_valid_duration
         return self.filter(query)

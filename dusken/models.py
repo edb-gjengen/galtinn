@@ -4,8 +4,7 @@ from datetime import timedelta
 from itertools import chain
 
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import AbstractUser, Group
 from django.contrib.auth.models import Group as DjangoGroup
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
@@ -35,24 +34,28 @@ class DuskenUser(AbstractUser):  # type: ignore
     email_confirmed_at = models.DateTimeField(blank=True, null=True)
     email_key = models.CharField(max_length=40, default=create_email_key)
     phone_number = PhoneNumberField(_("phone number"), blank=True, default="")
-    phone_number_key = models.CharField(max_length=40, blank=True, null=True)
+    phone_number_key = models.CharField(max_length=40, blank=True, null=True)  # noqa: DJ001
     phone_number_confirmed = models.BooleanField(default=False)
     phone_number_confirmed_at = models.DateTimeField(blank=True, null=True)
     date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
 
     # Address
-    street_address = models.CharField(_("street address"), max_length=255, null=True, blank=True)
-    street_address_two = models.CharField(_("street address 2"), max_length=255, null=True, blank=True)
-    postal_code = models.CharField(_("postal code"), max_length=10, null=True, blank=True)
-    city = models.CharField(_("city"), max_length=100, null=True, blank=True)
+    street_address = models.CharField(_("street address"), max_length=255, null=True, blank=True)  # noqa: DJ001
+    street_address_two = models.CharField(_("street address 2"), max_length=255, null=True, blank=True)  # noqa: DJ001
+    postal_code = models.CharField(_("postal code"), max_length=10, null=True, blank=True)  # noqa: DJ001
+    city = models.CharField(_("city"), max_length=100, null=True, blank=True)  # noqa: DJ001
     country = CountryField(_("country"), default="NO", blank=True)
 
     place_of_study = models.ForeignKey(
-        "dusken.PlaceOfStudy", models.SET_NULL, verbose_name=_("place of study"), blank=True, null=True
+        "dusken.PlaceOfStudy",
+        models.SET_NULL,
+        verbose_name=_("place of study"),
+        blank=True,
+        null=True,
     )
     legacy_id = models.IntegerField(_("legacy id"), null=True, blank=True)
 
-    stripe_customer_id = models.CharField(_("stripe customer id"), max_length=254, null=True, blank=True)
+    stripe_customer_id = models.CharField(_("stripe customer id"), max_length=254, null=True, blank=True)  # noqa: DJ001
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
@@ -185,16 +188,14 @@ class DuskenUser(AbstractUser):  # type: ignore
         zip_code_part = " ".join(x for x in zip_code_part if x != "None")
         country = self.country.name if self.country else ""
 
-        return "{}{}, {}".format(address_part + ", " if address_part else "", zip_code_part, country)
+        return "{}{}, {}".format(address_part + ", " if address_part else "", zip_code_part, country)
 
     def have_address(self):
         return any((self.street_address, self.street_address_two, self.postal_code, self.city))
 
     def __str__(self):
         if len(self.first_name) + len(self.last_name) > 0:
-            return "{first} {last} ({username})".format(
-                first=self.first_name, last=self.last_name, username=self.username
-            )
+            return f"{self.first_name} {self.last_name} ({self.username})"
         return f"{self.username}"
 
     class Meta:
@@ -284,25 +285,26 @@ class MembershipType(BaseModel):
 
     def get_expiry_date(self):
         """Get the correct end date for this membership type."""
-
         now = timezone.now()
         if self.expiry_type == self.EXPIRY_DURATION:
             return (now + self.duration).date()
-        elif self.expiry_type == self.EXPIRY_END_OF_YEAR:
+
+        if self.expiry_type == self.EXPIRY_END_OF_YEAR:
             return now.date().replace(year=now.year + 1, month=1, day=1)
-        elif self.expiry_type == self.EXPIRY_NEVER:
+
+        if self.expiry_type == self.EXPIRY_NEVER:
             return None
 
-        raise Exception(f"MembershipType object {self.__str__()} is configured incorrectly")
+        raise ImproperlyConfigured(f"MembershipType object {self.__str__()} is configured incorrectly")
 
     @classmethod
     def get_default(cls):
         try:
             return cls.objects.get(is_default=True)
-        except cls.DoesNotExist:
-            raise ImproperlyConfigured("Error: At least one MembershipType must have is_default set")
-        except cls.MultipleObjectsReturned:
-            raise ImproperlyConfigured("Error: Only one MembershipType can have is_default set")
+        except cls.DoesNotExist as err:
+            raise ImproperlyConfigured("Error: At least one MembershipType must have is_default set") from err
+        except cls.MultipleObjectsReturned as err:
+            raise ImproperlyConfigured("Error: Only one MembershipType can have is_default set") from err
 
     class Meta:
         verbose_name = _("Membership type")
@@ -314,11 +316,17 @@ class MemberCard(BaseModel):
     registered = models.DateTimeField(_("registered"), null=True, blank=True)
     is_active = models.BooleanField(_("is active"), default=True)
     user = models.ForeignKey(
-        "dusken.DuskenUser", models.SET_NULL, verbose_name=_("user"), null=True, blank=True, related_name="member_cards"
+        "dusken.DuskenUser",
+        models.SET_NULL,
+        verbose_name=_("user"),
+        null=True,
+        blank=True,
+        related_name="member_cards",
     )
 
     def register(self, user=None, order=None):
-        assert not (user and order)
+        if user is None and order is None:
+            raise ValueError("Cannot register without neither user nor order")
         if user or (order and not self.registered):
             self.registered = timezone.now()
             self.is_active = True
@@ -326,7 +334,8 @@ class MemberCard(BaseModel):
             user.member_cards.filter(is_active=True).update(is_active=False)
             self.user = user
         if order:
-            assert not order.member_card
+            if order.member_card:
+                raise ValueError("Member card already registered to order")
             order.member_card = self
             order.save()
         self.save()
@@ -341,9 +350,7 @@ class MemberCard(BaseModel):
 
 
 class GroupProfile(BaseModel):
-    """
-    django.contrib.auth.model.Group extended with additional fields.
-    """
+    """django.contrib.auth.model.Group extended with additional fields."""
 
     TYPE_VOLUNTEERS = "volunteers"
     TYPE_STANDARD = ""
@@ -380,9 +387,7 @@ class GroupProfile(BaseModel):
 
 # FIXME: We can't seem use the django-stubs type plugin to infer types from BaseModel, since MPTTModel is untyped/any
 class OrgUnit(MPTTModel, BaseModel):  # type: ignore
-    """
-    Association, comittee or similar
-    """
+    """Association, comittee or similar"""
 
     name = models.CharField(_("name"), max_length=255)
     slug = models.SlugField(_("slug"), unique=True, max_length=255, blank=True)
@@ -393,13 +398,22 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
     # Contact
     email = models.EmailField(_("email"), blank=True, default="")
     contact_person = models.ForeignKey(
-        "dusken.DuskenUser", models.SET_NULL, verbose_name=_("contact person"), blank=True, null=True
+        "dusken.DuskenUser",
+        models.SET_NULL,
+        verbose_name=_("contact person"),
+        blank=True,
+        null=True,
     )
     website = models.URLField(_("website"), blank=True, default="")
 
     # Member and permission groups
     group = models.ForeignKey(
-        DjangoGroup, models.SET_NULL, verbose_name=_("group"), blank=True, null=True, related_name="member_orgunits"
+        DjangoGroup,
+        models.SET_NULL,
+        verbose_name=_("group"),
+        blank=True,
+        null=True,
+        related_name="member_orgunits",
     )
     admin_group = models.ForeignKey(
         DjangoGroup,
@@ -412,7 +426,13 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
 
     # Hierarchical :-)
     parent = TreeForeignKey(
-        "self", models.SET_NULL, verbose_name=_("parent"), null=True, blank=True, related_name="children", db_index=True
+        "self",
+        models.SET_NULL,
+        verbose_name=_("parent"),
+        null=True,
+        blank=True,
+        related_name="children",
+        db_index=True,
     )
 
     @property
@@ -490,7 +510,7 @@ class Order(BaseModel):
 
     # Payment
     payment_method = models.CharField(max_length=254, choices=PAYMENT_METHODS, default=PAYMENT_METHOD_OTHER)
-    transaction_id = models.CharField(
+    transaction_id = models.CharField(  # noqa: DJ001
         max_length=254,
         null=True,
         blank=True,
@@ -533,7 +553,11 @@ class UserLogMessage(BaseModel):
     user = models.ForeignKey("dusken.DuskenUser", models.CASCADE, related_name="log_messages")
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        "dusken.DuskenUser", on_delete=models.SET_NULL, related_name="user_changes", blank=True, null=True
+        "dusken.DuskenUser",
+        on_delete=models.SET_NULL,
+        related_name="user_changes",
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
@@ -548,7 +572,11 @@ class OrgUnitLogMessage(BaseModel):
     org_unit = models.ForeignKey("dusken.OrgUnit", models.CASCADE, related_name="log_messages")
     message = models.CharField(max_length=500)
     changed_by = models.ForeignKey(
-        "dusken.DuskenUser", on_delete=models.SET_NULL, related_name="org_unit_changes", blank=True, null=True
+        "dusken.DuskenUser",
+        on_delete=models.SET_NULL,
+        related_name="org_unit_changes",
+        blank=True,
+        null=True,
     )
 
     def __str__(self):

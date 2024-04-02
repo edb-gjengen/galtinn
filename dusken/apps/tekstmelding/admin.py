@@ -12,12 +12,14 @@ from dusken.apps.tekstmelding.models import (
 )
 
 
+@admin.register(IncomingMessage)
 class IncomingMessageAdmin(admin.ModelAdmin):
     search_fields = ["msisdn"]
     list_display = ["pk", "msgid", "msisdn", "msg", "timestamp"]
     list_filter = ["timestamp"]
 
 
+@admin.register(OutgoingMessage)
 class OutgoingMessageAdmin(admin.ModelAdmin):
     search_fields = ["msisdn", "content", "destination"]
     list_display = [
@@ -49,6 +51,7 @@ def _show_link(obj, model_name):
     return format_html("<a href='{url}'>{obj}</a>", url=url, obj=obj)
 
 
+@admin.register(TekstmeldingEvent)
 class TekstmeldingEventAdmin(admin.ModelAdmin):
     list_display = [
         "pk",
@@ -79,7 +82,4 @@ class TekstmeldingEventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(DeliveryReport)
-admin.site.register(TekstmeldingEvent, TekstmeldingEventAdmin)
-admin.site.register(IncomingMessage, IncomingMessageAdmin)
-admin.site.register(OutgoingMessage, OutgoingMessageAdmin)
 admin.site.register(OutgoingResponse)
