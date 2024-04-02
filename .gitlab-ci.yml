@@ -25,10 +25,9 @@ tests:
   before_script:
     - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
     - poetry config virtualenvs.in-project true
-    - poetry run pip install -U pip wheel
+    - poetry run pip install -U pip pre-commit
     - poetry install
   script:
-    - bin/ensure-python-deps.sh
     - poetry run python manage.py migrate
     - poetry run python manage.py check
     - poetry run coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* -m pytest -v
