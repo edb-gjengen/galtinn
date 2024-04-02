@@ -12,6 +12,9 @@ from dusken.apps.neuf_ldap.utils import (
 )
 from dusken.models import DuskenUser, GroupProfile
 
+VERBOSE = 2
+VERY_VERBOSE = 3
+
 
 class Command(BaseCommand):
     help = "Synchronizes users in volunteer group from Dusken to LDAP"
@@ -47,7 +50,7 @@ class Command(BaseCommand):
         self.verbosity = int(options["verbosity"])
         self.dry_run = bool(options["dry_run"])
 
-        if self.verbosity >= 2:
+        if self.verbosity >= VERBOSE:
             self.stdout.write(f"[{datetime.utcnow()}] Started sync job")
 
         # Get all active user from Dusken
@@ -61,7 +64,7 @@ class Command(BaseCommand):
 
         self.log_totals()
 
-        if self.verbosity >= 2:
+        if self.verbosity >= VERBOSE:
             self.stdout.write(f"[{datetime.utcnow()}] Finished sync job")
 
         # Voila!
@@ -85,7 +88,7 @@ class Command(BaseCommand):
                 "groups": dusken_groups,
             }
 
-        if self.verbosity == 3:
+        if self.verbosity == VERY_VERBOSE:
             self.stdout.write(f"Found {len(dusken_users_diffable)} Dusken users")
 
         return dusken_users_diffable
@@ -106,7 +109,7 @@ class Command(BaseCommand):
                 "email": u.email,
                 "groups": ldap_groups,
             }
-        if self.verbosity == 3:
+        if self.verbosity == VERY_VERBOSE:
             self.stdout.write(f"Found {len(ldap_users_diffable)} LDAP users")
 
         return ldap_users_diffable
@@ -120,7 +123,7 @@ class Command(BaseCommand):
                 create_ldap_automount(user["username"], dry_run=self.dry_run)
 
                 self.COUNTS["create"] += 1
-                if self.verbosity >= 2:
+                if self.verbosity >= VERBOSE:
                     self.stdout.write(f"[CREATED] Dusken user {username} is not in LDAP")
             elif not self.user_details_in_sync(user, ldap_users_diffable[username]) or not self.user_groups_in_sync(
                 user,
@@ -137,16 +140,16 @@ class Command(BaseCommand):
                 )
 
                 self.COUNTS["update"] += 1
-                if self.verbosity >= 2:
+                if self.verbosity >= VERBOSE:
                     self.stdout.write(f"[UPDATED] Dusken user {username} is out of sync with LDAP")
             else:
                 # In sync :-)
                 self.COUNTS["in_sync"] += 1
-                if self.verbosity == 3:
+                if self.verbosity == VERBOSE:
                     self.stdout.write(f"[OK] Dusken user {username} is in sync with LDAP")
 
     def log_totals(self):
-        if self.COUNTS["create"] > 0 or self.COUNTS["update"] > 0 or self.verbosity >= 2:
+        if self.COUNTS["create"] > 0 or self.COUNTS["update"] > 0 or self.verbosity >= VERBOSE:
             self.stdout.write(
                 "Totals: created {}, updated {}, in sync: {}".format(
                     self.COUNTS["create"],
@@ -158,7 +161,7 @@ class Command(BaseCommand):
     def user_details_in_sync(self, dusken_user, ldap_user):
         for attr in self.DIFF_ATTRIBUTES:
             if dusken_user[attr] != ldap_user[attr]:
-                if self.verbosity >= 2:
+                if self.verbosity >= VERBOSE:
                     self.stdout.write(
                         "{}: {} (Dusken) != {} (LDAP)".format(
                             dusken_user["username"],
@@ -176,7 +179,7 @@ class Command(BaseCommand):
         ldap_groups = set(ldap_user["groups"])
         if delete_group_memberships:
             in_sync = dusken_groups == ldap_groups
-            if not in_sync and self.verbosity >= 2:
+            if not in_sync and self.verbosity >= VERBOSE:
                 self.stdout.write(
                     "{}: {} (Dusken) != {} (LDAP)".format(
                         dusken_user["username"],
@@ -187,7 +190,7 @@ class Command(BaseCommand):
         else:
             missing_groups = dusken_groups.difference(ldap_groups)
             in_sync = len(missing_groups) == 0
-            if not in_sync and self.verbosity >= 2:
+            if not in_sync and self.verbosity >= VERBOSE:
                 self.stdout.write(
                     "{}: Not in LDAP groups: {}".format(dusken_user["username"], ",".join(missing_groups)),
                 )

@@ -1,4 +1,5 @@
 import logging
+from http import HTTPStatus
 
 import requests
 from django.conf import settings
@@ -57,7 +58,7 @@ def get_list_subscription(email):
     # Get subscription status
     r = requests.get(get_list_member_url(list_id, email), auth=_get_auth())
 
-    if r.status_code == 404:
+    if r.status_code == HTTPStatus.NOT_FOUND:
         return None
 
     try:

@@ -41,7 +41,7 @@ class Command(BaseCommand):
         users = DuskenUser.objects.filter(groups=self.group_profile.group, is_active=True, username__isnull=False)
         users = users.values_list("username", flat=True)
 
-        if self.verbosity == 3:
+        if self.verbosity == 3:  # noqa: PLR2004
             self.stdout.write(f"Found {len(users)} Dusken users")
 
         return set(users)
@@ -54,7 +54,7 @@ class Command(BaseCommand):
             ldap_users = ldap_users.exclude(username__in=ldap_active_members)
         ldap_users = ldap_users.values_list("username", flat=True)
 
-        if self.verbosity == 3:
+        if self.verbosity == 3:  # noqa: PLR2004
             self.stdout.write(f"Found {len(ldap_users)} LDAP users")
 
         return set(ldap_users)

@@ -31,6 +31,9 @@ class UserRegisterView(FormView):
         return redirect(self.get_success_url())
 
 
+CODE_LENGTH = 8
+
+
 class UserActivateView(FormView):
     """Registration via link sent by SMS."""
 
@@ -46,7 +49,7 @@ class UserActivateView(FormView):
             user = DuskenUser.objects.get(phone_number=phone_number)
         except DuskenUser.DoesNotExist:
             user = None
-        if not user and len(code) == 8:
+        if not user and len(code) == CODE_LENGTH:
             self.valid_link = Order.objects.filter(phone_number=phone_number, transaction_id__startswith=code).exists()
         return super().get(request, *args, **kwargs)
 

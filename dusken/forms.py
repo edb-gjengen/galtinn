@@ -73,6 +73,9 @@ class DuskenUserForm(forms.ModelForm):
         fields = ["first_name", "last_name", "email", "phone_number", "password"]
 
 
+CODE_LENGTH = 8
+
+
 class DuskenUserActivateForm(DuskenUserForm):
     phone_number = PhoneNumberField(label=_("Phone number"), disabled=True)
     # Code is the first 8 letters of a transaction ID associated with the phone number
@@ -87,7 +90,7 @@ class DuskenUserActivateForm(DuskenUserForm):
         except DuskenUser.DoesNotExist:
             user = None
         valid = False
-        if not user and len(code) == 8:
+        if not user and len(code) == CODE_LENGTH:
             valid = Order.objects.filter(phone_number=phone_number, transaction_id__startswith=code).exists()
         if not valid:
             raise ValidationError(_("You have already registered or the link is invalid."))

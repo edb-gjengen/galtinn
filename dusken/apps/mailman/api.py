@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from urllib.parse import urljoin
 
 import requests
@@ -16,7 +17,7 @@ def get_lists_by_email(email):
     params = {"address": email}
     r = requests.get(settings.MAILMAN_API_URL, params=params, auth=_get_auth())
 
-    if r.status_code == 404:
+    if r.status_code == HTTPStatus.NOT_FOUND:
         return None
 
     r.raise_for_status()  # requests.exceptions.HTTPError
