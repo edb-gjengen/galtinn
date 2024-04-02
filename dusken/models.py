@@ -188,7 +188,7 @@ class DuskenUser(AbstractUser):  # type: ignore
         zip_code_part = " ".join(x for x in zip_code_part if x != "None")
         country = self.country.name if self.country else ""
 
-        return "{}{}, {}".format(address_part + ", " if address_part else "", zip_code_part, country)
+        return "{}{}, {}".format(address_part + ", " if address_part else "", zip_code_part, country)
 
     def have_address(self):
         return any((self.street_address, self.street_address_two, self.postal_code, self.city))
@@ -288,9 +288,11 @@ class MembershipType(BaseModel):
         now = timezone.now()
         if self.expiry_type == self.EXPIRY_DURATION:
             return (now + self.duration).date()
-        elif self.expiry_type == self.EXPIRY_END_OF_YEAR:
+
+        if self.expiry_type == self.EXPIRY_END_OF_YEAR:
             return now.date().replace(year=now.year + 1, month=1, day=1)
-        elif self.expiry_type == self.EXPIRY_NEVER:
+
+        if self.expiry_type == self.EXPIRY_NEVER:
             return None
 
         raise ImproperlyConfigured(f"MembershipType object {self.__str__()} is configured incorrectly")

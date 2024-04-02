@@ -43,7 +43,7 @@ def ldap_username_exists(username):
     return bool(LdapUser.objects.filter(username=username))
 
 
-def create_ldap_user(user, dry_run=False):
+def create_ldap_user(user, dry_run=False):  # noqa: C901
     from .models import LdapGroup, LdapUser
 
     def _get_next_uid():

@@ -30,3 +30,6 @@ class KassaEvent(models.Model):
 
     class Meta:
         managed = False
+
+    def __str__(self) -> str:
+        return self.event

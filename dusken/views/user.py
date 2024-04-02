@@ -128,10 +128,9 @@ class UserSetUsernameView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("home")
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            if request.user.has_set_username:
-                messages.error(self.request, _("Username can only be set once"))
-                return redirect(self.success_url)
+        if request.user.is_authenticated and request.user.has_set_username:
+            messages.error(self.request, _("Username can only be set once"))
+            return redirect(self.success_url)
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -162,6 +161,6 @@ class UserDeleteView(LoginRequiredMixin, FormView):
         user = str(self.request.user)
         self.request.user.delete()
 
-        messages.success(self.request, _(f"So long {user} and good luck on your future travels 🚣"))
+        messages.success(self.request, _("So long %s and good luck on your future travels 🚣") % user)
 
         return super().form_valid(form)

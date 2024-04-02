@@ -38,7 +38,7 @@ class Command(BaseCommand):
 
     DIFF_ATTRIBUTES = ["first_name", "last_name", "email", "ldap_password"]
     SYNC_GROUP_PREFIX = "dns-"
-    COUNTS = dict(create=0, update=0, in_sync=0)
+    COUNTS = {"create": 0, "update": 0, "in_sync": 0}
     verbosity = 1
     dry_run = False
 

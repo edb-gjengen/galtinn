@@ -67,11 +67,12 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 class StatsView(LoginRequiredMixin, TemplateView):
     template_name = "dusken/stats.html"
 
-    def get_context_data(self, **kwargs):
+    def _parse_start_date(self):
         start_date = self.request.GET.get("start_date", None)
         if not start_date:
-            start_date = timezone.now().date().replace(month=8, day=1)
-        else:
-            start_date = parse_date(start_date)
+            return timezone.now().date().replace(month=8, day=1)
 
-        return {**super().get_context_data(**kwargs), "start_date": start_date}
+        return parse_date(start_date)
+
+    def get_context_data(self, **kwargs):
+        return {**super().get_context_data(**kwargs), "start_date": self._parse_start_date()}

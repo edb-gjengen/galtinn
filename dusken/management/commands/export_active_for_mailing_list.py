@@ -22,17 +22,16 @@ class Command(BaseCommand):
     help = "Export users with an active membership and volunteer status as CSV"
 
     def handle(self, *_args, **_options):
-        exportable = []
         members = DuskenUser.objects.with_valid_membership()
-        for member in members:
-            if (member.is_volunteer and member.is_lifelong_member) or not member.is_lifelong_member:
-                exportable.append(
-                    {
-                        "email": member.email,
-                        "name": f"{member.first_name} {member.last_name}",
-                        "attributes": json.dumps({"user_id": member.id}),
-                    },
-                )
+        exportable = [
+            {
+                "email": member.email,
+                "name": f"{member.first_name} {member.last_name}",
+                "attributes": json.dumps({"user_id": member.id}),
+            }
+            for member in members
+            if (member.is_volunteer and member.is_lifelong_member) or not member.is_lifelong_member
+        ]
         writer = csv.DictWriter(sys.stdout, fieldnames=["email", "name", "attributes"])
         writer.writeheader()
         for row in exportable:

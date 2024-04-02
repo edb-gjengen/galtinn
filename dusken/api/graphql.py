@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 import strawberry.django
 from strawberry import auto
-from strawberry.types import Info
 
 from dusken import models
+
+if TYPE_CHECKING:
+    from strawberry.types import Info
 
 
 @strawberry.django.type(models.MembershipType)
