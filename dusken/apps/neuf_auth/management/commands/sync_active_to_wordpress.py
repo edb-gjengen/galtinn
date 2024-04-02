@@ -20,7 +20,7 @@ class Command(BaseCommand):
         users = DuskenUser.objects.filter(groups=self.volunteer_group, is_active=True)
         return users.filter(authprofile__isnull=False, authprofile__username_updated__isnull=False)
 
-    def handle(self, *args, **options):
+    def handle(self, *_args, **_options):
         active_users = self.get_active_users()
         users_out = [[u.username, u.first_name, u.last_name, u.email] for u in active_users]
 

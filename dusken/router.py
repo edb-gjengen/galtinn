@@ -18,19 +18,19 @@ class Router:
             return db == model.connection_name
         return db == "default"
 
-    def allow_migrate(self, db, app_label, model_name=None, **hints):
+    def allow_migrate(self, db, _app_label, _model_name=None, **hints):
         model = hints.get("model")
         if is_routed_model(model):
             return db == model.connection_name
         return None
 
-    def db_for_read(self, model, **hints):
+    def db_for_read(self, model, **_hints):
         """Point all operations on models connection_name to db=connection_name"""
         if is_routed_model(model):
             return model.connection_name
         return None
 
-    def db_for_write(self, model, **hints):
+    def db_for_write(self, model, **_hints):
         """Point all operations on models connection_name to db=connection_name"""
         if is_routed_model(model):
             return model.connection_name

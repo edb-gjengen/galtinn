@@ -13,7 +13,7 @@ class UserEmailValidateView(TemplateView):
     template_name = "dusken/user_email_confirm.html"
     success_url = reverse_lazy("home")
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *_args, **kwargs):
         form = UserEmailValidateForm(kwargs)
         if form.is_valid():
             return self.form_valid(form, request)
@@ -34,7 +34,7 @@ class UserPhoneValidateView(LoginRequiredMixin, TemplateView):
     template_name = "dusken/user_phone_confirm.html"
     success_url = reverse_lazy("home")
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *_args, **_kwargs):
         user = request.user
         code_sent = False
         if user.phone_number and not user.phone_number_confirmed and not user.phone_number_key:
@@ -43,7 +43,7 @@ class UserPhoneValidateView(LoginRequiredMixin, TemplateView):
         context = {"form": self.form_class(), "user": user, "code_sent": code_sent}
         return render(request, self.template_name, context)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *_args, **_kwargs):
         form = self.form_class(request.POST, user=request.user)
         if form.is_valid():
             return self.form_valid(form, request)
@@ -52,7 +52,7 @@ class UserPhoneValidateView(LoginRequiredMixin, TemplateView):
         context["form"] = form
         return render(request, self.template_name, context)
 
-    def form_valid(self, form, request):
+    def form_valid(self, _form, request):
         request.user.confirm_phone_number()
         messages.success(request, _("Success!"))
 

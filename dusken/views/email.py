@@ -11,7 +11,7 @@ class EmailSubscriptions(LoginRequiredMixin, TemplateView):
     MAILMAN_LISTS = ["medlemmer"]  # TODO: Make these database objects
     template_name = "dusken/email_subscriptions.html"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **_kwargs):
         email = self.request.user.email
 
         # FIXME: Remove this context data from view and move to AJAX views

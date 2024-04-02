@@ -13,7 +13,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser: CommandParser):
         parser.add_argument("--filename", default="schema.graphql", help="`-` prints to stdout")
 
-    def handle(self, *args, filename=None, **options):
+    def handle(self, *_args, filename=None, **_options):
         schema_output = print_schema(schema_symbol)
         if filename != "-":
             with Path(settings.BASE_DIR, filename).open("w+") as fp:

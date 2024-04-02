@@ -35,7 +35,7 @@ class HomeView(LoginRequiredMixin, DetailView):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     membership_type = None
 
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
     def get_context_data(self, **kwargs):
@@ -47,7 +47,7 @@ class HomeView(LoginRequiredMixin, DetailView):
 class HomeVolunteerView(LoginRequiredMixin, DetailView):
     template_name = "dusken/home_volunteer.html"
 
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
     def get_context_data(self, **kwargs):

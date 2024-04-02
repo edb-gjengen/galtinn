@@ -99,7 +99,7 @@ class UserDetailMeView(LoginRequiredMixin, DetailView):
     slug_field = "uuid"
     context_object_name = "userobj"
 
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
 
@@ -112,7 +112,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class UserUpdateMeView(UserUpdateView):
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
     def get_success_url(self):
@@ -132,7 +132,7 @@ class UserSetUsernameView(LoginRequiredMixin, UpdateView):
 
         return super().dispatch(request, *args, **kwargs)
 
-    def get_object(self, queryset=None):
+    def get_object(self, _queryset=None):
         return self.request.user
 
     def form_valid(self, form):

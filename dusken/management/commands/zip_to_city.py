@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     help = "Update zip code to city map"
 
-    def handle(self, *args, **options):
+    def handle(self, *_args, **_options):
         url = "https://www.bring.no/radgivning/sende-noe/adressetjenester/postnummer/_attachment/615728?_download=true&_ts=1595e62daf0"
         lines = []
 

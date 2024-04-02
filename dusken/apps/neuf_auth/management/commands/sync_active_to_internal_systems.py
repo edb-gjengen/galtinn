@@ -43,7 +43,7 @@ class Command(BaseCommand):
         super().__init__()
         self.volunteer_group = GroupProfile.objects.get(type=GroupProfile.TYPE_VOLUNTEERS).group
 
-    def handle(self, *args, **options):
+    def handle(self, *_args, **options):
         self.verbosity = int(options["verbosity"])
         self.dry_run = bool(options["dry_run"])
 

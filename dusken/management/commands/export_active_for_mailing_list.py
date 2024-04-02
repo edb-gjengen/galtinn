@@ -21,7 +21,7 @@ class Command(BaseCommand):
 
     help = "Export users with an active membership and volunteer status as CSV"
 
-    def handle(self, *args, **options):
+    def handle(self, *_args, **_options):
         exportable = []
         members = DuskenUser.objects.with_valid_membership()
         for member in members:

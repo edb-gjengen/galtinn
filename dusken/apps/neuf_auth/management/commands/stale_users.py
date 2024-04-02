@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand
 
 from dusken.apps.neuf_ldap.models import LdapGroup, LdapUser
-
-# from neuf_auth.ssh import get_home_dirs
 from dusken.models import DuskenUser, GroupProfile
 
 
@@ -23,7 +21,7 @@ class Command(BaseCommand):
         super().__init__()
         self.group_profile = GroupProfile.objects.get(type=GroupProfile.TYPE_VOLUNTEERS)
 
-    def handle(self, *args, **options):
+    def handle(self, *_args, **options):
         self.verbosity = int(options["verbosity"])
 
         inside_users_active = self.get_dusken_users()

@@ -68,7 +68,7 @@ class KassaMembershipView(GenericAPIView):
     permission_classes = (DjangoModelPermissions,)
     serializer_class = KassaOrderSerializer
 
-    def post(self, request):
+    def post(self, _request):
         # Validate
         serializer = self.serializer_class(data=self.request.data)
         serializer.is_valid(raise_exception=True)
