@@ -104,7 +104,6 @@ function formatMessage(message, alert) {
 
 $(document).ready(function () {
     const $membershipPurchase = $('#membership-purchase-form');
-    const $mailmanSub = $('.js-toggle-mailman-subscription');
     const $messages = $('.messages');
 
     if ($membershipPurchase.length) {
@@ -140,47 +139,6 @@ $(document).ready(function () {
             $languageSelect.focus();
         }
     });
-
-    /* Page: Newsletter and mailing lists */
-    if ($mailmanSub.length) {
-        $mailmanSub.on('click', (e) => {
-            e.preventDefault();
-            const $thisList = $(e.target);
-            const $thisStatus = $('.js-mailman-status[data-list-name="' + $thisList.attr('data-list-name') + '"]');
-
-            const shouldSubscribe = !$thisList.hasClass('subscribed');
-            const url = $thisList.attr('data-url');
-            const method = shouldSubscribe ? 'PUT' : 'DELETE';
-
-            const newButtonText = shouldSubscribe
-                ? $thisList.attr('data-text-unsubscribe')
-                : $thisList.attr('data-text-subscribe');
-            const newStatusText = shouldSubscribe ? '✅' : '❌';
-
-            $.ajax({
-                url: url,
-                method: method,
-                contentType: 'application/json',
-                dataType: 'json',
-            })
-                .done(function () {
-                    $thisList.text(newButtonText);
-                    $thisStatus.text(newStatusText);
-
-                    if (shouldSubscribe) {
-                        $thisList.addClass('subscribed');
-                    } else {
-                        $thisList.removeClass('subscribed');
-                    }
-                })
-                .fail(function () {
-                    $thisList.prop('checked', !shouldSubscribe);
-                    $messages.html(
-                        formatMessage('Could not change subscription status, please try again later...', 'danger')
-                    );
-                });
-        });
-    }
 
     /* View user (from select2 dropdown) */
     $('.js-view-user').on('click', () => {
