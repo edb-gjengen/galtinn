@@ -19,7 +19,10 @@ ignore = [
   "EM101", "EM102",  # Allow string in exceptions (prioritice code readability vs exception time readability)
   "TRY003",          # Allow long exception messages
   "E501",            # Allow long lines
+  "PGH003",          # FIXME: Improve typing
 ]
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
 
 [tool.ruff.lint.per-file-ignores]
 # Testing code can deviate a bit more
@@ -43,6 +46,7 @@ module = [
     "mptt.*",
     "passlib.*",
     "phonenumber_field.*",
+    "dusken.settings.local",
 ]
 ignore_missing_imports = true
 

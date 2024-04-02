@@ -1,3 +1,4 @@
+import contextlib
 import os
 
 import dj_database_url
@@ -54,7 +55,5 @@ CACHES = {
 }
 
 
-try:
-    from .local import *  # noqa
-except ImportError:
-    pass
+with contextlib.suppress(ImportError):
+    from .local import *  # noqa: F403
