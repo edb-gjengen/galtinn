@@ -1,5 +1,4 @@
 import csv
-import os
 
 import requests
 from django.conf import settings
@@ -24,7 +23,8 @@ class Command(BaseCommand):
 
             lines.append(f'    "{row[0]}": "{row[1]}",\n')  # f.ex '0559': 'OSLO',
 
-        with open(os.path.join(settings.BASE_DIR, "dusken/zip_to_city.py"), "w+") as out:
+        out_file = settings.BASE_DIR / "dusken/zip_to_city.py"
+        with out_file.open("w+") as out:
             out.write("ZIP_TO_CITY_MAP = {\n")
             out.writelines(lines)
             out.write("}\n")

@@ -1,5 +1,4 @@
 import logging
-import os
 
 from django.conf import settings
 from fabric import Connection
@@ -45,5 +44,5 @@ def get_home_dirs():
 
 def homedir_exists(username):
     conn = get_connection()
-    res = conn.run(f"ls {os.path.join(settings.FILESERVER_HOME_PATH, username)} &>/dev/null", hide=True)
+    res = conn.run(f"ls {settings.FILESERVER_HOME_PATH}/{username} &>/dev/null", hide=True)
     return res.ok

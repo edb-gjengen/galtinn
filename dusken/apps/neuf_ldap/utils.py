@@ -1,5 +1,4 @@
 import logging
-import os
 import pprint
 from datetime import datetime
 
@@ -85,7 +84,7 @@ def create_ldap_user(user, dry_run=False):
         "username": user["username"],
         "id": _get_next_uid(),
         "group": _get_next_user_gid(),
-        "home_directory": os.path.join(settings.LDAP_HOME_DIRECTORY_PREFIX, user["username"]),
+        "home_directory": f'{settings.LDAP_HOME_DIRECTORY_PREFIX}/{user["username"]}',
     }
     ldap_user = LdapUser(**user_data)
 

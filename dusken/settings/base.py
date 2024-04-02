@@ -1,12 +1,13 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+from pathlib import Path
 from typing import List
 
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+BASE_DIR = Path(__file__).parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -65,7 +66,7 @@ ROOT_URLCONF = "dusken.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "dusken/templates")],
+        "DIRS": [BASE_DIR / "dusken/templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -86,7 +87,7 @@ WSGI_APPLICATION = "dusken.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME": BASE_DIR / "db.sqlite3",
     },
 }
 # LDAP, Inside, Kassa and tekstmelding DB's
@@ -107,8 +108,8 @@ LANGUAGES = [
 
 # Static files
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "frontend", "dist")]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "frontend/dist"]
 
 SITE_ID = 1
 
@@ -174,7 +175,7 @@ NOCAPTCHA = True
 
 SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"] if RECAPTCHA_PUBLIC_KEY == TEST_PUBLIC_KEY else []
 
-SVG_DIRS = [os.path.join(BASE_DIR, "frontend/app/images")]
+SVG_DIRS = [BASE_DIR / "frontend/app/images"]
 
 # neuf_auth
 
@@ -205,8 +206,8 @@ LDAP_SHADOW_FLAG = 0
 FILESERVER_HOST = "localhost"
 FILESERVER_SSH_USER = "nikolark"  # change this to your own user for development
 FILESERVER_SSH_KEY_PATH = ""  # e.g. '/home/nikolark/.ssh/id_rsa'
-FILESERVER_HOME_PATH = "/tmp/"
-FILESERVER_CREATE_HOMEDIR_SCRIPT = os.path.join(BASE_DIR, "scripts", "create_home_directory.sh")
+FILESERVER_HOME_PATH = "/tmp/"  # noqa: S108
+FILESERVER_CREATE_HOMEDIR_SCRIPT = BASE_DIR / "scripts/create_home_directory.sh"
 
 # Celery
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
@@ -226,8 +227,8 @@ MAILMAN_API_PASSWORD = os.getenv("MAILMAN_API_PASSWORD", "")
 GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv("GOOGLE_ANALYTICS_PROPERTY_ID", "")
 
 # Wordpress sync
-WP_PHP_SCRIPT_PATH = os.path.join(BASE_DIR, "scripts")
-WP_OUT_FILENAME = os.path.join(WP_PHP_SCRIPT_PATH, "users_in_group_active.json")
+WP_PHP_SCRIPT_PATH = BASE_DIR / "scripts"
+WP_OUT_FILENAME = WP_PHP_SCRIPT_PATH / "users_in_group_active.json"
 WP_LOAD_PATHS = ["/var/www/studentersamfundet.no/www/wp/wp-load.php", "/var/www/neuf.no/aktivweb/wp/wp-load.php"]
 
 LOGGING = {
