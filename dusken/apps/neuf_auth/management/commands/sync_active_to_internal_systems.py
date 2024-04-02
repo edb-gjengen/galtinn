@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from django.core.management.base import BaseCommand
 
@@ -51,7 +51,7 @@ class Command(BaseCommand):
         self.dry_run = bool(options["dry_run"])
 
         if self.verbosity >= VERBOSE:
-            self.stdout.write(f"[{datetime.utcnow()}] Started sync job")
+            self.stdout.write(f"[{datetime.now(tz=timezone.utc)}] Started sync job")
 
         # Get all active user from Dusken
         dusken_users_diffable = self.get_dusken_users_diffable()
@@ -65,7 +65,7 @@ class Command(BaseCommand):
         self.log_totals()
 
         if self.verbosity >= VERBOSE:
-            self.stdout.write(f"[{datetime.utcnow()}] Finished sync job")
+            self.stdout.write(f"[{datetime.now(tz=timezone.utc)}] Finished sync job")
 
         # Voila!
 

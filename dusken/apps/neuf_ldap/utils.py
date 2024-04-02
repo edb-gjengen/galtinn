@@ -1,6 +1,6 @@
 import logging
 import pprint
-from datetime import datetime
+from datetime import datetime, timezone
 
 from django.conf import settings
 from django.db.utils import ConnectionDoesNotExist
@@ -48,7 +48,7 @@ def create_ldap_user(user, dry_run=False):
 
     def _get_next_uid():
         # Get user id order desc by id
-        logger.debug(f"{datetime.utcnow()} Getting next available UID")
+        logger.debug(f"{datetime.now(tz=timezone.utc)} Getting next available UID")
         users = LdapUser.objects.order_by("-id").values_list("id", flat=True)
 
         if len(users) == 0:
@@ -60,7 +60,7 @@ def create_ldap_user(user, dry_run=False):
         return users[0] + 1
 
     def _get_next_user_gid():
-        logger.debug(f"{datetime.utcnow()} Getting next available GID for user group")
+        logger.debug(f"{datetime.now(tz=timezone.utc)} Getting next available GID for user group")
         # Get user group ids order desc by id
         user_groups = LdapGroup.objects.order_by("-gid").values_list("gid", flat=True)
 
