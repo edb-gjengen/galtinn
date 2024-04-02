@@ -5,7 +5,6 @@ from django.urls import include, path, re_path
 from rest_framework.authtoken.views import obtain_auth_token
 
 from dusken.api import urls as api_urls
-from dusken.apps.mailchimp import urls as mailchimp_urls
 from dusken.apps.mailman import urls as mailman_urls
 from dusken.apps.neuf_auth.views import NeufPasswordChangeView, NeufPasswordResetConfirmView
 from dusken.views.email import EmailSubscriptions
@@ -66,7 +65,6 @@ urlpatterns = [
     # Other apps
     path("admin/", admin.site.urls),
     path("api/", include(api_urls)),
-    path("mailchimp/", include(mailchimp_urls, namespace="mailchimp")),
     path("mailman/", include(mailman_urls, namespace="mailman")),
     # Language selection
     path("i18n/", include("django.conf.urls.i18n")),

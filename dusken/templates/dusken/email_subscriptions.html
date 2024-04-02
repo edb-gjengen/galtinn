@@ -3,11 +3,6 @@
 {% block body %}
     <script>
     var config = {
-        {% if newsletter_subscription %}
-        mailChimpSubscription: '{{ newsletter_subscription.pk }}',
-        mailChimpSubscriptionDetailURL: '{% url "mailchimp:subscription-detail" newsletter_subscription.pk %}',
-        {% endif %}
-        mailChimpSubscriptionListURL: '{% url "mailchimp:subscription-list" %}',
         userEmail: '{{ request.user.email }}',
     };
     </script>
@@ -18,16 +13,6 @@
             <div class="alert alert-info">{% trans "You need to confirm your email address before you can change your subscriptions" %}</div>
             <a href="{% url "user-detail-me" %}" class="btn btn-outline-primary">{% trans "Go confirm my email" %}</a>
         {% else %}
-        <br>
-        <h4>{% trans "Newsletter" %}</h4>
-        <p>{% trans "Upcoming events and announcements. Maximum one email per week." %}</p>
-        {% trans "You are" %} <span class="js-mailchimp-status" data-text-subscribed="{% trans "subscribed" %}" data-text-unsubscribed="{% trans "unsubscribed" %}">{% if newsletter_subscription.show_checked %}{% trans "subscribed" %} ✅{% else %}{% trans "unsubscribed" %} ❌{% endif %}</span>
-            <a href="#"
-               class="btn btn-outline-primary newsletter-btn js-toggle-mailchimp-subscription{% if newsletter_subscription.show_checked %} subscribed{% endif %}"
-               data-text-subscribe="{% trans "Subscribe" %}"
-               data-text-unsubscribe="{% trans "Unsubscribe" %}">
-                {% if newsletter_subscription.show_checked %}{% trans "Unsubscribe" %}{% else %}{% trans "Subscribe" %}{% endif %}
-            </a>
         <br>
         <br>
         <h4>{% trans "Mailing lists" %}</h4>

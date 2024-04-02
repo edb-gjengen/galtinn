@@ -20,6 +20,7 @@ ignore = [
   "TRY003",          # Allow long exception messages
   "E501",            # Allow long lines
   "PGH003",          # FIXME: Improve typing
+  "COM812", "ISC001" # Avoid conflicting with ruff formatter
 ]
 [tool.ruff.lint.pyupgrade]
 keep-runtime-typing = true
