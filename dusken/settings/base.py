@@ -42,7 +42,6 @@ INSTALLED_APPS += [
     "dusken",
     "dusken.apps.neuf_ldap",
     "dusken.apps.neuf_auth",
-    "dusken.apps.mailchimp",
     "dusken.apps.mailman",
     "dusken.apps.common",
     # FIXME Keep these for easy referencing in django admin for now
