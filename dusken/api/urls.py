@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import include, path
 from django.views.decorators.csrf import csrf_exempt
+from oauth2_provider import urls as oauth2_provider_urls
 from rest_framework.routers import DefaultRouter
 from strawberry.django.views import GraphQLView
 
@@ -14,6 +15,7 @@ from dusken.api.views.users import (
     BasicAuthCurrentUserView,
     CurrentUserView,
     DuskenUserViewSet,
+    Oauth2CurrentUserView,
     RegisterUserView,
     user_pk_to_uuid,
 )
@@ -29,6 +31,7 @@ urlpatterns += [
     # Current user
     path("me/", CurrentUserView.as_view(), name="user-current"),
     path("me/basic/", BasicAuthCurrentUserView.as_view(), name="user-current-basic-auth"),
+    path("me/oauth/", Oauth2CurrentUserView.as_view(), name="user-current-oauth2"),
     # Stripe
     path("membership/charge/", MembershipChargeView.as_view(), name="membership-charge"),
     # Kassa
@@ -45,4 +48,6 @@ urlpatterns += [
     path("stats/", membership_stats, name="membership-stats"),
     # GraphQL API
     path("graphql/", csrf_exempt(GraphQLView.as_view(schema=schema)), name="graphql"),
+    # OAuth2
+    path("oauth/", include(oauth2_provider_urls, namespace="oauth2_provider")),
 ]

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "oauth2_provider",
     "rest_framework",
     "rest_framework.authtoken",
     "mptt",
@@ -153,6 +154,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "EXCEPTION_HANDLER": "dusken.api.views.api_500_handler",
 }
+
+OAUTH2_PROVIDER = {"SCOPES": {"profile": "Access to your  profile"}}
 
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
