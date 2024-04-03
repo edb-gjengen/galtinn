@@ -1,6 +1,7 @@
 import django_filters
 from django.http import HttpResponseForbidden, JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework import filters, permissions, viewsets
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
@@ -63,3 +64,9 @@ def user_pk_to_uuid(request):
 class BasicAuthCurrentUserView(CurrentUserView):
     authentication_classes = [UsernameBasicAuthentication]
     # FIXME: Rate limit per custom auth-user-ip header (from galtinn)
+
+
+class Oauth2CurrentUserView(CurrentUserView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [TokenHasScope]
+    required_scopes = ["profile"]

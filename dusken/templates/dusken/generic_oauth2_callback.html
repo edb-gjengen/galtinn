@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load %}
+{% block title %}Oauth2 callback{% endblock %}
+{% block body %}
+    <div class="generic-oauth-callback">
+        <div class="row">
+            <div class="col-12">
+                <h1>oauth2 callback</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {% if error %}
+                error: <strong>{{ error }}</strong><br />
+                error_description <strong>{{ error_description }}</strong><br />
+                {% else %}
+                code: <code>{{ code }}</code>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
