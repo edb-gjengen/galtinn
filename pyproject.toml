@@ -60,7 +60,6 @@ version = "0.1.0"
 description = ""
 authors = ["EDB <edb@neuf.no>"]
 license = "MIT"
-package-mode = false
 
 [tool.poetry.dependencies]
 argon2-cffi = "21.3.*"
