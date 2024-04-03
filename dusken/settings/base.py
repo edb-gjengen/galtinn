@@ -155,7 +155,16 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "dusken.api.views.api_500_handler",
 }
 
-OAUTH2_PROVIDER = {"SCOPES": {"profile": "Access to your  profile"}}
+OAUTH2_PROVIDER = {
+    "SCOPES": {
+        "profile": "Access to your profile",
+        "openid": "Access to your user ID",
+        "email": "Access to your email address",
+    },
+    "OIDC_ENABLED": True,
+    "OIDC_RSA_PRIVATE_KEY": os.getenv("OIDC_RSA_PRIVATE_KEY", ""),
+    "OAUTH2_VALIDATOR_CLASS": "dusken.api.oauth_validators.CustomOAuth2Validator",
+}
 
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")

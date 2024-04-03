@@ -6,6 +6,7 @@ from strawberry.django.views import GraphQLView
 
 from dusken.api.graphql import schema
 from dusken.api.views import ResendValidationEmailView
+from dusken.api.views.auth import GenericOauth2Callback
 from dusken.api.views.cards import KassaMemberCardUpdateView, MemberCardViewSet
 from dusken.api.views.memberships import KassaMembershipView, MembershipChargeView, MembershipViewSet
 from dusken.api.views.orders import OrderViewSet
@@ -49,5 +50,6 @@ urlpatterns += [
     # GraphQL API
     path("graphql/", csrf_exempt(GraphQLView.as_view(schema=schema)), name="graphql"),
     # OAuth2
+    path("oauth/generic-callback/", GenericOauth2Callback.as_view(), name="generic-oauth2-callback"),
     path("oauth/", include(oauth2_provider_urls, namespace="oauth2_provider")),
 ]
