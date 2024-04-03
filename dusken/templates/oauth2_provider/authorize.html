@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% block body %}
+    <div style="display: flex; justify-content: center;">
+    <div class="card col-md-6">
+        {% if not error %}
+            <form id="authorizationForm" method="post">
+                <div class="card-body">
+                    <h4 class="card-title">{% trans "Authorize" %} {{ application.name }}?</h4>
+                    <h6 class="card-subtitle text-muted">{% trans "Application requires the following permissions" %}</h6>
+                </div>
+
+                {% csrf_token %}
+                {% for field in form %}
+                    {% if field.is_hidden %}
+                        {{ field }}
+                    {% endif %}
+                {% endfor %}
+
+                <ul class="list-group list-group-flush">
+                    {% for scope in scopes_descriptions %}
+                        <li class="list-group-item">{{ scope }}</li>
+                    {% endfor %}
+                </ul>
+
+                {{ form.errors }}
+                {{ form.non_field_errors }}
+
+                <div class="card-body">
+                    <input type="submit" class="btn btn-large btn-outline" value="Cancel"/>
+                    <input type="submit" class="btn btn-large btn-primary" name="allow" value="Authorize"/>
+                </div>
+            </form>
+
+        {% else %}
+            <div class="card-body">
+                <h4 class="card-title">Error: {{ error.error }}</h4>
+                <p>{{ error.description }}</p>
+            </div>
+        {% endif %}
+    </div>
+    </div>
+{% endblock %}
