@@ -2,13 +2,13 @@
 
 Membership system ++ for DNS / Chateau Neuf.
 
-[![Build Status](https://circleci.com/gh/edb-gjengen/dusken.png)](https://circleci.com/gh/edb-gjengen/dusken)
-[![codecov](https://codecov.io/gh/edb-gjengen/dusken/branch/master/graph/badge.svg)](https://codecov.io/gh/edb-gjengen/dusken)
+[![Pipeline Status](https://git.neuf.no/edb/galtinn/badges/main/pipeline.svg)](https://git.neuf.no/edb/galtinn/-/commits/main)
+[![Coverage](https://git.neuf.no/edb/galtinn/badges/main/coverage.svg)](https://git.neuf.no/edb/galtinn)
 
 ## Install
 
 ```bash
-sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev libssl-dev ldap-utils redis-server
+sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev libssl-dev ldap-utils
 poetry shell  # Start a poetry shell creating a virtual environment.
 poetry install
 pre-commit install
