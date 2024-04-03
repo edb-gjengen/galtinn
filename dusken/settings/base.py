@@ -42,7 +42,6 @@ INSTALLED_APPS += [
     "dusken",
     "dusken.apps.neuf_ldap",
     "dusken.apps.neuf_auth",
-    "dusken.apps.mailman",
     "dusken.apps.common",
     # FIXME Keep these for easy referencing in django admin for now
     "dusken.apps.kassa",
@@ -211,11 +210,6 @@ FILESERVER_CREATE_HOMEDIR_SCRIPT = BASE_DIR / "scripts/create_home_directory.sh"
 
 # Celery
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
-
-# Mailman API
-MAILMAN_API_URL = os.getenv("MAILMAN_API_URL", "https://mailman-api.neuf.no")
-MAILMAN_API_USERNAME = os.getenv("MAILMAN_API_USERNAME", "")
-MAILMAN_API_PASSWORD = os.getenv("MAILMAN_API_PASSWORD", "")
 
 # Google Analytics
 GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv("GOOGLE_ANALYTICS_PROPERTY_ID", "")

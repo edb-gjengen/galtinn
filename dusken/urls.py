@@ -5,9 +5,7 @@ from django.urls import include, path, re_path
 from rest_framework.authtoken.views import obtain_auth_token
 
 from dusken.api import urls as api_urls
-from dusken.apps.mailman import urls as mailman_urls
 from dusken.apps.neuf_auth.views import NeufPasswordChangeView, NeufPasswordResetConfirmView
-from dusken.views.email import EmailSubscriptions
 from dusken.views.general import HomeView, HomeVolunteerView, IndexView, OrderDetailView, StatsView
 from dusken.views.membership import MembershipListView
 from dusken.views.orgunit import OrgUnitDetailView, OrgUnitEditUsersView, OrgUnitEditView, OrgUnitListView
@@ -58,14 +56,11 @@ urlpatterns = [
     path("orgunit/edit/<slug:slug>/", OrgUnitEditView.as_view(), name="orgunit-edit"),
     path("orgunit/edit/users/<slug:slug>/", OrgUnitEditUsersView.as_view(), name="orgunit-edit-users"),
     path("orgunits/<slug:slug>/", OrgUnitDetailView.as_view(), name="orgunit-detail"),
-    # Email
-    path("email/subscriptions/", EmailSubscriptions.as_view(), name="email-subscriptions"),
     # Stats
     path("stats/", StatsView.as_view(), name="stats"),
     # Other apps
     path("admin/", admin.site.urls),
     path("api/", include(api_urls)),
-    path("mailman/", include(mailman_urls, namespace="mailman")),
     # Language selection
     path("i18n/", include("django.conf.urls.i18n")),
     path("select2/", include("django_select2.urls")),
