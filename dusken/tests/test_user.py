@@ -1,8 +1,7 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from django.test import TestCase
-from django.utils import timezone
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
@@ -113,7 +112,7 @@ class DuskenUserActivateTestCase(TestCase):
             duration=timedelta(days=365),
             is_default=True,
         )
-        today = timezone.now().date()
+        today = datetime.now(tz=timezone.utc).date()
         self.membership = Membership.objects.create(
             start_date=today - timedelta(days=10),
             end_date=today + timedelta(days=10),
@@ -191,7 +190,7 @@ class DuskenUserActivateTestCase(TestCase):
 class DuskenUserMembershipTestCase(TestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user("olanord", email="olanord@example.com")
-        self.now = timezone.now().date()
+        self.now = datetime.now(tz=timezone.utc).date()
         self.membership_type = MembershipType.objects.create(
             name="Cool Club Membership",
             slug="standard",
@@ -255,7 +254,9 @@ class DuskenUserDelete(TestCase):
         url = reverse("user-delete")
         self.client.force_login(self.user)
         response = self.client.post(url, {"confirm_username": "wrong_username"})
-        self.assertFormError(response, "form", "confirm_username", "The username entered is not equal to your own.")
+        self.assertFormError(
+            response.context_data["form"], "confirm_username", "The username entered is not equal to your own."
+        )
 
         response = self.client.post(url, {"confirm_username": self.user.username})
 
