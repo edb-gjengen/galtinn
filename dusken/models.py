@@ -38,6 +38,7 @@ class DuskenUser(AbstractUser):  # type: ignore
     phone_number_confirmed = models.BooleanField(default=False)
     phone_number_confirmed_at = models.DateTimeField(blank=True, null=True)
     date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
+    discord_id = models.IntegerField(unique=True, blank=True, null=True)
 
     # Address
     street_address = models.CharField(_("street address"), max_length=255, null=True, blank=True)  # noqa: DJ001
