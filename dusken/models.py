@@ -60,7 +60,7 @@ class DuskenUser(AbstractUser):  # type: ignore
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
 
-    objects = DuskenUserManager()
+    objects = DuskenUserManager()  # type: ignore
 
     @property
     def email_is_confirmed(self):

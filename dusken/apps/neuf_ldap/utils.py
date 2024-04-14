@@ -3,7 +3,7 @@ import pprint
 from datetime import datetime, timezone
 
 from django.conf import settings
-from django.db.utils import ConnectionDoesNotExist
+from django.utils.connection import ConnectionDoesNotExist
 from passlib.hash import ldap_salted_sha1
 
 logger = logging.getLogger(__name__)

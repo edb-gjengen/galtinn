@@ -98,7 +98,6 @@ DATABASE_ROUTERS = ["dusken.router.Router"]
 LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "en")
 TIME_ZONE = os.getenv("TIME_ZONE", "Europe/Oslo")
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 LANGUAGES = [
