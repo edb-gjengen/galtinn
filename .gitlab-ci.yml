@@ -30,9 +30,7 @@ tests:
   script:
     - poetry run python manage.py migrate
     - poetry run python manage.py check
-    - poetry run coverage run --source=dusken,apps --omit=dusken/migrations/*,apps/*/migrations/* -m pytest -v
-    - poetry run coverage report
-    - poetry run coverage xml
+    - poetry run pytest -v --cov dusken --cov-report term --cov-report xml:coverage.xml
     - poetry run bin/lint
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:

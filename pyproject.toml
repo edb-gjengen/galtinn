@@ -3,6 +3,11 @@ DJANGO_SETTINGS_MODULE = "dusken.settings.dev"
 # FIXME: https://github.com/django-extensions/django-extensions/pull/1741
 filterwarnings = "ignore::PendingDeprecationWarning:django.apps.registry.*"
 
+[tool.coverage.run]
+omit = [
+    "dusken/migrations/*",
+]
+
 [tool.ruff]
 line-length = 120
 target-version = "py38"
@@ -105,7 +110,7 @@ django-upgrade = "^1.16.0"
 djangorestframework-stubs = {extras = ["compatible-mypy"], version = "^3.14.0"}
 mypy = "1.2.*"
 pytest = "*"
-pytest-cov = "^3.0.0"
+pytest-cov = "^5.0.0"
 pytest-django = "*"
 requests-mock = "1.9.*"
 ruff = "0.3.3"
