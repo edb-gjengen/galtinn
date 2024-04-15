@@ -395,6 +395,7 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
     short_name = models.CharField(_("short name"), max_length=128, blank=True)
     is_active = models.BooleanField(_("is active"), default=True)
     description = models.TextField(_("description"), blank=True, default="")
+    discord_role_id = models.IntegerField(unique=True, blank=True, null=True)
 
     # Contact
     email = models.EmailField(_("email"), blank=True, default="")
