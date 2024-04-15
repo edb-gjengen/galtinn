@@ -14,7 +14,7 @@ from dusken.models import DuskenUser
 class DuskenUserFilter(FilterSet):
     class Meta:
         model = DuskenUser
-        fields = ("username", "email", "phone_number")
+        fields = ("username", "email", "phone_number", "discord_id")
         filter_overrides = {PhoneNumberField: {"filter_class": django_filters.CharFilter}}
 
 
@@ -28,7 +28,7 @@ class DuskenUserViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
     )
     filterset_class = DuskenUserFilter
-    search_fields = ("first_name", "last_name", "email", "member_cards__card_number", "phone_number")
+    search_fields = ("first_name", "last_name", "email", "member_cards__card_number", "phone_number", "discord_id")
     lookup_field = "id"
 
     def get_queryset(self):
