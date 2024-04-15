@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('dusken', '0004_auto_20220723_1346'),
+        ("dusken", "0004_auto_20220723_1346"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='duskenuser',
-            name='discord_id',
+            model_name="duskenuser",
+            name="discord_id",
             field=models.IntegerField(blank=True, null=True, unique=True),
         ),
     ]

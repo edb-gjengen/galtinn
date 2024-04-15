@@ -31,7 +31,7 @@ class DuskenUserSerializer(serializers.ModelSerializer):
             "is_volunteer",
             "is_member",
             "last_membership",
-            "discord_id"
+            "discord_id",
         )
         read_only_fields = (
             "id",
@@ -41,7 +41,7 @@ class DuskenUserSerializer(serializers.ModelSerializer):
             "is_volunteer",
             "is_member",
             "last_membership",
-            "discord_id"
+            "discord_id",
         )
 
 
