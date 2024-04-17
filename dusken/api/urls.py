@@ -10,7 +10,7 @@ from dusken.api.views.auth import GenericOauth2Callback
 from dusken.api.views.cards import KassaMemberCardUpdateView, MemberCardViewSet
 from dusken.api.views.memberships import KassaMembershipView, MembershipChargeView, MembershipViewSet
 from dusken.api.views.orders import OrderViewSet
-from dusken.api.views.orgunits import add_user, remove_user
+from dusken.api.views.orgunits import OrgUnitViewSet, add_user, remove_user
 from dusken.api.views.stats import membership_stats
 from dusken.api.views.users import (
     BasicAuthCurrentUserView,
@@ -23,6 +23,7 @@ from dusken.api.views.users import (
 
 router = DefaultRouter()
 router.register(r"users", DuskenUserViewSet, basename="user-api")
+router.register(r"orgunits", OrgUnitViewSet, basename="orgunit-api")
 router.register(r"cards", MemberCardViewSet, basename="membercard-api")
 router.register(r"memberships", MembershipViewSet, basename="membership-api")
 router.register(r"orders", OrderViewSet, basename="order-api")
@@ -39,7 +40,11 @@ urlpatterns += [
     path("kassa/membership/", KassaMembershipView.as_view(), name="kassa-membership"),
     path("kassa/card/", KassaMemberCardUpdateView.as_view(), name="kassa-card-update"),
     # Users
-    path("user/resend_validation_email/", ResendValidationEmailView.as_view(), name="resend-validation-email"),
+    path(
+        "user/resend_validation_email/",
+        ResendValidationEmailView.as_view(),
+        name="resend-validation-email",
+    ),
     path("user/register/", RegisterUserView.as_view(), name="user-api-register"),
     path("user/pk/to/uuid/", user_pk_to_uuid, name="user_pk_to_uuid"),
     # Organizational Unit
@@ -50,6 +55,10 @@ urlpatterns += [
     # GraphQL API
     path("graphql/", csrf_exempt(GraphQLView.as_view(schema=schema)), name="graphql"),
     # OAuth2
-    path("oauth/generic-callback/", GenericOauth2Callback.as_view(), name="generic-oauth2-callback"),
+    path(
+        "oauth/generic-callback/",
+        GenericOauth2Callback.as_view(),
+        name="generic-oauth2-callback",
+    ),
     path("oauth/", include(oauth2_provider_urls, namespace="oauth2_provider")),
 ]
