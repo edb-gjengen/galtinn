@@ -362,6 +362,7 @@ class GroupProfile(BaseModel):
     posix_name = models.CharField(max_length=255, blank=True, default="")
     description = models.TextField(blank=True, default="")
     group = models.OneToOneField(DjangoGroup, models.CASCADE, related_name="profile")
+    discord_role_id = models.IntegerField(unique=True, blank=True, null=True)
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
