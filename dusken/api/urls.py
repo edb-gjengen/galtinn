@@ -11,6 +11,7 @@ from dusken.api.views.cards import KassaMemberCardUpdateView, MemberCardViewSet
 from dusken.api.views.memberships import KassaMembershipView, MembershipChargeView, MembershipViewSet
 from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.orgunits import OrgUnitViewSet, add_user, remove_user
+from dusken.api.views.groupprofiles import GroupProfileViewSet
 from dusken.api.views.stats import membership_stats
 from dusken.api.views.users import (
     BasicAuthCurrentUserView,
@@ -24,6 +25,7 @@ from dusken.api.views.users import (
 router = DefaultRouter()
 router.register(r"users", DuskenUserViewSet, basename="user-api")
 router.register(r"orgunits", OrgUnitViewSet, basename="orgunit-api")
+router.register(r"groupprofiles", GroupProfileViewSet, basename="groupprofile-api")
 router.register(r"cards", MemberCardViewSet, basename="membercard-api")
 router.register(r"memberships", MembershipViewSet, basename="membership-api")
 router.register(r"orders", OrderViewSet, basename="order-api")
