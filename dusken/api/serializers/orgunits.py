@@ -7,8 +7,8 @@ from dusken.models import DuskenUser, OrgUnit
 class OrgUnitUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DuskenUser
-        fields = ("id", "username", "discord_id")
-        read_only_fields = ("id", "username", "discord_id")
+        fields = ("id", "username")
+        read_only_fields = ("id", "username")
 
 
 class OrgUnitSerializer(serializers.ModelSerializer):
@@ -25,7 +25,6 @@ class OrgUnitSerializer(serializers.ModelSerializer):
             "short_name",
             "is_active",
             "description",
-            "discord_role_id",
             "email",
             "contact_person",
             "website",
@@ -38,7 +37,6 @@ class OrgUnitSerializer(serializers.ModelSerializer):
         read_only_fields = (
             "id",
             "is_active",
-            "discord_role_id",
             "group",
             "admin_group",
             "parent",
@@ -68,8 +66,6 @@ class OrgUnitRegisterSerializer(serializers.ModelSerializer):
             "short_name",
             "is_active",
             "description",
-            "discord_role_id",
-            "has_discord_role_id",
             "email",
             "contact_person",
             "website",
@@ -80,8 +76,6 @@ class OrgUnitRegisterSerializer(serializers.ModelSerializer):
         read_only_fields = (
             "id",
             "is_active",
-            "discord_role_id",
-            "has_discord_role_id",
             "group",
             "admin_group",
             "parent",

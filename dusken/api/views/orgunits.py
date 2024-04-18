@@ -9,11 +9,10 @@ from dusken.models import DuskenUser, OrgUnit
 
 
 class OrgUnitFilter(FilterSet):
-    no_discord_role = BooleanFilter(field_name="discord_role_id", lookup_expr="isnull")
 
     class Meta:
         model = OrgUnit
-        fields = ("id", "name", "slug", "discord_role_id")
+        fields = ("id", "name", "slug")
 
 
 class OrgUnitViewSet(viewsets.ModelViewSet):
@@ -30,7 +29,6 @@ class OrgUnitViewSet(viewsets.ModelViewSet):
         "id",
         "name",
         "slug",
-        "discord_role_id",
     )
     lookup_field = "id"
 
