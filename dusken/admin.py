@@ -12,6 +12,7 @@ from mptt.admin import MPTTModelAdmin
 
 from dusken.models import (
     DuskenUser,
+    GroupDiscordRole,
     GroupProfile,
     MemberCard,
     Membership,
@@ -20,6 +21,7 @@ from dusken.models import (
     OrgUnit,
     OrgUnitLogMessage,
     PlaceOfStudy,
+    UserDiscordProfile,
     UserLogMessage,
 )
 
@@ -133,6 +135,10 @@ class DuskenUserChangeForm(UserChangeForm):
         model = DuskenUser
 
 
+class UserDiscordProfileInline(admin.StackedInline):
+    model = UserDiscordProfile
+
+
 @admin.register(DuskenUser)
 class DuskenUserAdmin(UserAdmin):
     form = DuskenUserChangeForm
@@ -149,8 +155,11 @@ class DuskenUserAdmin(UserAdmin):
         "legacy_id",
         "uuid",
         "stripe_customer_id",
-        "discord_id",
     )
+
+    inlines = [
+        UserDiscordProfileInline,
+    ]
 
     def get_fieldsets(self, *_args):
         return (*self.fieldsets, (_("Dusken fields"), {"fields": self._extra_fields}))
@@ -201,6 +210,11 @@ class OrgUnitLogMessageAdmin(admin.ModelAdmin):
 @admin.register(GroupProfile)
 class GroupProfileAdmin(admin.ModelAdmin):
     list_display = ["pk", "group", "posix_name", "description"]
+
+
+@admin.register(GroupDiscordRole)
+class GroupDiscordRoleAdmin(admin.ModelAdmin):
+    list_display = ["group_profile", "discord_id", "description"]
 
 
 admin.site.register(MembershipType)

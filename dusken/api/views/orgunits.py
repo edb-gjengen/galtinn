@@ -1,6 +1,6 @@
 from django.http import HttpResponseForbidden, JsonResponse
 from django.utils.translation import gettext_lazy as _
-from django_filters.rest_framework import BooleanFilter, DjangoFilterBackend, FilterSet
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import filters, permissions, viewsets
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 
@@ -9,7 +9,6 @@ from dusken.models import DuskenUser, OrgUnit
 
 
 class OrgUnitFilter(FilterSet):
-
     class Meta:
         model = OrgUnit
         fields = ("id", "name", "slug")

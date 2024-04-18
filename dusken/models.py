@@ -38,7 +38,6 @@ class DuskenUser(AbstractUser):  # type: ignore
     phone_number_confirmed = models.BooleanField(default=False)
     phone_number_confirmed_at = models.DateTimeField(blank=True, null=True)
     date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
-    discord_id = models.IntegerField(unique=True, blank=True, null=True)
 
     # Address
     street_address = models.CharField(_("street address"), max_length=255, null=True, blank=True)  # noqa: DJ001
@@ -205,6 +204,11 @@ class DuskenUser(AbstractUser):  # type: ignore
         default_permissions = ("add", "change", "delete", "view")
 
 
+class UserDiscordProfile(BaseModel):
+    discord_id = models.IntegerField(unique=True, null=False)
+    user = models.OneToOneField(DuskenUser, null=False, on_delete=models.CASCADE, related_name="discord_profile")
+
+
 class Membership(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
@@ -362,7 +366,6 @@ class GroupProfile(BaseModel):
     posix_name = models.CharField(max_length=255, blank=True, default="")
     description = models.TextField(blank=True, default="")
     group = models.OneToOneField(DjangoGroup, models.CASCADE, related_name="profile")
-    discord_role_id = models.IntegerField(unique=True, blank=True, null=True)
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
@@ -385,6 +388,19 @@ class GroupProfile(BaseModel):
     class Meta:
         verbose_name = _("Group profile")
         verbose_name_plural = _("Group profiles")
+
+
+class GroupDiscordRole(BaseModel):
+    """TODO"""
+
+    discord_id = models.IntegerField(null=False)
+    description = models.TextField(blank=True, default="")
+    group_profile = models.ForeignKey(GroupProfile, null=False, on_delete=models.CASCADE, related_name="discord_roles")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["discord_id", "group_profile"], name="discord_id_group_profile_unique")
+        ]
 
 
 # FIXME: We can't seem use the django-stubs type plugin to infer types from BaseModel, since MPTTModel is untyped/any

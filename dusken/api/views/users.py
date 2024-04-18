@@ -12,11 +12,11 @@ from dusken.models import DuskenUser
 
 
 class DuskenUserFilter(FilterSet):
-    no_discord_id = BooleanFilter(field_name="discord_id", lookup_expr="isnull")
+    no_discord_id = BooleanFilter(field_name="discord_profile__discord_id", lookup_expr="isnull")
 
     class Meta:
         model = DuskenUser
-        fields = ("username", "email", "phone_number", "discord_id")
+        fields = ("username", "email", "phone_number", "discord_profile__discord_id")
         filter_overrides = {PhoneNumberField: {"filter_class": django_filters.CharFilter}}
 
 
@@ -30,7 +30,14 @@ class DuskenUserViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
     )
     filterset_class = DuskenUserFilter
-    search_fields = ("first_name", "last_name", "email", "member_cards__card_number", "phone_number", "discord_id")
+    search_fields = (
+        "first_name",
+        "last_name",
+        "email",
+        "member_cards__card_number",
+        "phone_number",
+        "discord_profile__discord_id",
+    )
     lookup_field = "id"
 
     def get_queryset(self):
