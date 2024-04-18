@@ -149,6 +149,7 @@ class DuskenUserAdmin(UserAdmin):
         "legacy_id",
         "uuid",
         "stripe_customer_id",
+        "discord_id",
     )
 
     def get_fieldsets(self, *_args):
