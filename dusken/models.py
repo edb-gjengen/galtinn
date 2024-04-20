@@ -391,8 +391,6 @@ class GroupProfile(BaseModel):
 
 
 class GroupDiscordRole(BaseModel):
-    """TODO"""
-
     discord_id = models.IntegerField(null=False)
     description = models.TextField(blank=True, default="")
     group_profile = models.ForeignKey(GroupProfile, null=False, on_delete=models.CASCADE, related_name="discord_roles")
