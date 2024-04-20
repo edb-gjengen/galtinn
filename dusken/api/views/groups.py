@@ -6,9 +6,7 @@ from dusken.api.serializers.groups import GroupSerializer
 
 
 class GroupFilter(FilterSet):
-    no_discord_roles = BooleanFilter(
-        field_name="profile__discord_roles", lookup_expr="isnull"
-    )
+    no_discord_roles = BooleanFilter(field_name="profile__discord_roles", lookup_expr="isnull")
 
     class Meta:
         model = DjangoGroup
