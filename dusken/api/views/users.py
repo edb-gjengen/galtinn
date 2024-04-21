@@ -1,6 +1,6 @@
 import django_filters
 from django.http import HttpResponseForbidden, JsonResponse
-from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from django_filters.rest_framework import BooleanFilter, DjangoFilterBackend, FilterSet
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework import filters, permissions, viewsets
@@ -12,9 +12,11 @@ from dusken.models import DuskenUser
 
 
 class DuskenUserFilter(FilterSet):
+    no_discord_id = BooleanFilter(field_name="discord_profile__discord_id", lookup_expr="isnull")
+
     class Meta:
         model = DuskenUser
-        fields = ("username", "email", "phone_number")
+        fields = ("username", "email", "phone_number", "discord_profile__discord_id")
         filter_overrides = {PhoneNumberField: {"filter_class": django_filters.CharFilter}}
 
 
@@ -28,7 +30,14 @@ class DuskenUserViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
     )
     filterset_class = DuskenUserFilter
-    search_fields = ("first_name", "last_name", "email", "member_cards__card_number", "phone_number")
+    search_fields = (
+        "first_name",
+        "last_name",
+        "email",
+        "member_cards__card_number",
+        "phone_number",
+        "discord_profile__discord_id",
+    )
     lookup_field = "id"
 
     def get_queryset(self):

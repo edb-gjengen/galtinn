@@ -1,7 +1,39 @@
 from django.http import HttpResponseForbidden, JsonResponse
 from django.utils.translation import gettext_lazy as _
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from rest_framework import filters, mixins, viewsets
 
+from dusken.api.serializers.orgunits import OrgUnitSerializer
 from dusken.models import DuskenUser, OrgUnit
+
+
+class OrgUnitFilter(FilterSet):
+    class Meta:
+        model = OrgUnit
+        fields = ("id", "name", "slug")
+
+
+class OrgUnitViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """OrgUnit API"""
+
+    queryset = OrgUnit.objects.all().order_by("id")
+    serializer_class = OrgUnitSerializer
+    filter_backends = (
+        DjangoFilterBackend,
+        filters.SearchFilter,
+    )
+    filterset_class = OrgUnitFilter
+    search_fields = (
+        "id",
+        "name",
+        "slug",
+    )
+    lookup_field = "id"
+
+    def get_queryset(self):
+        if self.request.user.has_perm("dusken.view_orgunit"):
+            return self.queryset
+        return self.queryset.filter(pk=self.request.user.pk)
 
 
 def remove_user(request):

@@ -5,15 +5,24 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from dusken.api.serializers.cards import MemberCardSerializer
+from dusken.api.serializers.groups import GroupSerializer
 from dusken.api.serializers.memberships import MembershipSerializer
-from dusken.models import DuskenUser
+from dusken.models import DuskenUser, UserDiscordProfile
 from dusken.utils import email_exists, generate_username, phone_number_exist
 from dusken.validators import email_validator, phone_number_validator
+
+
+class UserDiscordProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserDiscordProfile
+        fields = ("id", "discord_id", "user")
 
 
 class DuskenUserSerializer(serializers.ModelSerializer):
     active_member_card = MemberCardSerializer()
     last_membership = MembershipSerializer()
+    groups = GroupSerializer(many=True, read_only=True)
+    discord_profile = UserDiscordProfileSerializer()
 
     class Meta:
         model = DuskenUser
@@ -31,6 +40,8 @@ class DuskenUserSerializer(serializers.ModelSerializer):
             "is_volunteer",
             "is_member",
             "last_membership",
+            "groups",
+            "discord_profile",
         )
         read_only_fields = (
             "id",
@@ -40,6 +51,8 @@ class DuskenUserSerializer(serializers.ModelSerializer):
             "is_volunteer",
             "is_member",
             "last_membership",
+            "groups",
+            "discord_profile",
         )
 
 

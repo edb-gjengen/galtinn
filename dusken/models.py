@@ -204,6 +204,11 @@ class DuskenUser(AbstractUser):  # type: ignore
         default_permissions = ("add", "change", "delete", "view")
 
 
+class UserDiscordProfile(BaseModel):
+    discord_id = models.IntegerField(unique=True, null=False)
+    user = models.OneToOneField(DuskenUser, null=False, on_delete=models.CASCADE, related_name="discord_profile")
+
+
 class Membership(BaseModel):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
@@ -383,6 +388,17 @@ class GroupProfile(BaseModel):
     class Meta:
         verbose_name = _("Group profile")
         verbose_name_plural = _("Group profiles")
+
+
+class GroupDiscordRole(BaseModel):
+    discord_id = models.IntegerField(null=False)
+    description = models.TextField(blank=True, default="")
+    group_profile = models.ForeignKey(GroupProfile, null=False, on_delete=models.CASCADE, related_name="discord_roles")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["discord_id", "group_profile"], name="discord_id_group_profile_unique")
+        ]
 
 
 # FIXME: We can't seem use the django-stubs type plugin to infer types from BaseModel, since MPTTModel is untyped/any
