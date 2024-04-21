@@ -205,7 +205,7 @@ class DuskenUser(AbstractUser):  # type: ignore
 
 
 class UserDiscordProfile(BaseModel):
-    discord_id = models.IntegerField(unique=True, null=False)
+    discord_id = models.PositiveBigIntegerField(unique=True, null=False)
     user = models.OneToOneField(DuskenUser, null=False, on_delete=models.CASCADE, related_name="discord_profile")
 
 
@@ -391,7 +391,7 @@ class GroupProfile(BaseModel):
 
 
 class GroupDiscordRole(BaseModel):
-    discord_id = models.IntegerField(null=False)
+    discord_id = models.PositiveBigIntegerField(null=False)
     description = models.TextField(blank=True, default="")
     group_profile = models.ForeignKey(GroupProfile, null=False, on_delete=models.CASCADE, related_name="discord_roles")
 
