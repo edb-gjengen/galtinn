@@ -23,8 +23,3 @@ class UserDiscordProfileViewSet(viewsets.ModelViewSet):
     filterset_class = UserDiscordProfileFilter
     search_fields = ("discord_id", "user__id")
     lookup_field = "user__id"
-
-    def get_queryset(self):
-        if self.request.user.has_perm("dusken.view_discord_profile"):
-            return self.queryset
-        return self.queryset.filter(pk=self.request.user.pk)
