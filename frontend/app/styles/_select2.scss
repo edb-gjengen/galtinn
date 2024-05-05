@@ -1,6 +1,10 @@
 /* Select2 with Bootstrap 5 theme */
-
 @import "node_modules/select2/src/scss/core";
+
+/* Workaround issue with select2-bootstrap-5-theme and bootstrap v5.3.x
+Ref: https://github.com/apalfrey/select2-bootstrap-5-theme/pull/82 */
+$s2bs5-border-color: $border-color;
+
 @import "node_modules/select2-bootstrap-5-theme/src/include-all";
 
 /* Fix to make select fields responsive */

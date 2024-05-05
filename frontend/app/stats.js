@@ -69,7 +69,7 @@ function totals() {
             (memo, num) => {
                 return memo + num.sales;
             },
-            0
+            0,
         );
         $('.' + type).html(total);
         sum += total;
