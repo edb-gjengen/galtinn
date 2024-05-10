@@ -1,16 +1,6 @@
 {% load i18n static %}
-<script>
-    const stripe_config = {
-        image: '{% static "images/logo.png" %}',
-        stripe_pub_key: '{{ view.stripe_public_key }}',
-        membership_type: '{{ view.membership_type.slug }}',
-        membership_name: '{{ view.membership_type.name }}',
-        membership_price: {{ view.membership_type.price }},
-        charge_url: '{% url "membership-charge" %}'
-    };
-</script>
-<form method="post" id="membership-purchase-form" class="d-grid">
-    <div class="js-validation-errors"></div>
+<form method="post" action="{% url 'stripe-checkout-session' %}" id="membership-purchase-form" class="d-grid">
+    {% csrf_token %}
     {{ view.membership_purchase_form }}
     <button id="purchase-button" type="submit" class="btn btn-primary">
     {% if ms == null %}

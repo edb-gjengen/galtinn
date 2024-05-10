@@ -130,6 +130,7 @@ class DuskenUserUpdateForm(forms.ModelForm):
 
 class MembershipPurchaseForm(forms.Form):
     email = forms.EmailField(widget=forms.HiddenInput())
+    membership_type = forms.SlugField(widget=forms.HiddenInput())
 
 
 class UserEmailValidateForm(forms.Form):
