@@ -80,7 +80,7 @@ django-filter = "22.1"
 django-inline-svg = "0.1.*"
 django-ldapdb = { git = "https://github.com/nikolaik/django-ldapdb", rev = "nikolaik/django-42"}
 django-mptt = "0.13.*"
-django-phonenumber-field = "6.3.*"
+django-phonenumber-field = "6.4.*"
 django-recaptcha = "3.0.*"
 django-redis = "5.2.*"
 django-select2 = "7.10.*"

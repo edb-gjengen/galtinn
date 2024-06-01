@@ -866,17 +866,17 @@ requests = ">=2.13.0"
 
 [[package]]
 name = "django-phonenumber-field"
-version = "6.3.0"
+version = "6.4.0"
 description = "An international phone number field for django models."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "django-phonenumber-field-6.3.0.tar.gz", hash = "sha256:668db2e61559908ce8dcd660ac716262c7922cc29ec76ede3f9b88772992dc28"},
-    {file = "django_phonenumber_field-6.3.0-py3-none-any.whl", hash = "sha256:188ca55b27ef1ac4d9b279d90ee3f1377ece6cd9ed8c63f0a66efd565bf9ad6f"},
+    {file = "django-phonenumber-field-6.4.0.tar.gz", hash = "sha256:72a3e7a3e7493bf2a12c07a3bc77ce89813acc16592bf04d0eee3b5a452097ed"},
+    {file = "django_phonenumber_field-6.4.0-py3-none-any.whl", hash = "sha256:a31b4f05ac0ff898661516c84940f83adb5cdcf0ae4b9b1d31bb8ad3ff345b58"},
 ]
 
 [package.dependencies]
-Django = ">=2.2"
+Django = ">=3.2"
 
 [package.extras]
 phonenumbers = ["phonenumbers (>=7.0.2)"]
@@ -2014,4 +2014,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.8"
-content-hash = "c9dd2748a28ba142575e7a3d8bc42c1c6650fa04d0a412bc0d2463f15fd34b54"
+content-hash = "686163f756c375abfdbba58c7be9f90270652dec3ec4d8f7ec5c4695e178ec20"
