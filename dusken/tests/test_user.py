@@ -1,6 +1,8 @@
 import os
 from datetime import datetime, timedelta, timezone
+from unittest.mock import patch
 
+from captcha.client import RecaptchaResponse
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -157,14 +159,19 @@ class DuskenUserActivateTestCase(TestCase):
         # Very clever.
         assert b"the link is invalid" in response.content
 
-    def test_invalid_post_data_does_not_render_form(self):
+    @patch("captcha.fields.client.submit")
+    def test_invalid_post_data_does_not_render_form(self, mocked_submit):
+        mocked_submit.return_value = RecaptchaResponse(is_valid=True)
         kwargs = {"phone": "4712345678", "code": "12345678"}
         url = reverse("user-activate", kwargs=kwargs)
+
         response = self.client.post(url, self.user_data)
         # Very clever.
         assert b"the link is invalid" in response.content
 
-    def test_right_combination_confirms_phone_number_and_claims_order(self):
+    @patch("captcha.fields.client.submit")
+    def test_right_combination_confirms_phone_number_and_claims_order(self, mocked_submit):
+        mocked_submit.return_value = RecaptchaResponse(is_valid=True)
         kwargs = {"phone": str(self.order.phone_number).replace("+", ""), "code": self.order.transaction_id[:8]}
         url = reverse("user-activate", kwargs=kwargs)
         response = self.client.post(url, self.user_data)
@@ -173,7 +180,9 @@ class DuskenUserActivateTestCase(TestCase):
         assert user.phone_number_confirmed
         assert user.is_member
 
-    def test_right_combination_works_for_foreign_phone(self):
+    @patch("captcha.fields.client.submit")
+    def test_right_combination_works_for_foreign_phone(self, mocked_submit):
+        mocked_submit.return_value = RecaptchaResponse(is_valid=True)
         kwargs = {
             "phone": str(self.order_foreign.phone_number).replace("+", ""),
             "code": self.order_foreign.transaction_id[:8],

@@ -1,4 +1,6 @@
 import datetime
+from types import SimpleNamespace
+from unittest import mock
 
 from django.contrib.auth.models import Permission
 from rest_framework import status
@@ -34,7 +36,13 @@ class MembershipTest(APITestCase):
             "membership_type": self.membership_type.slug,
             "stripe_token": {"id": "asdf", "email": "asdf@example.com"},
         }
-        response = self.client.post(url, payload, format="json")
+
+        with mock.patch("stripe.Customer.create") as customer_create, mock.patch(
+            "stripe.Charge.create"
+        ) as charge_create:
+            customer_create.return_value = SimpleNamespace(id="someid")
+            charge_create.return_value = SimpleNamespace(id="someid", status="succeeded")
+            response = self.client.post(url, payload, format="json")
 
         assert response.status_code == status.HTTP_201_CREATED, response.data
         assert Order.objects.count() == 1
@@ -55,7 +63,13 @@ class MembershipTest(APITestCase):
             "membership_type": self.membership_type.slug,
             "stripe_token": {"id": "asdf", "email": "asdf@example.com"},
         }
-        response = self.client.post(url, payload, format="json")
+        with mock.patch("stripe.Customer.create") as customer_crate, mock.patch(
+            "stripe.Charge.create"
+        ) as charge_create:
+            customer_crate.return_value = SimpleNamespace(id="someid")
+            charge_create.return_value = SimpleNamespace(id="someid", status="succeeded")
+            response = self.client.post(url, payload, format="json")
+
         assert response.status_code == status.HTTP_201_CREATED, response.data
         assert self.user.last_membership.start_date == new_membership_starts
 

@@ -5,7 +5,8 @@ from http import HTTPStatus
 
 import requests
 from django.conf import settings
-from django.contrib.sites.models import Site
+from django.http import HttpResponseRedirect
+from django.shortcuts import resolve_url
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -38,18 +39,13 @@ def send_validation_email(user):
         # Bail
         return
 
-    site = Site.objects.get(pk=settings.SITE_ID)
-    url_kwargs = {"slug": str(user.uuid), "email_key": user.email_key}
-
+    path_and_params = reverse("user-email-validate", kwargs={"slug": str(user.uuid), "email_key": user.email_key})
     context = {
         "user": user,
-        "validation_url": "https://{}{}".format(site.domain, reverse("user-email-validate", kwargs=url_kwargs)),
-        "site_name": site.name,
+        "validation_url": f"{settings.SITE_URL}{path_and_params}",
     }
-
     message = render_to_string("dusken/emails/validation_email.txt", context)
     html_message = render_to_string("dusken/emails/validation_email.html", context)
-
     from_email = settings.DEFAULT_FROM_EMAIL
 
     send_mail_task.delay(
@@ -109,3 +105,17 @@ def phone_number_exist(phone_number):
     from dusken.models import DuskenUser
 
     return DuskenUser.objects.filter(phone_number=phone_number).exists()
+
+
+class HttpResponseSeeOther(HttpResponseRedirect):
+    status_code = 303
+
+
+def redirect_see_other(to, *args, **kwargs):
+    """
+    Return an HttpResponseSeeOther to the appropriate URL for the arguments
+    passed.
+
+    Adaptation of django.shortcuts.redirect to allow HTTP 303 status code
+    """
+    return HttpResponseSeeOther(resolve_url(to, *args, **kwargs))

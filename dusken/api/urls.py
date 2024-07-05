@@ -8,6 +8,7 @@ from dusken.api.graphql import schema
 from dusken.api.views import ResendValidationEmailView
 from dusken.api.views.auth import GenericOauth2Callback
 from dusken.api.views.cards import KassaMemberCardUpdateView, MemberCardViewSet
+from dusken.api.views.checkouts import StripeCheckoutSessionView, StripePaymentSheetView, StripeWebhookView
 from dusken.api.views.discord import UserDiscordProfileViewSet
 from dusken.api.views.groups import GroupViewSet
 from dusken.api.views.memberships import KassaMembershipView, MembershipChargeView, MembershipViewSet
@@ -40,6 +41,9 @@ urlpatterns += [
     path("me/oauth/", Oauth2CurrentUserView.as_view(), name="user-current-oauth2"),
     # Stripe
     path("membership/charge/", MembershipChargeView.as_view(), name="membership-charge"),
+    path("stripe/checkout-session/", StripeCheckoutSessionView.as_view(), name="stripe-checkout-session"),
+    path("stripe/webhook/", StripeWebhookView.as_view(), name="stripe-webhook"),
+    path("stripe/payment-sheet/", StripePaymentSheetView.as_view(), name="stripe-payment-sheet"),
     # Kassa
     path("kassa/membership/", KassaMembershipView.as_view(), name="kassa-membership"),
     path("kassa/card/", KassaMemberCardUpdateView.as_view(), name="kassa-card-update"),

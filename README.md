@@ -54,10 +54,16 @@ Font icons are from: <https://linearicons.com/free>
 
 Dusken supports Stripe for card payments. The Stripe APIs are documented here:
 
-- Stripe Checkout (JS): <https://stripe.com/docs/checkout>
+- Stripe Checkout (JS): <https://docs.stripe.com/payments/checkout>
 - Stripe API (Python): <https://stripe.com/docs/api?lang=python>
 
 Use this VISA card for testing: 4242 4242 4242 4242
+
+Run the stripe CLI to forward webhooks locally:
+
+```sh
+stripe listen --forward-to localhost:8000/api/stripe/webhook/
+```
 
 ### LDAP
 

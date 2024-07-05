@@ -28,23 +28,20 @@ class OrderSerializer(serializers.ModelSerializer):
 class BaseMembershipOrder:
     transaction_id = serializers.CharField(allow_null=True, required=False)
 
-    def _create_order(self, membership, transaction_id, payment_method, phone_number=None, member_card=None):  # noqa: PLR0913
+    def _create_order(self, membership, **kwargs):
         return Order.objects.create(
-            payment_method=payment_method,
-            transaction_id=transaction_id,
             price_nok=membership.membership_type.price,
             product=membership,
             user=membership.user,
-            phone_number=phone_number,
-            member_card=member_card,
+            **kwargs,
         )
 
-    def _create_membership(self, user, membership_type, start_date):
+    def _create_membership(self, membership_type, start_date, **kwargs):
         return Membership.objects.create(
             start_date=start_date,
             end_date=start_date + membership_type.duration,
             membership_type=membership_type,
-            user=user,
+            **kwargs,
         )
 
     def _validate_user_can_renew(self, user):
@@ -76,17 +73,17 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
 
     def create(self, validated_data, **_kwargs):
         user = validated_data.get("user")
-        membership_type = validated_data.get("membership_type")
-        transaction_id = validated_data.get("transaction_id")
-        payment_method = validated_data.get("payment_method", Order.BY_CARD)
-        start_date = self._get_start_date(user)
 
         with transaction.atomic():
-            membership = self._create_membership(user=user, start_date=start_date, membership_type=membership_type)
+            membership = self._create_membership(
+                user=user,
+                start_date=self._get_start_date(user),
+                membership_type=validated_data.get("membership_type"),
+            )
             return self._create_order(
                 membership=membership,
-                payment_method=payment_method,
-                transaction_id=transaction_id,
+                payment_method=validated_data.get("payment_method", Order.BY_CARD),
+                transaction_id=validated_data.get("transaction_id"),
             )
 
     def _get_start_date(self, user):

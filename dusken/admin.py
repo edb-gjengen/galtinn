@@ -21,6 +21,7 @@ from dusken.models import (
     OrgUnit,
     OrgUnitLogMessage,
     PlaceOfStudy,
+    StripePayment,
     UserDiscordProfile,
     UserLogMessage,
 )
@@ -46,7 +47,7 @@ class StartDateYearListFilter(admin.SimpleListFilter):
             year = int(year)
             return queryset.filter(start_date__gte=date(year, 1, 1), start_date__lte=date(year, 12, 31))
 
-        return queryset.none()
+        return queryset.all()
 
 
 @admin.register(Membership)
@@ -115,7 +116,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     @admin.display(description=_("Product"))
     def show_product_link(self, obj):
-        if obj.user is None:
+        if obj.user is None or obj.product is None:
             return ""
 
         url = reverse("admin:dusken_membership_change", args=[obj.product.pk])
@@ -215,6 +216,12 @@ class GroupProfileAdmin(admin.ModelAdmin):
 @admin.register(GroupDiscordRole)
 class GroupDiscordRoleAdmin(admin.ModelAdmin):
     list_display = ["group_profile", "discord_id", "description"]
+
+
+@admin.register(StripePayment)
+class StripePaymentAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", "stripe_id", "status", "source", "stripe_model"]
+    list_filter = ["status", "source", "stripe_model"]
 
 
 admin.site.register(MembershipType)

@@ -1,12 +1,17 @@
+import logging
+
 from django import forms
 from django.contrib.auth.forms import SetPasswordForm
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.utils.connection import ConnectionDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
 from dusken.apps.neuf_auth.models import AuthProfile
 from dusken.apps.neuf_auth.validators import LDAPUsernameValidator, blacklist_validator
 from dusken.apps.neuf_ldap.utils import ldap_username_exists, set_ldap_password
+
+logger = logging.getLogger(__name__)
 
 
 class NeufSetPasswordForm(SetPasswordForm):
@@ -22,10 +27,12 @@ class NeufSetPasswordForm(SetPasswordForm):
         username = self.user.username
         raw_password = self.cleaned_data["new_password1"]
 
-        if ldap_username_exists(username):
-            set_ldap_password(username, raw_password)
-
-        self.user.set_ldap_hash(raw_password)
+        try:
+            if ldap_username_exists(username):
+                set_ldap_password(username, raw_password)
+            self.user.set_ldap_hash(raw_password)
+        except ConnectionDoesNotExist:
+            logger.warning(f"Skipping password update of user {username}, since the LDAP connection does not exist")
 
         return self.user
 

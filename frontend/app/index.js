@@ -41,56 +41,6 @@ $.ajaxSetup({
     },
 });
 
-function openStripe(email) {
-    const stripeHandler = StripeCheckout.configure({
-        key: stripe_config.stripe_pub_key,
-        image: stripe_config.image,
-        locale: 'auto',
-        token: onStripeToken,
-        allowRememberMe: false, // Disallow the remember me function for new users
-    });
-
-    // Open Checkout with further options
-    stripeHandler.open({
-        name: 'Det Norske Studentersamfund',
-        description: stripe_config.membership_name,
-        currency: 'NOK',
-        amount: stripe_config.membership_price,
-        email: email,
-    });
-
-    // Close Checkout on page navigation
-    $(window).on('popstate', function () {
-        stripeHandler.close();
-    });
-}
-
-function onStripeToken(token) {
-    // Use the token to create the charge with a server-side script.
-    // You can access the token ID with `token.id` and user email with `token.email`
-    const postData = {
-        stripe_token: token,
-        membership_type: stripe_config.membership_type,
-    };
-    $.ajax(urls.charge, {
-        data: JSON.stringify(postData),
-        contentType: 'application/json',
-        dataType: 'json',
-        type: 'post',
-    })
-        .done(function (data) {
-            console.log(data);
-
-            // redirect to profile
-            location.href = urls.profile + '?payment_success=✔';
-        })
-        .fail(function (data) {
-            console.log('failed', data);
-            $('.js-validation-errors').addClass('alert alert-danger');
-            $('.js-validation-errors').html(JSON.parse(data.responseText).detail);
-        });
-}
-
 function formatMessage(message, alert) {
     return (
         '<div class="alert alert-' +
@@ -103,23 +53,8 @@ function formatMessage(message, alert) {
 }
 
 $(document).ready(function () {
-    const $membershipPurchase = $('#membership-purchase-form');
     const $messages = $('.messages');
 
-    if ($membershipPurchase.length) {
-        /* Membership purchase */
-        urls = {
-            charge: stripe_config.charge_url,
-            profile: '/home/',
-        };
-
-        const email = $membershipPurchase.find('input[name="email"]').val();
-
-        $('#purchase-button').on('click', function (e) {
-            e.preventDefault();
-            openStripe(email);
-        });
-    }
     /* Send validation email */
     const $validationEmailBtn = $('.js-send-validation-email');
     $validationEmailBtn.on('click', function (e) {

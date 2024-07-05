@@ -111,6 +111,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "frontend/dist"]
 
 SITE_ID = 1
+SITE_URL = os.getenv("SITE_URL", "http://localhost:8000")
 
 # Email
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "webmaster@localhost")
@@ -167,6 +168,7 @@ OAUTH2_PROVIDER = {
 
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
+STRIPE_WEBHOOK_SIGNING_SECRET = os.getenv("STRIPE_WEBHOOK_SIGNING_SECRET", "")
 
 TESTING = any(m in sys.modules for m in ["pytest", "py.test"])
 
