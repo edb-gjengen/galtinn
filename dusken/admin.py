@@ -224,5 +224,10 @@ class StripePaymentAdmin(admin.ModelAdmin):
     list_filter = ["status", "source", "stripe_model"]
 
 
-admin.site.register(MembershipType)
+@admin.register(MembershipType)
+class MembershipTypeAdmin(admin.ModelAdmin):
+    list_display = ["name", "slug", "price", "stripe_price_id", "description", "is_active", "is_default"]
+    list_filter = ["is_active", "is_default"]
+
+
 admin.site.register(PlaceOfStudy)
