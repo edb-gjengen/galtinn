@@ -57,7 +57,13 @@ Dusken supports Stripe for card payments. The Stripe APIs are documented here:
 - Stripe Checkout (JS): <https://docs.stripe.com/payments/checkout>
 - Stripe API (Python): <https://stripe.com/docs/api?lang=python>
 
-Use this VISA card for testing: 4242 4242 4242 4242
+Use these VISA cards for testing:
+
+- `4242424242424242` - The card payment succeeds and doesn’t require authentication.
+- `4000002500003155` - The card payment requires authentication.
+- `4000000000009995` - The card is declined with a decline code like `insufficient_funds`.
+
+Read more about how to test [here](https://docs.stripe.com/payments/accept-a-payment?platform=web&ui=elements#web-test-the-integration).
 
 Run the stripe CLI to forward webhooks locally:
 
