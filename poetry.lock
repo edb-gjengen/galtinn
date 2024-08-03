@@ -822,13 +822,13 @@ Django = ">=2.2"
 python-ldap = ">=3.0"
 
 [package.extras]
-dev = ["check-manifest", "factory_boy", "flake8", "isort (>=5.0.0)", "tox", "volatildap @ git+https://github.com/nikolaik/volatildap.git@42baf3be3293bae46d1c686e6e46e258680d766f", "wheel", "zest.releaser[recommended]"]
+dev = ["check-manifest", "factory_boy", "flake8", "isort (>=5.0.0)", "tox", "volatildap (>=1.1.0)", "wheel", "zest.releaser[recommended]"]
 
 [package.source]
 type = "git"
 url = "https://github.com/nikolaik/django-ldapdb"
-reference = "nikolaik/django-42"
-resolved_reference = "381e4f40032c96ea6ae6623a5a0339b3ea526ae5"
+reference = "d3a0b20eb53fd3e13c454499ca1771df7f8858b3"
+resolved_reference = "d3a0b20eb53fd3e13c454499ca1771df7f8858b3"
 
 [[package]]
 name = "django-mptt"
@@ -2045,4 +2045,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.8"
-content-hash = "a47e775575c87856fbf2496d818d15f0c206954b54ddc615f44f1f008b2f18c8"
+content-hash = "2c67ca090ebfbc46222c27b5d5a6fbc9227cf3dcf61c26f400e0ac27f6abb368"
