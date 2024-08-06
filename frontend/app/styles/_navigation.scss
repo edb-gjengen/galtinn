@@ -9,6 +9,11 @@
     .navbar-brand {
         width: 5em;
 
+        svg {
+            height: 0.8em;
+            width: auto;
+        }
+
         svg path {
             fill: white;
         }
