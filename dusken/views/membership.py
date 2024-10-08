@@ -21,5 +21,7 @@ class MembershipListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         self.membership_type = MembershipType.get_default()
-        self.membership_purchase_form = MembershipPurchaseForm(initial={"email": self.request.user.email})
+        self.membership_purchase_form = MembershipPurchaseForm(
+            initial={"email": self.request.user.email, "membership_type": self.membership_type.slug}
+        )
         return super().get_context_data(**kwargs)
