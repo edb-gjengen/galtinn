@@ -18,6 +18,7 @@ from dusken.api.views.stats import membership_stats
 from dusken.api.views.users import (
     BasicAuthCurrentUserView,
     CurrentUserView,
+    DeleteCurrentUserView,
     DuskenUserViewSet,
     Oauth2CurrentUserView,
     RegisterUserView,
@@ -39,6 +40,7 @@ urlpatterns += [
     path("me/", CurrentUserView.as_view(), name="user-current"),
     path("me/basic/", BasicAuthCurrentUserView.as_view(), name="user-current-basic-auth"),
     path("me/oauth/", Oauth2CurrentUserView.as_view(), name="user-current-oauth2"),
+    path("me/delete/", DeleteCurrentUserView.as_view(), name="user-current-delete"),
     # Stripe
     path("membership/charge/", MembershipChargeView.as_view(), name="membership-charge"),
     path("stripe/checkout-session/", StripeCheckoutSessionView.as_view(), name="stripe-checkout-session"),

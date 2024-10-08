@@ -4,7 +4,7 @@ from django_filters.rest_framework import BooleanFilter, DjangoFilterBackend, Fi
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework import filters, permissions, viewsets
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, DestroyAPIView, RetrieveAPIView
 
 from dusken.api.serializers.users import DuskenUserRegisterSerializer, DuskenUserSerializer
 from dusken.authentication import UsernameBasicAuthentication
@@ -68,6 +68,17 @@ def user_pk_to_uuid(request):
 
     data = {"uuid": user.uuid}
     return JsonResponse(data)
+
+
+class DeleteCurrentUserView(DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = DuskenUserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def delete_object(self):
+        return self.request.user.delete()
 
 
 class BasicAuthCurrentUserView(CurrentUserView):
