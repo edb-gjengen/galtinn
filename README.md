@@ -97,7 +97,7 @@ DATABASES = {
 
 ```bash
 # Generate .po files based on translation strings in code and template files
-fab makemessages
+bin/makemessages
 # Only for app dusken
 fab makemessages:limit=dusken
 ```
