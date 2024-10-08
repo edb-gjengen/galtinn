@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:21+0200\n"
+"POT-Creation-Date: 2024-10-08 19:40+0200\n"
 "PO-Revision-Date: 2017-11-22 20:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.0.4\n"
 
-#: dusken/apps/neuf_auth/forms.py:35
+#: apps/neuf_auth/forms.py:42
 msgid "Username"
 msgstr "Brukernavn"
 
-#: dusken/apps/neuf_auth/forms.py:38
+#: apps/neuf_auth/forms.py:45
 msgid ""
 "Between 3 and 32 characters. Lowercase letters, digits and - or _ only. It "
 "must start with a letter."
@@ -30,24 +30,24 @@ msgstr ""
 "Mellom 3 og 32 tegn. Bare små bokstaver, tall og - eller _. Må starte med en "
 "bokstav."
 
-#: dusken/apps/neuf_auth/forms.py:50
+#: apps/neuf_auth/forms.py:57
 msgid "Username can only be set once"
 msgstr "Brukernavn kan bare settes en gang"
 
-#: dusken/apps/neuf_auth/forms.py:64 dusken/apps/neuf_auth/forms.py:67
+#: apps/neuf_auth/forms.py:71 apps/neuf_auth/forms.py:74
 #, python-brace-format
 msgid "Username {value} is taken"
 msgstr "Brukernavnet {value} er allerede i bruk"
 
-#: dusken/apps/neuf_auth/validators.py:8
+#: apps/neuf_auth/validators.py:8
 msgid "Enter a valid username."
 msgstr "Skriv inn et gyldig brukernavn."
 
-#: dusken/apps/neuf_auth/validators.py:530
+#: apps/neuf_auth/validators.py:530
 #, python-format
 msgid "%(value)s is not an allowed username"
 msgstr "%(value)s er ikke et gyldig brukernavn"
 
-#: dusken/apps/neuf_auth/views.py:16 dusken/apps/neuf_auth/views.py:32
+#: apps/neuf_auth/views.py:16 apps/neuf_auth/views.py:32
 msgid "Password changed"
 msgstr "Passordet er endret"
