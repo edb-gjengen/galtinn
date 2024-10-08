@@ -100,6 +100,8 @@ DATABASES = {
 bin/makemessages
 # Only for app dusken
 fab makemessages:limit=dusken
+# Compile .po files to .mo files
+bin/compilemessages
 ```
 
 ## System Configuration
