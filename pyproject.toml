@@ -79,7 +79,7 @@ django-countries = "7.6.*"
 django-extensions = "3.2.*"
 django-filter = "22.1"
 django-inline-svg = "0.1.*"
-django-ldapdb = { git = "https://github.com/nikolaik/django-ldapdb", rev = "nikolaik/django-42"}
+django-ldapdb = { git = "https://github.com/nikolaik/django-ldapdb", rev = "d3a0b20eb53fd3e13c454499ca1771df7f8858b3"}
 django-mptt = "0.13.*"
 django-phonenumber-field = "6.4.*"
 django-recaptcha = "3.0.*"
