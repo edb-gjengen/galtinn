@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-08 19:40+0200\n"
+"POT-Creation-Date: 2024-11-04 21:28+0100\n"
 "PO-Revision-Date: 2024-04-03 09:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -266,47 +266,35 @@ msgstr "Du har allerede registrert deg eller så er lenken ugyldig."
 msgid "Date of birth"
 msgstr "Fødselsdato"
 
-#: forms.py:135
-msgid "Student"
-msgstr "Student"
-
-#: forms.py:136
-msgid "Regular"
-msgstr "Ordinær"
-
-#: forms.py:137
-msgid "Support"
-msgstr "Støtte"
-
-#: forms.py:156
+#: forms.py:145
 msgid "User does not exist"
 msgstr "Brukeren finnes ikke"
 
-#: forms.py:159
+#: forms.py:148
 msgid "Invalid email key for user"
 msgstr "Ugyldig e-postnøkkel for bruker"
 
-#: forms.py:162
+#: forms.py:151
 msgid "Email already confirmed"
 msgstr "E-post allerede bekreftet"
 
-#: forms.py:168
+#: forms.py:157
 msgid "Code"
 msgstr "Kode"
 
-#: forms.py:176
+#: forms.py:165
 msgid "Phone number already confirmed"
 msgstr "Mobilnummeret er allerede bekreftet"
 
-#: forms.py:180
+#: forms.py:169
 msgid "Invalid code"
 msgstr "Ugyldig kode"
 
-#: forms.py:189
+#: forms.py:178
 msgid "Email address / username"
 msgstr "E-postadresse / brukernavn"
 
-#: forms.py:208
+#: forms.py:197
 msgid "The username entered is not equal to your own."
 msgstr "Angitt brukernavn er ikke likt ditt eget."
 
@@ -327,7 +315,7 @@ msgid "Org unit log messages"
 msgstr "Foreningsloggmeldinger"
 
 #: models/orders.py:59 templates/dusken/orgunit_edit_users.html:31
-#: templates/dusken/user_detail.html:77 templates/nav.html:17
+#: templates/dusken/user_detail.html:72 templates/nav.html:17
 msgid "Membership"
 msgstr "Medlemskap"
 
@@ -535,7 +523,7 @@ msgstr "Forening"
 msgid "Org units"
 msgstr "Foreninger"
 
-#: models/users.py:375 templates/dusken/user_detail.html:69
+#: models/users.py:375 templates/dusken/user_detail.html:64
 msgid "Place of study"
 msgstr "Studiested"
 
@@ -652,7 +640,7 @@ msgstr "Du har gyldig medlemskap"
 msgid "There is a membership connected to your phone number."
 msgstr "Det finnes et medlemskap knyttet til mobilnummeret ditt."
 
-#: templates/dusken/home.html:38 templates/dusken/user_detail.html:59
+#: templates/dusken/home.html:38
 msgid "Validate phone number"
 msgstr "Bekreft mobilnummer"
 
@@ -669,14 +657,14 @@ msgid "Valid until"
 msgstr "Gyldig til"
 
 #: templates/dusken/home.html:51 templates/dusken/membership_list.html:30
-#: templates/dusken/user_detail.html:90 templates/dusken/user_detail.html:94
+#: templates/dusken/user_detail.html:85 templates/dusken/user_detail.html:89
 msgid "Expired"
 msgstr "Utløpt"
 
 #: templates/dusken/home.html:51 templates/dusken/membership_list.html:23
 #: templates/dusken/membership_list.html:27
 #: templates/dusken/orgunit_edit_users.html:39
-#: templates/dusken/user_detail.html:84
+#: templates/dusken/user_detail.html:79
 msgid "Lifelong"
 msgstr "Livsvarig"
 
@@ -710,7 +698,6 @@ msgid "Validated"
 msgstr "Bekreftet"
 
 #: templates/dusken/home.html:96 templates/dusken/user_detail.html:42
-#: templates/dusken/user_detail.html:55
 msgid "Not validated"
 msgstr "Ubekreftet"
 
@@ -806,7 +793,7 @@ msgstr "Administrèr medlemmer"
 
 #: templates/dusken/home_volunteer.html:51
 #: templates/dusken/orgunit_detail.html:7 templates/dusken/orgunit_list.html:30
-#: templates/dusken/user_detail.html:108 templates/dusken/user_detail.html:110
+#: templates/dusken/user_detail.html:103 templates/dusken/user_detail.html:105
 msgid "Edit"
 msgstr "Rediger"
 
@@ -904,7 +891,7 @@ msgid "Add admin"
 msgstr "Legg til admin"
 
 #: templates/dusken/orgunit_edit_users.html:47
-#: templates/dusken/user_detail.html:93
+#: templates/dusken/user_detail.html:88
 msgid "None"
 msgstr "Ingen"
 
@@ -980,7 +967,7 @@ msgid "Superusers can't delete their accounts"
 msgstr "Superbrukere kan ikke slette kontoen sin"
 
 #: templates/dusken/user_confirm_delete.html:8
-#: templates/dusken/user_detail.html:127
+#: templates/dusken/user_detail.html:122
 msgid "Permanently delete your account"
 msgstr "Slett kontoen din permanent"
 
@@ -1016,31 +1003,31 @@ msgstr "Brukernavn"
 msgid "Not set"
 msgstr "Ikke satt"
 
-#: templates/dusken/user_detail.html:64
+#: templates/dusken/user_detail.html:59
 msgid "Address"
 msgstr "Adresse"
 
-#: templates/dusken/user_detail.html:88
+#: templates/dusken/user_detail.html:83
 msgid "Valid"
 msgstr "Gyldig"
 
-#: templates/dusken/user_detail.html:102
+#: templates/dusken/user_detail.html:97
 msgid "Registered"
 msgstr "Registrert"
 
-#: templates/dusken/user_detail.html:103
+#: templates/dusken/user_detail.html:98
 msgid "Last updated"
 msgstr "Sist oppdatert"
 
-#: templates/dusken/user_detail.html:114
+#: templates/dusken/user_detail.html:109
 msgid "Organizations"
 msgstr "Foreninger"
 
-#: templates/dusken/user_detail.html:121
+#: templates/dusken/user_detail.html:116
 msgid "No organizations"
 msgstr "Ingen foreninger"
 
-#: templates/dusken/user_detail.html:126
+#: templates/dusken/user_detail.html:121
 msgid "Danger zone"
 msgstr "Farlig område"
 

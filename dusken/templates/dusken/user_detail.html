@@ -51,13 +51,8 @@
                 {% svg "icons/phone" %} {% trans "Phone number" %}: <strong>{{ userobj.phone_number }}</strong>
                 {% if userobj.phone_number_confirmed %}
                     <span class="badge bg-success">{% trans "Validated" %}</span>
-                {% else %}
-                    <span class="badge bg-warning">{% trans "Not validated" %}</span>
                 {% endif %}
             </span>
-            {% if userobj == user and not userobj.phone_number_confirmed %}
-                <a href="{% url "user-phone-validate" %}" class="btn btn-outline-primary btn-sm">{% trans "Validate phone number" %}</a>
-            {% endif %}
         </li>
         {% if userobj.have_address %}
             <li class="list-group-item">
