@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-04 21:26+0100\n"
+"POT-Creation-Date: 2024-11-04 21:28+0100\n"
 "PO-Revision-Date: 2024-04-03 09:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -315,7 +315,7 @@ msgid "Org unit log messages"
 msgstr "Foreningsloggmeldinger"
 
 #: models/orders.py:59 templates/dusken/orgunit_edit_users.html:31
-#: templates/dusken/user_detail.html:75 templates/nav.html:17
+#: templates/dusken/user_detail.html:72 templates/nav.html:17
 msgid "Membership"
 msgstr "Medlemskap"
 
@@ -523,7 +523,7 @@ msgstr "Forening"
 msgid "Org units"
 msgstr "Foreninger"
 
-#: models/users.py:375 templates/dusken/user_detail.html:67
+#: models/users.py:375 templates/dusken/user_detail.html:64
 msgid "Place of study"
 msgstr "Studiested"
 
@@ -640,7 +640,7 @@ msgstr "Du har gyldig medlemskap"
 msgid "There is a membership connected to your phone number."
 msgstr "Det finnes et medlemskap knyttet til mobilnummeret ditt."
 
-#: templates/dusken/home.html:38 templates/dusken/user_detail.html:57
+#: templates/dusken/home.html:38
 msgid "Validate phone number"
 msgstr "Bekreft mobilnummer"
 
@@ -657,14 +657,14 @@ msgid "Valid until"
 msgstr "Gyldig til"
 
 #: templates/dusken/home.html:51 templates/dusken/membership_list.html:30
-#: templates/dusken/user_detail.html:88 templates/dusken/user_detail.html:92
+#: templates/dusken/user_detail.html:85 templates/dusken/user_detail.html:89
 msgid "Expired"
 msgstr "Utløpt"
 
 #: templates/dusken/home.html:51 templates/dusken/membership_list.html:23
 #: templates/dusken/membership_list.html:27
 #: templates/dusken/orgunit_edit_users.html:39
-#: templates/dusken/user_detail.html:82
+#: templates/dusken/user_detail.html:79
 msgid "Lifelong"
 msgstr "Livsvarig"
 
@@ -793,7 +793,7 @@ msgstr "Administrèr medlemmer"
 
 #: templates/dusken/home_volunteer.html:51
 #: templates/dusken/orgunit_detail.html:7 templates/dusken/orgunit_list.html:30
-#: templates/dusken/user_detail.html:106 templates/dusken/user_detail.html:108
+#: templates/dusken/user_detail.html:103 templates/dusken/user_detail.html:105
 msgid "Edit"
 msgstr "Rediger"
 
@@ -891,7 +891,7 @@ msgid "Add admin"
 msgstr "Legg til admin"
 
 #: templates/dusken/orgunit_edit_users.html:47
-#: templates/dusken/user_detail.html:91
+#: templates/dusken/user_detail.html:88
 msgid "None"
 msgstr "Ingen"
 
@@ -967,7 +967,7 @@ msgid "Superusers can't delete their accounts"
 msgstr "Superbrukere kan ikke slette kontoen sin"
 
 #: templates/dusken/user_confirm_delete.html:8
-#: templates/dusken/user_detail.html:125
+#: templates/dusken/user_detail.html:122
 msgid "Permanently delete your account"
 msgstr "Slett kontoen din permanent"
 
@@ -1003,31 +1003,31 @@ msgstr "Brukernavn"
 msgid "Not set"
 msgstr "Ikke satt"
 
-#: templates/dusken/user_detail.html:62
+#: templates/dusken/user_detail.html:59
 msgid "Address"
 msgstr "Adresse"
 
-#: templates/dusken/user_detail.html:86
+#: templates/dusken/user_detail.html:83
 msgid "Valid"
 msgstr "Gyldig"
 
-#: templates/dusken/user_detail.html:100
+#: templates/dusken/user_detail.html:97
 msgid "Registered"
 msgstr "Registrert"
 
-#: templates/dusken/user_detail.html:101
+#: templates/dusken/user_detail.html:98
 msgid "Last updated"
 msgstr "Sist oppdatert"
 
-#: templates/dusken/user_detail.html:112
+#: templates/dusken/user_detail.html:109
 msgid "Organizations"
 msgstr "Foreninger"
 
-#: templates/dusken/user_detail.html:119
+#: templates/dusken/user_detail.html:116
 msgid "No organizations"
 msgstr "Ingen foreninger"
 
-#: templates/dusken/user_detail.html:124
+#: templates/dusken/user_detail.html:121
 msgid "Danger zone"
 msgstr "Farlig område"
 
