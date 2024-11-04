@@ -130,7 +130,18 @@ class DuskenUserUpdateForm(forms.ModelForm):
 
 class MembershipPurchaseForm(forms.Form):
     email = forms.EmailField(widget=forms.HiddenInput())
-    membership_type = forms.SlugField(widget=forms.HiddenInput())
+    # TODO: Let's not hardcode this. Shit's gonna break in the future for sure
+    OPTIONS = [
+        ("student", _("Student")),
+        ("regular", _("Regular")),
+        ("support", _("Support")),
+    ]
+    membership_type = forms.ChoiceField(
+        widget=forms.RadioSelect(attrs={"class": "membershiptype-radio-buttons"}),
+        choices=OPTIONS,
+        initial="regular",
+        required=True,
+    )
 
 
 class UserEmailValidateForm(forms.Form):

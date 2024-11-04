@@ -681,13 +681,13 @@ files = [
 
 [[package]]
 name = "django"
-version = "4.2.13"
+version = "4.2.14"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "Django-4.2.13-py3-none-any.whl", hash = "sha256:a17fcba2aad3fc7d46fdb23215095dbbd64e6174bf4589171e732b18b07e426a"},
-    {file = "Django-4.2.13.tar.gz", hash = "sha256:837e3cf1f6c31347a1396a3f6b65688f2b4bb4a11c580dcb628b5afe527b68a5"},
+    {file = "Django-4.2.14-py3-none-any.whl", hash = "sha256:3ec32bc2c616ab02834b9cac93143a7dc1cdcd5b822d78ac95fc20a38c534240"},
+    {file = "Django-4.2.14.tar.gz", hash = "sha256:fc6919875a6226c7ffcae1a7d51e0f2ceaf6f160393180818f6c95f51b1e7b96"},
 ]
 
 [package.dependencies]
@@ -899,17 +899,17 @@ django = "*"
 
 [[package]]
 name = "django-redis"
-version = "5.2.0"
+version = "5.4.0"
 description = "Full featured redis cache backend for Django."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "django-redis-5.2.0.tar.gz", hash = "sha256:8a99e5582c79f894168f5865c52bd921213253b7fd64d16733ae4591564465de"},
-    {file = "django_redis-5.2.0-py3-none-any.whl", hash = "sha256:1d037dc02b11ad7aa11f655d26dac3fb1af32630f61ef4428860a2e29ff92026"},
+    {file = "django-redis-5.4.0.tar.gz", hash = "sha256:6a02abaa34b0fea8bf9b707d2c363ab6adc7409950b2db93602e6cb292818c42"},
+    {file = "django_redis-5.4.0-py3-none-any.whl", hash = "sha256:ebc88df7da810732e2af9987f7f426c96204bf89319df4c6da6ca9a2942edd5b"},
 ]
 
 [package.dependencies]
-Django = ">=2.2"
+Django = ">=3.2"
 redis = ">=3,<4.0.0 || >4.0.0,<4.0.1 || >4.0.1"
 
 [package.extras]
@@ -917,13 +917,13 @@ hiredis = ["redis[hiredis] (>=3,!=4.0.0,!=4.0.1)"]
 
 [[package]]
 name = "django-select2"
-version = "7.10.1"
+version = "7.11.1"
 description = "Select2 option fields for Django"
 optional = false
 python-versions = "*"
 files = [
-    {file = "django-select2-7.10.1.tar.gz", hash = "sha256:f40ee661377edf493f446c25134e5b53feee17e3bc364a12dac1bf52eabe816a"},
-    {file = "django_select2-7.10.1-py2.py3-none-any.whl", hash = "sha256:e0e530ad8c8f0df75178f3d3ae3573113b14136cff0fad9454c458d635545db2"},
+    {file = "django-select2-7.11.1.tar.gz", hash = "sha256:6c56749ca5dd11be9a78a0861086973170c605ace27126c109f3d722cea3c32e"},
+    {file = "django_select2-7.11.1-py2.py3-none-any.whl", hash = "sha256:e558f79fd932fc9013a9dca5e680412403ad8b8a9b5b09754e97c8ce1849c4e1"},
 ]
 
 [package.dependencies]
@@ -2045,4 +2045,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.8"
-content-hash = "fe74351a2ff775f4e1e500bff600341ebe3b71c831f571ccee70d339006cdf92"
+content-hash = "a47e775575c87856fbf2496d818d15f0c206954b54ddc615f44f1f008b2f18c8"

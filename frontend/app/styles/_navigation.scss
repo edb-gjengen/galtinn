@@ -7,7 +7,13 @@
     }
 
     .navbar-brand {
-        width: 5em;
+        width: 6.5em;
+        margin-top: 0.2em;
+
+        svg {
+            height: 1.2em;
+            width: auto;
+        }
 
         svg path {
             fill: white;
