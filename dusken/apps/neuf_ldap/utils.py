@@ -43,6 +43,13 @@ def ldap_username_exists(username):
     return bool(LdapUser.objects.filter(username=username))
 
 
+def generate_member_of_list(user):
+    return [
+        f"cn={x},ou=Groups,dc=neuf,dc=no"
+        for x in user.groups.order_by("id").values_list("profile__posix_name", flat=True)
+    ]
+
+
 def create_ldap_user(user, dry_run=False):  # noqa: C901
     from .models import LdapGroup, LdapUser
 
@@ -82,6 +89,7 @@ def create_ldap_user(user, dry_run=False):  # noqa: C901
         "gecos": user["username"],
         "email": user["email"],
         "username": user["username"],
+        "member_of": generate_member_of_list(user),
         "id": _get_next_uid(),
         "group": _get_next_user_gid(),
         "home_directory": f'{settings.LDAP_HOME_DIRECTORY_PREFIX}/{user["username"]}',
@@ -163,6 +171,9 @@ def ldap_update_user_groups(dusken_user, ldap_user_diffable, dry_run=False, dele
             for g in LdapGroup.objects.filter(name__in=stale_groups):
                 g.members.remove(ldap_user.username)
                 g.save()
+
+        ldap_user["member_of"] = generate_member_of_list(dusken_user)
+        ldap_user.save()
 
     if len(missing_groups) > 0:
         logger.debug(f"Group memberships added: {','.join(missing_groups)}")

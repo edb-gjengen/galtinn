@@ -26,6 +26,7 @@ class LdapUser(ldapdb.models.Model):
     phone = CharField(db_column="telephoneNumber", blank=True)
     mobile_phone = CharField(db_column="mobile", blank=True)
     photo = ImageField(db_column="jpegPhoto")
+    member_of = ListField(db_column="memberOf")
 
     # posixAccount
     id = IntegerField(db_column="uidNumber", unique=True)  # referenced in reset password form
