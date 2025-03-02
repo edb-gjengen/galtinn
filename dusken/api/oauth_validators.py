@@ -23,6 +23,8 @@ class CustomOAuth2Validator(OAuth2Validator):
             # custom claims
             "is_volunteer": user.is_volunteer,
             "is_member": user.is_member,
+            "last_membership": user.last_membership,
+            "groups": [group.name for group in user.groups.all()],
         }
 
     def get_userinfo_claims(self, request):
