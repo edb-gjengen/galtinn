@@ -71,7 +71,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 argon2-cffi = "21.3.*"
-celery = "5.2.*"
+celery = "5.5.*"
 dj-database-url = "0.5.*"
 Django = "4.2.*"
 django-bootstrap5 = "21.3"
