@@ -46,7 +46,7 @@ def ldap_username_exists(username):
 def generate_member_of_list(user):
     return [
         f"cn={x},ou=Groups,dc=neuf,dc=no"
-        for x in user.groups.order_by("id").values_list("profile__posix_name", flat=True)
+        for x in user["groups"]
     ]
 
 
@@ -172,7 +172,7 @@ def ldap_update_user_groups(dusken_user, ldap_user_diffable, dry_run=False, dele
                 g.members.remove(ldap_user.username)
                 g.save()
 
-        ldap_user["member_of"] = generate_member_of_list(dusken_user)
+        ldap_user.member_of = generate_member_of_list(dusken_user)
         ldap_user.save()
 
     if len(missing_groups) > 0:
