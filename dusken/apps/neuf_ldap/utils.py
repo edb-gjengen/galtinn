@@ -44,10 +44,7 @@ def ldap_username_exists(username):
 
 
 def generate_member_of_list(user):
-    return [
-        f"cn={x},ou=Groups,dc=neuf,dc=no"
-        for x in user["groups"]
-    ]
+    return [f"cn={x},ou=Groups,dc=neuf,dc=no" for x in user["groups"]]
 
 
 def create_ldap_user(user, dry_run=False):  # noqa: C901
@@ -80,7 +77,7 @@ def create_ldap_user(user, dry_run=False):  # noqa: C901
         return user_groups[0] + 1
 
     # User
-    full_name = f'{user["first_name"]} {user["last_name"]}'
+    full_name = f"{user['first_name']} {user['last_name']}"
     user_data = {
         "first_name": user["first_name"],
         "last_name": user["last_name"],
@@ -92,7 +89,7 @@ def create_ldap_user(user, dry_run=False):  # noqa: C901
         "member_of": generate_member_of_list(user),
         "id": _get_next_uid(),
         "group": _get_next_user_gid(),
-        "home_directory": f'{settings.LDAP_HOME_DIRECTORY_PREFIX}/{user["username"]}',
+        "home_directory": f"{settings.LDAP_HOME_DIRECTORY_PREFIX}/{user['username']}",
     }
     ldap_user = LdapUser(**user_data)
 
