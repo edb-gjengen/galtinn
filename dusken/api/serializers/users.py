@@ -1,10 +1,11 @@
+from datetime import timedelta
+
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from django.utils import timezone
-from datetime import timedelta
 
 from dusken.api.serializers.cards import MemberCardSerializer
 from dusken.api.serializers.groups import GroupSerializer
