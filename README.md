@@ -9,12 +9,10 @@ Membership system ++ for DNS / Chateau Neuf.
 
 ```bash
 sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev libssl-dev ldap-utils
-poetry shell  # Start a poetry shell creating a virtual environment.
-poetry install
 pre-commit install
 python manage.py migrate
 python manage.py loaddata testdata
-bin/run
+uv run bin/run
 
 # Frontend
 bin/build-frontend
@@ -23,7 +21,7 @@ bin/run-frontend
 # start databases
 docker-compose up
 # start Celery worker
-bin/worker
+uv run bin/worker
 
 # Add Stripe keys in dusken/settings/local.py
 # Note: get this from your account on stripe.com
@@ -41,9 +39,9 @@ AUTH_PASSWORD_VALIDATORS = []
 
 ```bash
 # Make sure redis is running using `docker-compose up`
-bin/test
+uv run bin/test
 # Run this for testing import from Inside (legacy)
-python manage.py test --testrunner apps.inside.tests.NoDbTestRunner apps.inside
+uv run manage.py test --testrunner apps.inside.tests.NoDbTestRunner apps.inside
 ```
 
 ## Development
@@ -97,9 +95,9 @@ DATABASES = {
 
 ```bash
 # Generate .po files based on translation strings in code and template files
-bin/makemessages
+uv run bin/makemessages
 # Compile .po files to .mo files
-bin/compilemessages
+uv run bin/compilemessages
 ```
 
 ## System Configuration
