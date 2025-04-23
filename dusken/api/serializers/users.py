@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -23,6 +26,22 @@ class DuskenUserSerializer(serializers.ModelSerializer):
     last_membership = MembershipSerializer()
     groups = GroupSerializer(many=True, read_only=True)
     discord_profile = UserDiscordProfileSerializer()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        if instance.groups.filter(
+            name__in=["Den norske Studentersangforeningen - Sangere", "Kvindelig studenters sangforening medlemmer"]
+        ).exists():
+            data["is_volunteer"] = True
+            data["is_member"] = True
+            data["last_membership"] = {
+                "start_date": timezone.now().date(),
+                "end_date": (timezone.now() + timedelta(days=30)).date(),
+                "is_valid": True,
+            }
+
+        return data
 
     class Meta:
         model = DuskenUser
