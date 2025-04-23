@@ -13,9 +13,9 @@ git pull
 bin/build-frontend
 
 # Backend
-poetry install --no-root
-umask 022; poetry run python manage.py collectstatic --noinput -i node_modules -c  # Collect static (including frontend)
-poetry run python manage.py migrate  # Run DB migrations
+uv sync
+umask 022; uv run manage.py collectstatic --noinput -i node_modules -c  # Collect static (including frontend)
+uv run manage.py migrate  # Run DB migrations
 
 # Reload backend
 echo "Reloading supervisor processes ${PROCESS_NAME} ${PROCESS_NAME}-celery"

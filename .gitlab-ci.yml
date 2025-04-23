@@ -24,14 +24,11 @@ tests:
   stage: test
   before_script:
     - apt-get update && apt-get install libsasl2-dev libldap2-dev -y
-    - poetry config virtualenvs.in-project true
-    - poetry run pip install -U pip pre-commit
-    - poetry install
   script:
-    - poetry run python manage.py migrate
-    - poetry run python manage.py check
-    - poetry run pytest -v --cov dusken --cov-report term --cov-report xml:coverage.xml
-    - poetry run bin/pre-commit
+    - uv run manage.py migrate
+    - uv run manage.py check
+    - uv run pytest -v --cov dusken --cov-report term --cov-report xml:coverage.xml
+    - uvx pre-commit run -a
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
