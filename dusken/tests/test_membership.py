@@ -37,9 +37,10 @@ class MembershipTest(APITestCase):
             "stripe_token": {"id": "asdf", "email": "asdf@example.com"},
         }
 
-        with mock.patch("stripe.Customer.create") as customer_create, mock.patch(
-            "stripe.Charge.create"
-        ) as charge_create:
+        with (
+            mock.patch("stripe.Customer.create") as customer_create,
+            mock.patch("stripe.Charge.create") as charge_create,
+        ):
             customer_create.return_value = SimpleNamespace(id="someid")
             charge_create.return_value = SimpleNamespace(id="someid", status="succeeded")
             response = self.client.post(url, payload, format="json")
@@ -63,9 +64,10 @@ class MembershipTest(APITestCase):
             "membership_type": self.membership_type.slug,
             "stripe_token": {"id": "asdf", "email": "asdf@example.com"},
         }
-        with mock.patch("stripe.Customer.create") as customer_crate, mock.patch(
-            "stripe.Charge.create"
-        ) as charge_create:
+        with (
+            mock.patch("stripe.Customer.create") as customer_crate,
+            mock.patch("stripe.Charge.create") as charge_create,
+        ):
             customer_crate.return_value = SimpleNamespace(id="someid")
             charge_create.return_value = SimpleNamespace(id="someid", status="succeeded")
             response = self.client.post(url, payload, format="json")

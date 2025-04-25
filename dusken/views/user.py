@@ -42,7 +42,7 @@ class UserActivateView(FormView):
     success_url = reverse_lazy("home")
 
     def get(self, request, *args, **kwargs):
-        phone_number = f'+{kwargs.get("phone", "")}'
+        phone_number = f"+{kwargs.get('phone', '')}"
         code = kwargs.get("code")
         self.valid_link = False
         try:
@@ -60,7 +60,7 @@ class UserActivateView(FormView):
 
     def get_initial(self):
         initial = super().get_initial()
-        initial["phone_number"] = f'+{self.kwargs.get("phone", "")}'
+        initial["phone_number"] = f"+{self.kwargs.get('phone', '')}"
         initial["code"] = self.kwargs.get("code")
         return initial
 

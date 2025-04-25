@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 import sys
 from pathlib import Path
-from typing import List
 
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -13,7 +12,7 @@ BASE_DIR = Path(__file__).parent.parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 DEBUG = True
-ALLOWED_HOSTS: List[str] = []
+ALLOWED_HOSTS: list[str] = []
 SECRET_KEY = os.getenv("SECRET_KEY", "insecure_default")
 
 # Application definition
@@ -208,10 +207,10 @@ LDAP_LOGIN_SHELL = "/bin/bash"
 LDAP_HOME_DIRECTORY_PREFIX = "/home"
 # Ref: http://tille.garrels.be/training/ldap/ch02s02.html
 LDAP_SHADOW_LAST_CHANGE = 0  # Days since password last change
-LDAP_SHADOW_MIN = 8  #
+LDAP_SHADOW_MIN = 8
 LDAP_SHADOW_MAX = 999999
-LDAP_SHADOW_WARNING = 7  #
-LDAP_SHADOW_EXPIRE = -1  #
+LDAP_SHADOW_WARNING = 7
+LDAP_SHADOW_EXPIRE = -1
 LDAP_SHADOW_FLAG = 0
 
 # Home dir

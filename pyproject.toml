@@ -51,7 +51,7 @@ dev = [
     "pytest-only",
     "pytest-socket",
     "requests-mock",
-    "ruff==0.4.9",
+    "ruff==0.11.7",
     "types-requests==2.*",
     "types-stripe>=3.5.0,<4",
 ]
@@ -72,7 +72,7 @@ omit = [
 
 [tool.ruff]
 line-length = 120
-target-version = "py38"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["ALL"]
