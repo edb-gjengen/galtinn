@@ -1,10 +1,11 @@
-from captcha.fields import ReCaptchaField
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.forms import fields
 from django.utils.translation import gettext_lazy as _
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV3
 from django_select2.forms import ModelSelect2Widget
 from phonenumber_field.formfields import PhoneNumberField
 
@@ -49,7 +50,7 @@ class DuskenUserForm(forms.ModelForm):
     email = fields.EmailField(label=_("Email"), widget=forms.EmailInput(attrs={"placeholder": _("Email")}))
     phone_number = PhoneNumberField(label=_("Phone number"))
     password = fields.CharField(label=_("Password"), widget=forms.PasswordInput())
-    captcha = ReCaptchaField(label="")
+    captcha = ReCaptchaField(widget=ReCaptchaV3(action="form"))
 
     def clean_email(self):
         email = self.cleaned_data["email"]

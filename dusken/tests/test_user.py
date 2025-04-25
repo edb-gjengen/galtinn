@@ -2,8 +2,8 @@ import os
 from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
-from captcha.client import RecaptchaResponse
 from django.test import TestCase
+from django_recaptcha.client import RecaptchaResponse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
@@ -159,9 +159,9 @@ class DuskenUserActivateTestCase(TestCase):
         # Very clever.
         assert b"the link is invalid" in response.content
 
-    @patch("captcha.fields.client.submit")
+    @patch("django_recaptcha.fields.client.submit")
     def test_invalid_post_data_does_not_render_form(self, mocked_submit):
-        mocked_submit.return_value = RecaptchaResponse(is_valid=True)
+        mocked_submit.return_value = RecaptchaResponse(is_valid=True, action="form")
         kwargs = {"phone": "4712345678", "code": "12345678"}
         url = reverse("user-activate", kwargs=kwargs)
 
@@ -169,20 +169,24 @@ class DuskenUserActivateTestCase(TestCase):
         # Very clever.
         assert b"the link is invalid" in response.content
 
-    @patch("captcha.fields.client.submit")
+    @patch("django_recaptcha.fields.client.submit")
     def test_right_combination_confirms_phone_number_and_claims_order(self, mocked_submit):
-        mocked_submit.return_value = RecaptchaResponse(is_valid=True)
+        mocked_submit.return_value = RecaptchaResponse(is_valid=True, action="form")
         kwargs = {"phone": str(self.order.phone_number).replace("+", ""), "code": self.order.transaction_id[:8]}
         url = reverse("user-activate", kwargs=kwargs)
         response = self.client.post(url, self.user_data)
+
+        # FIXME: This should not assert, why not?
+        assert b"the link is invalid" not in response.content
         assert response.status_code == status.HTTP_302_FOUND  # redirect to home
+
         user = DuskenUser.objects.get(email=self.user_data.get("email"))
         assert user.phone_number_confirmed
         assert user.is_member
 
-    @patch("captcha.fields.client.submit")
+    @patch("django_recaptcha.fields.client.submit")
     def test_right_combination_works_for_foreign_phone(self, mocked_submit):
-        mocked_submit.return_value = RecaptchaResponse(is_valid=True)
+        mocked_submit.return_value = RecaptchaResponse(is_valid=True, action="form")
         kwargs = {
             "phone": str(self.order_foreign.phone_number).replace("+", ""),
             "code": self.order_foreign.transaction_id[:8],
@@ -190,7 +194,9 @@ class DuskenUserActivateTestCase(TestCase):
         self.user_data["code"] = self.order_foreign.transaction_id[:8]
         url = reverse("user-activate", kwargs=kwargs)
         response = self.client.post(url, self.user_data)
+
         assert response.status_code == status.HTTP_302_FOUND  # redirect to home
+
         user = DuskenUser.objects.get(email=self.user_data.get("email"))
         assert user.phone_number_confirmed
         assert user.is_member

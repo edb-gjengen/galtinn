@@ -520,14 +520,14 @@ wheels = [
 
 [[package]]
 name = "django-recaptcha"
-version = "3.0.0"
+version = "4.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/06/0e/b124478374ec4607c65936bec9da4705ca2b7116af399f6836e22a1d7248/django-recaptcha-3.0.0.tar.gz", hash = "sha256:253197051288923cae675d7eff91b619e3775311292a5dbaf27a8a55ffebc670", size = 22063, upload_time = "2022-02-07T21:44:22.724Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d4/6b/6edf89da076b2d1ea042e14f116de80be18d25b17af158038d5fc14c00bb/django-recaptcha-4.0.0.tar.gz", hash = "sha256:5316438f97700c431d65351470d1255047e3f2cd9af0f2f13592b637dad9213e", size = 22907, upload_time = "2023-11-16T15:29:08.601Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/18/dd/b266aa9e695e4b0fc13a2bd06533cd671a71be46f72342c2222fa3d5b290/django_recaptcha-3.0.0-py3-none-any.whl", hash = "sha256:1aed69fd6ac8fd9e99e52665392ae6748f8b6339ace656fad779fe0c6c915a52", size = 22080, upload_time = "2022-02-07T21:44:21.009Z" },
+    { url = "https://files.pythonhosted.org/packages/28/d7/09cefb2b4a7dc9ed8a6aabb176ea86eb904a8f73671358436e4b0aa81b93/django_recaptcha-4.0.0-py3-none-any.whl", hash = "sha256:0d912d5c7c009df4e47accd25029133d47a74342dbd2a8edc2877b6bffa971a3", size = 21915, upload_time = "2023-11-16T15:29:06.79Z" },
 ]
 
 [[package]]
@@ -716,7 +716,7 @@ requires-dist = [
     { name = "django-mptt", specifier = "==0.17.*" },
     { name = "django-oauth-toolkit", specifier = "==3.*" },
     { name = "django-phonenumber-field", specifier = "==6.4.*" },
-    { name = "django-recaptcha", specifier = "==3.0.*" },
+    { name = "django-recaptcha", specifier = "==4.0.*" },
     { name = "django-redis", specifier = "==5.4.*" },
     { name = "django-select2", specifier = "==8.4.*" },
     { name = "django-signal-disabler", specifier = "==0.1.*" },
