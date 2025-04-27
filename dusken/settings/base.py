@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "django_filters",
     "django_select2",
-    "captcha",
+    "django_recaptcha",
     "svg",
 ]
 INSTALLED_APPS += [

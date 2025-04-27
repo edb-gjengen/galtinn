@@ -19,7 +19,7 @@ dependencies = [
     "django-mptt==0.17.*",
     "django-oauth-toolkit==3.*",
     "django-phonenumber-field==6.4.*",
-    "django-recaptcha==3.0.*",
+    "django-recaptcha==4.0.*",
     "django-redis==5.4.*",
     "django-select2==8.4.*",
     "django-signal-disabler==0.1.*",
@@ -105,7 +105,7 @@ plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main", "strawberry.ext.my
 
 [[tool.mypy.overrides]]
 module = [
-    "captcha.*",
+    "django_recaptcha.*",
     "dj_database_url.*",
     "django_filters.*",
     "django_select2.*",
