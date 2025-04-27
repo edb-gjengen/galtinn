@@ -66,7 +66,7 @@ class StripeBaseAPIView(GenericAPIView):
         except stripe.InvalidRequestError as e:
             logger.exception("Stripe Customer API request failed", exc_info=e)
             if self.redirect_on_exception:
-                home_url = f'{settings.SITE_URL}{reverse("home")}'
+                home_url = f"{settings.SITE_URL}{reverse('home')}"
                 return redirect_see_other(f"{home_url}?payment_failed=1&error=tryagainlater")
 
             raise APIException(_("Payment failed with a Stripe API error")) from e
@@ -78,7 +78,7 @@ class StripeBaseAPIView(GenericAPIView):
 class StripeCheckoutSessionView(StripeBaseAPIView):
     def get_response(self):
         # Create checkout session
-        home_url = f'{settings.SITE_URL}{reverse("home")}'
+        home_url = f"{settings.SITE_URL}{reverse('home')}"
         try:
             checkout_session = stripe.checkout.Session.create(
                 line_items=[{"price": self.membership_type.stripe_price_id, "quantity": 1}],

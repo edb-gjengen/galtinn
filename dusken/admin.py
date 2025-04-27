@@ -38,7 +38,7 @@ class StartDateYearListFilter(admin.SimpleListFilter):
         if min_start_date and min_start_date["start_date__min"] is not None:
             min_year = min_start_date["start_date__min"].year
         years = range(min_year, timezone.now().year + 1)
-        return zip(years, years)
+        return zip(years, years, strict=False)
 
     def queryset(self, _request, queryset):
         # Compare the requested value to decide how to filter the queryset.

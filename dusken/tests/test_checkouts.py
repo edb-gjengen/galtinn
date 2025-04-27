@@ -14,7 +14,7 @@ from dusken.models.orders import MembershipType, StripePayment
 from dusken.models.users import DuskenUser
 
 
-@pytest.fixture()
+@pytest.fixture
 def user():
     return DuskenUser.objects.create_user(
         "olanord",
@@ -24,7 +24,7 @@ def user():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def membership_type():
     return MembershipType.objects.create(
         name="Cool Club Membership",
@@ -48,12 +48,12 @@ def stripe_payment(user, membership_type, request):
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def _use_fake_signing_secret(settings):
     settings.STRIPE_WEBHOOK_SIGNING_SECRET = "yolo"  # noqa: S105
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_stripe_create_checkout_session(user, membership_type, client):
     client.force_login(user)
     url = reverse("stripe-checkout-session")
@@ -62,9 +62,10 @@ def test_stripe_create_checkout_session(user, membership_type, client):
     }
     stripe_id = "yolo"
 
-    with mock.patch("stripe.Customer.create") as customer_create, mock.patch(
-        "stripe.checkout.Session.create"
-    ) as session_create:
+    with (
+        mock.patch("stripe.Customer.create") as customer_create,
+        mock.patch("stripe.checkout.Session.create") as session_create,
+    ):
         customer_create.return_value = SimpleNamespace(id="someid")
         session_create.return_value = SimpleNamespace(id=stripe_id, url="http://example.com/payment-url-123")
         response = client.post(url, payload, format="json")
@@ -78,7 +79,7 @@ def test_stripe_create_checkout_session(user, membership_type, client):
     assert sp.status == StripePayment.Status.OPEN
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_stripe_create_payment_sheet(user, membership_type, client):
     client.force_login(user)
     url = reverse("stripe-payment-sheet")
@@ -87,9 +88,11 @@ def test_stripe_create_payment_sheet(user, membership_type, client):
     }
     stripe_id = "yolo"
 
-    with mock.patch("stripe.Customer.create") as customer_create, mock.patch(
-        "stripe.PaymentIntent.create"
-    ) as payment_intent, mock.patch("stripe.EphemeralKey.create") as ephemeral_key:
+    with (
+        mock.patch("stripe.Customer.create") as customer_create,
+        mock.patch("stripe.PaymentIntent.create") as payment_intent,
+        mock.patch("stripe.EphemeralKey.create") as ephemeral_key,
+    ):
         customer_create.return_value = SimpleNamespace(id="someid")
         ephemeral_key.return_value = SimpleNamespace(secret="somesecret")
         payment_intent.return_value = SimpleNamespace(id=stripe_id, client_secret="someclientsecret")
@@ -106,7 +109,7 @@ def test_stripe_create_payment_sheet(user, membership_type, client):
     assert sp.stripe_model == StripePayment.StripeModel.PAYMENT_INTENT
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_stripe_webhook_invalid_signature(client):
     url = reverse("stripe-webhook")
     response = client.post(url, format="json")
@@ -115,7 +118,7 @@ def test_stripe_webhook_invalid_signature(client):
     assert response.json() == ["Invalid stripe webhook signature"]
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 @pytest.mark.usefixtures("_use_fake_signing_secret")
 def test_stripe_webhook_unhandled_event(client: Client):
     url = reverse("stripe-webhook")
@@ -127,7 +130,7 @@ def test_stripe_webhook_unhandled_event(client: Client):
     assert not response.json()["handled"]
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 @pytest.mark.usefixtures("_use_fake_signing_secret")
 def test_stripe_webhook_checkout_session_complete(client: Client, stripe_payment: StripePayment):
     url = reverse("stripe-webhook")
@@ -154,4 +157,4 @@ def _stripe_signature_header(payload: dict):
     ts = int(time.time())
     signed_payload = f"{ts}.{json.dumps(payload)}"
     signature = WebhookSignature._compute_signature(signed_payload, "yolo")  # noqa: SLF001
-    return {"stripe-signature": f"t={ts },v1={signature}"}
+    return {"stripe-signature": f"t={ts},v1={signature}"}
