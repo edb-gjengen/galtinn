@@ -31,7 +31,12 @@ class DuskenUserSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
 
         if instance.groups.filter(
-            name__in=["Den norske Studentersangforeningen - Sangere", "Kvindelig studenters sangforening medlemmer"]
+            name__in=[
+                "Kvindelige Studenters Sangforening-medlemmer",
+                "Kvindelige Studenters Sangforening-styret",
+                "Den norske Studentersangforening-medlemmer",
+                "Den norske Studentersangforening-styret",
+            ]
         ).exists():
             data["is_volunteer"] = True
             data["is_member"] = True
