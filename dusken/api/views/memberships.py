@@ -28,7 +28,7 @@ class MembershipFilter(FilterSet):
         fields = ("id", "user", "start_date")
 
 
-class MembershipViewSet(viewsets.ReadOnlyModelViewSet):
+class MembershipViewSet(viewsets.ModelViewSet):
     """Membership API"""
 
     queryset = Membership.objects.all().order_by("pk")
