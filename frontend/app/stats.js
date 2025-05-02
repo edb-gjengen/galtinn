@@ -1,3 +1,4 @@
+/* global $ */
 import _ from 'lodash';
 import moment from 'moment';
 import Chart from 'chart.js';
@@ -82,7 +83,7 @@ function today() {
     const today = moment.utc().format('YYYY-MM-DD');
     $('.today-date-wrap').text(today);
 
-    const todaySales = _.map(salesData, (salesPerDay, key) => {
+    const todaySales = _.map(salesData, (salesPerDay) => {
         return _.find(salesPerDay, { date: today });
     }).filter((el) => {
         return el !== undefined;

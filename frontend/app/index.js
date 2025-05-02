@@ -1,3 +1,4 @@
+/* global config */
 import $ from 'jquery';
 window.$ = window.jQuery = $;
 
@@ -10,14 +11,12 @@ import './OrgUnit';
 
 import './styles/app.scss';
 
-let urls;
-
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
-            const cookie = jQuery.trim(cookies[i]);
+            const cookie = (cookies[i] || '').trim();
             // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === name + '=') {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -41,25 +40,12 @@ $.ajaxSetup({
     },
 });
 
-function formatMessage(message, alert) {
-    return (
-        '<div class="alert alert-' +
-        alert +
-        ' alert-dismissible fade show" role="alert">' +
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-        message +
-        '</div>'
-    );
-}
-
-$(document).ready(function () {
-    const $messages = $('.messages');
-
+$(function () {
     /* Send validation email */
     const $validationEmailBtn = $('.js-send-validation-email');
     $validationEmailBtn.on('click', function (e) {
         e.preventDefault();
-        $.post(config.validateEmail, function (data) {
+        $.post(config.validateEmail, function () {
             $validationEmailBtn.text('Sent.');
         });
     });
@@ -80,7 +66,7 @@ $(document).ready(function () {
         let user = null;
         try {
             user = $('#id_user').select2('data')[0].id;
-        } catch (err) {
+        } catch {
             return;
         }
         $.ajax({

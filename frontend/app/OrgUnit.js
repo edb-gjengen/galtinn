@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-$(document).ready(function () {
+$(function () {
     /* Orgunit: Add member */
     $('.js-orgunit-add-member').on('click', (e) => {
         const $el = $(e.target);
@@ -11,7 +11,7 @@ $(document).ready(function () {
         if (!user) {
             try {
                 user = $('#id_user').select2('data')[0].id;
-            } catch (err) {
+            } catch {
                 return;
             }
         }
