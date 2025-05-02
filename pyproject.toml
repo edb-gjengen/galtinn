@@ -3,7 +3,7 @@ name = "dusken"
 version = "0.1.0"
 description = ""
 authors = [{ name = "EDB", email = "edb@neuf.no" }]
-requires-python = ">=3.10,<3.11"
+requires-python = ">=3.13,<3.14"
 license = "MIT"
 dependencies = [
     "argon2-cffi==23.1.*",
