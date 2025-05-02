@@ -70,6 +70,14 @@ module.exports = ({ production }, argv) => {
                             options: {
                                 sassOptions: {
                                     precision: 8,
+                                    loadPaths: ['.'],
+                                    silenceDeprecations: [
+                                        'import',
+                                        'mixed-decls',
+                                        'color-functions',
+                                        'global-builtin',
+                                        'legacy-js-api',
+                                    ],
                                 },
                             },
                         },

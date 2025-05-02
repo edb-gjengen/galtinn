@@ -8,24 +8,24 @@ $color-orange: #f58220;
 $grid-max-width: 1140px;
 $footer-height: 140px;
 
-@import "mixins";
-@import "general";
-@import "layout";
-@import "fonts";
-@import "forms";
-@import "navigation";
-@import "footer";
-@import "icons";
+@import "./mixins";
+@import "./general";
+@import "./layout";
+@import "./fonts";
+@import "./forms";
+@import "./navigation";
+@import "./footer";
+@import "./icons";
 
 /* Components */
-@import "components/app_download";
+@import "./components/app_download";
 
 /* Pages */
-@import "pages";
-@import "pages/home";
-@import "pages/home_volunteer";
-@import "pages/orgunit_list";
-@import "flatpages";
+@import "./pages";
+@import "./pages/home";
+@import "./pages/home_volunteer";
+@import "./pages/orgunit_list";
+@import "./flatpages";
 
 /* Select2 */
 @import "select2";
