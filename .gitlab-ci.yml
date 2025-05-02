@@ -3,7 +3,7 @@ variables:
   CELERY_BROKER_URL: "redis://redis:6379/0"
 
 default:
-  image: nikolaik/python-nodejs:python3.13-nodejs20
+  image: nikolaik/python-nodejs:python3.10-nodejs20
   cache:
     paths:
       - .cache/pip

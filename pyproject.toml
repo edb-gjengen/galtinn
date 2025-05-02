@@ -3,13 +3,13 @@ name = "dusken"
 version = "0.1.0"
 description = ""
 authors = [{ name = "EDB", email = "edb@neuf.no" }]
-requires-python = ">=3.13,<3.14"
+requires-python = ">=3.10,<3.11"
 license = "MIT"
 dependencies = [
     "argon2-cffi==23.1.*",
     "celery==5.5.*",
     "dj-database-url==2.3.*",
-    "Django==5.2.*",
+    "Django==4.2.*",
     "django-bootstrap5==25.*",
     "django-countries==7.6.*",
     "django-extensions==4.1.*",

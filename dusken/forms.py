@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.db import models
 from django.forms import fields
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
@@ -33,18 +32,6 @@ class UserWidgetForm(forms.Form):
     )
 
 
-def urlfields_assume_https(db_field, **kwargs):
-    """
-    ModelForm.Meta.formfield_callback function to assume HTTPS for scheme-less
-    domains in URLFields.
-
-    Ref: https://adamj.eu/tech/2023/12/07/django-fix-urlfield-assume-scheme-warnings/
-    """
-    if isinstance(db_field, models.URLField):
-        kwargs["assume_scheme"] = "https"
-    return db_field.formfield(**kwargs)
-
-
 class OrgUnitEditForm(forms.ModelForm):
     contact_person = forms.ModelChoiceField(
         queryset=DuskenUser.objects.all(),
@@ -55,7 +42,6 @@ class OrgUnitEditForm(forms.ModelForm):
     class Meta:
         model = OrgUnit
         fields = ["name", "short_name", "email", "website", "description", "contact_person"]
-        formfield_callback = urlfields_assume_https  # FIXME: Remove this when Django 6.0 is released
 
 
 class DuskenUserForm(forms.ModelForm):
