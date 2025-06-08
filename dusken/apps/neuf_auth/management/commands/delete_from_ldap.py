@@ -1,7 +1,7 @@
 import sys
-from distutils.util import strtobool
 from pathlib import Path
 
+from distutils.util import strtobool
 from django.core.management.base import BaseCommand
 
 from dusken.apps.neuf_ldap.models import LdapAutomountHome, LdapGroup, LdapUser

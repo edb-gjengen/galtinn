@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import ldapdb.models
 from django.conf import settings
@@ -51,7 +51,7 @@ class LdapUser(ldapdb.models.Model):
 
     @staticmethod
     def _days_since_epoch():
-        return (datetime.now(tz=timezone.utc) - datetime(1970, 1, 1, tzinfo=timezone.utc)).days
+        return (datetime.now(tz=UTC) - datetime(1970, 1, 1, tzinfo=UTC)).days
 
     def set_password(self, raw_password, commit=True, prehashed=False):
         self.password = raw_password if prehashed else ldap_create_password(raw_password)

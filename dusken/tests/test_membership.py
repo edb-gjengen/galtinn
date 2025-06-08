@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase
 
 from dusken.models import DuskenUser, MemberCard, Membership, MembershipType, Order
 
-today = datetime.datetime.now(tz=datetime.timezone.utc).date()
+today = datetime.datetime.now(tz=datetime.UTC).date()
 
 
 class MembershipTest(APITestCase):

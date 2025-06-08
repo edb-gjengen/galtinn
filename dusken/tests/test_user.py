@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from unittest.mock import patch
 
 import django_recaptcha.client
@@ -114,7 +114,7 @@ class DuskenUserActivateTestCase(TestCase):
             duration=timedelta(days=365),
             is_default=True,
         )
-        today = datetime.now(tz=timezone.utc).date()
+        today = datetime.now(tz=UTC).date()
         self.membership = Membership.objects.create(
             start_date=today - timedelta(days=10),
             end_date=today + timedelta(days=10),
@@ -199,7 +199,7 @@ class DuskenUserActivateTestCase(TestCase):
 class DuskenUserMembershipTestCase(TestCase):
     def setUp(self):
         self.user = DuskenUser.objects.create_user("olanord", email="olanord@example.com")
-        self.now = datetime.now(tz=timezone.utc).date()
+        self.now = datetime.now(tz=UTC).date()
         self.membership_type = MembershipType.objects.create(
             name="Cool Club Membership",
             slug="standard",
@@ -245,7 +245,7 @@ class DuskenUserDelete(TestCase):
 
         mt = MembershipType.objects.first()
         self.membership = Membership.objects.create(
-            start_date=datetime.now(tz=timezone.utc),
+            start_date=datetime.now(tz=UTC),
             membership_type=mt,
             user=self.user,
         )
