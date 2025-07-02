@@ -41,7 +41,7 @@ class StripeBaseAPIView(GenericAPIView):
     membership_type: MembershipType
     redirect_on_exception = False
 
-    def get_response() -> HttpResponse:
+    def get_response(self) -> HttpResponse:
         raise NotImplementedError
 
     def stripe_customer_get_or_create(self, user) -> stripe.Customer:
