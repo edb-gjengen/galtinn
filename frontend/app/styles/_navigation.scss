@@ -24,7 +24,8 @@
 #main-navigation {
     padding: 0;
 
-    a.nav-link {
+    a.nav-link,
+    button.nav-link {
         color: white;
         transition: all 0.14s ease-in-out;
 

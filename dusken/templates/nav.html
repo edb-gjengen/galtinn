@@ -44,7 +44,10 @@
                     </form>
 
                     {% if user.is_authenticated %}
-                        <a class="nav-item nav-link" href="{% url 'logout' %}">{% svg "icons/exit" %} {% trans "Log out" %}</a>
+                        <form action="{% url "logout" %}" method="post">
+                            {% csrf_token %}
+                        <button type="submit" class="nav-item nav-link w-100 text-start">{% svg "icons/exit" %} {% trans "Log out" %}</button>
+                        </form>
                     {% endif %}
                 </div>
             </div>
