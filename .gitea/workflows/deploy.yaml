@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - tests
+      - pre-commit
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup SSH
+        run: |
+          command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )
+          eval $(ssh-agent -s)
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+      - name: Deploy
+        run: ssh gitdeploy@dreamcast.neuf.no "$(< bin/deploy)"
+
+  pre-commit:
+    uses: ./.gitea/workflows/pre-commit.yaml
+  tests:
+    uses: ./.gitea/workflows/tests.yaml

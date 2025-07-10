@@ -1,0 +1,48 @@
+name: Tests
+
+on:
+  pull_request:
+  workflow_call:
+
+
+env:
+  POSTGRES_DB: dusken
+  CELERY_BROKER_URL: "redis://redis:6379/0"
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-latest
+    container: nikolaik/python-nodejs:python3.13-nodejs20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build frontend
+        run: bin/build-frontend
+
+  tests:
+    runs-on: ubuntu-latest
+    container: nikolaik/python-nodejs:python3.13-nodejs20
+    services:
+      redis:
+        image: redis:latest
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install system dependencies
+        run: apt-get update && apt-get install libsasl2-dev libldap2-dev -y
+
+      - name: Run migrations
+        run: uv run manage.py migrate
+      - name: Run Django checks
+        run: uv run manage.py check
+      - name: Run tests with coverage
+        run: uv run pytest -v --cov dusken --cov-report term --cov-report xml:coverage.xml
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.xml

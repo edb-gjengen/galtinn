@@ -1,0 +1,7 @@
+extends: default
+
+rules:
+  line-length: disable
+  document-start: disable
+  comments: disable
+  truthy: disable # github workflows uses "on:" a lot, which is a truthy value in yaml
