@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [nikolaik/measly-band]
 
 jobs:
   deploy:
@@ -23,7 +23,7 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
 
           # Deploy
-          ssh gitdeploy@dreamcast.neuf.no "$(< bin/deploy)"
+          ssh -v gitdeploy@dreamcast.neuf.no "$(< bin/deploy)"
 
   pre-commit:
     uses: ./.gitea/workflows/pre-commit.yaml
