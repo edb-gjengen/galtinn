@@ -33,7 +33,7 @@ dependencies = [
     "psycopg==3.2.*",
     "redis==5.*",
     "requests==2.32.*",
-    "sentry-sdk==1.45.*",
+    "sentry-sdk==2.32.*",
     "strawberry-graphql==0.266.*",
     "strawberry-graphql-django==0.59.*",
     "stripe==12.*",
