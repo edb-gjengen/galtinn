@@ -12,7 +12,7 @@ jobs:
       - pre-commit
     steps:
       - uses: actions/checkout@v4
-      - name: Setup SSH
+      - name: Setup SSH and deploy
         run: |
           command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )
           eval $(ssh-agent -s)
@@ -21,8 +21,9 @@ jobs:
           chmod 700 ~/.ssh
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-      - name: Deploy
-        run: ssh gitdeploy@dreamcast.neuf.no "$(< bin/deploy)"
+
+          # Deploy
+          ssh gitdeploy@dreamcast.neuf.no "$(< bin/deploy)"
 
   pre-commit:
     uses: ./.gitea/workflows/pre-commit.yaml
