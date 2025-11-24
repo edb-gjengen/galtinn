@@ -1,6 +1,7 @@
 from oauth2_provider.oauth2_validators import OAuth2Validator
 
 from dusken.models import DuskenUser  # noqa: TC001
+from dusken.api.serializers.users import MembershipSerializer
 
 
 class CustomOAuth2Validator(OAuth2Validator):
@@ -23,7 +24,8 @@ class CustomOAuth2Validator(OAuth2Validator):
             # custom claims
             "is_volunteer": user.is_volunteer,
             "is_member": user.is_member,
-            "last_membership": user.last_membership,
+            # TODO: make this less jank. we should be serializing somewhere else
+            "last_membership": MembershipSerializer(user.last_membership).data if user.last_membership else None,
             "groups": [group.name for group in user.groups.all()],
         }
 
