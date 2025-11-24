@@ -1,7 +1,7 @@
 from oauth2_provider.oauth2_validators import OAuth2Validator
 
-from dusken.models import DuskenUser  # noqa: TC001
 from dusken.api.serializers.users import MembershipSerializer
+from dusken.models import DuskenUser  # noqa: TC001
 
 
 class CustomOAuth2Validator(OAuth2Validator):
