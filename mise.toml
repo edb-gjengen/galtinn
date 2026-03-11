@@ -1,4 +1,6 @@
 [tools]
+act = "latest"
 node = "22"
+prek = "latest"
 python = "3.13"
 uv = "latest"

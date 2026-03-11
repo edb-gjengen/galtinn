@@ -5,11 +5,11 @@ Membership system ++ for DNS / Chateau Neuf.
 [![Pipeline Status](https://git.neuf.no/edb/galtinn/badges/main/pipeline.svg)](https://git.neuf.no/edb/galtinn/-/commits/main)
 [![Coverage](https://git.neuf.no/edb/galtinn/badges/main/coverage.svg)](https://git.neuf.no/edb/galtinn)
 
-## Install
+## Getting started
 
 ```bash
 sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev libssl-dev ldap-utils
-pre-commit install
+prek install
 python manage.py migrate
 python manage.py loaddata testdata
 uv run bin/run
@@ -194,3 +194,11 @@ Read more:
 - <https://django-oauth-toolkit.readthedocs.io/en/latest/oidc.html#openid-connect-support>
 - <https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-auth-code-flow>
 - <https://docs.digdir.no/docs/idporten/oidc/oidc_func_pkce.html>
+
+## act
+
+To develop actions workflows locally:
+
+```sh
+act act -W .gitea/workflows/
+```
