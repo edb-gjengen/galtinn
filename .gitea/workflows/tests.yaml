@@ -12,15 +12,18 @@ env:
 jobs:
   build_frontend:
     runs-on: ubuntu-latest
-    container: nikolaik/python-nodejs:python3.13-nodejs20
+    container: nikolaik/python-nodejs:python3.14-nodejs20
     steps:
       - uses: actions/checkout@v4
       - name: Build frontend
-        run: bin/build-frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
 
   tests:
     runs-on: ubuntu-latest
-    container: nikolaik/python-nodejs:python3.13-nodejs20
+    container: nikolaik/python-nodejs:python3.14-nodejs20
     services:
       redis:
         image: redis:latest

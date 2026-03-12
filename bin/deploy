@@ -12,7 +12,10 @@ cd "$PROJECT_PATH" || exit 1
 git pull
 
 # Frontend
-bin/build-frontend
+cd frontend
+npm ci
+npm run build
+cd -
 
 # Backend
 uv sync
