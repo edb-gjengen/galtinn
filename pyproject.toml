@@ -41,17 +41,17 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "celery-types==0.13.*",
-    "django-stubs[compatible-mypy]>=4.2.0,<5",
+    "celery-types==0.25.*",
+    "django-stubs[compatible-mypy]==5.2.*",
     "django-upgrade",
     "djangorestframework-stubs[compatible-mypy]>=3.14.0,<4",
-    "mypy==1.2.*",
+    "mypy==1.19.*",
     "pytest",
     "pytest-cov",
     "pytest-django",
     "pytest-socket",
     "requests-mock",
-    "ruff==0.11.7",
+    "ruff==0.15.5",
     "types-requests==2.*",
     "types-stripe>=3.5.0,<4",
 ]
