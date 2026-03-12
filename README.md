@@ -200,5 +200,5 @@ Read more:
 To develop actions workflows locally:
 
 ```sh
-act act -W .gitea/workflows/
+act -W .gitea/workflows/
 ```

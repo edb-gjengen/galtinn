@@ -12,7 +12,7 @@ env:
 jobs:
   build_frontend:
     runs-on: ubuntu-latest
-    container: nikolaik/python-nodejs:python3.14-nodejs20
+    container: node:20-alpine
     steps:
       - uses: actions/checkout@v4
       - name: Build frontend
@@ -24,14 +24,6 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     container: nikolaik/python-nodejs:python3.14-nodejs20
-    services:
-      redis:
-        image: redis:latest
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - name: Install system dependencies

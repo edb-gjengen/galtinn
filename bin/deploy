@@ -7,7 +7,7 @@ export DJANGO_SETTINGS_MODULE=dusken.settings.prod
 PROJECT_PATH=/var/www/neuf.no/dusken
 PROCESS_NAME="galtinn.neuf.no"
 
-echo "Deploying bbs to ${PROJECT_PATH}"
+echo "Deploying ${PROCESS_NAME} to ${PROJECT_PATH}"
 cd "$PROJECT_PATH" || exit 1
 git pull
 
