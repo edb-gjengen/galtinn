@@ -12,16 +12,16 @@ sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev li
 prek install
 python manage.py migrate
 python manage.py loaddata testdata
-uv run bin/run
+mise run run
 
 # Frontend
-bin/build-frontend
-bin/run-frontend
+mise run build-frontend
+mise run run-frontend
 
 # start databases
 docker-compose up
 # start Celery worker
-uv run bin/worker
+mise run worker
 
 # Add Stripe keys in dusken/settings/local.py
 # Note: get this from your account on stripe.com
@@ -39,7 +39,7 @@ AUTH_PASSWORD_VALIDATORS = []
 
 ```bash
 # Make sure redis is running using `docker-compose up`
-uv run bin/test
+mise run test
 # Run this for testing import from Inside (legacy)
 uv run manage.py test --testrunner apps.inside.tests.NoDbTestRunner apps.inside
 ```
@@ -95,9 +95,9 @@ DATABASES = {
 
 ```bash
 # Generate .po files based on translation strings in code and template files
-uv run bin/makemessages
+mise run makemessages
 # Compile .po files to .mo files
-uv run bin/compilemessages
+mise run compilemessages
 ```
 
 ## System Configuration

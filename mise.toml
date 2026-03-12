@@ -4,3 +4,57 @@ node = "22"
 prek = "latest"
 python = "3.13"
 uv = "latest"
+
+[tasks.build-frontend]
+description = "Install frontend dependencies and build assets"
+dir = "frontend"
+run = "npm i && npm run build"
+
+[tasks.compilemessages]
+description = "Compile translation files for Norwegian Bokmal"
+dir = "dusken"
+run = "uv run ../manage.py compilemessages -l nb"
+
+[tasks.generate_schema]
+description = "Generate GraphQL schema"
+run = "uv run manage.py graphql_schema"
+
+[tasks.makemessages]
+description = "Extract translation strings for Norwegian Bokmal"
+dir = "dusken"
+run = "uv run ../manage.py makemessages -l nb"
+
+[tasks.poedit]
+description = "Open translation file in poedit (default: dusken)"
+run = '''
+APP="${1:-dusken}"
+
+if [ "$APP" != "dusken" ]; then
+	APP_PATH="dusken/apps/${APP}"
+else
+	APP_PATH="dusken"
+fi
+
+poedit "${APP_PATH}/locale/nb/LC_MESSAGES/django.po"
+'''
+
+[tasks.prek]
+description = "Run pre-commit hooks via prek"
+run = "prek run -a"
+
+[tasks.run]
+description = "Run Django development server"
+run = "uv run manage.py runserver"
+
+[tasks.run-frontend]
+description = "Run frontend development server"
+dir = "frontend"
+run = "npm run start"
+
+[tasks.test]
+description = "Run Python test suite"
+run = "uv run pytest -v"
+
+[tasks.worker]
+description = "Run Celery worker with beat in development"
+run = "DJANGO_SETTINGS_MODULE=dusken.settings.dev uv run celery -A dusken worker -B"
