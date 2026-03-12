@@ -18,6 +18,7 @@ npm run build
 cd -
 
 # Backend
+uv self update
 uv sync
 umask 022; uv run manage.py collectstatic --noinput -i node_modules -c  # Collect static (including frontend)
 uv run manage.py migrate  # Run DB migrations
