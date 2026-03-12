@@ -1,14 +1,17 @@
 import json
 import logging
-from argparse import ArgumentParser
 from datetime import datetime, timedelta
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from dusken.models import DuskenUser
+
+if TYPE_CHECKING:
+    from argparse import ArgumentParser
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +51,7 @@ class Command(BaseCommand):
 
     def _update_user_membership(self, user: DuskenUser, is_member: bool, duration_days: int) -> None:  # noqa: FBT001
         if is_member and not user.last_membership:
-            from dusken.models import Membership, MembershipType
+            from dusken.models import Membership, MembershipType  # noqa: PLC0415
 
             membership_type = MembershipType.get_default()
             start_date = datetime.now().date()  # noqa: DTZ005

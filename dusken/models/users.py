@@ -90,7 +90,7 @@ class DuskenUser(AbstractUser):  # type: ignore
 
     @property
     def has_set_username(self):
-        from dusken.apps.neuf_auth.models import AuthProfile
+        from dusken.apps.neuf_auth.models import AuthProfile  # noqa: PLC0415
 
         return AuthProfile.objects.filter(user=self, username_updated__isnull=False).exists()
 
@@ -113,7 +113,7 @@ class DuskenUser(AbstractUser):  # type: ignore
 
     @property
     def unclaimed_orders(self):
-        from .orders import Order
+        from .orders import Order  # noqa: PLC0415
 
         return Order.objects.unclaimed(phone_number=self.phone_number)
 
@@ -125,7 +125,7 @@ class DuskenUser(AbstractUser):  # type: ignore
             Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first().user_set.add(self)
 
     def log(self, message, changed_by=None):
-        from .logs import UserLogMessage
+        from .logs import UserLogMessage  # noqa: PLC0415
 
         if changed_by is None:
             changed_by = self
@@ -152,7 +152,7 @@ class DuskenUser(AbstractUser):  # type: ignore
         super().delete(**kwargs)
 
     def set_ldap_hash(self, raw_password):
-        from dusken.apps.neuf_auth.models import AuthProfile
+        from dusken.apps.neuf_auth.models import AuthProfile  # noqa: PLC0415
 
         ap, _ = AuthProfile.objects.get_or_create(user=self)
         ap.ldap_password = ldap_create_password(raw_password)
@@ -343,7 +343,7 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
         user_obj.log(f"No longer admin in {self} OrgUnit", changed_by)
 
     def log(self, message, changed_by):
-        from .logs import OrgUnitLogMessage
+        from .logs import OrgUnitLogMessage  # noqa: PLC0415
 
         OrgUnitLogMessage(org_unit=self, message=message, changed_by=changed_by).save()
 

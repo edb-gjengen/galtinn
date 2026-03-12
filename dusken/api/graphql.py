@@ -17,7 +17,7 @@ class MembershipType:
 @strawberry.type
 class Query:
     @strawberry.field()
-    def membership_types(self, _info: Info, is_default: bool | None = None) -> list[MembershipType]:
+    def membership_types(self, _info: Info, is_default: bool | None = None) -> list[MembershipType]:  # noqa: FBT001
         query = {} if is_default is None else {"is_default": is_default}
         # FIXME: How to allow using django types here?
         return models.MembershipType.objects.filter(**query)  # type: ignore

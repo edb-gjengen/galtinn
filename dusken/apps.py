@@ -7,4 +7,4 @@ class DuskenAppConfig(AppConfig):
     verbose_name = _("Dusken")
 
     def ready(self):
-        import dusken.signals  # noqa: F401
+        import dusken.signals  # noqa: F401, PLC0415

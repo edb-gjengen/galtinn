@@ -56,7 +56,7 @@ class OrderManager(Manager):
 
 class MembershipQuerySet(QuerySet):
     def valid(self):
-        from dusken.models import MembershipType
+        from dusken.models import MembershipType  # noqa: PLC0415
 
         is_lifelong = Q(membership_type__expiry_type=MembershipType.EXPIRY_NEVER, end_date__isnull=True)
         is_valid_duration = Q(

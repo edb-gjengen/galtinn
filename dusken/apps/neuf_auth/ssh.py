@@ -25,7 +25,7 @@ def create_home_dir(username, dry_run=False):
     if not dry_run:
         res = conn.sudo(script_cmd, warn=True, hide=True)
         if not res.ok:
-            logger.info(f"Could not create homedir: {res.stdout if res.stdout else res.stderr}")
+            logger.info(f"Could not create homedir: {res.stdout or res.stderr}")
         return res.ok
 
     return True

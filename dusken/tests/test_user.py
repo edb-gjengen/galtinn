@@ -76,7 +76,7 @@ class DuskenUserAPITestCase(APITestCase):
 
 class DuskenUserPhoneValidationTestCase(TestCase):
     def setUp(self):
-        from dusken.utils import send_validation_sms
+        from dusken.utils import send_validation_sms  # noqa: PLC0415
 
         self.user = DuskenUser.objects.create_user(
             "olanord",

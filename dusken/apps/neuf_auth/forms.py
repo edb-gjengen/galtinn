@@ -59,7 +59,7 @@ class SetUsernameForm(forms.Form):
     def save(self):
         self.instance.username = self.cleaned_data["username"]
 
-        ap, created = AuthProfile.objects.get_or_create(user=self.instance)
+        ap, _ = AuthProfile.objects.get_or_create(user=self.instance)
         ap.username_updated = timezone.now()
         ap.save()
 

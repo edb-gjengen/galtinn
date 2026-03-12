@@ -3,15 +3,18 @@ import json
 import time
 from http import HTTPStatus
 from types import SimpleNamespace
+from typing import TYPE_CHECKING
 from unittest import mock
 
 import pytest
-from django.test import Client
 from django.urls import reverse
 from stripe import WebhookSignature
 
 from dusken.models.orders import MembershipType, StripePayment
 from dusken.models.users import DuskenUser
+
+if TYPE_CHECKING:
+    from django.test import Client
 
 
 @pytest.fixture
@@ -44,7 +47,10 @@ def membership_type():
 )
 def stripe_payment(user, membership_type, request):
     return StripePayment.objects.create(
-        user=user, membership_type=membership_type, stripe_id=request.param["id"], stripe_model=request.param["model"]
+        user=user,
+        membership_type=membership_type,
+        stripe_id=request.param["id"],
+        stripe_model=request.param["model"],
     )
 
 
@@ -124,7 +130,12 @@ def test_stripe_webhook_unhandled_event(client: Client):
     url = reverse("stripe-webhook")
 
     payload = {"type": "finished-showering"}
-    response = client.post(url, payload, headers=_stripe_signature_header(payload), content_type="application/json")
+    response = client.post(
+        url,
+        payload,
+        headers=_stripe_signature_header(payload),
+        content_type="application/json",
+    )
 
     assert response.status_code == HTTPStatus.OK, response.json()
     assert not response.json()["handled"]
@@ -143,7 +154,12 @@ def test_stripe_webhook_checkout_session_complete(client: Client, stripe_payment
 
     assert not stripe_payment.user.is_member
 
-    response = client.post(url, payload, headers=_stripe_signature_header(payload), content_type="application/json")
+    response = client.post(
+        url,
+        payload,
+        headers=_stripe_signature_header(payload),
+        content_type="application/json",
+    )
 
     assert response.status_code == HTTPStatus.OK, response.json()
     assert response.json()["handled"]

@@ -1,21 +1,24 @@
 import logging
+from typing import TYPE_CHECKING
 
 import stripe
 from django.conf import settings
 from django.db import transaction
-from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from dusken.models.orders import Membership, MembershipType, Order, StripePayment
 from dusken.utils import redirect_see_other
+
+if TYPE_CHECKING:
+    from django.http import HttpResponse
+    from rest_framework.request import Request
 
 logger = logging.getLogger(__name__)
 stripe.api_key = settings.STRIPE_SECRET_KEY

@@ -96,13 +96,13 @@ def create_phone_key(length=6):
 
 
 def email_exists(email):
-    from dusken.models import DuskenUser
+    from dusken.models import DuskenUser  # noqa: PLC0415
 
     return DuskenUser.objects.filter(email=email).exists()
 
 
 def phone_number_exist(phone_number):
-    from dusken.models import DuskenUser
+    from dusken.models import DuskenUser  # noqa: PLC0415
 
     return DuskenUser.objects.filter(phone_number=phone_number).exists()
 

@@ -21,7 +21,7 @@ def ldap_validate_password(raw_password, challenge_password):
 
 def set_ldap_password(username, raw_password):
     # TODO: Allow LDAP to be down
-    from .models import LdapUser
+    from .models import LdapUser  # noqa: PLC0415
 
     try:
         # Lookup the Ldap user with the identical username (1-to-1).
@@ -32,19 +32,19 @@ def set_ldap_password(username, raw_password):
 
 
 def ldap_user_group_exists(username):
-    from .models import LdapGroup
+    from .models import LdapGroup  # noqa: PLC0415
 
     return bool(LdapGroup.objects.filter(name=username))
 
 
 def ldap_username_exists(username):
-    from .models import LdapUser
+    from .models import LdapUser  # noqa: PLC0415
 
     return bool(LdapUser.objects.filter(username=username))
 
 
 def create_ldap_user(user, dry_run=False):  # noqa: C901
-    from .models import LdapGroup, LdapUser
+    from .models import LdapGroup, LdapUser  # noqa: PLC0415
 
     def _get_next_uid():
         # Get user id order desc by id
@@ -124,7 +124,7 @@ def create_ldap_user(user, dry_run=False):  # noqa: C901
 
 
 def ldap_update_user_details(dusken_user, dry_run=False):
-    from .models import LdapUser
+    from .models import LdapUser  # noqa: PLC0415
 
     ldap_user = LdapUser.objects.get(username=dusken_user["username"])
     ldap_user.email = dusken_user["email"]
@@ -148,7 +148,7 @@ def ldap_update_user_details(dusken_user, dry_run=False):
 
 
 def ldap_update_user_groups(dusken_user, ldap_user_diffable, dry_run=False, delete_group_memberships=False):
-    from .models import LdapGroup, LdapUser
+    from .models import LdapGroup, LdapUser  # noqa: PLC0415
 
     ldap_user = LdapUser.objects.get(username=dusken_user["username"])
 
@@ -172,7 +172,7 @@ def ldap_update_user_groups(dusken_user, ldap_user_diffable, dry_run=False, dele
 
 
 def create_ldap_automount(username, dry_run=False):
-    from .models import LdapAutomountHome
+    from .models import LdapAutomountHome  # noqa: PLC0415
 
     if LdapAutomountHome.objects.filter(username=username).exists():
         # Bail if it already exists
@@ -189,13 +189,13 @@ def create_ldap_automount(username, dry_run=False):
 
 
 def delete_ldap_automount(username):
-    from .models import LdapAutomountHome
+    from .models import LdapAutomountHome  # noqa: PLC0415
 
     LdapAutomountHome.objects.filter(username=username).delete()
 
 
 def delete_ldap_user_groups(username):
-    from .models import LdapGroup
+    from .models import LdapGroup  # noqa: PLC0415
 
     groups_with_memberships = LdapGroup.objects.filter(members__contains=username)
 
@@ -205,7 +205,7 @@ def delete_ldap_user_groups(username):
 
 
 def delete_ldap_user(username):
-    from .models import LdapGroup, LdapUser
+    from .models import LdapGroup, LdapUser  # noqa: PLC0415
 
     try:
         logger.info(f"Deleting LDAP user {username}")
