@@ -65,6 +65,8 @@ module.exports = ({ production }, argv) => {
                             loader: require.resolve('sass-loader'),
                             options: {
                                 sassOptions: {
+                                    quietDeps: true,
+                                    silenceDeprecations: ['color-functions', 'global-builtin', 'import'],
                                     precision: 8,
                                 },
                             },

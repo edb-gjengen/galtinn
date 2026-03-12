@@ -52,7 +52,7 @@ function formatMessage(message, alert) {
     );
 }
 
-$(document).ready(function () {
+$(() => {
     const $messages = $('.messages');
 
     /* Send validation email */

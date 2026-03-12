@@ -74,3 +74,6 @@
         {% trans "You have no right to edit this organisation" %}
     {% endif %}
 {% endblock %}
+{% block tailinc %}
+    {{ user_search.media.js }}
+{% endblock %}

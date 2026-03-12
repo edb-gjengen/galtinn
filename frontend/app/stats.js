@@ -239,7 +239,7 @@ function recalc(start) {
     });
 }
 
-$(document).ready(() => {
+$(() => {
     const $exportBtn = $('.export-data-btn');
     const $startInput = $('#start');
     salesChartEl = document.getElementById('sales-chart');

@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "build": "rspack build",
-    "start": "rspack serve",
-    "lint": "eslint --quiet app",
     "format": "eslint --fix app",
-    "prepare": "cd .. && husky install frontend/.husky",
-    "lint-staged": "lint-staged"
+    "lint": "eslint --quiet app",
+    "lint-staged": "lint-staged",
+    "prepare": "husky",
+    "start": "rspack serve"
   },
   "lint-staged": {
     "*.js": [
@@ -31,20 +31,20 @@
   "devDependencies": {
     "@rspack/cli": "^1.7.8",
     "@rspack/core": "^1.7.8",
-    "autoprefixer": "^10.4.19",
-    "css-loader": "^7.1.1",
-    "cssnano": "^6.1.2",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-prettier": "^5.1.3",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
-    "postcss": "^8.4.38",
-    "postcss-loader": "^8.1.1",
-    "prettier": "^3.2.5",
-    "sass": "^1.75.0",
-    "sass-loader": "^14.2.0"
+    "autoprefixer": "^10.4.27",
+    "css-loader": "^7.1.4",
+    "cssnano": "^7.1.3",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.3",
+    "postcss": "^8.5.8",
+    "postcss-loader": "^8.2.1",
+    "prettier": "^3.8.1",
+    "sass": "^1.98.0",
+    "sass-loader": "^16.0.7"
   },
   "engines": {
     "node": "v24"

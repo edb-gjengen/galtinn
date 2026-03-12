@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-$(document).ready(function () {
+$(() => {
     /* Orgunit: Add member */
     $('.js-orgunit-add-member').on('click', (e) => {
         const $el = $(e.target);
