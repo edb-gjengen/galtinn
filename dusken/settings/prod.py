@@ -48,6 +48,13 @@ sentry_sdk.init(
     environment=SENTRY_ENVIRONMENT,
     release=release,
     integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()],
+    # Bugsink likes the following settings
+    send_default_pii=True,
+    max_request_body_size="always",
+    # Disable event types which are not supported by Bugsink:
+    traces_sample_rate=0,
+    send_client_reports=False,
+    auto_session_tracking=False,
 )
 
 # Cache with Redis
