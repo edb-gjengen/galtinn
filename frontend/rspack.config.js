@@ -1,10 +1,5 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { IgnorePlugin } = require('webpack');
-const CopyPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
-const baseStyleLoader = (production) => (production ? MiniCssExtractPlugin.loader : require.resolve('style-loader'));
+const { rspack } = require('@rspack/core');
 
 module.exports = ({ production }, argv) => {
     return {
@@ -13,6 +8,7 @@ module.exports = ({ production }, argv) => {
             stats: path.resolve(__dirname, 'app/stats.js'),
         },
         output: {
+            clean: true,
             filename: '[name].js',
             path: path.resolve(__dirname, 'dist'),
         },
@@ -21,12 +17,11 @@ module.exports = ({ production }, argv) => {
             modules: ['node_modules'],
         },
         plugins: [
-            new MiniCssExtractPlugin(),
-            new CopyPlugin({
+            new rspack.CssExtractRspackPlugin(),
+            new rspack.CopyRspackPlugin({
                 patterns: ['app/favicon.ico', { from: 'app/images', to: 'images' }, { from: 'app/fonts', to: 'fonts' }],
             }),
-            new CleanWebpackPlugin(),
-            production && new IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
+            production && new rspack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
         ].filter(Boolean),
         devServer: {
             static: path.resolve(__dirname, 'dist'),
@@ -42,20 +37,21 @@ module.exports = ({ production }, argv) => {
                 {
                     test: /\.(js|jsx)$/,
                     exclude: /node_modules/,
-                    loader: require.resolve('babel-loader'),
+                    loader: 'builtin:swc-loader',
                 },
                 {
                     test: /\.css$/,
                     use: [
-                        baseStyleLoader(production),
+                        rspack.CssExtractRspackPlugin.loader,
                         require.resolve('css-loader'),
                         require.resolve('postcss-loader'),
                     ],
+                    type: 'javascript/auto',
                 },
                 {
                     test: /\.scss$/,
                     use: [
-                        baseStyleLoader(production),
+                        rspack.CssExtractRspackPlugin.loader,
                         {
                             loader: require.resolve('css-loader'),
                             options: {

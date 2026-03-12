@@ -12,7 +12,7 @@ env:
 jobs:
   build_frontend:
     runs-on: ubuntu-latest
-    container: node:20-alpine
+    container: node:24-alpine
     steps:
       - uses: actions/checkout@v4
       - name: Build frontend
@@ -23,7 +23,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    container: nikolaik/python-nodejs:python3.14-nodejs20
+    container: nikolaik/python-nodejs:python3.14-nodejs24
     steps:
       - uses: actions/checkout@v4
       - name: Install system dependencies
