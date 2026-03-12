@@ -41,7 +41,7 @@ try:
 except InvalidGitRepository:
     release = "N/A"
 
-SENTRY_DSN = os.getenv("SENTRY_DSN", "https://0f0067c4548445a6867a471e2b69a419@sentry.neuf.no/2")
+SENTRY_DSN = os.getenv("SENTRY_DSN", "https://f897a7de435f495995e5b2a2a75248fa@bugsink.neuf.no/1")
 SENTRY_ENVIRONMENT = os.getenv("SENTRY_ENVIRONMENT", "production")
 sentry_sdk.init(
     dsn=SENTRY_DSN,
