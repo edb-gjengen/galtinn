@@ -6,6 +6,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from dusken.api import urls as api_urls
 from dusken.apps.neuf_auth.views import NeufPasswordChangeView, NeufPasswordResetConfirmView
+from dusken.autocompletes import UserAutocompleteView
 from dusken.views.general import HomeView, HomeVolunteerView, IndexView, OrderDetailView, StatsView
 from dusken.views.membership import MembershipListView
 from dusken.views.orgunit import OrgUnitDetailView, OrgUnitEditUsersView, OrgUnitEditView, OrgUnitListView
@@ -63,7 +64,7 @@ urlpatterns = [
     path("api/", include(api_urls)),
     # Language selection
     path("i18n/", include("django.conf.urls.i18n")),
-    path("select2/", include("django_select2.urls")),
+    path("autocomplete/user/", UserAutocompleteView.as_view(), name="user_autocomplete"),
     # Authentication
     path("auth/password_change/", NeufPasswordChangeView.as_view(), name="password_change"),
     re_path(

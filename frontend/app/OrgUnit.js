@@ -1,80 +1,78 @@
-import $ from 'jquery';
+function getCSRFToken() {
+    const meta = document.querySelector('meta[name="x-csrf-token"]');
+    return meta ? meta.getAttribute('content') : '';
+}
 
-$(() => {
+document.addEventListener('DOMContentLoaded', () => {
     /* Orgunit: Add member */
-    $('.js-orgunit-add-member').on('click', (e) => {
-        const $el = $(e.target);
-        const orgunit = $el.data('orgunitSlug');
-        const type = $el.data('orgunitAction');
-        let user = $el.data('userId');
+    document.querySelectorAll('.js-orgunit-add-member').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            const el = e.target;
+            const orgunit = el.dataset.orgunitSlug;
+            const type = el.dataset.orgunitAction;
+            let user = el.dataset.userId;
 
-        if (!user) {
-            try {
-                user = $('#id_user').select2('data')[0].id;
-            } catch (err) {
-                return;
+            if (!user) {
+                const userSelect = document.getElementById('id_user');
+                user = userSelect ? userSelect.value : null;
+                if (!user) return;
             }
-        }
 
-        $.ajax({
-            url: '/api/orgunit/add/user/',
-            data: {
-                user: user,
-                orgunit: orgunit,
-                type: type,
-            },
-            dataType: 'json',
-            success: function (response) {
-                if (response.success) {
-                    location.reload();
-                } else {
-                    alert(response.error);
-                }
-            },
-            error: function () {
-                alert('Failed to contact server');
-            },
+            fetch('/api/orgunit/add/user/?' + new URLSearchParams({ user, orgunit, type }), {
+                headers: { 'X-CSRFToken': getCSRFToken() },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert(data.error);
+                    }
+                })
+                .catch(() => {
+                    alert('Failed to contact server');
+                });
         });
     });
 
     /* Orgunit: Remove member */
-    $('.js-orgunit-remove-user').on('click', (e) => {
-        const $el = $(e.target);
-        const orgunit = $el.data('orgunitSlug');
-        const type = $el.data('orgunitAction');
-        const user = $el.data('userId');
-        const confirmText = $el.data('textRemoveUser');
+    document.querySelectorAll('.js-orgunit-remove-user').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            const el = e.target;
+            const orgunit = el.dataset.orgunitSlug;
+            const type = el.dataset.orgunitAction;
+            const user = el.dataset.userId;
+            const confirmText = el.dataset.textRemoveUser;
 
-        if (type === 'member' && !confirm(confirmText)) {
-            return;
-        }
+            if (type === 'member' && !confirm(confirmText)) {
+                return;
+            }
 
-        $.ajax({
-            url: '/api/orgunit/remove/user/',
-            data: {
-                user: user,
-                orgunit: orgunit,
-                type: type,
-            },
-            dataType: 'json',
-            success: function (response) {
-                if (response.success) {
-                    if (type === 'admin') {
-                        location.reload();
+            fetch('/api/orgunit/remove/user/?' + new URLSearchParams({ user, orgunit, type }), {
+                headers: { 'X-CSRFToken': getCSRFToken() },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        if (type === 'admin') {
+                            location.reload();
+                        } else {
+                            const row = document.getElementById('user_remove_' + user);
+                            if (row) {
+                                const li = row.closest('li');
+                                if (li) {
+                                    li.classList.add('removing');
+                                    li.addEventListener('transitionend', () => li.remove());
+                                }
+                            }
+                        }
                     } else {
-                        $('#user_remove_' + user)
-                            .parent()
-                            .parent()
-                            .parent()
-                            .slideUp();
+                        alert(data.error);
                     }
-                } else {
-                    alert(response.error);
-                }
-            },
-            error: function () {
-                alert('Failed to contact server');
-            },
+                })
+                .catch(() => {
+                    alert('Failed to contact server');
+                });
         });
     });
 });

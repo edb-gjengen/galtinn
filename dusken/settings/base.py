@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     "django_bootstrap5",
     "django_extensions",
     "django_filters",
-    "django_select2",
+    "django_tomselect",
     "django_recaptcha",
     "svg",
 ]
@@ -57,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_tomselect.middleware.TomSelectMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
 ]
 
@@ -74,6 +75,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "dusken.context_processors.sentry",
+                "django_tomselect.context_processors.tomselect",
             ],
         },
     },

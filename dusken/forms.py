@@ -7,29 +7,21 @@ from django.forms import fields
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
-from django_select2.forms import ModelSelect2Widget
+from django_tomselect.forms import TomSelectConfig, TomSelectModelChoiceField
 from phonenumber_field.formfields import PhoneNumberField
 
 from dusken.models import DuskenUser, Order, OrgUnit
 from dusken.utils import email_exists, phone_number_exist
 
 
-class UserSearchWidget(ModelSelect2Widget):
-    model = DuskenUser
-    queryset = DuskenUser.objects.by_membership_end_date()
-    search_fields = [
-        "first_name__icontains",
-        "last_name__icontains",
-        "username__icontains",
-    ]
-    max_results = 200
-
-
 class UserWidgetForm(forms.Form):
-    user = forms.ModelChoiceField(
-        queryset=DuskenUser.objects.all(),
+    user = TomSelectModelChoiceField(
+        config=TomSelectConfig(
+            url="user_autocomplete",
+            value_field="id",
+            label_field="full_name",
+        ),
         label=_("User"),
-        widget=UserSearchWidget(attrs={"data-placeholder": _("User")}),
     )
 
 
@@ -46,10 +38,13 @@ def urlfields_assume_https(db_field, **kwargs):
 
 
 class OrgUnitEditForm(forms.ModelForm):
-    contact_person = forms.ModelChoiceField(
-        queryset=DuskenUser.objects.all(),
+    contact_person = TomSelectModelChoiceField(
+        config=TomSelectConfig(
+            url="user_autocomplete",
+            value_field="id",
+            label_field="full_name",
+        ),
         label=_("Contact person"),
-        widget=UserSearchWidget(attrs={"data-placeholder": _("User")}),
     )
 
     class Meta:

@@ -435,18 +435,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-appconf"
-version = "1.2.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d1/a2/e58bec8d7941b914af52a67c35b5709eceed2caa2848f28437f1666ed668/django_appconf-1.2.0.tar.gz", hash = "sha256:15a88d60dd942d6059f467412fe4581db632ef03018a3c183fb415d6fc9e5cec", size = 16127, upload-time = "2025-11-08T15:46:27.304Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e8/e6/4c34d94dfb74bbcbc489606e61f1924933de30d22c593dd1f429f35fbd7f/django_appconf-1.2.0-py3-none-any.whl", hash = "sha256:b81bce5ef0ceb9d84df48dfb623a32235d941c78cc5e45dbb6947f154ea277f4", size = 6500, upload-time = "2025-11-08T15:46:25.957Z" },
-]
-
-[[package]]
 name = "django-bootstrap5"
 version = "26.2"
 source = { registry = "https://pypi.org/simple" }
@@ -590,19 +578,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-select2"
-version = "8.4.8"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-    { name = "django-appconf" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/2d/cc/6dc944fd0cdc53f49b532640d3d3bdf194411dc3b086b039994c2760fafd/django_select2-8.4.8.tar.gz", hash = "sha256:592e52effff2b5850cb7c98b265715b6704fb784699c4aedddfdd8ae1ffa1e81", size = 13662, upload-time = "2026-01-07T18:44:17.356Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/93/d5/e84591b966a4af1003944245d950621645cd7d2f4475c491339338849d31/django_select2-8.4.8-py3-none-any.whl", hash = "sha256:a2ce6a4c556dd2d4d57eb3753618d6f31f8d3910e9d9fa1b686d9340f50b14eb", size = 15573, upload-time = "2026-01-07T18:44:15.897Z" },
-]
-
-[[package]]
 name = "django-signal-disabler"
 version = "0.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -642,6 +617,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/55/03/9c2be939490d2282328db4611bc5956899f5ff7eabc3e88bd4b964a87373/django_stubs_ext-5.2.9.tar.gz", hash = "sha256:6db4054d1580657b979b7d391474719f1a978773e66c7070a5e246cd445a25a9", size = 6497, upload-time = "2026-01-20T23:58:59.462Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9b/f7/0d5f7d7e76fe972d9f560f687fdc0cab4db9e1624fd90728ca29b4ed7a63/django_stubs_ext-5.2.9-py3-none-any.whl", hash = "sha256:230c51575551b0165be40177f0f6805f1e3ebf799b835c85f5d64c371ca6cf71", size = 9974, upload-time = "2026-01-20T23:58:58.438Z" },
+]
+
+[[package]]
+name = "django-tomselect"
+version = "2026.1.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/68/b7/f693a4bf9462e310ebab2a9b26862dc5b8a520cef0009f8cd447bc449bea/django_tomselect-2026.1.3.tar.gz", hash = "sha256:12c9e98db484f2940716c18e05808dadaa1643691cd2d5134cdad39390eb2979", size = 220032, upload-time = "2026-01-29T21:57:32.975Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e2/87/e50e55b6181b069f89d5720052d9dcf136e65ef843cb6df8212d1a7aa704/django_tomselect-2026.1.3-py3-none-any.whl", hash = "sha256:b0aa5703ea4db9de240154a2d558c96395005cd5ad2c3de5892f8d67a34a4024", size = 251154, upload-time = "2026-01-29T21:57:29.123Z" },
 ]
 
 [[package]]
@@ -708,8 +695,8 @@ dependencies = [
     { name = "django-phonenumber-field" },
     { name = "django-recaptcha" },
     { name = "django-redis" },
-    { name = "django-select2" },
     { name = "django-signal-disabler" },
+    { name = "django-tomselect" },
     { name = "djangorestframework" },
     { name = "fabric" },
     { name = "gunicorn" },
@@ -760,8 +747,8 @@ requires-dist = [
     { name = "django-phonenumber-field", specifier = "==8.*" },
     { name = "django-recaptcha", specifier = "==4.*" },
     { name = "django-redis", specifier = "==6.0.*" },
-    { name = "django-select2", specifier = "==8.4.*" },
     { name = "django-signal-disabler", specifier = "==0.1.*" },
+    { name = "django-tomselect" },
     { name = "djangorestframework", specifier = "==3.16.*" },
     { name = "fabric", specifier = "==3.*" },
     { name = "gunicorn", specifier = "==25.*" },

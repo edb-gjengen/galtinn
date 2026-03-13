@@ -50,15 +50,17 @@ function toChartJSDatasets(memberships) {
 }
 
 function getSales(start, cb) {
-    return $.getJSON(url + '?start_date=' + start, function (data) {
-        salesData = data.memberships;
-        saleTypes = data.payment_methods;
-        salesChartData = toChartJSDatasets(salesData);
+    return fetch(url + '?start_date=' + start)
+        .then((response) => response.json())
+        .then((data) => {
+            salesData = data.memberships;
+            saleTypes = data.payment_methods;
+            salesChartData = toChartJSDatasets(salesData);
 
-        if (cb) {
-            cb();
-        }
-    });
+            if (cb) {
+                cb();
+            }
+        });
 }
 
 function totals() {
@@ -71,16 +73,17 @@ function totals() {
             },
             0,
         );
-        $('.' + type).html(total);
+        const el = document.querySelector('.' + type);
+        if (el) el.innerHTML = total;
         sum += total;
     });
 
-    $('.sum').html(sum);
+    document.querySelector('.sum').innerHTML = sum;
 }
 
 function today() {
     const today = moment.utc().format('YYYY-MM-DD');
-    $('.today-date-wrap').text(today);
+    document.querySelector('.today-date-wrap').textContent = today;
 
     const todaySales = _.map(salesData, (salesPerDay, key) => {
         return _.find(salesPerDay, { date: today });
@@ -97,7 +100,7 @@ function today() {
         return a + b;
     }, 0);
 
-    $('.sum-today').html(sumSales);
+    document.querySelector('.sum-today').innerHTML = sumSales;
 
     const salesChartTodayData = _.map(todaySales, (el) => {
         return {
@@ -125,11 +128,10 @@ function groupSalesByDate() {
     let salesByDate = {};
     _.each(saleTypes, function (type) {
         _.each(salesData[type], function (el) {
-            let d = {};
-            d[el.date] = {};
-            d[el.date][type] = el.sales;
-
-            $.extend(true, salesByDate, d);
+            if (!salesByDate[el.date]) {
+                salesByDate[el.date] = {};
+            }
+            salesByDate[el.date][type] = el.sales;
         });
     });
     /* add zeros */
@@ -171,7 +173,7 @@ function salesTable() {
     });
     html += '</tbody>';
 
-    $('#sales-table').html(html);
+    document.getElementById('sales-table').innerHTML = html;
 }
 
 function toCSV(data) {
@@ -239,26 +241,26 @@ function recalc(start) {
     });
 }
 
-$(() => {
-    const $exportBtn = $('.export-data-btn');
-    const $startInput = $('#start');
+document.addEventListener('DOMContentLoaded', () => {
+    const exportBtn = document.querySelector('.export-data-btn');
+    const startInput = document.getElementById('start');
     salesChartEl = document.getElementById('sales-chart');
     salesChartTodayEl = document.getElementById('sales-chart-today');
 
-    let start = $startInput.val();
+    let start = startInput.value;
     recalc(start);
 
     /* Dynamic date change */
-    $startInput.on('input', (e) => {
-        start = $(e.target).val();
+    startInput.addEventListener('input', (e) => {
+        start = e.target.value;
         history.replaceState(null, null, '?start_date=' + start);
         recalc(start);
     });
 
     /* Export to CSV */
-    $exportBtn.on('click', (e) => {
+    exportBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        const fileName = 'medlemskapsstats-' + $startInput.val() + '.csv';
+        const fileName = 'medlemskapsstats-' + startInput.value + '.csv';
         if (!Object.keys(salesData).length) {
             return;
         }

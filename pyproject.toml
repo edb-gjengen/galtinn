@@ -21,7 +21,7 @@ dependencies = [
     "django-phonenumber-field==8.*",
     "django-recaptcha==4.*",
     "django-redis==6.0.*",
-    "django-select2==8.4.*",
+    "django-tomselect",
     "django-signal-disabler==0.1.*",
     "djangorestframework==3.16.*",
     "fabric==3.*",
