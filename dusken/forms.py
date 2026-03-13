@@ -20,7 +20,6 @@ user_config = TomSelectConfig(
     label_field="display_label",
     placeholder=_("User"),
     highlight=True,
-    open_on_focus=True,
     plugin_clear_button=PluginClearButton(title="Clear user", class_name="lnr lnr-cross btn"),
 )
 

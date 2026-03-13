@@ -11,7 +11,7 @@ class UserAutocompleteView(AutocompleteModelView):
         "username__icontains",
     ]
     value_fields = ["id", "first_name", "last_name", "username"]
-    virtual_fields = ["full_name"]
+    virtual_fields = ["display_label"]
     ordering = ["-memberships__end_date"]
     page_size = 10
 
