@@ -107,7 +107,7 @@ module = [
     "django_recaptcha.*",
     "dj_database_url.*",
     "django_filters.*",
-    "django_select2.*",
+    "django_tomselect.*",
     "fabric.*",
     "ldapdb.*",
     "mptt.*",

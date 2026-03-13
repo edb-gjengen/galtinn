@@ -11,3 +11,7 @@ class UserAutocompleteView(AutocompleteModelView):
         "username__icontains",
     ]
     value_fields = ["id", "first_name", "last_name", "username"]
+
+    # FIXME: You are here
+    def get_queryset(self):
+        return super().get_queryset().order_by("-memberships__end_date")

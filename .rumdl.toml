@@ -1,0 +1,9 @@
+[global]
+line_length = 120
+disable = ["MD013", "MD036", "MD041", "MD046", "MD059"]
+
+[MD004]
+style = "dash"
+
+[MD024]
+siblings-only = true

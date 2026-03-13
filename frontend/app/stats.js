@@ -85,7 +85,7 @@ function today() {
     const today = moment.utc().format('YYYY-MM-DD');
     document.querySelector('.today-date-wrap').textContent = today;
 
-    const todaySales = _.map(salesData, (salesPerDay, key) => {
+    const todaySales = _.map(salesData, (salesPerDay, _) => {
         return _.find(salesPerDay, { date: today });
     }).filter((el) => {
         return el !== undefined;

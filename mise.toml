@@ -5,19 +5,49 @@ prek = "latest"
 python = "3.14"
 uv = "latest"
 
-[tasks.build-frontend]
+# Backend tasks
+[tasks.generate_schema]
+description = "Generate GraphQL schema"
+run = "uv run manage.py graphql_schema"
+
+[tasks.run]
+description = "Run Django development server"
+run = "uv run manage.py runserver"
+
+[tasks.test]
+description = "Run Python test suite"
+run = "uv run pytest -v"
+
+[tasks.worker]
+description = "Run Celery worker with beat in development"
+run = "DJANGO_SETTINGS_MODULE=dusken.settings.dev uv run celery -A dusken worker -B"
+
+# Frontend tasks
+[tasks.frontend-build]
 description = "Install frontend dependencies and build assets"
 dir = "frontend"
 run = "npm i && npm run build"
 
+[tasks.frontend-format]
+description = "Format frontend code"
+dir = "frontend"
+run = "npm run format"
+
+[tasks.frontend-lint]
+description = "Lint frontend code"
+dir = "frontend"
+run = "npm run lint"
+
+[tasks.frontend-run]
+description = "Run frontend development server"
+dir = "frontend"
+run = "npm run start"
+
+# Translation tasks
 [tasks.compilemessages]
 description = "Compile translation files for Norwegian Bokmal"
 dir = "dusken"
 run = "uv run ../manage.py compilemessages -l nb"
-
-[tasks.generate_schema]
-description = "Generate GraphQL schema"
-run = "uv run manage.py graphql_schema"
 
 [tasks.makemessages]
 description = "Extract translation strings for Norwegian Bokmal"
@@ -38,23 +68,7 @@ fi
 poedit "${APP_PATH}/locale/nb/LC_MESSAGES/django.po"
 '''
 
+# Generic tasks
 [tasks.prek]
 description = "Run pre-commit hooks via prek"
 run = "prek run -a"
-
-[tasks.run]
-description = "Run Django development server"
-run = "uv run manage.py runserver"
-
-[tasks.run-frontend]
-description = "Run frontend development server"
-dir = "frontend"
-run = "npm run start"
-
-[tasks.test]
-description = "Run Python test suite"
-run = "uv run pytest -v"
-
-[tasks.worker]
-description = "Run Celery worker with beat in development"
-run = "DJANGO_SETTINGS_MODULE=dusken.settings.dev uv run celery -A dusken worker -B"
