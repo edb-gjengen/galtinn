@@ -12,7 +12,7 @@ class UserAutocompleteView(AutocompleteModelView):
     ]
     value_fields = ["id", "first_name", "last_name", "username"]
     virtual_fields = ["display_label"]
-    ordering = ["-memberships__end_date"]
+    ordering = ["first_name", "last_name", "-memberships__end_date"]
     page_size = 10
 
     def hook_prepare_results(self, results):
