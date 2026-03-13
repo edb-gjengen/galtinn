@@ -29,8 +29,12 @@
     {% include "footer.html" %}
 
     {% if SENTRY_DSN %}
-        <script src="https://browser.sentry-cdn.com/5.10.2/bundle.min.js" integrity="sha384-ssBfXiBvlVC7bdA/VX03S88B5MwXQWdnpJRbUYFPgswlOBwETwTp6F3SMUNpo9M9" crossorigin="anonymous"></script>
-        <script>Sentry.init({ dsn: '{{ SENTRY_DSN }}', environment: '{{ SENTRY_ENVIRONMENT }}' });</script>
+        <script
+        src="https://browser.sentry-cdn.com/10.43.0/bundle.min.js"
+        integrity="sha384-hbEY7sSD1yWZzTh5zZNZl1bIOz8bgjsTAMmeTChKAgB1bl5eztnEG9qFuvS9kDun"
+        crossorigin="anonymous"
+        ></script>
+        <script>typeof Sentry != "undefined" && Sentry.init({dsn: '{{ SENTRY_DSN }}', environment: '{{ SENTRY_ENVIRONMENT }}' });</script>
     {% endif %}
     {% block preinc %}{% endblock %}
     <script type="text/javascript" src="{% static 'app.js' %}"></script>
