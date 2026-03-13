@@ -39,6 +39,7 @@ class OrgUnitViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 def remove_user(request):
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
+
     user_uuid = request.GET.get("user", None)
     orgunit_slug = request.GET.get("orgunit", None)
     member_type = request.GET.get("type", None)
@@ -63,6 +64,7 @@ def remove_user(request):
 def add_user(request):
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
+
     user_id = request.GET.get("user", None)
     orgunit_slug = request.GET.get("orgunit", None)
     member_type = request.GET.get("type", None)

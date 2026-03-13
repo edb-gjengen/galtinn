@@ -34,6 +34,7 @@ urlpatterns = [
     path("me/update/", UserUpdateMeView.as_view(), name="user-update-me"),
     path("me/update/username/", UserSetUsernameView.as_view(), name="user-update-username"),
     path("me/delete/", UserDeleteView.as_view(), name="user-delete"),
+    path("users/autocomplete/", UserAutocompleteView.as_view(), name="user-autocomplete"),
     path("users/<slug:slug>/", UserDetailView.as_view(), name="user-detail"),
     path("users/<slug:slug>/update/", UserUpdateView.as_view(), name="user-update"),
     path("users/", UserListView.as_view(), name="user-list"),
@@ -64,7 +65,6 @@ urlpatterns = [
     path("api/", include(api_urls)),
     # Language selection
     path("i18n/", include("django.conf.urls.i18n")),
-    path("autocomplete/user/", UserAutocompleteView.as_view(), name="user_autocomplete"),
     # Authentication
     path("auth/password_change/", NeufPasswordChangeView.as_view(), name="password_change"),
     re_path(

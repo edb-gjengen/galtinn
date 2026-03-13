@@ -2,55 +2,45 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.db import models
 from django.forms import fields
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
+from django_tomselect.app_settings import PluginClearButton
 from django_tomselect.forms import TomSelectConfig, TomSelectModelChoiceField
 from phonenumber_field.formfields import PhoneNumberField
 
 from dusken.models import DuskenUser, Order, OrgUnit
 from dusken.utils import email_exists, phone_number_exist
 
+user_config = TomSelectConfig(
+    url="user-autocomplete",
+    css_framework="bootstrap5",
+    value_field="id",
+    label_field="display_label",
+    placeholder=_("User"),
+    highlight=True,
+    open_on_focus=True,
+    plugin_clear_button=PluginClearButton(title="Clear user", class_name="lnr lnr-cross btn"),
+)
+
 
 class UserWidgetForm(forms.Form):
     user = TomSelectModelChoiceField(
-        config=TomSelectConfig(
-            url="user_autocomplete",
-            value_field="id",
-            label_field="full_name",
-        ),
+        config=user_config,
         label=_("User"),
     )
 
 
-def urlfields_assume_https(db_field, **kwargs):
-    """
-    ModelForm.Meta.formfield_callback function to assume HTTPS for scheme-less
-    domains in URLFields.
-
-    Ref: https://adamj.eu/tech/2023/12/07/django-fix-urlfield-assume-scheme-warnings/
-    """
-    if isinstance(db_field, models.URLField):
-        kwargs["assume_scheme"] = "https"
-    return db_field.formfield(**kwargs)
-
-
 class OrgUnitEditForm(forms.ModelForm):
     contact_person = TomSelectModelChoiceField(
-        config=TomSelectConfig(
-            url="user_autocomplete",
-            value_field="id",
-            label_field="full_name",
-        ),
+        config=user_config,
         label=_("Contact person"),
     )
 
     class Meta:
         model = OrgUnit
         fields = ["name", "short_name", "email", "website", "description", "contact_person"]
-        formfield_callback = urlfields_assume_https  # FIXME: Remove this when Django 6.0 is released
 
 
 class DuskenUserForm(forms.ModelForm):

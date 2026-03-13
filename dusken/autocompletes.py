@@ -11,7 +11,13 @@ class UserAutocompleteView(AutocompleteModelView):
         "username__icontains",
     ]
     value_fields = ["id", "first_name", "last_name", "username"]
+    virtual_fields = ["full_name"]
+    ordering = ["-memberships__end_date"]
+    page_size = 10
 
-    # FIXME: You are here
-    def get_queryset(self):
-        return super().get_queryset().order_by("-memberships__end_date")
+    def hook_prepare_results(self, results):
+        """Customize the prepared results before sending to the client."""
+        for result in results:
+            full_name = f"{result.get('first_name', '')} {result.get('last_name', '')}".strip()
+            result["display_label"] = f"{full_name} ({result.get('username', '')})"
+        return results

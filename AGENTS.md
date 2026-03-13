@@ -31,6 +31,7 @@
 - ESLint flat config with Prettier formatting for JS
 - Tests must not make network calls (pytest-socket enforced)
 - Documentation uses rumdl for linting
+- Django route names use kabab casing
 
 ## Architecture
 
