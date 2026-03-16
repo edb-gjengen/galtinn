@@ -16,6 +16,7 @@
     "i18next-browser-languagedetector": "^8.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.71.2",
     "react-i18next": "^15.5.3",
     "react-router-dom": "^7.6.2"
   },

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -14,74 +15,73 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError } from "@/lib/api";
 
+interface RegisterFormData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
+  password: string;
+}
+
 export function Register() {
   const { t } = useTranslation();
-  const { register } = useAuth();
-  const [form, setForm] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone_number: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const { register: registerUser } = useAuth();
   const [generalError, setGeneralError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
-    setErrors((prev) => {
-      const next = { ...prev };
-      delete next[field];
-      return next;
-    });
-  };
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormData>();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
+  const onSubmit = async (data: RegisterFormData) => {
     setGeneralError("");
-    setLoading(true);
 
     try {
-      await register(form);
+      await registerUser(data);
     } catch (err) {
       if (err instanceof ApiError) {
-        const fieldErrors: Record<string, string[]> = {};
+        let hasFieldErrors = false;
         for (const [key, value] of Object.entries(err.data)) {
           if (key === "detail") {
             setGeneralError(String(value));
           } else if (key === "non_field_errors") {
             setGeneralError((value as string[]).join(" "));
-          } else if (Array.isArray(value)) {
-            fieldErrors[key] = value.map(String);
+          } else if (Array.isArray(value) && key in data) {
+            setError(key as keyof RegisterFormData, {
+              message: value.map(String).join(" "),
+            });
+            hasFieldErrors = true;
           }
         }
-        setErrors(fieldErrors);
-        if (!Object.keys(fieldErrors).length && !generalError) {
+        if (!hasFieldErrors && !generalError) {
           setGeneralError(t("registrationFailed"));
         }
       } else {
         setGeneralError(t("registrationFailed"));
       }
-    } finally {
-      setLoading(false);
     }
   };
 
-  const fields = [
+  const fields: {
+    name: keyof RegisterFormData;
+    label: string;
+    type: "text" | "email" | "tel" | "password";
+    autoComplete: string;
+  }[] = [
     { name: "first_name", label: t("firstName"), type: "text", autoComplete: "given-name" },
     { name: "last_name", label: t("lastName"), type: "text", autoComplete: "family-name" },
     { name: "email", label: t("email"), type: "email", autoComplete: "email" },
     { name: "phone_number", label: t("phoneNumber"), type: "tel", autoComplete: "tel" },
     { name: "password", label: t("password"), type: "password", autoComplete: "new-password" },
-  ] as const;
+  ];
 
   return (
     <Flex justify="center" pt="9">
       <Box style={{ width: "100%", maxWidth: 420 }}>
         <Card size="4">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Flex direction="column" gap="4">
               <Heading size="5" align="center">
                 {t("register")}
@@ -101,28 +101,26 @@ export function Register() {
                   <TextField.Root
                     id={field.name}
                     type={field.type}
-                    value={form[field.name]}
-                    onChange={handleChange(field.name)}
-                    required
                     autoComplete={field.autoComplete}
                     mt="1"
                     color={errors[field.name] ? "red" : undefined}
+                    {...register(field.name, { required: true })}
                   />
-                  {errors[field.name] && (
+                  {errors[field.name]?.message && (
                     <Text size="1" color="red" mt="1">
-                      {errors[field.name].join(" ")}
+                      {errors[field.name]?.message}
                     </Text>
                   )}
                 </Box>
               ))}
 
-              <Button type="submit" size="3" disabled={loading}>
+              <Button type="submit" size="3" disabled={isSubmitting}>
                 {t("register")}
               </Button>
 
               <Text size="2" align="center" color="gray">
                 {t("alreadyHaveAccount")}{" "}
-                <Link to="/login/">{t("loginHere")}</Link>
+                <Link to="/login/v2">{t("loginHere")}</Link>
               </Text>
             </Flex>
           </form>
