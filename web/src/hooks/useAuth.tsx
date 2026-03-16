@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { fetchApi, ApiError } from "@/lib/api";
 import type { User } from "@/types";
@@ -44,19 +37,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    refreshUser().finally(() => setIsLoading(false));
+    const initialize = async () => {
+      await refreshUser().finally(() => setIsLoading(false));
+    };
+    initialize();
   }, [refreshUser]);
 
-  const login = useCallback(
-    async (email: string, password: string) => {
-      const data = await fetchApi<User>("/api/auth/login/", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-      setUser(data);
-    },
-    [],
-  );
+  const login = useCallback(async (email: string, password: string) => {
+    const data = await fetchApi<User>("/api/auth/login/", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
+    setUser(data);
+  }, []);
 
   const logout = useCallback(async () => {
     await fetchApi("/api/auth/logout/", { method: "POST" });

@@ -1,16 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import {
-  Box,
-  Button,
-  Callout,
-  Card,
-  Flex,
-  Heading,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
+import { Box, Button, Callout, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes";
 import { fetchApi, ApiError } from "@/lib/api";
 
 interface ChangePasswordFormData {
@@ -46,15 +37,11 @@ export function ChangePassword() {
         const d = err.data;
         if (d.old_password) {
           setError("old_password", {
-            message: Array.isArray(d.old_password)
-              ? d.old_password.map(String).join(" ")
-              : String(d.old_password),
+            message: Array.isArray(d.old_password) ? d.old_password.map(String).join(" ") : String(d.old_password),
           });
         } else if (d.new_password) {
           setError("new_password", {
-            message: Array.isArray(d.new_password)
-              ? d.new_password.map(String).join(" ")
-              : String(d.new_password),
+            message: Array.isArray(d.new_password) ? d.new_password.map(String).join(" ") : String(d.new_password),
           });
         } else if (d.detail) {
           setGeneralError(String(d.detail));

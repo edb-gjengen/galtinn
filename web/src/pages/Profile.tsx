@@ -1,16 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  Badge,
-  Box,
-  Button,
-  Card,
-  Flex,
-  Heading,
-  Separator,
-  Text,
-} from "@radix-ui/themes";
+import { Badge, Box, Button, Card, Flex, Heading, Separator, Text } from "@radix-ui/themes";
 import { useAuth } from "@/hooks/useAuth";
 import { fetchApi } from "@/lib/api";
 
@@ -66,12 +57,7 @@ export function Profile() {
             ) : (
               <>
                 <Badge color="yellow">{t("notValidated")}</Badge>
-                <Button
-                  size="1"
-                  variant="soft"
-                  onClick={handleResendEmail}
-                  disabled={emailSent}
-                >
+                <Button size="1" variant="soft" onClick={handleResendEmail} disabled={emailSent}>
                   {emailSent ? t("validationEmailSent") : t("resendValidationEmail")}
                 </Button>
               </>
@@ -80,8 +66,7 @@ export function Profile() {
 
           <Flex align="center" gap="2" wrap="wrap">
             <Text size="2">
-              {t("phoneNumber")}:{" "}
-              <Text weight="bold">{user.phone_number || "-"}</Text>
+              {t("phoneNumber")}: <Text weight="bold">{user.phone_number || "-"}</Text>
             </Text>
             {user.phone_number ? (
               user.phone_number_confirmed ? (
@@ -96,9 +81,7 @@ export function Profile() {
             <Text size="2">
               {t("address")}:{" "}
               <Text weight="bold">
-                {[user.street_address, user.street_address_two, user.postal_code, user.city]
-                  .filter(Boolean)
-                  .join(", ")}
+                {[user.street_address, user.street_address_two, user.postal_code, user.city].filter(Boolean).join(", ")}
               </Text>
             </Text>
           )}
@@ -118,9 +101,7 @@ export function Profile() {
               {t("membership")}:{" "}
               {membership ? (
                 <>
-                  <Text weight="bold">
-                    {membership.end_date ?? t("lifelong")}
-                  </Text>{" "}
+                  <Text weight="bold">{membership.end_date ?? t("lifelong")}</Text>{" "}
                   {membership.is_valid ? (
                     <Badge color="green">{t("valid")}</Badge>
                   ) : (
@@ -129,8 +110,7 @@ export function Profile() {
                 </>
               ) : (
                 <>
-                  <Text weight="bold">{t("none")}</Text>{" "}
-                  <Badge color="red">{t("expired")}</Badge>
+                  <Text weight="bold">{t("none")}</Text> <Badge color="red">{t("expired")}</Badge>
                 </>
               )}
             </Text>

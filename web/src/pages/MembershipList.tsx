@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Badge,
-  Box,
-  Callout,
-  Heading,
-  Table,
-  Text,
-} from "@radix-ui/themes";
+import { Badge, Box, Callout, Heading, Table, Text } from "@radix-ui/themes";
 import { fetchApi } from "@/lib/api";
 import type { Membership } from "@/types";
 
@@ -61,11 +54,7 @@ export function MembershipList() {
                 <Table.Cell>{m.start_date}</Table.Cell>
                 <Table.Cell>{m.end_date ?? t("lifelong")}</Table.Cell>
                 <Table.Cell>
-                  {m.is_valid ? (
-                    <Badge color="green">{t("valid")}</Badge>
-                  ) : (
-                    <Badge color="red">{t("expired")}</Badge>
-                  )}
+                  {m.is_valid ? <Badge color="green">{t("valid")}</Badge> : <Badge color="red">{t("expired")}</Badge>}
                 </Table.Cell>
               </Table.Row>
             ))}

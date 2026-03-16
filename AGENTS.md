@@ -13,14 +13,13 @@
 - Run a single test: `uv run pytest -xvs dusken/tests/test_user.py::TestName`
 - Lint python with ruff only: `prek run ruff`
 - Format python with ruff only: `prek run ruff-format`
-- Build javascript: `mise run frontend-build`
-- Lint javascript: `mise run frontend-lint`
-- Format javascript: `mise run frontend-format`
+- Lint javascript: `mise run web-lint`
+- Format javascript: `mise run web-format`
 - Run all pre-commit checks: `prek run`
 - Generate GraphQL schema: `mise run generate_schema`
 - Load test fixtures: `uv run python manage.py loaddata testdata`
 - Run dev server: `mise run run`
-- Run frontend dev server: `mise run frontend-run`
+- Run frontend dev server: `mise run web-run`
 - Run Celery worker: `mise run worker`
 - Format and lint markdown `prek run rumdl`
 
@@ -32,15 +31,6 @@
 - Tests must not make network calls (pytest-socket enforced)
 - Documentation uses rumdl for linting
 - Django route names use kabab casing
-
-## Architecture
-
-- **Django settings**: `dusken/settings/` — `base.py` (shared), `dev.py`, `prod.py`. Tests use `dev` settings.
-- **Database routing**: Custom router in `dusken/router.py` routes LDAP, Kassa, and tekstmelding models to separate databases.
-- **API layers**: REST (DRF) at `dusken/api/` and GraphQL (Strawberry) at `dusken/api/graphql.py`.
-- **Templates**: Django templates with Bootstrap 5 in `dusken/templates/`.
-- **Static assets**: Built by Rspack from `frontend/app/` into `staticfiles/`.
-- **i18n**: Norwegian Bokmål (`nb`) translations in `dusken/locale/`.
 
 ## Local Services
 
@@ -64,14 +54,15 @@ Push to `main` triggers deployment after:
 Python and JavaScript repository
 
 - `.gitea/workflows` - GitHub Actions workflows ran using [act](https://github.com/nektos/act)
-- `frontend/` - Frontend using vanilla JavaScript
-- `dusken/` - Python/Django Backend using Django HTML templates and Bootstrap
+- `bin/deploy` - Production deployment script
+- `docs/agents/` - Documentation of agent-driven changes
+- `dusken/` - Python/Django Backend
 - `dusken/api/` - REST and GraphQL API layer
-- `dusken/models/` - Django models (users, orders, logs)
-- `dusken/views/` - Django views
-- `dusken/settings/` - Settings split into base/dev/prod
-- `dusken/tests/` - pytest test suite
 - `dusken/apps/` - Sub-apps (kassa, neuf_auth, neuf_ldap, tekstmelding)
 - `dusken/fixtures/` - Test data fixtures
-- `docs/agents/` - Documentation of agent-driven changes
-- `bin/deploy` - Production deployment script
+- `dusken/models/` - Django models (users, orders, logs)
+- `dusken/settings/` - Settings split into base/dev/prod
+- `dusken/tests/` - pytest test suite
+- `dusken/views/` - Django views
+- `frontend/` - Legacy frontend
+- `web/` - SPA web frontend using TypeScript

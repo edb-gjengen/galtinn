@@ -1,12 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  Box,
-  Button,
-  DropdownMenu,
-  Flex,
-  Text,
-} from "@radix-ui/themes";
+import { Box, Button, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import { useAuth } from "@/hooks/useAuth";
 
 export function Navbar() {
@@ -68,20 +62,14 @@ export function Navbar() {
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
                 <Button variant="soft">
-                  {user.first_name
-                    ? `${user.first_name} ${user.last_name}`
-                    : user.username}
+                  {user.first_name ? `${user.first_name} ${user.last_name}` : user.username}
                   <DropdownMenu.TriggerIcon />
                 </Button>
               </DropdownMenu.Trigger>
               <DropdownMenu.Content>
-                <DropdownMenu.Item onClick={() => navigate("/me/")}>
-                  {t("profile")}
-                </DropdownMenu.Item>
+                <DropdownMenu.Item onClick={() => navigate("/me/")}>{t("profile")}</DropdownMenu.Item>
                 <DropdownMenu.Separator />
-                <DropdownMenu.Item onClick={handleLogout}>
-                  {t("logout")}
-                </DropdownMenu.Item>
+                <DropdownMenu.Item onClick={handleLogout}>{t("logout")}</DropdownMenu.Item>
               </DropdownMenu.Content>
             </DropdownMenu.Root>
           ) : (

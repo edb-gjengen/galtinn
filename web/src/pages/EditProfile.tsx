@@ -2,16 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import {
-  Box,
-  Button,
-  Callout,
-  Card,
-  Flex,
-  Heading,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
+import { Box, Button, Callout, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes";
 import { useAuth } from "@/hooks/useAuth";
 import { fetchApi, ApiError } from "@/lib/api";
 import type { User } from "@/types";
@@ -143,12 +134,7 @@ export function EditProfile() {
                 <Button type="submit" size="3" style={{ flex: 1 }} disabled={isSubmitting}>
                   {t("save")}
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="3"
-                  onClick={() => navigate("/me/")}
-                >
+                <Button type="button" variant="outline" size="3" onClick={() => navigate("/me/")}>
                   {t("cancel")}
                 </Button>
               </Flex>

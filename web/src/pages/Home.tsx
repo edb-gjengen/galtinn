@@ -1,16 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  Badge,
-  Box,
-  Button,
-  Card,
-  Flex,
-  Grid,
-  Heading,
-  Text,
-} from "@radix-ui/themes";
+import { Badge, Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import { useAuth } from "@/hooks/useAuth";
 import { fetchApi } from "@/lib/api";
 
@@ -37,8 +28,6 @@ export function Home() {
     });
     window.location.href = data.url;
   };
-
-  console.log("💥 User:", user);
 
   return (
     <Box>
@@ -112,10 +101,7 @@ export function Home() {
             {hasValidMembership && membership && (
               <Flex direction="column" gap="1">
                 <Text size="2">
-                  {t("validUntil")}:{" "}
-                  <Text weight="bold">
-                    {membership.end_date ?? t("lifelong")}
-                  </Text>
+                  {t("validUntil")}: <Text weight="bold">{membership.end_date ?? t("lifelong")}</Text>
                 </Text>
               </Flex>
             )}
@@ -152,15 +138,8 @@ export function Home() {
                 ) : (
                   <>
                     <Badge color="yellow">{t("notValidated")}</Badge>
-                    <Button
-                      size="1"
-                      variant="soft"
-                      onClick={handleResendEmail}
-                      disabled={emailSent}
-                    >
-                      {emailSent
-                        ? t("validationEmailSent")
-                        : t("resendValidationEmail")}
+                    <Button size="1" variant="soft" onClick={handleResendEmail} disabled={emailSent}>
+                      {emailSent ? t("validationEmailSent") : t("resendValidationEmail")}
                     </Button>
                   </>
                 )}
@@ -168,10 +147,7 @@ export function Home() {
 
               <Flex align="center" gap="2" wrap="wrap">
                 <Text size="2">
-                  {t("phoneNumber")}:{" "}
-                  <Text weight="bold">
-                    {user.phone_number || "-"}
-                  </Text>
+                  {t("phoneNumber")}: <Text weight="bold">{user.phone_number || "-"}</Text>
                 </Text>
                 {user.phone_number ? (
                   user.phone_number_confirmed ? (

@@ -1,16 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  Box,
-  Button,
-  Callout,
-  Card,
-  Flex,
-  Heading,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
+import { Box, Button, Callout, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError } from "@/lib/api";
 
@@ -91,8 +82,7 @@ export function Login() {
               </Button>
 
               <Text size="2" align="center" color="gray">
-                {t("noAccountYet")}{" "}
-                <Link to="/register/">{t("registerHere")}</Link>
+                {t("noAccountYet")} <Link to="/register/">{t("registerHere")}</Link>
               </Text>
             </Flex>
           </form>
