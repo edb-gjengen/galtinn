@@ -11,9 +11,18 @@ from dusken.api.views.cards import KassaMemberCardUpdateView, MemberCardViewSet
 from dusken.api.views.checkouts import StripeCheckoutSessionView, StripePaymentSheetView, StripeWebhookView
 from dusken.api.views.discord import UserDiscordProfileViewSet
 from dusken.api.views.groups import GroupViewSet
+from dusken.api.views.membership_types import MembershipTypeListView
 from dusken.api.views.memberships import KassaMembershipView, MembershipChargeView, MembershipViewSet
 from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.orgunits import OrgUnitViewSet, add_user, remove_user
+from dusken.api.views.session import (
+    SessionLoginView,
+    SessionLogoutView,
+    SessionPasswordChangeView,
+    SessionPasswordResetConfirmView,
+    SessionPasswordResetView,
+    SessionView,
+)
 from dusken.api.views.stats import membership_stats
 from dusken.api.views.users import (
     BasicAuthCurrentUserView,
@@ -60,6 +69,19 @@ urlpatterns += [
     # Organizational Unit
     path("orgunit/remove/user/", remove_user, name="remove_user"),
     path("orgunit/add/user/", add_user, name="add_user"),
+    # Session auth
+    path("auth/login/", SessionLoginView.as_view(), name="api-auth-login"),
+    path("auth/logout/", SessionLogoutView.as_view(), name="api-auth-logout"),
+    path("auth/session/", SessionView.as_view(), name="api-auth-session"),
+    path("auth/password/reset/", SessionPasswordResetView.as_view(), name="api-auth-password-reset"),
+    path(
+        "auth/password/reset/confirm/",
+        SessionPasswordResetConfirmView.as_view(),
+        name="api-auth-password-reset-confirm",
+    ),
+    path("auth/password/change/", SessionPasswordChangeView.as_view(), name="api-auth-password-change"),
+    # Membership types
+    path("membership-types/", MembershipTypeListView.as_view(), name="api-membership-types"),
     # Stats
     path("stats/", membership_stats, name="membership-stats"),
     # GraphQL API

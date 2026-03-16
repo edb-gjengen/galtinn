@@ -7,7 +7,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from dusken.api import urls as api_urls
 from dusken.apps.neuf_auth.views import NeufPasswordChangeView, NeufPasswordResetConfirmView
 from dusken.autocompletes import UserAutocompleteView
-from dusken.views.general import HomeView, HomeVolunteerView, IndexView, OrderDetailView, StatsView
+from dusken.views.general import HomeVolunteerView, IndexView, OrderDetailView, StatsView, spa_view
 from dusken.views.membership import MembershipListView
 from dusken.views.orgunit import OrgUnitDetailView, OrgUnitEditUsersView, OrgUnitEditView, OrgUnitListView
 from dusken.views.user import (
@@ -28,7 +28,9 @@ admin.autodiscover()
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
-    path("home/", HomeView.as_view(), name="home"),
+    path("home/", spa_view, name="home"),
+    path("login/", spa_view, name="login"),
+    path("register/", spa_view, name="register"),
     # User
     path("me/", UserDetailMeView.as_view(), name="user-detail-me"),
     path("me/update/", UserUpdateMeView.as_view(), name="user-update-me"),

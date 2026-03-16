@@ -1,0 +1,74 @@
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  date_of_birth: string | null;
+  place_of_study: number | null;
+  is_volunteer: boolean;
+  is_member: boolean;
+  email_is_confirmed: boolean;
+  phone_number_confirmed: boolean;
+  active_member_card: MemberCard | null;
+  last_membership: Membership | null;
+  groups: Group[];
+  discord_profile: DiscordProfile | null;
+  has_set_username: boolean;
+}
+
+export interface Membership {
+  id: number;
+  start_date: string;
+  end_date: string | null;
+  order: number | null;
+  user: number;
+  membership_type: string;
+  is_valid: boolean;
+  expires_in_less_than_one_month?: boolean;
+}
+
+export interface MembershipType {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  price_nok_kr: number;
+  description: string;
+  is_active: boolean;
+  is_default: boolean;
+  expiry_type: string;
+}
+
+export interface MemberCard {
+  card_number: number;
+  registered: string | null;
+  is_active: boolean;
+  user: number | null;
+}
+
+export interface Group {
+  id: number;
+  name: string;
+}
+
+export interface DiscordProfile {
+  id: number;
+  discord_id: string;
+  user: number;
+}
+
+export interface Order {
+  uuid: string;
+  price_nok: number;
+  price_nok_kr: number;
+  payment_method: string;
+  payment_method_display: string;
+}
+
+export interface ApiError {
+  detail?: string;
+  non_field_errors?: string[];
+  [key: string]: unknown;
+}

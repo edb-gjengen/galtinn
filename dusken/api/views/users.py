@@ -1,4 +1,5 @@
 import django_filters
+from django.contrib.auth import login
 from django.http import HttpResponseForbidden, JsonResponse
 from django_filters.rest_framework import BooleanFilter, DjangoFilterBackend, FilterSet
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
@@ -58,6 +59,10 @@ class RegisterUserView(CreateAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = DuskenUserRegisterSerializer
     queryset = DuskenUser.objects.all()
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        login(self.request, user, backend="django.contrib.auth.backends.ModelBackend")
 
 
 def user_pk_to_uuid(request):

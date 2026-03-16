@@ -109,7 +109,8 @@ LANGUAGES = [
 # Static files
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "frontend/dist"]
+STATICFILES_DIRS = [BASE_DIR / "frontend/dist", BASE_DIR / "web/dist/assets"]
+WEB_DIR = BASE_DIR / "web/dist"
 
 SITE_ID = 1
 SITE_URL = os.getenv("SITE_URL", "http://localhost:8000")

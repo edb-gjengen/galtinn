@@ -1,10 +1,14 @@
+from pathlib import Path
+
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.dateparse import parse_date
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DetailView, FormView, TemplateView
 
 from dusken.forms import DuskenAuthenticationForm, MembershipPurchaseForm, UserWidgetForm
@@ -64,6 +68,12 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
+
+
+@ensure_csrf_cookie
+def spa_view(request):  # noqa: ARG001
+    index_path = Path(settings.WEB_DIR) / "index.html"
+    return HttpResponse(index_path.read_text(), content_type="text/html")
 
 
 class StatsView(LoginRequiredMixin, TemplateView):

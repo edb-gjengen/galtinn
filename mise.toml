@@ -43,6 +43,27 @@ description = "Run frontend development server"
 dir = "frontend"
 run = "npm run start"
 
+# Web app tasks
+[tasks.web-build]
+description = "Install web app dependencies and build assets"
+dir = "web"
+run = "npm i && npm run build"
+
+[tasks.web-run]
+description = "Run web app development server"
+dir = "web"
+run = "npm run dev"
+
+[tasks.web-lint]
+description = "Lint web app code"
+dir = "web"
+run = "npm run lint"
+
+[tasks.web-format]
+description = "Format web app code"
+dir = "web"
+run = "npm run format"
+
 # Translation tasks
 [tasks.compilemessages]
 description = "Compile translation files for Norwegian Bokmal"
