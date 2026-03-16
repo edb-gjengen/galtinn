@@ -7,6 +7,11 @@ export interface User {
   phone_number: string;
   date_of_birth: string | null;
   place_of_study: number | null;
+  street_address: string | null;
+  street_address_two: string | null;
+  postal_code: string | null;
+  city: string | null;
+  country: string;
   is_volunteer: boolean;
   is_member: boolean;
   email_is_confirmed: boolean;
@@ -16,6 +21,8 @@ export interface User {
   groups: Group[];
   discord_profile: DiscordProfile | null;
   has_set_username: boolean;
+  date_joined?: string;
+  updated?: string;
 }
 
 export interface Membership {

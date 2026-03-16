@@ -60,6 +60,11 @@ class DuskenUserSerializer(serializers.ModelSerializer):
             "date_of_birth",
             "legacy_id",
             "place_of_study",
+            "street_address",
+            "street_address_two",
+            "postal_code",
+            "city",
+            "country",
             "active_member_card",
             "is_volunteer",
             "is_member",
@@ -69,6 +74,7 @@ class DuskenUserSerializer(serializers.ModelSerializer):
             "last_membership",
             "groups",
             "discord_profile",
+            "date_joined",
         )
         read_only_fields = (
             "id",

@@ -49,6 +49,11 @@ export function Navbar() {
                     {t("home")}
                   </Text>
                 </Link>
+                <Link to="/memberships/" style={{ textDecoration: "none" }}>
+                  <Text color="gray" highContrast>
+                    {t("membership")}
+                  </Text>
+                </Link>
               </nav>
             </Flex>
           )}
@@ -70,6 +75,10 @@ export function Navbar() {
                 </Button>
               </DropdownMenu.Trigger>
               <DropdownMenu.Content>
+                <DropdownMenu.Item onClick={() => navigate("/me/")}>
+                  {t("profile")}
+                </DropdownMenu.Item>
+                <DropdownMenu.Separator />
                 <DropdownMenu.Item onClick={handleLogout}>
                   {t("logout")}
                 </DropdownMenu.Item>

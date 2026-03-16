@@ -202,3 +202,13 @@ To develop actions workflows locally:
 ```sh
 act -W .gitea/workflows/
 ```
+
+## SPA Migration
+
+### Followup tasks
+
+- [ ] Verify feature parity
+- [ ] Verify Norwegian translations with legacy frontend
+- [ ] Improve styling according to current style guide
+- [ ] Remove legacy HTML templates
+- [ ] Refactor things

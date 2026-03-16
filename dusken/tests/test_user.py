@@ -260,16 +260,10 @@ class DuskenUserDelete(TestCase):
         self.user_3 = DuskenUser.objects.create_user("mrclean2", email="mrclean2@example.com", password="mypassword")
 
     def test_delete_user(self):
-        url = reverse("user-delete")
+        url = reverse("user-current-delete")
         self.client.force_login(self.user)
-        response = self.client.post(url, {"confirm_username": "wrong_username"})
-        self.assertFormError(
-            response.context_data["form"], "confirm_username", "The username entered is not equal to your own."
-        )
-
-        response = self.client.post(url, {"confirm_username": self.user.username})
-
-        self.assertRedirects(response, reverse("index"))
+        response = self.client.delete(url)
+        assert response.status_code == status.HTTP_204_NO_CONTENT
 
         assert not DuskenUser.objects.filter(pk=self.user.pk).exists()
         assert DuskenUser.objects.filter(username__in=["mrclean1", "mrclean2"]).count() == 2

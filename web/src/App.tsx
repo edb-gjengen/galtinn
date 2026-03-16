@@ -3,6 +3,12 @@ import { Layout } from "@/components/Layout";
 import { Login } from "@/pages/Login";
 import { Register } from "@/pages/Register";
 import { Home } from "@/pages/Home";
+import { Profile } from "@/pages/Profile";
+import { EditProfile } from "@/pages/EditProfile";
+import { ChangePassword } from "@/pages/ChangePassword";
+import { SetUsername } from "@/pages/SetUsername";
+import { DeleteAccount } from "@/pages/DeleteAccount";
+import { MembershipList } from "@/pages/MembershipList";
 import { NotFound } from "@/pages/NotFound";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -59,6 +65,54 @@ export function App() {
           element={
             <ProtectedRoute>
               <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/me/"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/me/update/"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/me/update/username/"
+          element={
+            <ProtectedRoute>
+              <SetUsername />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/me/delete/"
+          element={
+            <ProtectedRoute>
+              <DeleteAccount />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/memberships/"
+          element={
+            <ProtectedRoute>
+              <MembershipList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/auth/password_change/"
+          element={
+            <ProtectedRoute>
+              <ChangePassword />
             </ProtectedRoute>
           }
         />

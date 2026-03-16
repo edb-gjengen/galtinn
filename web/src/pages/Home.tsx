@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Badge,
@@ -36,6 +37,8 @@ export function Home() {
     });
     window.location.href = data.url;
   };
+
+  console.log("💥 User:", user);
 
   return (
     <Box>
@@ -167,7 +170,7 @@ export function Home() {
                 <Text size="2">
                   {t("phoneNumber")}:{" "}
                   <Text weight="bold">
-                    {user.phone_number || "—"}
+                    {user.phone_number || "-"}
                   </Text>
                 </Text>
                 {user.phone_number ? (
@@ -190,7 +193,7 @@ export function Home() {
               {t("changePasswordHint")}
             </Text>
             <Button variant="outline" asChild>
-              <a href="/auth/password_change/">{t("changePassword")}</a>
+              <Link to="/auth/password_change/">{t("changePassword")}</Link>
             </Button>
           </Flex>
         </Card>
@@ -204,7 +207,7 @@ export function Home() {
                 {t("setUsernameHint")}
               </Text>
               <Button variant="outline" asChild>
-                <a href="/me/update/username/">{t("setUsername")}</a>
+                <Link to="/me/update/username/">{t("setUsername")}</Link>
               </Button>
             </Flex>
           </Card>

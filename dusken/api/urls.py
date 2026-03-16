@@ -15,6 +15,7 @@ from dusken.api.views.membership_types import MembershipTypeListView
 from dusken.api.views.memberships import KassaMembershipView, MembershipChargeView, MembershipViewSet
 from dusken.api.views.orders import OrderViewSet
 from dusken.api.views.orgunits import OrgUnitViewSet, add_user, remove_user
+from dusken.api.views.profile import CurrentUserMembershipsView, SetUsernameView, UpdateCurrentUserView
 from dusken.api.views.session import (
     SessionLoginView,
     SessionLogoutView,
@@ -50,6 +51,9 @@ urlpatterns += [
     path("me/basic/", BasicAuthCurrentUserView.as_view(), name="user-current-basic-auth"),
     path("me/oauth/", Oauth2CurrentUserView.as_view(), name="user-current-oauth2"),
     path("me/delete/", DeleteCurrentUserView.as_view(), name="user-current-delete"),
+    path("me/update/", UpdateCurrentUserView.as_view(), name="user-current-update"),
+    path("me/set-username/", SetUsernameView.as_view(), name="user-current-set-username"),
+    path("me/memberships/", CurrentUserMembershipsView.as_view(), name="user-current-memberships"),
     # Stripe
     path("membership/charge/", MembershipChargeView.as_view(), name="membership-charge"),
     path("stripe/checkout-session/", StripeCheckoutSessionView.as_view(), name="stripe-checkout-session"),

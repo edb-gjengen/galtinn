@@ -5,20 +5,14 @@ from django.urls import include, path, re_path
 from rest_framework.authtoken.views import obtain_auth_token
 
 from dusken.api import urls as api_urls
-from dusken.apps.neuf_auth.views import NeufPasswordChangeView, NeufPasswordResetConfirmView
+from dusken.apps.neuf_auth.views import NeufPasswordResetConfirmView
 from dusken.autocompletes import UserAutocompleteView
 from dusken.views.general import HomeVolunteerView, IndexView, OrderDetailView, StatsView, spa_view
-from dusken.views.membership import MembershipListView
 from dusken.views.orgunit import OrgUnitDetailView, OrgUnitEditUsersView, OrgUnitEditView, OrgUnitListView
 from dusken.views.user import (
     UserActivateView,
-    UserDeleteView,
-    UserDetailMeView,
     UserDetailView,
     UserListView,
-    UserRegisterView,
-    UserSetUsernameView,
-    UserUpdateMeView,
     UserUpdateView,
 )
 from dusken.views.validation import UserEmailValidateView, UserPhoneValidateView
@@ -32,16 +26,19 @@ urlpatterns = [
     path("login/", spa_view, name="login"),
     path("register/", spa_view, name="register"),
     # User
-    path("me/", UserDetailMeView.as_view(), name="user-detail-me"),
-    path("me/update/", UserUpdateMeView.as_view(), name="user-update-me"),
-    path("me/update/username/", UserSetUsernameView.as_view(), name="user-update-username"),
-    path("me/delete/", UserDeleteView.as_view(), name="user-delete"),
+    path("me/", spa_view, name="user-detail-me"),
+    path("me/update/", spa_view, name="user-update-me"),
+    path("me/update/username/", spa_view, name="user-update-username"),
+    path("me/delete/", spa_view, name="user-delete"),
+    # Membership
+    path("memberships/", spa_view, name="membership-list"),
+    # Change password
+    path("auth/password_change/", spa_view, name="password_change"),
     path("users/autocomplete/", UserAutocompleteView.as_view(), name="user-autocomplete"),
     path("users/<slug:slug>/", UserDetailView.as_view(), name="user-detail"),
     path("users/<slug:slug>/update/", UserUpdateView.as_view(), name="user-update"),
     path("users/", UserListView.as_view(), name="user-list"),
     # Registration
-    path("register/", UserRegisterView.as_view(), name="user-register"),
     path("activate/<int:phone>/<code>", UserActivateView.as_view(), name="user-activate"),
     # Contact info validation
     path(
@@ -51,7 +48,6 @@ urlpatterns = [
     ),
     path("me/validate_phone/", UserPhoneValidateView.as_view(), name="user-phone-validate"),
     # Membership
-    path("memberships/", MembershipListView.as_view(), name="membership-list"),
     path("order/<slug:slug>/", OrderDetailView.as_view(), name="payment-detail"),
     # Volunteer
     path("volunteer/", HomeVolunteerView.as_view(), name="home-volunteer"),
@@ -68,7 +64,6 @@ urlpatterns = [
     # Language selection
     path("i18n/", include("django.conf.urls.i18n")),
     # Authentication
-    path("auth/password_change/", NeufPasswordChangeView.as_view(), name="password_change"),
     re_path(
         r"^auth/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
         NeufPasswordResetConfirmView.as_view(),
