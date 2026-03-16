@@ -34,6 +34,16 @@ from dusken.api.views.users import (
     RegisterUserView,
     user_pk_to_uuid,
 )
+from dusken.api.views.volunteer import (
+    MyOrgUnitsAPIView,
+    OrgUnitAddMemberAPIView,
+    OrgUnitDetailAPIView,
+    OrgUnitListAPIView,
+    OrgUnitMembersAPIView,
+    OrgUnitRemoveMemberAPIView,
+    OrgUnitUpdateAPIView,
+    UserSearchAPIView,
+)
 
 router = DefaultRouter()
 router.register(r"users", DuskenUserViewSet, basename="user-api")
@@ -70,9 +80,26 @@ urlpatterns += [
     ),
     path("user/register/", RegisterUserView.as_view(), name="user-api-register"),
     path("user/pk/to/uuid/", user_pk_to_uuid, name="user_pk_to_uuid"),
-    # Organizational Unit
+    # Organizational Unit (legacy)
     path("orgunit/remove/user/", remove_user, name="remove_user"),
     path("orgunit/add/user/", add_user, name="add_user"),
+    # Organizational Unit (SPA)
+    path("volunteer/orgunits/", OrgUnitListAPIView.as_view(), name="api-orgunit-list"),
+    path("volunteer/orgunits/mine/", MyOrgUnitsAPIView.as_view(), name="api-orgunit-mine"),
+    path("volunteer/orgunits/<slug:slug>/", OrgUnitDetailAPIView.as_view(), name="api-orgunit-detail"),
+    path("volunteer/orgunits/<slug:slug>/update/", OrgUnitUpdateAPIView.as_view(), name="api-orgunit-update"),
+    path("volunteer/orgunits/<slug:slug>/members/", OrgUnitMembersAPIView.as_view(), name="api-orgunit-members"),
+    path(
+        "volunteer/orgunits/<slug:slug>/members/add/",
+        OrgUnitAddMemberAPIView.as_view(),
+        name="api-orgunit-add-member",
+    ),
+    path(
+        "volunteer/orgunits/<slug:slug>/members/remove/",
+        OrgUnitRemoveMemberAPIView.as_view(),
+        name="api-orgunit-remove-member",
+    ),
+    path("volunteer/users/search/", UserSearchAPIView.as_view(), name="api-user-search"),
     # Session auth
     path("auth/login/", SessionLoginView.as_view(), name="api-auth-login"),
     path("auth/logout/", SessionLogoutView.as_view(), name="api-auth-logout"),

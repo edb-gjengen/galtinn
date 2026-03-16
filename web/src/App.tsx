@@ -9,6 +9,11 @@ import { ChangePassword } from "@/pages/ChangePassword";
 import { SetUsername } from "@/pages/SetUsername";
 import { DeleteAccount } from "@/pages/DeleteAccount";
 import { MembershipList } from "@/pages/MembershipList";
+import { VolunteerHome } from "@/pages/VolunteerHome";
+import { OrgUnitList } from "@/pages/OrgUnitList";
+import { OrgUnitDetail } from "@/pages/OrgUnitDetail";
+import { OrgUnitEdit } from "@/pages/OrgUnitEdit";
+import { OrgUnitMembers } from "@/pages/OrgUnitMembers";
 import { NotFound } from "@/pages/NotFound";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -113,6 +118,46 @@ export function App() {
           element={
             <ProtectedRoute>
               <ChangePassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/volunteer/"
+          element={
+            <ProtectedRoute>
+              <VolunteerHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orgunits/"
+          element={
+            <ProtectedRoute>
+              <OrgUnitList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orgunit/:slug/"
+          element={
+            <ProtectedRoute>
+              <OrgUnitDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orgunit/edit/:slug/"
+          element={
+            <ProtectedRoute>
+              <OrgUnitEdit />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orgunit/edit/users/:slug/"
+          element={
+            <ProtectedRoute>
+              <OrgUnitMembers />
             </ProtectedRoute>
           }
         />

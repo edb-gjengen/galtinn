@@ -48,6 +48,11 @@ export function Navbar() {
                     {t("membership")}
                   </Text>
                 </Link>
+                <Link to="/volunteer/" style={{ textDecoration: "none" }}>
+                  <Text color="gray" highContrast>
+                    {t("volunteer")}
+                  </Text>
+                </Link>
               </nav>
             </Flex>
           )}

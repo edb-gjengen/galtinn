@@ -7,8 +7,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from dusken.api import urls as api_urls
 from dusken.apps.neuf_auth.views import NeufPasswordResetConfirmView
 from dusken.autocompletes import UserAutocompleteView
-from dusken.views.general import HomeVolunteerView, IndexView, OrderDetailView, StatsView, spa_view
-from dusken.views.orgunit import OrgUnitDetailView, OrgUnitEditUsersView, OrgUnitEditView, OrgUnitListView
+from dusken.views.general import IndexView, OrderDetailView, StatsView, spa_view
 from dusken.views.user import (
     UserActivateView,
     UserDetailView,
@@ -50,12 +49,11 @@ urlpatterns = [
     # Membership
     path("order/<slug:slug>/", OrderDetailView.as_view(), name="payment-detail"),
     # Volunteer
-    path("volunteer/", HomeVolunteerView.as_view(), name="home-volunteer"),
-    path("orgunits/", OrgUnitListView.as_view(), name="orgunit-list"),
-    path("orgunit/<slug:slug>/", OrgUnitDetailView.as_view(), name="orgunit-detail"),
-    path("orgunit/edit/<slug:slug>/", OrgUnitEditView.as_view(), name="orgunit-edit"),
-    path("orgunit/edit/users/<slug:slug>/", OrgUnitEditUsersView.as_view(), name="orgunit-edit-users"),
-    path("orgunits/<slug:slug>/", OrgUnitDetailView.as_view(), name="orgunit-detail"),
+    path("volunteer/", spa_view, name="home-volunteer"),
+    path("orgunits/", spa_view, name="orgunit-list"),
+    path("orgunit/<slug:slug>/", spa_view, name="orgunit-detail"),
+    path("orgunit/edit/<slug:slug>/", spa_view, name="orgunit-edit"),
+    path("orgunit/edit/users/<slug:slug>/", spa_view, name="orgunit-edit-users"),
     # Stats
     path("stats/", StatsView.as_view(), name="stats"),
     # Other apps

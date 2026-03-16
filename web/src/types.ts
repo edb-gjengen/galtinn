@@ -74,6 +74,54 @@ export interface Order {
   payment_method_display: string;
 }
 
+export interface OrgUnit {
+  id: number;
+  name: string;
+  slug: string;
+  short_name: string;
+  is_active: boolean;
+  description: string;
+  email: string;
+  contact_person: OrgUnitUser | null;
+  website: string;
+  group: number | null;
+  admin_group: number | null;
+  parent: number | null;
+  users: OrgUnitUser[];
+  admins: OrgUnitUser[];
+}
+
+export interface OrgUnitUser {
+  id: number;
+  username: string;
+}
+
+export interface OrgUnitMember {
+  id: number;
+  uuid: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  is_admin: boolean;
+  membership_end_date: string | null;
+  membership_is_valid: boolean;
+}
+
+export interface OrgUnitMembersResponse {
+  members: OrgUnitMember[];
+  is_admin: boolean;
+}
+
+export interface UserSearchResult {
+  id: number;
+  uuid: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
 export interface ApiError {
   detail?: string;
   non_field_errors?: string[];
