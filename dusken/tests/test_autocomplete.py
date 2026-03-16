@@ -9,17 +9,13 @@ from dusken.models import DuskenUser
 @pytest.mark.django_db
 @pytest.fixture
 def admin():
-    return DuskenUser.objects.create_superuser(
-        "admin", email="admin@example.com", password="password"
-    )
+    return DuskenUser.objects.create_superuser("admin", email="admin@example.com", password="password")
 
 
 @pytest.mark.django_db
 @pytest.fixture
 def foo_bar_user():
-    return DuskenUser.objects.create_user(
-        "foobar", email="foobar@example.com", first_name="Foo", last_name="Bar"
-    )
+    return DuskenUser.objects.create_user("foobar", email="foobar@example.com", first_name="Foo", last_name="Bar")
 
 
 def search_autocomplete(client, query):
