@@ -6,15 +6,13 @@ from django.urls import reverse
 from dusken.models import DuskenUser
 
 
-@pytest.mark.django_db
 @pytest.fixture
-def admin():
+def admin(db):
     return DuskenUser.objects.create_superuser("admin", email="admin@example.com", password="password")
 
 
-@pytest.mark.django_db
 @pytest.fixture
-def foo_bar_user():
+def foo_bar_user(db):
     return DuskenUser.objects.create_user("foobar", email="foobar@example.com", first_name="Foo", last_name="Bar")
 
 
@@ -25,7 +23,7 @@ def search_autocomplete(client, query):
     return json.loads(response.content)
 
 
-def test_search_by_full_name(client, admin, foo_bar_user):  # noqa: ARG001
+def test_search_by_full_name(client, admin, foo_bar_user):
     """Searching 'Foo Bar' should find a user with first_name='Foo' and last_name='Bar'."""
     client.force_login(admin)
     data = search_autocomplete(client, "Foo Bar")
