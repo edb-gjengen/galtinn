@@ -11,6 +11,7 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
+    assetsDir: "static/assets",
     emptyOutDir: true,
   },
   server: {

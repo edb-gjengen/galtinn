@@ -71,7 +71,7 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 
 
 @ensure_csrf_cookie
-def spa_view(request):  # noqa: ARG001
+def spa_view(_):
     index_path = Path(settings.WEB_DIR) / "index.html"
     return HttpResponse(index_path.read_text(), content_type="text/html")
 

@@ -109,7 +109,7 @@ LANGUAGES = [
 # Static files
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "frontend/dist", BASE_DIR / "web/dist/assets"]
+STATICFILES_DIRS = [BASE_DIR / "frontend/dist", BASE_DIR / "web/dist/static"]
 WEB_DIR = BASE_DIR / "web/dist"
 
 SITE_ID = 1

@@ -18,6 +18,10 @@ run = "uv run manage.py runserver"
 description = "Run Python test suite"
 run = "uv run pytest -v"
 
+[tasks.collectstatic]
+description = "Collect static files"
+run = "uv run manage.py collectstatic --noinput -i node_modules -c"
+
 [tasks.worker]
 description = "Run Celery worker with beat in development"
 run = "DJANGO_SETTINGS_MODULE=dusken.settings.dev uv run celery -A dusken worker -B"
