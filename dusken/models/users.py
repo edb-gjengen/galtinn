@@ -338,6 +338,7 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
     def remove_admin(self, user_obj, changed_by):
         if self.admin_group == self.group:
             return
+
         self.admin_group.user_set.remove(user_obj)
         self.log(f"Removed {user_obj} from admin", changed_by)
         user_obj.log(f"No longer admin in {self} OrgUnit", changed_by)

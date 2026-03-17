@@ -208,7 +208,12 @@ act -W .gitea/workflows/
 ### Followup tasks
 
 - [ ] Verify feature parity
+- [ ] Add tests for REST endpoints
 - [ ] Verify Norwegian translations with legacy frontend
+- [ ] SPA detail view: Render 404 page if object not found
 - [ ] Improve styling according to current style guide
+
+#### Round two tasks
+
 - [ ] Remove legacy HTML templates
 - [ ] Refactor things

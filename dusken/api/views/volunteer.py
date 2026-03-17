@@ -1,8 +1,13 @@
 from django.db import models
 from rest_framework import permissions, serializers, status
-from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import (
+    CreateAPIView,
+    GenericAPIView,
+    ListAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
+)
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from dusken.api.serializers.orgunits import OrgUnitSerializer
 from dusken.models import DuskenUser, OrgUnit
@@ -10,7 +15,22 @@ from dusken.models import DuskenUser, OrgUnit
 
 class IsVolunteer(permissions.BasePermission):
     def has_permission(self, request, _view):
-        return request.user.is_authenticated and (request.user.is_volunteer or request.user.is_superuser)
+        if not request.user.is_authenticated:
+            return False
+
+        return request.user.is_volunteer or request.user.is_superuser
+
+
+class IsOrgUnitAdmin(permissions.BasePermission):
+    """Checks if the user is an admin of the OrgUnit. Only meaningful in a generic view where the object is an OrgUnit.
+    Ref: https://www.django-rest-framework.org/api-guide/permissions/#custom-permissions
+    """
+
+    def has_object_permission(self, request, _view, org_unit):
+        if not request.user.is_authenticated:
+            return False
+
+        return request.user.is_superuser or request.user.has_group(org_unit.admin_group)
 
 
 class OrgUnitListAPIView(ListAPIView):
@@ -90,7 +110,7 @@ class OrgUnitMemberSerializer(serializers.ModelSerializer):
         return ms.is_valid
 
 
-class OrgUnitMembersAPIView(APIView):
+class OrgUnitMembersAPIView(GenericAPIView):
     permission_classes = [IsVolunteer]
 
     def get(self, request, slug):
@@ -105,48 +125,52 @@ class OrgUnitManageMemberSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     role = serializers.ChoiceField(choices=["member", "admin"])
 
+    def validate(self, attrs):
+        try:
+            user = DuskenUser.objects.get(pk=attrs.get("user_id"))
+        except DuskenUser.DoesNotExist as err:
+            raise serializers.ValidationError("User does not exist.") from err
 
-class OrgUnitAddMemberAPIView(APIView):
-    permission_classes = [IsVolunteer]
+        attrs["user"] = user
+        return attrs
 
-    def post(self, request, slug):
-        orgunit = OrgUnit.objects.get(slug=slug, is_active=True)
-        if not request.user.is_superuser and not request.user.has_group(orgunit.admin_group):
-            return Response({"detail": "Not authorized."}, status=status.HTTP_403_FORBIDDEN)
 
-        serializer = OrgUnitManageMemberSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = DuskenUser.objects.get(pk=serializer.validated_data["user_id"])
+class OrgUnitManageMemberBaseAPIView(CreateAPIView):
+    serializer_class = OrgUnitManageMemberSerializer
+    permission_classes = [IsOrgUnitAdmin]
+    queryset = OrgUnit.objects.filter(is_active=True)
+    lookup_field = "slug"
+
+
+class OrgUnitAddMemberAPIView(OrgUnitManageMemberBaseAPIView):
+    def perform_create(self, serializer):
+        org_unit = self.get_object()
+        user = serializer.validated_data["user"]
         role = serializer.validated_data["role"]
 
         if role == "admin":
-            if not user.has_group(orgunit.admin_group):
-                orgunit.add_admin(user, request.user)
-        elif not user.has_group(orgunit.group):
-            orgunit.add_user(user, request.user)
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            org_unit.add_admin(user, self.request.user)
+        else:
+            org_unit.add_user(user, self.request.user)
 
 
-class OrgUnitRemoveMemberAPIView(APIView):
-    permission_classes = [IsVolunteer]
+class OrgUnitRemoveMemberAPIView(OrgUnitManageMemberBaseAPIView):
+    """Remove a user from an organization unit. Uses CreateAPIView"""
 
-    def post(self, request, slug):
-        orgunit = OrgUnit.objects.get(slug=slug, is_active=True)
-        if not request.user.is_superuser and not request.user.has_group(orgunit.admin_group):
-            return Response({"detail": "Not authorized."}, status=status.HTTP_403_FORBIDDEN)
+    def create(self, request, *args, **kwargs):
+        res = super().create(request, *args, **kwargs)
+        res.status_code = status.HTTP_204_NO_CONTENT
+        return res
 
-        serializer = OrgUnitManageMemberSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = DuskenUser.objects.get(pk=serializer.validated_data["user_id"])
+    def perform_create(self, serializer):
+        org_unit = self.get_object()
+        user = serializer.validated_data["user"]
         role = serializer.validated_data["role"]
 
-        if role == "admin" and user.has_group(orgunit.admin_group):
-            orgunit.remove_admin(user, request.user)
-        elif user.has_group(orgunit.group):
-            orgunit.remove_user(user, request.user)
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if role == "admin":
+            org_unit.remove_admin(user, self.request.user)
+        else:
+            org_unit.remove_user(user, self.request.user)
 
 
 MIN_SEARCH_LENGTH = 2
