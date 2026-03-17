@@ -123,7 +123,6 @@ class OrgUnitMembersAPIView(GenericAPIView):
 
 class OrgUnitManageMemberSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
-    role = serializers.ChoiceField(choices=["member", "admin"])
 
     def validate(self, attrs):
         try:
@@ -135,14 +134,19 @@ class OrgUnitManageMemberSerializer(serializers.Serializer):
         return attrs
 
 
+class OrgUnitAddMemberSerializer(OrgUnitManageMemberSerializer):
+    role = serializers.ChoiceField(choices=["member", "admin"])
+
+
 class OrgUnitManageMemberBaseAPIView(CreateAPIView):
-    serializer_class = OrgUnitManageMemberSerializer
     permission_classes = [IsOrgUnitAdmin]
     queryset = OrgUnit.objects.filter(is_active=True)
     lookup_field = "slug"
 
 
 class OrgUnitAddMemberAPIView(OrgUnitManageMemberBaseAPIView):
+    serializer_class = OrgUnitAddMemberSerializer
+
     def perform_create(self, serializer):
         org_unit = self.get_object()
         user = serializer.validated_data["user"]
@@ -155,22 +159,20 @@ class OrgUnitAddMemberAPIView(OrgUnitManageMemberBaseAPIView):
 
 
 class OrgUnitRemoveMemberAPIView(OrgUnitManageMemberBaseAPIView):
-    """Remove a user from an organization unit. Uses CreateAPIView"""
+    """Remove a member from an organization unit"""
+
+    serializer_class = OrgUnitManageMemberSerializer
 
     def create(self, request, *args, **kwargs):
         res = super().create(request, *args, **kwargs)
-        res.status_code = status.HTTP_204_NO_CONTENT
+        res.status_code = status.HTTP_200_OK
         return res
 
     def perform_create(self, serializer):
         org_unit = self.get_object()
         user = serializer.validated_data["user"]
-        role = serializer.validated_data["role"]
-
-        if role == "admin":
-            org_unit.remove_admin(user, self.request.user)
-        else:
-            org_unit.remove_user(user, self.request.user)
+        org_unit.remove_user(user, self.request.user)
+        org_unit.remove_admin(user, self.request.user)
 
 
 MIN_SEARCH_LENGTH = 2

@@ -52,12 +52,12 @@ export function OrgUnitMembers() {
     loadMembers();
   };
 
-  const removeMember = async (userId: number, role: "member" | "admin") => {
+  const removeMember = async (userId: number) => {
     if (!slug) return;
     if (!confirm(t("removeUserConfirm"))) return;
     await fetchApi(`/api/volunteer/orgunits/${slug}/members/remove/`, {
       method: "POST",
-      body: JSON.stringify({ user_id: userId, role }),
+      body: JSON.stringify({ user_id: userId }),
     });
     loadMembers();
   };
@@ -65,9 +65,9 @@ export function OrgUnitMembers() {
   const toggleRole = async (member: OrgUnitMember) => {
     if (!slug) return;
     if (member.is_admin) {
-      await fetchApi(`/api/volunteer/orgunits/${slug}/members/remove/`, {
+      await fetchApi(`/api/volunteer/orgunits/${slug}/members/add/`, {
         method: "POST",
-        body: JSON.stringify({ user_id: member.id, role: "admin" }),
+        body: JSON.stringify({ user_id: member.id, role: "member" }),
       });
     } else {
       await fetchApi(`/api/volunteer/orgunits/${slug}/members/add/`, {
@@ -154,7 +154,7 @@ export function OrgUnitMembers() {
                       {m.is_admin ? t("makeMember") : t("makeAdmin")}
                     </Button>
                   )}
-                  <Button size="1" variant="outline" color="red" onClick={() => removeMember(m.id, "member")}>
+                  <Button size="1" variant="outline" color="red" onClick={() => removeMember(m.id)}>
                     {t("remove")}
                   </Button>
                 </Flex>

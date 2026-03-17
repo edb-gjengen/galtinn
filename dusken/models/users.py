@@ -315,6 +315,7 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
         users = self.group.user_set.order_by(*order_fields).exclude(pk__in=admins)
         return chain(admins, users)
 
+    # FIXME: Rename to add_member
     def add_user(self, user_obj, changed_by):
         self.group.user_set.add(user_obj)
         self.log(f"Added user {user_obj}", changed_by)
@@ -328,6 +329,7 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
         user_obj.log(f"Added to {self} OrgUnit as admin", changed_by)
         user_obj.update_volunteer_status()
 
+    # FIXME: Rename to remove_member
     def remove_user(self, user_obj, changed_by):
         self.group.user_set.remove(user_obj)
         self.admin_group.user_set.remove(user_obj)
@@ -342,6 +344,7 @@ class OrgUnit(MPTTModel, BaseModel):  # type: ignore
         self.admin_group.user_set.remove(user_obj)
         self.log(f"Removed {user_obj} from admin", changed_by)
         user_obj.log(f"No longer admin in {self} OrgUnit", changed_by)
+        user_obj.update_volunteer_status()
 
     def log(self, message, changed_by):
         from .logs import OrgUnitLogMessage  # noqa: PLC0415

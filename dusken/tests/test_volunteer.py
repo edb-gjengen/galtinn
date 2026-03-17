@@ -114,7 +114,7 @@ class TestOrgUnitRemoveMemberAPIView:
         client.force_login(admin_user)
         data = {"user_id": target_user.pk, "role": "member"}
         response = client.post(remove_url, data, content_type="application/json")
-        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert response.status_code == status.HTTP_200_OK
         assert not member_group.user_set.filter(pk=target_user.pk).exists()
 
     def test_admin_can_remove_admin(
@@ -124,10 +124,9 @@ class TestOrgUnitRemoveMemberAPIView:
         client.force_login(admin_user)
         data = {"user_id": target_user.pk, "role": "admin"}
         response = client.post(remove_url, data, content_type="application/json")
-        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert response.status_code == status.HTTP_200_OK
         assert not admin_group.user_set.filter(pk=target_user.pk).exists()
-        # User should still be a regular member after admin removal
-        assert member_group.user_set.filter(pk=target_user.pk).exists()
+        assert not member_group.user_set.filter(pk=target_user.pk).exists()
 
     def test_remove_member_also_removes_admin(
         self, client, volunteer_group, admin_user, target_user, member_group, admin_group, remove_url
@@ -136,7 +135,7 @@ class TestOrgUnitRemoveMemberAPIView:
         client.force_login(admin_user)
         data = {"user_id": target_user.pk, "role": "member"}
         response = client.post(remove_url, data, content_type="application/json")
-        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert response.status_code == status.HTTP_200_OK
         assert not member_group.user_set.filter(pk=target_user.pk).exists()
         assert not admin_group.user_set.filter(pk=target_user.pk).exists()
 
@@ -146,7 +145,7 @@ class TestOrgUnitRemoveMemberAPIView:
         client.force_login(superuser)
         data = {"user_id": target_user.pk, "role": "member"}
         response = client.post(remove_url, data, content_type="application/json")
-        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert response.status_code == status.HTTP_200_OK
         assert not member_group.user_set.filter(pk=target_user.pk).exists()
 
     def test_invalid_user_id(self, client, volunteer_group, admin_user, remove_url):
