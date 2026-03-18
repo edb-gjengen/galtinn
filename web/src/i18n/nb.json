@@ -40,6 +40,7 @@
   "setUsername": "Sett brukernavn",
   "setUsernameHint": "Nødvendig for tilgang til interne systemer",
   "buyMembership": "Kjøp medlemskap",
+  "selectMembershipType": "Velg medlemskap",
   "pageNotFound": "Siden ble ikke funnet",
   "pageNotFoundMessage": "Siden du leter etter finnes ikke eller har ikke blitt migrert ennå.",
   "goHome": "Gå til hjem",
@@ -99,10 +100,10 @@
   "becomeVolunteer": "Les mer",
   "findUsers": "Finn brukere",
   "view": "Vis",
-  "orgUnitList": "Organisasjonsenheter",
+  "orgUnitList": "Foreninger",
   "orgUnitListDescription": "Kontaktinformasjon og medlemslister",
-  "showOrgUnits": "Vis organisasjonsenheter",
-  "yourOrganizations": "Dine organisasjoner",
+  "showOrgUnits": "Vis foreninger",
+  "yourOrganizations": "Dine foreninger",
   "manageMembers": "Administrer medlemmer",
   "memberStatistics": "Medlemsstatistikk",
   "statistics": "Statistikk",
@@ -123,5 +124,8 @@
   "notAuthorized": "Du har ikke tilgang til å redigere denne organisasjonen",
   "searchUsers": "Søk brukere...",
   "editOrgUnit": "Rediger organisasjon",
-  "orgUnitUpdated": "Organisasjon oppdatert."
+  "orgUnitUpdated": "Organisasjon oppdatert.",
+  "membershipType.student": "Student",
+  "membershipType.regular": "Ikke-student",
+  "membershipType.support": "Støttemedlem"
 }

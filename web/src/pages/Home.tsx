@@ -1,14 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Badge, Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
+import { Badge, Box, Button, Card, Flex, Grid, Heading, RadioCards, Text } from "@radix-ui/themes";
 import { useAuth } from "@/hooks/useAuth";
-import { fetchApi } from "@/lib/api";
+import { fetchApi, getCsrfToken } from "@/lib/api";
+import type { MembershipType } from "@/types";
 
 export function Home() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [emailSent, setEmailSent] = useState(false);
+  const [membershipTypes, setMembershipTypes] = useState<MembershipType[]>([]);
+  const [selectedMembershipType, setSelectedMembershipType] = useState<string>("");
+
+  useEffect(() => {
+    fetchApi<MembershipType[]>("/api/membership-types/").then((types) => {
+      setMembershipTypes(types);
+      const defaultType = types.find((mt) => mt.is_default) ?? types[0];
+      if (defaultType) {
+        setSelectedMembershipType(defaultType.slug);
+      }
+    });
+  }, []);
 
   if (!user) return null;
 
@@ -19,14 +32,6 @@ export function Home() {
   const handleResendEmail = async () => {
     await fetchApi("/api/user/resend_validation_email/", { method: "POST" });
     setEmailSent(true);
-  };
-
-  const handleBuyMembership = async () => {
-    const data = await fetchApi<{ url: string }>("/api/stripe/checkout-session/", {
-      method: "POST",
-      body: JSON.stringify({}),
-    });
-    window.location.href = data.url;
   };
 
   return (
@@ -106,8 +111,32 @@ export function Home() {
               </Flex>
             )}
 
-            {(!hasValidMembership || expiringSoon) && (
-              <Button onClick={handleBuyMembership}>{t("buyMembership")}</Button>
+            {(!hasValidMembership || expiringSoon) && membershipTypes.length > 0 && (
+              <Flex direction="column" gap="3">
+                <RadioCards.Root
+                  value={selectedMembershipType}
+                  onValueChange={setSelectedMembershipType}
+                  columns={{ initial: "1", sm: String(membershipTypes.length) }}
+                >
+                  {membershipTypes.map((mt) => (
+                    <RadioCards.Item key={mt.slug} value={mt.slug}>
+                      <Flex direction="column" width="100%">
+                        <Text weight="bold">{t(`membershipType.${mt.slug}`)}</Text>
+                        <Text size="2" color="gray">
+                          {mt.price_nok_kr} kr
+                        </Text>
+                      </Flex>
+                    </RadioCards.Item>
+                  ))}
+                </RadioCards.Root>
+                <form action="/api/stripe/checkout-session/" method="POST">
+                  <input type="hidden" name="membership_type" value={selectedMembershipType} />
+                  <input type="hidden" name="csrfmiddlewaretoken" value={getCsrfToken()} />
+                  <Button type="submit" disabled={!selectedMembershipType} style={{ width: "100%" }}>
+                    {t("buyMembership")}
+                  </Button>
+                </form>
+              </Flex>
             )}
           </Flex>
         </Card>

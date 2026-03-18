@@ -51,9 +51,7 @@ urlpatterns = [
     # Volunteer
     path("volunteer/", spa_view, name="home-volunteer"),
     path("orgunits/", spa_view, name="orgunit-list"),
-    path("orgunit/<slug:slug>/", spa_view, name="orgunit-detail"),
-    path("orgunit/edit/<slug:slug>/", spa_view, name="orgunit-edit"),
-    path("orgunit/edit/users/<slug:slug>/", spa_view, name="orgunit-edit-users"),
+    re_path(r"^orgunit/.*", spa_view, name="orgunit-views"),
     # Stats
     path("stats/", StatsView.as_view(), name="stats"),
     # Other apps

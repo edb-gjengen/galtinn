@@ -217,3 +217,9 @@ act -W .gitea/workflows/
 
 - [ ] Remove legacy HTML templates
 - [ ] Refactor things
+
+## Future improvements
+
+- [ ] Investigate adopting new version of [Stripe Checkout](https://stripe.com/payments/checkout)
+- [ ] Sync `zip_to_city.py` from <https://www.bring.no/tjenester/adressetjenester/postnummer>
+- [ ] Add membership icon where relevant

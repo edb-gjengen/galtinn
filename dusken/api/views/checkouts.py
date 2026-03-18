@@ -60,8 +60,19 @@ class StripeBaseAPIView(GenericAPIView):
 
         return customer
 
+    def _migrate_membership_type_slug_standard(self, request_data):
+        """Migrate uses of legacy MembershipType.slug from 'standard' to 'student', since cnapp hardcodes `standard`.
+        Ref: https://git.neuf.no/edb/cnapp/src/commit/9e2cb13bedac26a65ee9e3028fe778d0041382ff/src/modules/membership/useProof.tsx#L31
+        """
+        slug = request_data.get("membership_type", "") or ""
+        if slug == "standard":
+            request_data = request_data.copy()
+            request_data["membership_type"] = "student"
+        return request_data
+
     def post(self, request):
-        self.serializer = self.serializer_class(data=request.data, context={"request": request})
+        request_data = self._migrate_membership_type_slug_standard(request.data)
+        self.serializer = self.serializer_class(data=request_data, context={"request": request})
         self.serializer.is_valid(raise_exception=True)
         self.membership_type = self.serializer.validated_data.get("membership_type")
         try:

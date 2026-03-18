@@ -8,5 +8,5 @@ from dusken.models import MembershipType
 class MembershipTypeListView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = MembershipTypeSerializer
-    queryset = MembershipType.objects.filter(is_active=True)
+    queryset = MembershipType.objects.filter(is_active=True).order_by("order")
     pagination_class = None

@@ -31,6 +31,17 @@ def user():
 def membership_type():
     return MembershipType.objects.create(
         name="Cool Club Membership",
+        slug="student",
+        duration=datetime.timedelta(days=365),
+        is_default=True,
+        stripe_price_id="price_asdf",
+    )
+
+
+@pytest.fixture
+def membership_type_legacy():
+    return MembershipType.objects.create(
+        name="Cool Club Membership",
         slug="standard",
         duration=datetime.timedelta(days=365),
         is_default=True,
@@ -109,6 +120,37 @@ def test_stripe_create_payment_sheet(user, membership_type, client):
     sp = StripePayment.objects.get()
     assert sp.stripe_id == stripe_id
     assert sp.membership_type.id == membership_type.id
+    assert sp.user.id == user.id
+    assert sp.status == StripePayment.Status.OPEN
+    assert sp.source == "app"
+    assert sp.stripe_model == StripePayment.StripeModel.PAYMENT_INTENT
+
+
+@pytest.mark.django_db
+def test_stripe_create_payment_sheet_legacy_migrate(user, membership_type_legacy, membership_type, client):
+    client.force_login(user)
+    url = reverse("stripe-payment-sheet")
+    payload = {
+        "membership_type": membership_type_legacy.slug,
+    }
+    stripe_id = "yolo"
+
+    with (
+        mock.patch("stripe.Customer.create") as customer_create,
+        mock.patch("stripe.PaymentIntent.create") as payment_intent,
+        mock.patch("stripe.EphemeralKey.create") as ephemeral_key,
+    ):
+        customer_create.return_value = SimpleNamespace(id="someid")
+        ephemeral_key.return_value = SimpleNamespace(secret="somesecret")
+        payment_intent.return_value = SimpleNamespace(id=stripe_id, client_secret="someclientsecret")
+        response = client.post(url, payload, format="json")
+
+    assert response.status_code == HTTPStatus.OK, getattr(response, "data", response.status_code)
+    assert StripePayment.objects.count() == 1
+    sp = StripePayment.objects.get()
+    assert sp.stripe_id == stripe_id
+    assert sp.membership_type.id == membership_type.id  # migrated
+    assert sp.membership_type.id != membership_type_legacy.id
     assert sp.user.id == user.id
     assert sp.status == StripePayment.Status.OPEN
     assert sp.source == "app"

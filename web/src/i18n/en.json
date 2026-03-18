@@ -40,6 +40,7 @@
   "setUsername": "Set username",
   "setUsernameHint": "Needed to get access to internal systems",
   "buyMembership": "Buy membership",
+  "selectMembershipType": "Select membership type",
   "pageNotFound": "Page not found",
   "pageNotFoundMessage": "The page you're looking for doesn't exist or hasn't been migrated yet.",
   "goHome": "Go to home",
@@ -99,10 +100,10 @@
   "becomeVolunteer": "Read more",
   "findUsers": "Find users",
   "view": "View",
-  "orgUnitList": "Organizational units",
+  "orgUnitList": "Associations",
   "orgUnitListDescription": "Contact information and member lists",
-  "showOrgUnits": "Show organizational units",
-  "yourOrganizations": "Your organizations",
+  "showOrgUnits": "Show associations",
+  "yourOrganizations": "Your associations",
   "manageMembers": "Manage members",
   "memberStatistics": "Membership statistics",
   "statistics": "Statistics",
@@ -123,5 +124,8 @@
   "notAuthorized": "You are not authorized to edit this organization",
   "searchUsers": "Search users...",
   "editOrgUnit": "Edit organization",
-  "orgUnitUpdated": "Organization updated."
+  "orgUnitUpdated": "Organization updated.",
+  "membershipType.student": "Student",
+  "membershipType.regular": "Non-student",
+  "membershipType.support": "Supporting member"
 }

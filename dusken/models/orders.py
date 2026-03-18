@@ -88,6 +88,7 @@ class MembershipType(BaseModel):
     duration = models.DurationField(default=timedelta(days=365), null=True, blank=True)
     expiry_type = models.CharField(max_length=254, choices=EXPIRY_TYPES, default=EXPIRY_DURATION)
     stripe_price_id = models.CharField(max_length=254, blank=True, default="")
+    order = models.PositiveIntegerField(default=0, help_text=_("Order of appearance in frontend"), db_index=True)
 
     @property
     def price_nok_kr(self):

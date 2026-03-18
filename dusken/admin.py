@@ -226,8 +226,9 @@ class StripePaymentAdmin(admin.ModelAdmin):
 
 @admin.register(MembershipType)
 class MembershipTypeAdmin(admin.ModelAdmin):
-    list_display = ["name", "slug", "price", "stripe_price_id", "description", "is_active", "is_default"]
+    list_display = ["name", "slug", "price", "stripe_price_id", "description", "is_active", "is_default", "order"]
     list_filter = ["is_active", "is_default"]
+    ordering = ["-is_active", "order"]
 
 
 admin.site.register(PlaceOfStudy)

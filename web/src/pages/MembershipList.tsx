@@ -50,7 +50,9 @@ export function MembershipList() {
           <Table.Body>
             {memberships.map((m) => (
               <Table.Row key={m.id}>
-                <Table.Cell>{m.membership_type}</Table.Cell>
+                <Table.Cell>
+                  {t("membership")}, {t(`membershipType.${m.membership_type}`)}
+                </Table.Cell>
                 <Table.Cell>{m.start_date}</Table.Cell>
                 <Table.Cell>{m.end_date ?? t("lifelong")}</Table.Cell>
                 <Table.Cell>
