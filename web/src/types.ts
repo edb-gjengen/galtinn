@@ -7,6 +7,7 @@ export interface User {
   phone_number: string;
   date_of_birth: string | null;
   place_of_study: number | null;
+  place_of_study_display: string | null;
   street_address: string | null;
   street_address_two: string | null;
   postal_code: string | null;
@@ -55,9 +56,16 @@ export interface MemberCard {
   user: number | null;
 }
 
+export interface GroupOrgUnit {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 export interface Group {
   id: number;
   name: string;
+  member_orgunits: GroupOrgUnit[];
 }
 
 export interface DiscordProfile {

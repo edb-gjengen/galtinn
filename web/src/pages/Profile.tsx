@@ -5,8 +5,33 @@ import { Badge, Box, Button, Card, Flex, Heading, Separator, Text } from "@radix
 import { useAuth } from "@/hooks/useAuth";
 import { fetchApi } from "@/lib/api";
 
+function timeAgo(dateString: string, locale: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+
+  const intervals: [number, Intl.RelativeTimeFormatUnit][] = [
+    [60 * 60 * 24 * 365, "year"],
+    [60 * 60 * 24 * 30, "month"],
+    [60 * 60 * 24 * 7, "week"],
+    [60 * 60 * 24, "day"],
+    [60 * 60, "hour"],
+    [60, "minute"],
+  ];
+
+  for (const [secondsInUnit, unit] of intervals) {
+    const value = Math.floor(seconds / secondsInUnit);
+    if (value >= 1) {
+      return rtf.format(-value, unit);
+    }
+  }
+  return rtf.format(-seconds, "second");
+}
+
 export function Profile() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [emailSent, setEmailSent] = useState(false);
 
@@ -91,6 +116,12 @@ export function Profile() {
               {t("dateOfBirth")}: <Text weight="bold">{user.date_of_birth}</Text>
             </Text>
           )}
+
+          {user.place_of_study_display && (
+            <Text size="2">
+              {t("placeOfStudy")}: <Text weight="bold">{user.place_of_study_display}</Text>
+            </Text>
+          )}
         </Flex>
       </Card>
 
@@ -118,11 +149,48 @@ export function Profile() {
         </Flex>
       </Card>
 
+      <Card mb="4">
+        <Flex direction="column" gap="2">
+          <Text size="2" color="gray">
+            {t("registered")}: <Text weight="bold">{user.date_joined?.slice(0, 10) || "-"}</Text>
+          </Text>
+          <Text size="2" color="gray">
+            {t("lastUpdated")}:{" "}
+            <Text weight="bold" title={user.updated}>
+              {user.updated ? timeAgo(user.updated, i18n.language) : "-"}
+            </Text>
+          </Text>
+        </Flex>
+      </Card>
+
       <Flex gap="3" mb="4">
         <Button variant="outline" asChild>
           <Link to="/me/update/">{t("editProfile")}</Link>
         </Button>
       </Flex>
+
+      <Separator size="4" my="4" />
+
+      <Heading size="4" mb="3">
+        {t("organizations")}
+      </Heading>
+      <Card mb="4">
+        {(() => {
+          const orgunits = user.groups.flatMap((g) => g.member_orgunits);
+          if (orgunits.length === 0) {
+            return <Text size="2">{t("noOrganizations")}</Text>;
+          }
+          return (
+            <Flex direction="column" gap="2">
+              {orgunits.map((ou) => (
+                <Text key={ou.id} size="2">
+                  <Link to={`/orgunit/${ou.slug}/`}>{ou.name}</Link>
+                </Text>
+              ))}
+            </Flex>
+          );
+        })()}
+      </Card>
 
       <Separator size="4" my="4" />
 

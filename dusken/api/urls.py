@@ -6,7 +6,7 @@ from strawberry.django.views import GraphQLView
 
 from dusken.api.graphql import schema
 from dusken.api.views import ResendValidationEmailView
-from dusken.api.views.auth import GenericOauth2Callback
+from dusken.api.views.auth import GenericOauth2Callback, PasswordValidatorsView
 from dusken.api.views.cards import KassaMemberCardUpdateView, MemberCardViewSet
 from dusken.api.views.checkouts import StripeCheckoutSessionView, StripePaymentSheetView, StripeWebhookView
 from dusken.api.views.discord import UserDiscordProfileViewSet
@@ -104,6 +104,7 @@ urlpatterns += [
     path("auth/login/", SessionLoginView.as_view(), name="api-auth-login"),
     path("auth/logout/", SessionLogoutView.as_view(), name="api-auth-logout"),
     path("auth/session/", SessionView.as_view(), name="api-auth-session"),
+    path("auth/password/validators/", PasswordValidatorsView.as_view(), name="api-auth-password-validators"),
     path("auth/password/reset/", SessionPasswordResetView.as_view(), name="api-auth-password-reset"),
     path(
         "auth/password/reset/confirm/",

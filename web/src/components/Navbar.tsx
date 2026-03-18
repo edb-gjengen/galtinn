@@ -10,7 +10,7 @@ export function Navbar() {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/login/");
+    navigate("/");
   };
 
   const toggleLanguage = () => {
@@ -29,7 +29,7 @@ export function Navbar() {
     >
       <Flex justify="between" align="center" gap="4">
         <Flex align="center" gap="4">
-          <Link to={isAuthenticated ? "/home/" : "/login/"} style={{ textDecoration: "none" }}>
+          <Link to={isAuthenticated ? "/home/" : "/"} style={{ textDecoration: "none" }}>
             <Text size="5" weight="bold" color="blue">
               Galtinn
             </Text>

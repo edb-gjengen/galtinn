@@ -21,18 +21,6 @@ export default defineConfig({
         target: "http://localhost:8000",
         changeOrigin: true,
       },
-      "/admin": {
-        target: "http://localhost:8000",
-        changeOrigin: true,
-      },
-      "/i18n": {
-        target: "http://localhost:8000",
-        changeOrigin: true,
-      },
-      "/auth": {
-        target: "http://localhost:8000",
-        changeOrigin: true,
-      },
     },
   },
 });

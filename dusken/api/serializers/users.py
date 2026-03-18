@@ -26,6 +26,7 @@ class DuskenUserSerializer(serializers.ModelSerializer):
     last_membership = MembershipSerializer()
     groups = GroupSerializer(many=True, read_only=True)
     discord_profile = UserDiscordProfileSerializer()
+    place_of_study_display = serializers.StringRelatedField(source="place_of_study", read_only=True)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -75,6 +76,8 @@ class DuskenUserSerializer(serializers.ModelSerializer):
             "groups",
             "discord_profile",
             "date_joined",
+            "updated",
+            "place_of_study_display",
         )
         read_only_fields = (
             "id",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { Box, Button, Callout, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes";
@@ -13,6 +13,20 @@ export function ChangePassword() {
   const { t } = useTranslation();
   const [success, setSuccess] = useState(false);
   const [generalError, setGeneralError] = useState("");
+  const [passwordHelpTexts, setPasswordHelpTexts] = useState<string[]>([]);
+
+  const fetchPasswordHelpTexts = async () => {
+    try {
+      const data = await fetchApi<{ help_texts: string[] }>("/api/auth/password/validators/");
+      setPasswordHelpTexts(data.help_texts);
+    } catch (err) {
+      console.error("Failed to fetch password help texts:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPasswordHelpTexts();
+  }, []);
 
   const {
     register,
@@ -103,6 +117,15 @@ export function ChangePassword() {
                   color={errors.new_password ? "red" : undefined}
                   {...register("new_password", { required: true })}
                 />
+                {passwordHelpTexts.length > 0 && (
+                  <Flex direction="column" gap="1" mt="1">
+                    {passwordHelpTexts.map((text, idx) => (
+                      <Text key={idx} size="1" color="gray">
+                        {text}
+                      </Text>
+                    ))}
+                  </Flex>
+                )}
                 {errors.new_password?.message && (
                   <Text size="1" color="red" mt="1">
                     {errors.new_password.message}
