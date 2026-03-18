@@ -29,8 +29,9 @@
 - Ruff with nearly all rules enabled (see pyproject.toml) — docstrings and type annotations are NOT required
 - ESLint flat config with Prettier formatting for JS
 - Tests must not make network calls (pytest-socket enforced)
-- Documentation uses rumdl for linting
+- Documentation uses `rumdl` for linting
 - Django route names use kabab casing
+- React forms use `react-hook-form`
 
 ## Local Services
 

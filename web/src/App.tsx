@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
+import { Index } from "@/pages/Index";
 import { Login } from "@/pages/Login";
 import { Register } from "@/pages/Register";
 import { Home } from "@/pages/Home";
@@ -45,10 +46,25 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function IndexRedirect() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/home/" replace />;
+  }
+
+  return <Index />;
+}
+
 export function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
+        <Route path="/" element={<IndexRedirect />} />
         <Route
           path="/login/"
           element={

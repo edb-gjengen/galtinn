@@ -7,7 +7,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from dusken.api import urls as api_urls
 from dusken.apps.neuf_auth.views import NeufPasswordResetConfirmView
 from dusken.autocompletes import UserAutocompleteView
-from dusken.views.general import IndexView, OrderDetailView, StatsView, spa_view
+from dusken.views.general import OrderDetailView, StatsView, spa_view
 from dusken.views.user import (
     UserActivateView,
     UserDetailView,
@@ -20,7 +20,7 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    path("", IndexView.as_view(), name="index"),
+    path("", spa_view, name="index"),
     path("home/", spa_view, name="home"),
     path("login/", spa_view, name="login"),
     path("register/", spa_view, name="register"),
