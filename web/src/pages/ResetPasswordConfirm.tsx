@@ -16,17 +16,20 @@ export function ResetPasswordConfirm() {
   const [generalError, setGeneralError] = useState("");
   const [passwordHelpTexts, setPasswordHelpTexts] = useState<string[]>([]);
 
-  const fetchPasswordHelpTexts = async () => {
-    try {
-      const data = await fetchApi<{ help_texts: string[] }>("/api/auth/password/validators/");
-      setPasswordHelpTexts(data.help_texts);
-    } catch (err) {
-      console.error("Failed to fetch password help texts:", err);
-    }
-  };
-
   useEffect(() => {
-    fetchPasswordHelpTexts();
+    let ignore = false;
+    fetchApi<{ help_texts: string[] }>("/api/auth/password/validators/")
+      .then((data) => {
+        if (!ignore) {
+          setPasswordHelpTexts(data.help_texts);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch password help texts:", err);
+      });
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const {
