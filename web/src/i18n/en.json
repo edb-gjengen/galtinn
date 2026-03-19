@@ -11,7 +11,7 @@
   "firstName": "First name",
   "lastName": "Last name",
   "phoneNumber": "Phone number",
-  "forgotPassword": "Forgot password?",
+  "forgotPassword": "Forgot your password?",
   "noAccountYet": "Don't have an account yet?",
   "alreadyHaveAccount": "Already have an account?",
   "registerHere": "Register here",
@@ -127,5 +127,13 @@
   "orgUnitUpdated": "Organization updated.",
   "membershipType.student": "Student",
   "membershipType.regular": "Non-student",
-  "membershipType.support": "Supporting member"
+  "membershipType.support": "Supporting member",
+  "forgotPasswordHint": "Enter your email address and we'll send you a link to reset your password.",
+  "sendResetLink": "Send reset link",
+  "backToLogin": "Back to login",
+  "passwordResetEmailSent": "If an account exists with that email, a reset link has been sent.",
+  "setNewPassword": "Set new password",
+  "newPassword": "New password",
+  "passwordResetSuccess": "Your password has been reset. You can now log in.",
+  "invalidResetLink": "This reset link is invalid or has expired."
 }

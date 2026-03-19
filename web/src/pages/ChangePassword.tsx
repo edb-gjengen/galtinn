@@ -117,6 +117,11 @@ export function ChangePassword() {
                   color={errors.new_password ? "red" : undefined}
                   {...register("new_password", { required: true })}
                 />
+                {errors.new_password?.message && (
+                  <Text size="1" color="red" mt="1">
+                    {errors.new_password.message}
+                  </Text>
+                )}
                 {passwordHelpTexts.length > 0 && (
                   <Flex direction="column" gap="1" mt="1">
                     {passwordHelpTexts.map((text, idx) => (
@@ -125,11 +130,6 @@ export function ChangePassword() {
                       </Text>
                     ))}
                   </Flex>
-                )}
-                {errors.new_password?.message && (
-                  <Text size="1" color="red" mt="1">
-                    {errors.new_password.message}
-                  </Text>
                 )}
               </Box>
 

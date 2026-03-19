@@ -91,6 +91,9 @@ export function Index() {
                     mt="1"
                     {...register("password", { required: true })}
                   />
+                  <Text size="1" align="center">
+                    <Link to="/auth/password_reset/">{t("forgotPassword")}</Link>
+                  </Text>
                 </Box>
 
                 <Button type="submit" size="3" disabled={isSubmitting}>

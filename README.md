@@ -223,3 +223,4 @@ act -W .gitea/workflows/
 - [ ] Investigate adopting new version of [Stripe Checkout](https://stripe.com/payments/checkout)
 - [ ] Sync `zip_to_city.py` from <https://www.bring.no/tjenester/adressetjenester/postnummer>
 - [ ] Add membership icon where relevant
+- [ ] Pass `Accept-Language` header with current locale to get localized API error strings

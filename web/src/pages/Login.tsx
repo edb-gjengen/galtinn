@@ -75,6 +75,9 @@ export function Login() {
                   autoComplete="current-password"
                   mt="1"
                 />
+                <Text size="1" align="center">
+                  <Link to="/auth/password_reset/">{t("forgotPassword")}</Link>
+                </Text>
               </Box>
 
               <Button type="submit" size="3" disabled={loading}>

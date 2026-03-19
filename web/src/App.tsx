@@ -15,6 +15,8 @@ import { OrgUnitList } from "@/pages/OrgUnitList";
 import { OrgUnitDetail } from "@/pages/OrgUnitDetail";
 import { OrgUnitEdit } from "@/pages/OrgUnitEdit";
 import { OrgUnitMembers } from "@/pages/OrgUnitMembers";
+import { ForgotPassword } from "@/pages/ForgotPassword";
+import { ResetPasswordConfirm } from "@/pages/ResetPasswordConfirm";
 import { NotFound } from "@/pages/NotFound";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -78,6 +80,22 @@ export function App() {
           element={
             <GuestRoute>
               <Register />
+            </GuestRoute>
+          }
+        />
+        <Route
+          path="/auth/password_reset/"
+          element={
+            <GuestRoute>
+              <ForgotPassword />
+            </GuestRoute>
+          }
+        />
+        <Route
+          path="/auth/reset/:uid/:token/"
+          element={
+            <GuestRoute>
+              <ResetPasswordConfirm />
             </GuestRoute>
           }
         />

@@ -5,7 +5,6 @@ from django.urls import include, path, re_path
 from rest_framework.authtoken.views import obtain_auth_token
 
 from dusken.api import urls as api_urls
-from dusken.apps.neuf_auth.views import NeufPasswordResetConfirmView
 from dusken.autocompletes import UserAutocompleteView
 from dusken.views.general import OrderDetailView, StatsView, spa_view
 from dusken.views.user import (
@@ -24,6 +23,11 @@ urlpatterns = [
     path("home/", spa_view, name="home"),
     path("login/", spa_view, name="login"),
     path("register/", spa_view, name="register"),
+    # Password reset
+    path("auth/password_reset/", spa_view, name="password_reset"),
+    re_path(
+        r"^auth/reset/[0-9A-Za-z_\-]+/[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20}/$", spa_view, name="password_reset_confirm"
+    ),
     # User
     path("me/", spa_view, name="user-detail-me"),
     path("me/update/", spa_view, name="user-update-me"),
@@ -59,12 +63,6 @@ urlpatterns = [
     path("api/", include(api_urls)),
     # Language selection
     path("i18n/", include("django.conf.urls.i18n")),
-    # Authentication
-    re_path(
-        r"^auth/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$",
-        NeufPasswordResetConfirmView.as_view(),
-        name="password_reset_confirm",
-    ),
     # Built in auth views
     path("auth/", include(auth_urls)),
     # API auth
