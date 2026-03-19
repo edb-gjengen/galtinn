@@ -18,6 +18,7 @@ import { OrgUnitMembers } from "@/pages/OrgUnitMembers";
 import { ForgotPassword } from "@/pages/ForgotPassword";
 import { ResetPasswordConfirm } from "@/pages/ResetPasswordConfirm";
 import { NotFound } from "@/pages/NotFound";
+import { FlatPage } from "@/pages/FlatPage";
 import { useAuth } from "@/hooks/useAuth";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -48,25 +49,18 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function IndexRedirect() {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return null;
-  }
-
-  if (isAuthenticated) {
-    return <Navigate to="/home/" replace />;
-  }
-
-  return <Index />;
-}
-
 export function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<IndexRedirect />} />
+        <Route
+          path="/"
+          element={
+            <GuestRoute>
+              <Index />
+            </GuestRoute>
+          }
+        />
         <Route
           path="/login/"
           element={
@@ -195,6 +189,7 @@ export function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/page/*" element={<FlatPage />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views.decorators.csrf import csrf_exempt
 from oauth2_provider import urls as oauth2_provider_urls
 from rest_framework.routers import DefaultRouter
@@ -10,6 +10,7 @@ from dusken.api.views.auth import GenericOauth2Callback, PasswordValidatorsView
 from dusken.api.views.cards import KassaMemberCardUpdateView, MemberCardViewSet
 from dusken.api.views.checkouts import StripeCheckoutSessionView, StripePaymentSheetView, StripeWebhookView
 from dusken.api.views.discord import UserDiscordProfileViewSet
+from dusken.api.views.flatpages import FlatPageDetailView
 from dusken.api.views.groups import GroupViewSet
 from dusken.api.views.membership_types import MembershipTypeListView
 from dusken.api.views.memberships import KassaMembershipView, MembershipChargeView, MembershipViewSet
@@ -114,6 +115,8 @@ urlpatterns += [
     path("auth/password/change/", SessionPasswordChangeView.as_view(), name="api-auth-password-change"),
     # Membership types
     path("membership-types/", MembershipTypeListView.as_view(), name="api-membership-types"),
+    # Flatpages
+    re_path(r"^flatpages/(?P<url>.+/)$", FlatPageDetailView.as_view(), name="api-flatpage-detail"),
     # Stats
     path("stats/", membership_stats, name="membership-stats"),
     # GraphQL API
