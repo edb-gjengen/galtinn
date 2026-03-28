@@ -18,7 +18,7 @@ export function MembershipList() {
   }, [t]);
 
   return (
-    <Box style={{ maxWidth: 700, margin: "0 auto" }}>
+    <Box style={{ maxWidth: 640 }}>
       <Heading size="5" mb="4">
         {t("membershipHistory")}
       </Heading>

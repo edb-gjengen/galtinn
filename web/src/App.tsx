@@ -21,6 +21,8 @@ import { NotFound } from "@/pages/NotFound";
 import { FlatPage } from "@/pages/FlatPage";
 import { useAuth } from "@/hooks/useAuth";
 
+import "./App.css";
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
 

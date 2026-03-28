@@ -135,5 +135,7 @@
   "setNewPassword": "Sett nytt passord",
   "newPassword": "Nytt passord",
   "passwordResetSuccess": "Passordet ditt er tilbakestilt. Du kan nå logge inn.",
-  "invalidResetLink": "Denne tilbakestillingslenken er ugyldig eller utløpt."
+  "invalidResetLink": "Denne tilbakestillingslenken er ugyldig eller utløpt.",
+  "createdWith": "Laget med",
+  "by": "av"
 }

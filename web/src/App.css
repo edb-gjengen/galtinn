@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+}
+
+.galtinn-logo {
+  height: 32px;
+  fill: var(--gray-12);
+}
+
+.galtinn-logo path {
+  fill: var(--gray-12);
+}

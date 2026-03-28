@@ -135,5 +135,7 @@
   "setNewPassword": "Set new password",
   "newPassword": "New password",
   "passwordResetSuccess": "Your password has been reset. You can now log in.",
-  "invalidResetLink": "This reset link is invalid or has expired."
+  "invalidResetLink": "This reset link is invalid or has expired.",
+  "createdWith": "Created with",
+  "by": "by"
 }
