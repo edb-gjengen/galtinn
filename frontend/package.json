@@ -23,7 +23,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^2.9.4",
     "globals": "^17.4.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "moment": "^2.30.1"
   },
   "devDependencies": {
