@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from dusken.models import DuskenUser, Membership, MembershipType, Order
+from dusken.models import DuskenUser, Membership, MembershipType, Order, PlaceOfStudy
 from dusken.utils import generate_username
 
 
@@ -107,11 +107,14 @@ class DuskenUserActivateTestCase(TestCase):
             phone_number="+46771793336",
             transaction_id="79c2bf64-5b37-43a1-917a-85512eee4bbd",
         )
+        self.place_of_study = PlaceOfStudy.objects.create(name="University of Oslo", short_name="UiO")
         self.user_data = {
             "first_name": "Ola",
             "last_name": "Nordmann",
             "email": "olanord@example.com",
             "password": "irifjckekemvjfgsdfshdf",
+            "date_of_birth": "2001-09-11",
+            "place_of_study": self.place_of_study.pk,
             "code": self.order.transaction_id[:8],
             "captcha": "not-empty",
         }
@@ -259,6 +262,8 @@ class DuskenUserUpdateTestCase(TestCase):
             "last_name": "Nordmann",
             "email": "attacker@example.com",
             "phone_number": "+4748105885",
+            "date_of_birth": "2001-09-11",
+            "place_of_study": PlaceOfStudy.objects.create(name="University of Oslo", short_name="UiO").pk,
         }
 
     def test_user_cannot_view_other_users_update_form(self):
