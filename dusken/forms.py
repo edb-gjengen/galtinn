@@ -10,7 +10,7 @@ from django_tomselect.app_settings import PluginClearButton
 from django_tomselect.forms import TomSelectConfig, TomSelectModelChoiceField
 from phonenumber_field.formfields import PhoneNumberField
 
-from dusken.models import DuskenUser, Order, OrgUnit
+from dusken.models import DuskenUser, Order, OrgUnit, PlaceOfStudy
 from dusken.utils import email_exists, phone_number_exist
 
 user_config = TomSelectConfig(
@@ -47,6 +47,16 @@ class DuskenUserForm(forms.ModelForm):
     last_name = fields.CharField(label=_("Last name"))
     email = fields.EmailField(label=_("Email"), widget=forms.EmailInput(attrs={"placeholder": _("Email")}))
     phone_number = PhoneNumberField(label=_("Phone number"))
+    date_of_birth = fields.DateField(
+        label=_("Date of birth"),
+        required=True,
+        widget=forms.DateInput(attrs={"type": "date"}),
+    )
+    place_of_study = forms.ModelChoiceField(
+        queryset=PlaceOfStudy.objects.all(),
+        label=_("Place of study"),
+        required=True,
+    )
     password = fields.CharField(label=_("Password"), widget=forms.PasswordInput())
     captcha = ReCaptchaField(widget=ReCaptchaV3(action="form"))
 
@@ -69,7 +79,15 @@ class DuskenUserForm(forms.ModelForm):
 
     class Meta:
         model = DuskenUser
-        fields = ["first_name", "last_name", "email", "phone_number", "password"]
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number",
+            "date_of_birth",
+            "place_of_study",
+            "password",
+        ]
 
 
 CODE_LENGTH = 8
@@ -96,7 +114,15 @@ class DuskenUserActivateForm(DuskenUserForm):
 
     class Meta:
         model = DuskenUser
-        fields = ["first_name", "last_name", "email", "phone_number"]
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number",
+            "date_of_birth",
+            "place_of_study",
+            "password",
+        ]
 
 
 class DuskenUserUpdateForm(forms.ModelForm):
@@ -106,8 +132,13 @@ class DuskenUserUpdateForm(forms.ModelForm):
     phone_number = PhoneNumberField(label=_("Phone number"))
     date_of_birth = fields.DateField(
         label=_("Date of birth"),
-        required=False,
+        required=True,
         widget=forms.DateInput(attrs={"type": "date"}),
+    )
+    place_of_study = forms.ModelChoiceField(
+        queryset=PlaceOfStudy.objects.all(),
+        label=_("Place of study"),
+        required=True,
     )
 
     class Meta:
