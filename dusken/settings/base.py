@@ -137,7 +137,9 @@ PASSWORD_HASHERS = [
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -165,6 +167,7 @@ OAUTH2_PROVIDER = {
     "OIDC_ENABLED": True,
     "OIDC_RSA_PRIVATE_KEY": os.getenv("OIDC_RSA_PRIVATE_KEY", ""),
     "OAUTH2_VALIDATOR_CLASS": "dusken.api.oauth_validators.CustomOAuth2Validator",
+    "OIDC_RP_INITIATED_LOGOUT_ENABLED": True,
 }
 
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
@@ -186,7 +189,11 @@ TEST_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY", TEST_PRIVATE_KEY)
 NOCAPTCHA = True
 
-SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"] if RECAPTCHA_PUBLIC_KEY == TEST_PUBLIC_KEY else []
+SILENCED_SYSTEM_CHECKS = (
+    ["captcha.recaptcha_test_key_error"]
+    if RECAPTCHA_PUBLIC_KEY == TEST_PUBLIC_KEY
+    else []
+)
 
 SVG_DIRS = [BASE_DIR / "frontend/app/images"]
 
@@ -231,7 +238,10 @@ GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv("GOOGLE_ANALYTICS_PROPERTY_ID", "")
 # Wordpress sync
 WP_PHP_SCRIPT_PATH = BASE_DIR / "scripts"
 WP_OUT_FILENAME = WP_PHP_SCRIPT_PATH / "users_in_group_active.json"
-WP_LOAD_PATHS = ["/var/www/studentersamfundet.no/www/wp/wp-load.php", "/var/www/neuf.no/aktivweb/wp/wp-load.php"]
+WP_LOAD_PATHS = [
+    "/var/www/studentersamfundet.no/www/wp/wp-load.php",
+    "/var/www/neuf.no/aktivweb/wp/wp-load.php",
+]
 
 LOGGING = {
     "version": 1,
@@ -241,9 +251,17 @@ LOGGING = {
         "handlers": ["console"],
     },
     "formatters": {
-        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"},
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
+        },
     },
-    "handlers": {"console": {"level": "DEBUG", "class": "logging.StreamHandler", "formatter": "verbose"}},
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        }
+    },
     "loggers": {
         "django.db.backends": {
             "level": "ERROR",
