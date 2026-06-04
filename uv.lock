@@ -324,14 +324,14 @@ wheels = [
 
 [[package]]
 name = "cross-web"
-version = "0.4.1"
+version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a4/58/e688e99d1493c565d1587e64b499268d0a3129ae59f4efe440aac395f803/cross_web-0.4.1.tar.gz", hash = "sha256:0466295028dcae98c9ab3d18757f90b0e74fac2ff90efbe87e74657546d9993d", size = 157385, upload-time = "2026-01-09T18:17:41.534Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4a/a0/bdb8370215987cc5bde497cb8b976b17ab14841566ecef2aab6ae3e6c7b0/cross_web-0.7.0.tar.gz", hash = "sha256:15fbc8b9a824a055db8127fd6e43e0773074f620fdecb6b2b587d3d0a2bdd459", size = 332407, upload-time = "2026-05-19T14:18:48.849Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/67/49/92b46b6e65f09b717a66c4e5a9bc47a45ebc83dd0e0ed126f8258363479d/cross_web-0.4.1-py3-none-any.whl", hash = "sha256:41b07c3a38253c517ec0603c1a366353aff77538946092b0f9a2235033f192c2", size = 14320, upload-time = "2026-01-09T18:17:40.325Z" },
+    { url = "https://files.pythonhosted.org/packages/7a/4a/78b52ec2edcbd9b123638f4e0421fd8699ebe653ebf63ac5f82abd2665bc/cross_web-0.7.0-py3-none-any.whl", hash = "sha256:ddea9be3c68b48eaf16561847a5831a559786949c544b3701432e00a4e8d19d9", size = 25207, upload-time = "2026-05-19T14:18:47.614Z" },
 ]
 
 [[package]]
@@ -760,7 +760,7 @@ requires-dist = [
     { name = "redis", specifier = "==7.*" },
     { name = "requests", specifier = "==2.32.*" },
     { name = "sentry-sdk", specifier = "==2.54.*" },
-    { name = "strawberry-graphql", specifier = "==0.311.*" },
+    { name = "strawberry-graphql", specifier = "==0.315.*" },
     { name = "strawberry-graphql-django", specifier = "==0.80.*" },
     { name = "stripe", specifier = "==14.*" },
 ]
@@ -1293,7 +1293,7 @@ wheels = [
 
 [[package]]
 name = "strawberry-graphql"
-version = "0.311.1"
+version = "0.315.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cross-web" },
@@ -1302,9 +1302,9 @@ dependencies = [
     { name = "python-dateutil" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9e/a0/613add1b64682e379795ed80039af9edeb9cac71879e1f077f251d6e900c/strawberry_graphql-0.311.1.tar.gz", hash = "sha256:158032e99bb612c023fe0022574c1aa9d9e58df323368eaabd490aae2369a6ff", size = 214109, upload-time = "2026-03-10T19:27:01.838Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ae/6a/49ea67e9419d934c505835fdb8cae63eb13bf4a99575e1c0e91c3b239eeb/strawberry_graphql-0.315.7.tar.gz", hash = "sha256:cce4c30b22686d4420eef1da640c8644d03478489181da505acf93a48bb4a629", size = 223087, upload-time = "2026-05-19T16:50:26.284Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/46/e6/09106295ea9f4403b77dc036fe8930d57eaf2ec77be462052fd72520bd0c/strawberry_graphql-0.311.1-py3-none-any.whl", hash = "sha256:03fedc54b3d9f9b4372d8cf6e1baa652296b776579c26fda477dad5f98430dec", size = 311588, upload-time = "2026-03-10T19:27:03.983Z" },
+    { url = "https://files.pythonhosted.org/packages/13/1e/2266df7e27a809de2eb610b644553b8d4cfb888c77db8c06b59d9378b6f7/strawberry_graphql-0.315.7-py3-none-any.whl", hash = "sha256:859c21b06c328357d935f5b735601e9f06342967033c9f1afe1db968aeabff24", size = 325535, upload-time = "2026-05-19T16:50:23.834Z" },
 ]
 
 [[package]]
