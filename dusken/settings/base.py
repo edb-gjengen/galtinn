@@ -137,9 +137,7 @@ PASSWORD_HASHERS = [
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -189,11 +187,7 @@ TEST_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY", TEST_PRIVATE_KEY)
 NOCAPTCHA = True
 
-SILENCED_SYSTEM_CHECKS = (
-    ["captcha.recaptcha_test_key_error"]
-    if RECAPTCHA_PUBLIC_KEY == TEST_PUBLIC_KEY
-    else []
-)
+SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"] if RECAPTCHA_PUBLIC_KEY == TEST_PUBLIC_KEY else []
 
 SVG_DIRS = [BASE_DIR / "frontend/app/images"]
 
@@ -251,9 +245,7 @@ LOGGING = {
         "handlers": ["console"],
     },
     "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
-        },
+        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"},
     },
     "handlers": {
         "console": {
