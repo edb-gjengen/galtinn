@@ -59,6 +59,13 @@ class OrgUnitEditTestCase(TestCase):
         response = self.client.post(reverse("orgunit-edit", args=[self.orgunit.slug]), self.data)
         assert response.status_code == status.HTTP_302_FOUND
 
+    def test_edit_page_includes_contact_person_widget_media(self):
+        self.client.force_login(self.admin)
+        response = self.client.get(reverse("orgunit-edit", args=[self.orgunit.slug]))
+        assert response.status_code == status.HTTP_200_OK
+        # The contact person autocomplete needs the tomselect JS from form media
+        assert "django_tomselect" in response.content.decode()
+
     def test_description_is_sanitized(self):
         self.orgunit.description = '<p onclick="alert(1)">Hello <b>world</b></p><script>alert(2)</script>'
         self.orgunit.save()
