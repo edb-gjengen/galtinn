@@ -23,7 +23,7 @@ dependencies = [
     "django-redis==6.0.*",
     "django-tomselect",
     "django-signal-disabler==0.1.*",
-    "djangorestframework==3.16.*",
+    "djangorestframework>=3.16,<3.18",
     "fabric==3.*",
     "gunicorn==25.*",
     "Markdown==3.10.*",
