@@ -132,6 +132,14 @@ Navigate to `/admin/oauth2_provider/application/` and create an application with
 - `Authorization grant type`: Authorization code
 - `Algorithm`: RSA with SHA-2 256
 
+### Granting access by group
+
+The `groups` claim lists the names of all Django groups the user is in, so a client can gate access on one of them.
+A group that no org unit uses as its group or admin group can't be changed from the org unit pages,
+only by superusers on the group's page under `/admin/auth/group/`.
+The CMS (cms.neuf.no) grants editor access this way, to members of the group named in its `GALTINN_EDITOR_GROUP` setting.
+Such a group must not be given a group profile or be attached to an org unit.
+
 ### Example authorization code PKCE flow
 
 Navigate to the following URL in your browser:

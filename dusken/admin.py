@@ -1,8 +1,9 @@
 from datetime import date
 
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
+from django.contrib.auth.models import Group
 from django.db.models import Min
 from django.urls import reverse
 from django.utils import timezone
@@ -229,6 +230,22 @@ class OrgUnitLogMessageAdmin(admin.ModelAdmin):
     list_filter = ["created"]
     search_fields = ["message", "org_unit__name", "org_unit__short_name"]
     readonly_fields = ["org_unit", "message", "changed_by"]
+
+
+class GroupMemberInline(admin.TabularInline):
+    model = DuskenUser.groups.through
+    autocomplete_fields = ["duskenuser"]
+    verbose_name = _("member")
+    verbose_name_plural = _("members")
+    extra = 0
+
+
+admin.site.unregister(Group)
+
+
+@admin.register(Group)
+class DuskenGroupAdmin(GroupAdmin):
+    inlines = [GroupMemberInline]
 
 
 @admin.register(GroupProfile)
