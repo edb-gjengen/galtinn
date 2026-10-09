@@ -30,7 +30,8 @@
                     {% get_current_language as LANGUAGE_CODE %}
                     {% get_available_languages as LANGUAGES %}
                     {% get_language_info_list for LANGUAGES as languages %}
-                    <form class="d-flex" action="{% url "set_language" %}?next={{ request.path }}" method="post">{% csrf_token %}
+                    <form class="d-flex" action="{% url "set_language" %}" method="post">{% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
                         <select class="form-control language-select hidden" name="language" onchange="this.form.submit()">
                             {% for language in languages %}
                                 <option value="{{ language.code }}"
