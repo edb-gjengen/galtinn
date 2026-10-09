@@ -119,11 +119,17 @@ class DuskenUser(AbstractUser):  # type: ignore
         return Order.objects.unclaimed(phone_number=self.phone_number)
 
     def update_volunteer_status(self):
-        # FIXME: What if user is part of a group not tied to an org unit? Should check that
-        if self.groups.count() <= 1 and self.is_volunteer:
-            Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first().user_set.remove(self)
+        volunteers = Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first()
+        # Only groups tied to an org unit count, so standalone groups don't keep the status alive
+        in_orgunit = (
+            self.groups.exclude(pk=volunteers.pk)
+            .filter(models.Q(member_orgunits__isnull=False) | models.Q(admin_orgunits__isnull=False))
+            .exists()
+        )
+        if in_orgunit:
+            volunteers.user_set.add(self)
         else:
-            Group.objects.filter(profile__type=GroupProfile.TYPE_VOLUNTEERS).first().user_set.add(self)
+            volunteers.user_set.remove(self)
 
     def log(self, message, changed_by=None):
         from .logs import UserLogMessage  # noqa: PLC0415
