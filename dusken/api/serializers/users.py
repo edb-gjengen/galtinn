@@ -36,6 +36,7 @@ class DuskenUserSerializer(serializers.ModelSerializer):
                 "Kvindelige Studenters Sangforening-styret",
                 "Den norske Studentersangforening-medlemmer",
                 "Den norske Studentersangforening-styret",
+                "Delegasjonsledere i Velferdstinget"
             ]
         ).exists():
             data["is_volunteer"] = True
