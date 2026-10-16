@@ -80,4 +80,4 @@ Python and JavaScript repository
 - `dusken/apps/` - Sub-apps (kassa, neuf_auth, neuf_ldap)
 - `dusken/fixtures/` - Test data fixtures
 - `docs/agents/` - Documentation of agent-driven changes
-- `bin/deploy` - Production deployment script
+- `Dockerfile` - Production image, built and deployed by `.gitea/workflows/deploy.yaml`
