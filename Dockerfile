@@ -23,7 +23,7 @@ RUN DJANGO_SETTINGS_MODULE=dusken.settings.prod .venv/bin/python manage.py colle
 
 FROM python:3.14-slim-trixie
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libldap2 libsasl2-2 libmariadb3 \
+    && apt-get install -y --no-install-recommends libldap2 libsasl2-2 libmariadb3 libpq5 \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --system --uid 931 --home-dir /app --no-create-home galtinn
 COPY --from=build /app /app
