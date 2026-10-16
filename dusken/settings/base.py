@@ -227,11 +227,6 @@ CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
 # Google Analytics
 GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv("GOOGLE_ANALYTICS_PROPERTY_ID", "")
 
-# Wordpress sync
-WP_PHP_SCRIPT_PATH = BASE_DIR / "scripts"
-WP_OUT_FILENAME = WP_PHP_SCRIPT_PATH / "users_in_group_active.json"
-WP_LOAD_PATHS = ["/var/www/studentersamfundet.no/www/wp/wp-load.php", "/var/www/neuf.no/aktivweb/wp/wp-load.php"]
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
