@@ -25,6 +25,54 @@ jobs:
           # Deploy
           ssh gitdeploy@dreamcast.neuf.no "$(< bin/deploy)"
 
+  # The runner gives jobs no docker socket, so kaniko builds the image unprivileged.
+  # Its debug image has busybox but no node, so it clones the tested commit itself
+  # instead of using actions/checkout.
+  image:
+    if: vars.DEPLOY_AMIGA == 'true'
+    runs-on: ubuntu-latest
+    needs:
+      - tests
+      - prek
+    container: ghcr.io/osscontainertools/kaniko:v1.28.6-debug
+    defaults:
+      run:
+        shell: sh
+    steps:
+      - name: Build and push
+        env:
+          GIT_USERNAME: ${{ github.actor }}
+          GIT_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
+          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+        run: |
+          auth=$(printf '%s:%s' "$REGISTRY_USER" "$REGISTRY_TOKEN" | base64 | tr -d '\n')
+          printf '{"auths":{"git.neuf.no":{"auth":"%s"}}}' "$auth" > /kaniko/.docker/config.json
+          /kaniko/executor \
+            --context "git://git.neuf.no/${{ github.repository }}.git#${{ github.ref }}#${{ github.sha }}" \
+            --destination "git.neuf.no/edb/galtinn:${{ github.sha }}" \
+            --build-arg "SENTRY_RELEASE=${{ github.sha }}" \
+            --cache=true --cache-repo git.neuf.no/edb/galtinn-cache \
+            --snapshot-mode=redo --use-new-run
+
+  # amiga's authorized_keys sends this key to galtinn-deploy, which reads the sha
+  # from the ssh command line.
+  deploy-amiga:
+    if: vars.DEPLOY_AMIGA == 'true'
+    runs-on: ubuntu-latest
+    needs:
+      - image
+    steps:
+      - name: Deploy
+        run: |
+          command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )
+          eval $(ssh-agent -s)
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+          ssh gitdeploy@amiga.neuf.no "${{ github.sha }}"
+
   prek:
     uses: ./.gitea/workflows/prek.yaml
   tests:
