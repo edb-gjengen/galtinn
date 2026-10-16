@@ -34,8 +34,8 @@ dependencies = [
     "redis==7.*",
     "requests==2.32.*",
     "sentry-sdk==2.54.*",
-    "strawberry-graphql==0.311.*",
-    "strawberry-graphql-django==0.80.*",
+    "strawberry-graphql==0.335.*",
+    "strawberry-graphql-django==0.93.*",
     "stripe==14.*",
     "nh3==0.3.*",
 ]
