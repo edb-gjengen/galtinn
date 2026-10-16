@@ -35,4 +35,4 @@ ENV PATH=/app/.venv/bin:$PATH \
     SENTRY_RELEASE=$SENTRY_RELEASE
 USER galtinn
 EXPOSE 8000
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--access-logfile", "-", "dusken.wsgi"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--no-control-socket", "--access-logfile", "-", "dusken.wsgi"]
