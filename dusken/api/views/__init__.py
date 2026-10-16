@@ -24,6 +24,6 @@ def api_500_handler(exception, context):
     if response is not None:
         return response
 
-    logger.exception(exception)
+    logger.error("Unhandled API exception", exc_info=exception)
     msg = "Galtinn is having issues, sorry about that :-/ Please try again later..."
     return Response({"detail": msg}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

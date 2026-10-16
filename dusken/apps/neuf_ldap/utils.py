@@ -55,7 +55,7 @@ def create_ldap_user(user, dry_run=False):  # noqa: C901
             return settings.LDAP_UID_MIN
 
         if users[0] >= settings.LDAP_UID_MAX:
-            logger.exception("UID larger than LDAP_UID_MAX")
+            logger.error("UID larger than LDAP_UID_MAX")
 
         return users[0] + 1
 
@@ -68,7 +68,7 @@ def create_ldap_user(user, dry_run=False):  # noqa: C901
             return settings.LDAP_USER_GID_MIN
 
         if user_groups[0] >= settings.LDAP_USER_GID_MAX:
-            logger.exception("UID larger than LDAP_USER_GID_MAX")
+            logger.error("GID larger than LDAP_USER_GID_MAX")
 
         return user_groups[0] + 1
 
