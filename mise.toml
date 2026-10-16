@@ -19,8 +19,8 @@ description = "Run Python test suite"
 run = "uv run pytest -v"
 
 [tasks.worker]
-description = "Run Celery worker with beat in development"
-run = "DJANGO_SETTINGS_MODULE=dusken.settings.dev uv run celery -A dusken worker -B"
+description = "Run Celery worker in development"
+run = "DJANGO_SETTINGS_MODULE=dusken.settings.dev uv run celery -A dusken worker"
 
 # Frontend tasks
 [tasks.frontend-build]
