@@ -33,7 +33,8 @@ jobs:
             --destination "git.neuf.no/edb/galtinn:${{ github.sha }}" \
             --build-arg "SENTRY_RELEASE=${{ github.sha }}" \
             --cache=true --cache-repo git.neuf.no/edb/galtinn-cache \
-            --snapshot-mode=redo --use-new-run
+            --snapshot-mode=redo --use-new-run \
+            --reproducible
 
   # amiga's authorized_keys sends this key to galtinn-deploy, which reads the sha
   # from the ssh command line.
