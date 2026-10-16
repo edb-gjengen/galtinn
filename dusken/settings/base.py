@@ -43,9 +43,8 @@ INSTALLED_APPS += [
     "dusken.apps.neuf_ldap",
     "dusken.apps.neuf_auth",
     "dusken.apps.common",
-    # FIXME Keep these for easy referencing in django admin for now
+    # FIXME Keep this for easy referencing in django admin for now
     "dusken.apps.kassa",
-    "dusken.apps.tekstmelding",
 ]
 
 MIDDLEWARE = [
@@ -91,7 +90,7 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     },
 }
-# LDAP, Inside, Kassa and tekstmelding DB's
+# LDAP and Kassa DB's
 DATABASE_ROUTERS = ["dusken.router.Router"]
 
 # Internationalization

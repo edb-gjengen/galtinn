@@ -42,7 +42,7 @@ important information that isn't already in the code or comments. No trailers.
 ## Architecture
 
 - **Django settings**: `dusken/settings/` — `base.py` (shared), `dev.py`, `prod.py`. Tests use `dev` settings.
-- **Database routing**: Custom router in `dusken/router.py` routes LDAP, Kassa, and tekstmelding models to separate databases.
+- **Database routing**: Custom router in `dusken/router.py` routes LDAP and Kassa models to separate databases.
 - **API layers**: REST (DRF) at `dusken/api/` and GraphQL (Strawberry) at `dusken/api/graphql.py`.
 - **Templates**: Django templates with Bootstrap 5 in `dusken/templates/`.
 - **Static assets**: Built by Rspack from `frontend/app/` into `staticfiles/`.
@@ -77,7 +77,7 @@ Python and JavaScript repository
 - `dusken/views/` - Django views
 - `dusken/settings/` - Settings split into base/dev/prod
 - `dusken/tests/` - pytest test suite
-- `dusken/apps/` - Sub-apps (kassa, neuf_auth, neuf_ldap, tekstmelding)
+- `dusken/apps/` - Sub-apps (kassa, neuf_auth, neuf_ldap)
 - `dusken/fixtures/` - Test data fixtures
 - `docs/agents/` - Documentation of agent-driven changes
 - `bin/deploy` - Production deployment script
