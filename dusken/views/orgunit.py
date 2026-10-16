@@ -3,7 +3,7 @@ from django.views.generic import DetailView, ListView, UpdateView
 
 from dusken.forms import OrgUnitEditForm, UserWidgetForm
 from dusken.models import OrgUnit
-from dusken.views.mixins import VolunteerRequiredMixin
+from dusken.views.mixins import OrgUnitAdminRequiredMixin, VolunteerRequiredMixin
 
 
 class OrgUnitListView(VolunteerRequiredMixin, ListView):
@@ -18,7 +18,7 @@ class OrgUnitDetailView(VolunteerRequiredMixin, DetailView):
     context_object_name = "orgunit"
 
 
-class OrgUnitEditView(VolunteerRequiredMixin, UpdateView):
+class OrgUnitEditView(OrgUnitAdminRequiredMixin, UpdateView):
     model = OrgUnit
     form_class = OrgUnitEditForm
     template_name = "dusken/orgunit_edit.html"
@@ -29,7 +29,7 @@ class OrgUnitEditView(VolunteerRequiredMixin, UpdateView):
         return reverse("orgunit-detail", args=[slug])
 
 
-class OrgUnitEditUsersView(VolunteerRequiredMixin, DetailView):
+class OrgUnitEditUsersView(OrgUnitAdminRequiredMixin, DetailView):
     model = OrgUnit
     template_name = "dusken/orgunit_edit_users.html"
     context_object_name = "orgunit"

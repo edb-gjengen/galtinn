@@ -22,3 +22,18 @@ class VolunteerRequiredMixin(PermissionRequiredMessagesMixin):
             return True
 
         return user.is_authenticated and user.is_volunteer
+
+
+class OrgUnitAdminRequiredMixin(VolunteerRequiredMixin):
+    permission_denied_message = _("You have no right to edit this organisation")
+
+    def has_permission(self):
+        if not super().has_permission():
+            return False
+
+        user = self.request.user
+        if user.is_superuser:
+            return True
+
+        admin_group = self.get_object().admin_group
+        return admin_group is not None and user.has_group(admin_group)

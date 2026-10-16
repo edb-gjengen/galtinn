@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n user svg %}
+{% load i18n user svg html %}
 {% block body %}
     <h4 class="card-title">{% svg "icons/users" %} {{ orgunit.name }}</h4>
     {% if user|has_admin_group:orgunit.admin_group %}
@@ -19,7 +19,7 @@
     </ul>
     {% if orgunit.description %}
         <br><h5>{% trans "Description:" %}</h5>
-        <p>{{ orgunit.description|safe }}</p>
+        <p>{{ orgunit.description|sanitize_html }}</p>
     {% endif %}
     <br>
     <h5>{% trans "Members" %} ({{ orgunit.group.user_set.count|default:0 }})</h5>
