@@ -1,32 +1,502 @@
 [
 {
+    "model": "dusken.membershiptype",
     "pk": 1,
     "fields": {
         "created": "2015-09-05T16:59:59.831Z",
+        "updated": "2015-09-05T17:02:33.350Z",
+        "name": "Membership 1 year",
+        "slug": "standard",
+        "description": "Membership in The Norwegian Student Society for 365 days.",
         "is_active": true,
         "price": 25000,
-        "expiry_type": "duration",
         "is_default": true,
-        "updated": "2015-09-05T17:02:33.350Z",
-        "description": "Membership in The Norwegian Student Society for 365 days.",
-        "name": "Membership 1 year",
-        "slug": "standard"
-    },
-    "model": "dusken.membershiptype"
+        "duration": "365 00:00:00",
+        "expiry_type": "duration",
+        "stripe_price_id": ""
+    }
 },
 {
+    "model": "dusken.membershiptype",
     "pk": 2,
     "fields": {
         "created": "2015-09-05T17:03:37.375Z",
-        "is_active": true,
-        "is_default": false,
-        "price": 20000,
-        "expiry_type": "duration",
         "updated": "2015-09-05T17:03:37.375Z",
-        "description": "Membership, with discount for active members, in The Norwegian Student Society for 365 days.",
         "name": "Membership 1 year (active)",
-        "slug": "active"
-    },
-    "model": "dusken.membershiptype"
+        "slug": "active",
+        "description": "Membership, with discount for active members, in The Norwegian Student Society for 365 days.",
+        "is_active": true,
+        "price": 20000,
+        "is_default": false,
+        "duration": "365 00:00:00",
+        "expiry_type": "duration",
+        "stripe_price_id": ""
+    }
+},
+{
+    "model": "dusken.groupprofile",
+    "pk": 1,
+    "fields": {
+        "created": "2026-10-16T15:05:39.907Z",
+        "updated": "2026-10-16T15:05:39.908Z",
+        "type": "volunteers",
+        "posix_name": "",
+        "description": "",
+        "group": 1
+    }
+},
+{
+    "model": "dusken.duskenuser",
+    "pk": 1,
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$bWRRSzVaelZDYTFxRE9YTzJLazBKdw$KFod+SmTcEK/WWxlwIXrEghwuGNJKBZD6IyAEoVZyfw",
+        "last_login": null,
+        "is_superuser": true,
+        "username": "admin",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-10-16T15:05:39.955Z",
+        "updated": "2026-10-16T15:05:40.057Z",
+        "uuid": "95d68121-260e-4386-86e8-a3824b1239dd",
+        "first_name": "Admin",
+        "last_name": "Adminsen",
+        "email": "admin@example.com",
+        "email_confirmed_at": null,
+        "email_key": "AdhwaBaITUme",
+        "phone_number": "",
+        "phone_number_key": null,
+        "phone_number_confirmed": false,
+        "phone_number_confirmed_at": null,
+        "date_of_birth": null,
+        "street_address": null,
+        "street_address_two": null,
+        "postal_code": null,
+        "city": null,
+        "country": "NO",
+        "place_of_study": null,
+        "legacy_id": null,
+        "stripe_customer_id": null,
+        "groups": [
+            1,
+            2,
+            3
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "dusken.duskenuser",
+    "pk": 2,
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$eG02cXZ1NFU2N1dQallRVmFQQ0ZxRg$mxSoaYelx4RlgOgAm4HlvV30LcXiXaD9Qk75E2r+f4E",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "kari",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-10-16T15:05:40.104Z",
+        "updated": "2026-10-16T15:05:40.201Z",
+        "uuid": "29d60ce0-661e-4aea-80ad-859a744982cf",
+        "first_name": "Kari",
+        "last_name": "Nordmann",
+        "email": "kari@example.com",
+        "email_confirmed_at": null,
+        "email_key": "EGhC6HDRbUDv",
+        "phone_number": "",
+        "phone_number_key": null,
+        "phone_number_confirmed": false,
+        "phone_number_confirmed_at": null,
+        "date_of_birth": null,
+        "street_address": null,
+        "street_address_two": null,
+        "postal_code": null,
+        "city": null,
+        "country": "NO",
+        "place_of_study": null,
+        "legacy_id": null,
+        "stripe_customer_id": null,
+        "groups": [
+            1,
+            2,
+            3
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "dusken.duskenuser",
+    "pk": 3,
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$TXdjR3ZoamVSZGlROUVveUw0cDRtOA$L+DexYJQ1Ij5NK6Wp580tXAWTnsfc7967iQZutyERoQ",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "ola",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-10-16T15:05:40.247Z",
+        "updated": "2026-10-16T15:05:40.347Z",
+        "uuid": "c2e5fc99-accd-479f-a6e8-ba93df432fa6",
+        "first_name": "Ola",
+        "last_name": "Nordmann",
+        "email": "ola@example.com",
+        "email_confirmed_at": null,
+        "email_key": "7pkPjpJMz6Gn",
+        "phone_number": "",
+        "phone_number_key": null,
+        "phone_number_confirmed": false,
+        "phone_number_confirmed_at": null,
+        "date_of_birth": null,
+        "street_address": null,
+        "street_address_two": null,
+        "postal_code": null,
+        "city": null,
+        "country": "NO",
+        "place_of_study": null,
+        "legacy_id": null,
+        "stripe_customer_id": null,
+        "groups": [
+            1,
+            2
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "dusken.duskenuser",
+    "pk": 4,
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$WFQ1d3IyakxlR2M0dDNabWh3TVRwTw$1J3QElslX0KzCzMlBCeACPFAJnrLZWAcsC3jn3PhDSo",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "per",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-10-16T15:05:40.391Z",
+        "updated": "2026-10-16T15:05:40.493Z",
+        "uuid": "0b2b578e-ab27-4f2c-a4f5-6adf752035d2",
+        "first_name": "Per",
+        "last_name": "Hansen",
+        "email": "per@example.com",
+        "email_confirmed_at": null,
+        "email_key": "SHtqNBMZkWej",
+        "phone_number": "",
+        "phone_number_key": null,
+        "phone_number_confirmed": false,
+        "phone_number_confirmed_at": null,
+        "date_of_birth": null,
+        "street_address": null,
+        "street_address_two": null,
+        "postal_code": null,
+        "city": null,
+        "country": "NO",
+        "place_of_study": null,
+        "legacy_id": null,
+        "stripe_customer_id": null,
+        "groups": [
+            1,
+            2
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "dusken.duskenuser",
+    "pk": 5,
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$VE8xOGJwNHR0cHZjZ1lNNDBCaXF4UQ$iwmWHP3rRbSGPc3OZyeDVid7JtP/BbUIK+lLSqvjlbA",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "lise",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-10-16T15:05:40.537Z",
+        "updated": "2026-10-16T15:05:40.641Z",
+        "uuid": "38645518-11d8-4c19-a6b9-4a1ea3fb25bc",
+        "first_name": "Lise",
+        "last_name": "Berg",
+        "email": "lise@example.com",
+        "email_confirmed_at": null,
+        "email_key": "5hr7kLYOIC2y",
+        "phone_number": "",
+        "phone_number_key": null,
+        "phone_number_confirmed": false,
+        "phone_number_confirmed_at": null,
+        "date_of_birth": null,
+        "street_address": null,
+        "street_address_two": null,
+        "postal_code": null,
+        "city": null,
+        "country": "NO",
+        "place_of_study": null,
+        "legacy_id": null,
+        "stripe_customer_id": null,
+        "groups": [
+            1,
+            2
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "dusken.duskenuser",
+    "pk": 6,
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$dE9MNXZKT2tGQmdLQW1vT2llRUI5bg$f53wACeUi2KrII7idqXo26il/dDhsj12MvyGRxYoWq0",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "nils",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-10-16T15:05:40.689Z",
+        "updated": "2026-10-16T15:05:40.790Z",
+        "uuid": "66ee1ab5-a0b0-4949-bb83-1eab08afcb27",
+        "first_name": "Nils",
+        "last_name": "Dahl",
+        "email": "nils@example.com",
+        "email_confirmed_at": null,
+        "email_key": "NmkBIpADB1A3",
+        "phone_number": "",
+        "phone_number_key": null,
+        "phone_number_confirmed": false,
+        "phone_number_confirmed_at": null,
+        "date_of_birth": null,
+        "street_address": null,
+        "street_address_two": null,
+        "postal_code": null,
+        "city": null,
+        "country": "NO",
+        "place_of_study": null,
+        "legacy_id": null,
+        "stripe_customer_id": null,
+        "groups": [
+            1,
+            2
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "dusken.duskenuser",
+    "pk": 7,
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$MWhhQmxlV2hmYVhpTVNjaDV0THZnRQ$EO3ZoSjGGaB50wAbMilk99O5JopO5JKKEVwpaDESspc",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "ingrid",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-10-16T15:05:40.806Z",
+        "updated": "2026-10-16T15:05:40.892Z",
+        "uuid": "878b4a32-41fb-49c9-8e5d-64cdbc78aab4",
+        "first_name": "Ingrid",
+        "last_name": "Lie",
+        "email": "ingrid@example.com",
+        "email_confirmed_at": null,
+        "email_key": "yHGKrid4JCXj",
+        "phone_number": "",
+        "phone_number_key": null,
+        "phone_number_confirmed": false,
+        "phone_number_confirmed_at": null,
+        "date_of_birth": null,
+        "street_address": null,
+        "street_address_two": null,
+        "postal_code": null,
+        "city": null,
+        "country": "NO",
+        "place_of_study": null,
+        "legacy_id": null,
+        "stripe_customer_id": null,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "dusken.duskenuser",
+    "pk": 8,
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$NzZaYzNqTGtkTVN4aWdZRXhOQU5tbA$1GCVRlbAe/E3mHjUZ+6kF9cnFXQUwAzS3mX/1KahFnU",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "erik",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-10-16T15:05:40.909Z",
+        "updated": "2026-10-16T15:05:41.005Z",
+        "uuid": "8c164e81-7431-4db1-86b5-0bf8c3902991",
+        "first_name": "Erik",
+        "last_name": "Strand",
+        "email": "erik@example.com",
+        "email_confirmed_at": null,
+        "email_key": "X1jjfZIxkts6",
+        "phone_number": "",
+        "phone_number_key": null,
+        "phone_number_confirmed": false,
+        "phone_number_confirmed_at": null,
+        "date_of_birth": null,
+        "street_address": null,
+        "street_address_two": null,
+        "postal_code": null,
+        "city": null,
+        "country": "NO",
+        "place_of_study": null,
+        "legacy_id": null,
+        "stripe_customer_id": null,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "dusken.duskenuser",
+    "pk": 9,
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$MnVIN0xIRzY1U0dLb3lnc0dDZTM0cw$72NJu4l40RsAgNqjvNDdPMl1wzqNG9A6b2nyG/Fnjys",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "sofie",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-10-16T15:05:41.016Z",
+        "updated": "2026-10-16T15:05:41.105Z",
+        "uuid": "b1057eb4-4353-450b-b139-72b90fd57f7c",
+        "first_name": "Sofie",
+        "last_name": "Moen",
+        "email": "sofie@example.com",
+        "email_confirmed_at": null,
+        "email_key": "vRF30nzy59Qi",
+        "phone_number": "",
+        "phone_number_key": null,
+        "phone_number_confirmed": false,
+        "phone_number_confirmed_at": null,
+        "date_of_birth": null,
+        "street_address": null,
+        "street_address_two": null,
+        "postal_code": null,
+        "city": null,
+        "country": "NO",
+        "place_of_study": null,
+        "legacy_id": null,
+        "stripe_customer_id": null,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "dusken.orgunit",
+    "pk": 1,
+    "fields": {
+        "created": "2026-10-16T15:05:39.935Z",
+        "updated": "2026-10-16T15:05:40.090Z",
+        "name": "Test Unit",
+        "slug": "test-unit",
+        "short_name": "",
+        "is_active": true,
+        "description": "",
+        "email": "",
+        "contact_person": 1,
+        "website": "",
+        "group": 2,
+        "admin_group": 3,
+        "parent": null,
+        "lft": 1,
+        "rght": 2,
+        "tree_id": 1,
+        "level": 0
+    }
+},
+{
+    "model": "dusken.membership",
+    "pk": 1,
+    "fields": {
+        "created": "2026-10-16T15:05:40.237Z",
+        "updated": "2026-10-16T15:06:03.523Z",
+        "start_date": "2020-08-01",
+        "end_date": "2099-07-31",
+        "membership_type": 1,
+        "user": 2
+    }
+},
+{
+    "model": "dusken.membership",
+    "pk": 2,
+    "fields": {
+        "created": "2026-10-16T15:05:40.380Z",
+        "updated": "2026-10-16T15:06:03.545Z",
+        "start_date": "2020-08-01",
+        "end_date": "2099-07-31",
+        "membership_type": 1,
+        "user": 3
+    }
+},
+{
+    "model": "dusken.membership",
+    "pk": 3,
+    "fields": {
+        "created": "2026-10-16T15:05:40.527Z",
+        "updated": "2026-10-16T15:06:03.557Z",
+        "start_date": "2020-08-01",
+        "end_date": "2021-07-31",
+        "membership_type": 1,
+        "user": 4
+    }
+},
+{
+    "model": "dusken.membership",
+    "pk": 4,
+    "fields": {
+        "created": "2026-10-16T15:05:40.680Z",
+        "updated": "2026-10-16T15:06:03.566Z",
+        "start_date": "2020-08-01",
+        "end_date": null,
+        "membership_type": 1,
+        "user": 5
+    }
+},
+{
+    "model": "dusken.membership",
+    "pk": 5,
+    "fields": {
+        "created": "2026-10-16T15:05:40.901Z",
+        "updated": "2026-10-16T15:06:03.577Z",
+        "start_date": "2020-08-01",
+        "end_date": "2099-07-31",
+        "membership_type": 1,
+        "user": 7
+    }
+},
+{
+    "model": "dusken.membership",
+    "pk": 6,
+    "fields": {
+        "created": "2026-10-16T15:05:41.143Z",
+        "updated": "2026-10-16T15:06:03.586Z",
+        "start_date": "2020-08-01",
+        "end_date": "2099-07-31",
+        "membership_type": 1,
+        "user": 9
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+        "name": "Aktive",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+        "name": "Test Unit",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+        "name": "Test Unit Admin",
+        "permissions": []
+    }
 }
 ]

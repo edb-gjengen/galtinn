@@ -11,7 +11,7 @@ Membership system ++ for DNS / Chateau Neuf.
 sudo apt install python3-venv libpq-dev python3-dev libsasl2-dev libldap2-dev libssl-dev ldap-utils
 prek install
 python manage.py migrate
-python manage.py loaddata testdata
+python manage.py loaddata testdata  # Superuser admin/admin, test users (password "test") in the "Test Unit" orgunit
 mise run run
 
 # Frontend
