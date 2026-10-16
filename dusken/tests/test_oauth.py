@@ -28,7 +28,7 @@ class OAuth2AuthorizationCodeFlowTestCase(TestCase):
         self.user = DuskenUser.objects.create_user(
             "olanord", email="olanord@example.com", password="mypassword", first_name="Ola", last_name="Nordmann"
         )
-        self.client_secret = "client-secret"
+        self.client_secret = "client-secret"  # noqa: S105
         self.application = Application.objects.create(
             name="Test client",
             client_type=Application.CLIENT_CONFIDENTIAL,
@@ -86,7 +86,7 @@ class OAuth2AuthorizationCodeFlowTestCase(TestCase):
     def test_userinfo_returns_custom_claims(self):
         tokens = self.obtain_tokens()
         response = self.client.get(
-            reverse("oauth2_provider:user-info"), HTTP_AUTHORIZATION=f"Bearer {tokens['access_token']}"
+            reverse("oauth2_provider:user-info"), headers={"authorization": f"Bearer {tokens['access_token']}"}
         )
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
@@ -96,6 +96,8 @@ class OAuth2AuthorizationCodeFlowTestCase(TestCase):
 
     def test_current_user_endpoint_accepts_access_token(self):
         tokens = self.obtain_tokens()
-        response = self.client.get(reverse("user-current-oauth2"), HTTP_AUTHORIZATION=f"Bearer {tokens['access_token']}")
+        response = self.client.get(
+            reverse("user-current-oauth2"), headers={"authorization": f"Bearer {tokens['access_token']}"}
+        )
         assert response.status_code == status.HTTP_200_OK
         assert response.json()["username"] == "olanord"
