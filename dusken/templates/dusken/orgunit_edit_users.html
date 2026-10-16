@@ -1,78 +1,50 @@
 {% extends "base.html" %}
-{% load i18n django_bootstrap5 user svg %}
+{% load i18n django_bootstrap5 svg %}
 {% block body %}
     <h4>
         {% svg "icons/users" %} <a href="{% url "orgunit-detail" orgunit.slug %}">{{ orgunit.name }}</a>
     </h4>
-    {% if user|has_admin_group:orgunit.admin_group %}
+    <div class="js-orgunit-members">
         {% bootstrap_form user_search %}
         <div>
             {% if orgunit.group != orgunit.admin_group %}
-                <button class="btn btn-primary js-orgunit-add-member" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="member">{% trans "Add member" %}</button>
+                <button class="btn btn-primary js-add-member" data-role="member">{% trans "Add member" %}</button>
             {% endif %}
-            <button class="btn btn-primary js-orgunit-add-member" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="admin">{% trans "Add admin" %}</button>
+            <button class="btn btn-primary js-add-member" data-role="admin">{% trans "Add admin" %}</button>
         </div>
+        <div class="alert alert-danger mt-3 js-error" role="alert" hidden></div>
         <br>
-        <ul class="list-group" id="user_list">
-            {% for user in orgunit.users %}
-                <li class="list-group-item">
-                    <div class="row">
-                    <div class="col-xl-8 col-lg-7">
-                        {% if user|has_group:orgunit.admin_group %}
-                            {% svg "icons/star" %}
-                        {% else %}
-                            {% svg "icons/user" %}
-                        {% endif %}
-                        <a href="{% url "user-detail" user.uuid %}"> {{ user.get_full_name }}</a>
-                        &ndash; <a href="mailto:{{ user.email }}">{{ user.email }}</a>
-                        {% if user|has_group:orgunit.admin_group %}
-                            ({% trans "Admin" %})
-                        {% endif %}
-                        &ndash; <span title="{% trans "Membership" %}">
-                            {% with user.last_membership as ms %}
-                                {% if ms != null %}
-                                    {% if ms.is_valid %}
-                                        <span class="badge bg-success">
-                                            {% if ms.end_date %}
-                                                {{ ms.end_date }}
-                                            {% else %}
-                                                {% trans "Lifelong" %}
-                                            {% endif %}
-                                        </span>
-                                    {% else %}
-                                        <span class="badge bg-danger">{{ ms.end_date }}</span>
-                                    {% endif %}
-                                {% else %}
-                                    <strong></strong>
-                                    <span class="badge bg-danger">{% trans "None" %}</span>
-                                {% endif %}
-                            {% endwith %}
-                        </span>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-sm-6">
-                        {% if orgunit.group != orgunit.admin_group %}
-                            {% if user|has_group:orgunit.admin_group %}
-                                <button class="btn btn-outline-primary js-orgunit-remove-user" id="user_remove_{{ user.uuid }}"
-                                        data-user-id="{{ user.uuid }}" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="admin">{% trans "Make member" %}</button>
-                            {% else %}
-                                <button class="btn btn-outline-primary js-orgunit-add-member" id="user_remove_{{ user.uuid }}"
-                                        data-user-id="{{ user.uuid }}" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="admin_uuid">{% trans "Make admin" %}</button>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                    <div class="col-xl-2 col-lg-2 col-sm-6">
-                        <button class="btn btn-outline-primary js-orgunit-remove-user" id="user_remove_{{ user.uuid }}"
-                                data-user-id="{{ user.uuid }}" data-orgunit-slug="{{ orgunit.slug }}" data-orgunit-action="member" data-text-remove-user="{% trans "Remove User?" %}">{% trans "Remove" %}</button>
-                    </div>
-                    </div>
-                </li>
-            {% empty %}
-                {% trans "No members" %}
-            {% endfor %}
-        </ul>
-    {% else %}
-        {% trans "You have no right to edit this organisation" %}
-    {% endif %}
+        <ul class="list-group js-member-list"></ul>
+    </div>
+
+    <template id="orgunit-member-template">
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-xl-8 col-lg-7">
+                    <span class="js-icon-admin">{% svg "icons/star" %}</span>
+                    <span class="js-icon-member">{% svg "icons/user" %}</span>
+                    <a class="js-name"></a>
+                    <span class="js-you">({% trans "You" %})</span>
+                    &ndash; <a class="js-email"></a>
+                    &ndash; <span title="{% trans "Membership" %}"><span class="badge js-membership"></span></span>
+                </div>
+                <div class="col-xl-2 col-lg-3 col-sm-6">
+                    {% if orgunit.group != orgunit.admin_group %}
+                        <select class="form-select js-role" aria-label="{% trans "Role" %}">
+                            <option value="member">{% trans "Member" %}</option>
+                            <option value="admin">{% trans "Admin" %}</option>
+                        </select>
+                    {% else %}
+                        {% trans "Admin" %}
+                    {% endif %}
+                </div>
+                <div class="col-xl-2 col-lg-2 col-sm-6">
+                    <button class="btn btn-outline-primary js-remove">{% trans "Remove" %}</button>
+                </div>
+            </div>
+        </li>
+    </template>
+    {{ members_config|json_script:"orgunit-members-config" }}
 {% endblock %}
 {% block tailinc %}
     {{ user_search.media }}

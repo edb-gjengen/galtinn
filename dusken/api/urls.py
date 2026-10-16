@@ -13,7 +13,7 @@ from dusken.api.views.discord import UserDiscordProfileViewSet
 from dusken.api.views.groups import GroupViewSet
 from dusken.api.views.memberships import KassaMembershipView, MembershipChargeView, MembershipViewSet
 from dusken.api.views.orders import OrderViewSet
-from dusken.api.views.orgunits import OrgUnitViewSet, add_user, remove_user
+from dusken.api.views.orgunits import OrgUnitMemberViewSet, OrgUnitViewSet
 from dusken.api.views.stats import membership_stats
 from dusken.api.views.users import (
     BasicAuthCurrentUserView,
@@ -34,6 +34,9 @@ router.register(r"cards", MemberCardViewSet, basename="membercard-api")
 router.register(r"memberships", MembershipViewSet, basename="membership-api")
 router.register(r"orders", OrderViewSet, basename="order-api")
 urlpatterns = router.urls
+
+orgunit_member_list = OrgUnitMemberViewSet.as_view({"get": "list", "post": "create"})
+orgunit_member_detail = OrgUnitMemberViewSet.as_view({"patch": "partial_update", "delete": "destroy"})
 
 urlpatterns += [
     # Current user
@@ -58,8 +61,8 @@ urlpatterns += [
     path("user/register/", RegisterUserView.as_view(), name="user-api-register"),
     path("user/pk/to/uuid/", user_pk_to_uuid, name="user_pk_to_uuid"),
     # Organizational Unit
-    path("orgunit/remove/user/", remove_user, name="remove_user"),
-    path("orgunit/add/user/", add_user, name="add_user"),
+    path("orgunits/<slug:slug>/members/", orgunit_member_list, name="orgunit-member-list"),
+    path("orgunits/<slug:slug>/members/<int:pk>/", orgunit_member_detail, name="orgunit-member-detail"),
     # Stats
     path("stats/", membership_stats, name="membership-stats"),
     # GraphQL API

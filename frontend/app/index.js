@@ -2,22 +2,9 @@ import 'bootstrap/js/dist/collapse';
 import 'bootstrap/js/dist/dropdown';
 
 import './OrgUnit';
+import { apiFetch } from './api';
 
 import './styles/app.scss';
-
-function getCSRFToken() {
-    const meta = document.querySelector('meta[name="x-csrf-token"]');
-    return meta ? meta.getAttribute('content') : '';
-}
-
-function fetchWithCSRF(url, options = {}) {
-    const defaults = {
-        headers: {
-            'X-CSRFToken': getCSRFToken(),
-        },
-    };
-    return fetch(url, { ...defaults, ...options });
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     /* Send validation email */
@@ -25,9 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (validationEmailBtn) {
         validationEmailBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            fetchWithCSRF(config.validateEmail, { method: 'POST' }).then(() => {
-                validationEmailBtn.textContent = 'Sent.';
-            });
+            apiFetch(config.validateEmail, { method: 'POST' })
+                .then(() => {
+                    validationEmailBtn.textContent = 'Sent.';
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
         });
     }
 
@@ -52,8 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const user = userSelect ? userSelect.value : null;
             if (!user) return;
 
-            fetch('/api/user/pk/to/uuid/?' + new URLSearchParams({ user }))
-                .then((response) => response.json())
+            apiFetch('/api/user/pk/to/uuid/?' + new URLSearchParams({ user }))
                 .then((data) => {
                     window.location.href = '/users/' + data.uuid;
                 })

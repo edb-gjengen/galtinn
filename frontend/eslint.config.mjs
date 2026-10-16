@@ -9,5 +9,11 @@ export default defineConfig([
     js.configs.recommended,
     eslintPluginPrettierRecommended,
     importPlugin.flatConfigs.recommended,
-    { languageOptions: { globals: { ...globals.browser, config: false } } },
+    {
+        languageOptions: {
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+            globals: { ...globals.browser, config: false },
+        },
+    },
 ]);

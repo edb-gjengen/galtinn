@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-04 21:28+0100\n"
+"POT-Creation-Date: 2026-10-16 17:01+0200\n"
 "PO-Revision-Date: 2024-04-03 09:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -26,7 +26,7 @@ msgstr "år solgt"
 msgid "Payment method"
 msgstr "Betalingsmåte"
 
-#: admin.py:68 admin.py:109 admin.py:186 forms.py:29 forms.py:30 forms.py:38
+#: admin.py:68 admin.py:109 admin.py:186 forms.py:21 forms.py:30
 #: models/users.py:204
 msgid "User"
 msgstr "Bruker"
@@ -43,39 +43,31 @@ msgstr "Medlemskort"
 msgid "Dusken fields"
 msgstr "Dusken-felter"
 
-#: api/serializers/users.py:84 forms.py:63
+#: api/serializers/orgunits.py:83
+msgid "User already added"
+msgstr "Brukeren er allerede lagt til"
+
+#: api/serializers/users.py:109 forms.py:62
 msgid "Phone number already in use"
 msgstr "Mobilnummeret er i bruk"
 
-#: api/serializers/users.py:91 forms.py:57
+#: api/serializers/users.py:116 forms.py:56
 msgid "Email already in use"
 msgstr "E-postadressen er i bruk"
 
-#: api/views/checkouts.py:72 api/views/checkouts.py:117
+#: api/views/checkouts.py:75 api/views/checkouts.py:120
 #, fuzzy
 #| msgid "Stripe charge failed with API error."
 msgid "Payment failed with a Stripe API error"
 msgstr "Feil med Stripe (leverandøren av betalingstjenesten) sitt API."
 
-#: api/views/orgunits.py:48 api/views/orgunits.py:80
-msgid "Error"
-msgstr "Feil"
+#: api/views/orgunits.py:90
+msgid "This organisation has no member or admin group"
+msgstr "Denne foreningen har ingen medlems- eller admingruppe"
 
-#: api/views/orgunits.py:55
-msgid "Can't remove user because the user is not in the group"
-msgstr "Kan ikke fjerne brukeren fordi en ikke er i gruppen"
-
-#: api/views/orgunits.py:57
-msgid "You are not authorized to remove users"
-msgstr "Du har ikke tilgang til å fjerne brukere"
-
-#: api/views/orgunits.py:89
-msgid "User already added"
-msgstr "Brukeren er allerede lagt til"
-
-#: api/views/orgunits.py:91
-msgid "You are not authorized to add users"
-msgstr "Du har ikke tilgang til å legge til brukere"
+#: api/views/orgunits.py:124
+msgid "All members of this organisation are admins"
+msgstr "Alle medlemmene i denne foreningen er admin"
 
 #: api/views/stripe_mixin.py:10
 msgid "The card number is incorrect."
@@ -236,65 +228,77 @@ msgstr "Brukeren er inaktiv eller slettet."
 msgid "Contact person"
 msgstr "Kontaktperson"
 
-#: forms.py:47 forms.py:104
+#: forms.py:46 forms.py:103
 msgid "First name"
 msgstr "Fornavn"
 
-#: forms.py:48 forms.py:105
+#: forms.py:47 forms.py:104
 msgid "Last name"
 msgstr "Etternavn"
 
-#: forms.py:49 forms.py:106 templates/dusken/home.html:92
+#: forms.py:48 forms.py:105 templates/dusken/home.html:92
 #: templates/dusken/orgunit_detail.html:12 templates/dusken/user_detail.html:38
 msgid "Email"
 msgstr "E-post"
 
-#: forms.py:50 forms.py:80 forms.py:107 templates/dusken/home.html:105
+#: forms.py:49 forms.py:79 forms.py:106 templates/dusken/home.html:105
 #: templates/dusken/user_detail.html:51
 msgid "Phone number"
 msgstr "Mobilnummer"
 
-#: forms.py:51 templates/dusken/home.html:137
+#: forms.py:50 templates/dusken/home.html:137
 msgid "Password"
 msgstr "Passord"
 
-#: forms.py:96 templates/dusken/user_activate.html:6
+#: forms.py:95 templates/dusken/user_activate.html:6
 msgid "You have already registered or the link is invalid."
 msgstr "Du har allerede registrert deg eller så er lenken ugyldig."
 
-#: forms.py:109
+#: forms.py:108
 msgid "Date of birth"
 msgstr "Fødselsdato"
 
-#: forms.py:145
+#: forms.py:134
+msgid "Student"
+msgstr ""
+
+#: forms.py:135
+msgid "Regular"
+msgstr ""
+
+#: forms.py:136
+msgid "Support"
+msgstr ""
+
+#: forms.py:155
 msgid "User does not exist"
 msgstr "Brukeren finnes ikke"
 
-#: forms.py:148
+#: forms.py:158
 msgid "Invalid email key for user"
 msgstr "Ugyldig e-postnøkkel for bruker"
 
-#: forms.py:151
+#: forms.py:161
 msgid "Email already confirmed"
 msgstr "E-post allerede bekreftet"
 
-#: forms.py:157
+#: forms.py:167
 msgid "Code"
 msgstr "Kode"
 
-#: forms.py:165
+#: forms.py:175
 msgid "Phone number already confirmed"
 msgstr "Mobilnummeret er allerede bekreftet"
 
-#: forms.py:169
+#: forms.py:179
 msgid "Invalid code"
 msgstr "Ugyldig kode"
 
-#: forms.py:178
+#: forms.py:188
 msgid "Email address / username"
 msgstr "E-postadresse / brukernavn"
 
-#: forms.py:197
+#: forms.py:207
 msgid "The username entered is not equal to your own."
 msgstr "Angitt brukernavn er ikke likt ditt eget."
 
@@ -314,7 +318,7 @@ msgstr "Foreningsloggmelding"
 msgid "Org unit log messages"
 msgstr "Foreningsloggmeldinger"
 
-#: models/orders.py:59 templates/dusken/orgunit_edit_users.html:31
+#: models/orders.py:59 templates/dusken/orgunit_edit_users.html:29
 #: templates/dusken/user_detail.html:72 templates/nav.html:17
 msgid "Membership"
 msgstr "Medlemskap"
@@ -531,11 +535,11 @@ msgstr "Studiested"
 msgid "Places of study"
 msgstr "Studiesteder"
 
-#: settings/base.py:104
+#: settings/base.py:105
 msgid "Norwegian"
 msgstr "Norsk"
 
-#: settings/base.py:105
+#: settings/base.py:106
 msgid "English"
 msgstr "Engelsk"
 
@@ -663,8 +667,7 @@ msgstr "Utløpt"
 
 #: templates/dusken/home.html:51 templates/dusken/membership_list.html:23
 #: templates/dusken/membership_list.html:27
-#: templates/dusken/orgunit_edit_users.html:39
-#: templates/dusken/user_detail.html:79
+#: templates/dusken/user_detail.html:79 views/orgunit.py:50
 msgid "Lifelong"
 msgstr "Livsvarig"
 
@@ -864,12 +867,12 @@ msgid "Members"
 msgstr "Medlemmer"
 
 #: templates/dusken/orgunit_detail.html:41
-#: templates/dusken/orgunit_edit_users.html:29
+#: templates/dusken/orgunit_edit_users.html:35
+#: templates/dusken/orgunit_edit_users.html:38
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/dusken/orgunit_detail.html:45
-#: templates/dusken/orgunit_edit_users.html:70
+#: templates/dusken/orgunit_detail.html:45 views/orgunit.py:52
 msgid "No members"
 msgstr "Ingen medlemmer"
 
@@ -877,8 +880,7 @@ msgstr "Ingen medlemmer"
 msgid "Save changes"
 msgstr "Lagre"
 
-#: templates/dusken/orgunit_edit.html:13
-#: templates/dusken/orgunit_edit_users.html:74
+#: templates/dusken/orgunit_edit.html:13 views/mixins.py:28
 msgid "You have no right to edit this organisation"
 msgstr "Du har ikke tilgang til å endre denne foreningen"
 
@@ -890,24 +892,19 @@ msgstr "Legg til medlem"
 msgid "Add admin"
 msgstr "Legg til admin"
 
-#: templates/dusken/orgunit_edit_users.html:47
-#: templates/dusken/user_detail.html:88
-msgid "None"
-msgstr "Ingen"
+#: templates/dusken/orgunit_edit_users.html:27
+msgid "You"
+msgstr "Deg"
 
-#: templates/dusken/orgunit_edit_users.html:56
-msgid "Make member"
-msgstr "Gjør til medlem"
+#: templates/dusken/orgunit_edit_users.html:33
+msgid "Role"
+msgstr "Rolle"
 
-#: templates/dusken/orgunit_edit_users.html:59
-msgid "Make admin"
-msgstr "Gjør til admin"
+#: templates/dusken/orgunit_edit_users.html:34
+msgid "Member"
+msgstr "Medlem"
 
-#: templates/dusken/orgunit_edit_users.html:65
-msgid "Remove User?"
-msgstr "Fjern bruker?"
-
-#: templates/dusken/orgunit_edit_users.html:65
+#: templates/dusken/orgunit_edit_users.html:42
 msgid "Remove"
 msgstr "Fjern"
 
@@ -1011,6 +1008,10 @@ msgstr "Adresse"
 msgid "Valid"
 msgstr "Gyldig"
 
+#: templates/dusken/user_detail.html:88 views/orgunit.py:51
+msgid "None"
+msgstr "Ingen"
+
 #: templates/dusken/user_detail.html:97
 msgid "Registered"
 msgstr "Registrert"
@@ -1096,7 +1097,7 @@ msgstr "Profil"
 msgid "Change language to..."
 msgstr "Endre språk til..."
 
-#: templates/nav.html:47
+#: templates/nav.html:49
 msgid "Log out"
 msgstr "Logg ut"
 
@@ -1222,16 +1223,46 @@ msgstr "Du har ikke tilgang til denne siden"
 msgid "You need to be a volunteer to see this page"
 msgstr "Du må være registrert aktiv for å se denne siden"
 
-#: views/user.py:132
+#: views/orgunit.py:53
+#, python-brace-format
+msgid "Remove admin rights from {name}?"
+msgstr "Fjerne adminrettighetene til {name}?"
+
+#: views/orgunit.py:55
+msgid ""
+"You are about to remove your own admin rights, and will no longer be able to "
+"manage this organisation. Continue?"
+msgstr ""
+"Du er i ferd med å fjerne dine egne adminrettigheter, og vil ikke lenger "
+"kunne administrere denne foreningen. Fortsette?"
+
+#: views/orgunit.py:58
+#, python-brace-format
+msgid "Remove {name} from this organisation?"
+msgstr "Fjerne {name} fra denne foreningen?"
+
+#: views/orgunit.py:60
+msgid ""
+"You are about to remove yourself from this organisation, and will no longer "
+"be able to manage it. Continue?"
+msgstr ""
+"Du er i ferd med å fjerne deg selv fra denne foreningen, og vil ikke lenger "
+"kunne administrere den. Fortsette?"
+
+#: views/orgunit.py:63
+msgid "Failed to contact server"
+msgstr "Kunne ikke kontakte serveren"
+
+#: views/user.py:138
 msgid "Username can only be set once"
 msgstr "Brukernavnet kan bare settes én gang"
 
-#: views/user.py:144
+#: views/user.py:150
 #, python-brace-format
 msgid "Username set to {username}"
 msgstr "Brukernavnet er satt til {username}"
 
-#: views/user.py:164
+#: views/user.py:170
 #, python-format
 msgid "So long %s and good luck on your future travels 🚣"
 msgstr "Takk og farvel %s og lykke til på reisen 🚣"
@@ -1239,3 +1270,24 @@ msgstr "Takk og farvel %s og lykke til på reisen 🚣"
 #: views/validation.py:27 views/validation.py:57
 msgid "Success!"
 msgstr "Hurra!"
+
+#~ msgid "Error"
+#~ msgstr "Feil"
+
+#~ msgid "Can't remove user because the user is not in the group"
+#~ msgstr "Kan ikke fjerne brukeren fordi en ikke er i gruppen"
+
+#~ msgid "You are not authorized to remove users"
+#~ msgstr "Du har ikke tilgang til å fjerne brukere"
+
+#~ msgid "You are not authorized to add users"
+#~ msgstr "Du har ikke tilgang til å legge til brukere"
+
+#~ msgid "Make member"
+#~ msgstr "Gjør til medlem"
+
+#~ msgid "Make admin"
+#~ msgstr "Gjør til admin"
+
+#~ msgid "Remove User?"
+#~ msgstr "Fjern bruker?"

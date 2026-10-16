@@ -1,4 +1,6 @@
 from django.urls import reverse
+from django.utils.translation import get_language
+from django.utils.translation import gettext as _
 from django.views.generic import DetailView, ListView, UpdateView
 
 from dusken.forms import OrgUnitEditForm, UserWidgetForm
@@ -37,4 +39,28 @@ class OrgUnitEditUsersView(OrgUnitAdminRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user_search"] = UserWidgetForm
+        context["members_config"] = {
+            "membersUrl": reverse("orgunit-member-list", args=[self.object.slug]),
+            "orgunitUrl": reverse("orgunit-detail", args=[self.object.slug]),
+            "currentUserId": self.request.user.pk,
+            "isSuperuser": self.request.user.is_superuser,
+            "userUrl": reverse("user-detail", args=["__uuid__"]),
+            "language": get_language(),
+            "strings": {
+                "lifelong": _("Lifelong"),
+                "none": _("None"),
+                "noMembers": _("No members"),
+                "confirmDemote": _("Remove admin rights from {name}?"),
+                "confirmDemoteSelf": _(
+                    "You are about to remove your own admin rights, "
+                    "and will no longer be able to manage this organisation. Continue?"
+                ),
+                "confirmRemove": _("Remove {name} from this organisation?"),
+                "confirmRemoveSelf": _(
+                    "You are about to remove yourself from this organisation, "
+                    "and will no longer be able to manage it. Continue?"
+                ),
+                "networkError": _("Failed to contact server"),
+            },
+        }
         return context
