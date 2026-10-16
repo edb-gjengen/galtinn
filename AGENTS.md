@@ -33,6 +33,12 @@
 - Documentation uses rumdl for linting
 - Django route names use kabab casing
 
+## Commits
+
+Write commit messages as [Conventional Commits](https://www.conventionalcommits.org/),
+e.g. `fix: restrict user update view to own profile or superuser`. Skip the body unless it carries
+important information that isn't already in the code or comments. No trailers.
+
 ## Architecture
 
 - **Django settings**: `dusken/settings/` — `base.py` (shared), `dev.py`, `prod.py`. Tests use `dev` settings.
