@@ -21,7 +21,7 @@ from dusken.views.user import (
     UserUpdateMeView,
     UserUpdateView,
 )
-from dusken.views.validation import UserEmailValidateView, UserPhoneValidateView
+from dusken.views.validation import UserEmailValidateView
 
 admin.autodiscover()
 
@@ -47,7 +47,6 @@ urlpatterns = [
         UserEmailValidateView.as_view(),
         name="user-email-validate",
     ),
-    path("me/validate_phone/", UserPhoneValidateView.as_view(), name="user-phone-validate"),
     # Membership
     path("memberships/", MembershipListView.as_view(), name="membership-list"),
     path("order/<slug:slug>/", OrderDetailView.as_view(), name="payment-detail"),

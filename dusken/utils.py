@@ -1,9 +1,7 @@
 import logging
 import random
 import re
-from http import HTTPStatus
 
-import requests
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import resolve_url
@@ -59,40 +57,6 @@ def send_validation_email(user):
 
 def create_email_key(length=12):
     return get_random_string(length=length)
-
-
-def send_sms(to, message):
-    if settings.TESTING:
-        return True
-    url = f"{settings.TEKSTMELDING_API_URL}send"
-    payload = {"to": str(to), "message": message}
-    headers = {"Authorization": "Token " + settings.TEKSTMELDING_API_KEY}
-    response = requests.post(url, json=payload, headers=headers, timeout=10)
-    if response.status_code != HTTPStatus.OK:
-        logger.warning(f"Failed to send SMS, status_code={response.status_code} payload={payload}")
-        return None
-
-    return response.json().get("outgoing_id")
-
-
-def send_validation_sms(user):
-    if user.phone_number_confirmed:
-        # Bail
-        return None
-
-    # Create a key if needed
-    if not user.phone_number_key:
-        user.phone_number_key = create_phone_key()
-        user.save()
-
-    message = _("Confirm your phone number at Chateau Neuf with this code:")
-    message = message + " " + user.phone_number_key
-
-    return send_sms(to=user.phone_number, message=message)
-
-
-def create_phone_key(length=6):
-    return "".join([random.choice("0123456789") for i in range(length)])  # noqa: S311
 
 
 def email_exists(email):

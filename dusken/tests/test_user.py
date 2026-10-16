@@ -74,38 +74,6 @@ class DuskenUserAPITestCase(APITestCase):
         assert response.data.get("auth_token") is not None, "No token was returned in response"
 
 
-class DuskenUserPhoneValidationTestCase(TestCase):
-    def setUp(self):
-        from dusken.utils import send_validation_sms  # noqa: PLC0415
-
-        self.user = DuskenUser.objects.create_user(
-            "olanord",
-            email="olanord@example.com",
-            password="mypassword",
-            phone_number="+4794430002",
-        )
-        send_validation_sms(self.user)
-
-    def test_user_phone_number_confirmation_valid_key(self):
-        self.client.force_login(self.user)
-        assert not self.user.phone_number_confirmed
-        assert self.user.phone_number_key.isdigit()
-        url = reverse("user-phone-validate")
-        data = {"phone_key": self.user.phone_number_key}
-        response = self.client.post(url, data)
-        assert response.status_code == status.HTTP_302_FOUND
-        assert response.url == reverse("home")
-        assert DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed
-
-    def test_user_phone_number_confirmation_invalid_key(self):
-        self.client.force_login(self.user)
-        url = reverse("user-phone-validate")
-        data = {"phone_key": "hello"}
-        response = self.client.post(url, data)
-        assert response.status_code == status.HTTP_200_OK
-        assert not DuskenUser.objects.get(pk=self.user.pk).phone_number_confirmed
-
-
 class DuskenUserActivateTestCase(TestCase):
     def setUp(self):
         self.membership_type = MembershipType.objects.create(

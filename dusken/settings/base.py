@@ -175,9 +175,6 @@ TESTING = any(m in sys.modules for m in ["pytest", "py.test"])
 PHONENUMBER_DB_FORMAT = "E164"
 PHONENUMBER_DEFAULT_REGION = "NO"
 
-TEKSTMELDING_API_URL = "https://tekstmelding.neuf.no/"
-TEKSTMELDING_API_KEY = os.getenv("TEKSTMELDING_API_KEY", "")
-
 # Fallback keys from # from captcha.constants import TEST_PUBLIC_KEY, TEST_PRIVATE_KEY
 TEST_PUBLIC_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
 RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY", TEST_PUBLIC_KEY)

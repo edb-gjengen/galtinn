@@ -34,8 +34,7 @@
                     {% else %}
                         {% if user.unclaimed_orders %}
                             <li class="list-group-item list-group-item-warning"><span>{% svg "icons/warning" %}
-                                {% trans "There is a membership connected to your phone number." %}<br>
-                                <a href="{% url "user-phone-validate" %}">{% trans "Validate phone number" %}</a>
+                                {% trans "There is a membership connected to your phone number." %}
                             </span></li>
                         {% else %}
                             {% if ms == null %}
@@ -114,9 +113,6 @@
                             {% endif %}
 
                         </span>
-                        {% comment %}{% if user.phone_number and not user.phone_number_confirmed %}
-                            <a href="{% url "user-phone-validate" %}" class="btn btn-outline-primary btn-sm">{% trans "Validate phone number" %}</a>
-                        {% endif %}{% endcomment %}
                     </li>
                 </ul>
                 <div class="card-body d-grid">
