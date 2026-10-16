@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 
 import phonenumbers
 
@@ -19,7 +19,7 @@ def format_phone_number(number):
 
 
 def is_autumn():
-    today = datetime.datetime.now(tz=datetime.UTC).date()
-    _min = datetime.date(year=today.year, month=8, day=1)
-    _max = datetime.date(year=today.year + 1, month=1, day=1)
+    today = dt.datetime.now(tz=dt.UTC).date()
+    _min = dt.date(year=today.year, month=8, day=1)
+    _max = dt.date(year=today.year + 1, month=1, day=1)
     return _min <= today < _max

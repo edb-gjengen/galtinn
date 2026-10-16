@@ -82,11 +82,11 @@ Configure our LDAP database like so in `dusken/settings/local.py`:
 
 ```python
 DATABASES = {
-    'ldap': {
-        'ENGINE': 'ldapdb.backends.ldap',
-        'NAME': 'ldap://localhost/',
-        'USER': 'cn=admin,dc=neuf,dc=no',
-        'PASSWORD': 'toor',
+    "ldap": {
+        "ENGINE": "ldapdb.backends.ldap",
+        "NAME": "ldap://localhost/",
+        "USER": "cn=admin,dc=neuf,dc=no",
+        "PASSWORD": "toor",
     }
 }
 ```

@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import json
 import time
 from http import HTTPStatus
@@ -32,7 +32,7 @@ def membership_type():
     return MembershipType.objects.create(
         name="Cool Club Membership",
         slug="standard",
-        duration=datetime.timedelta(days=365),
+        duration=dt.timedelta(days=365),
         is_default=True,
         stripe_price_id="price_asdf",
     )

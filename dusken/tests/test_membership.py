@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 from types import SimpleNamespace
 from unittest import mock
 
@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase
 
 from dusken.models import DuskenUser, MemberCard, Membership, MembershipType, Order
 
-today = datetime.datetime.now(tz=datetime.UTC).date()
+today = dt.datetime.now(tz=dt.UTC).date()
 
 
 class MembershipTest(APITestCase):
@@ -26,7 +26,7 @@ class MembershipTest(APITestCase):
         self.membership_type = MembershipType.objects.create(
             name="Cool Club Membership",
             slug="standard",
-            duration=datetime.timedelta(days=365),
+            duration=dt.timedelta(days=365),
             is_default=True,
         )
 
@@ -51,8 +51,8 @@ class MembershipTest(APITestCase):
         assert Membership.objects.count() == 1
 
     def test_stripe_renewing_valid_membership_gives_proper_start_date(self):
-        old_membership_ends = today + datetime.timedelta(days=10)
-        new_membership_starts = old_membership_ends + datetime.timedelta(days=1)
+        old_membership_ends = today + dt.timedelta(days=10)
+        new_membership_starts = old_membership_ends + dt.timedelta(days=1)
         Membership.objects.create(
             start_date=today,
             end_date=old_membership_ends,
@@ -86,8 +86,8 @@ class MembershipTest(APITestCase):
 
     def test_confirming_phone_number_claims_orders(self):
         membership = Membership.objects.create(
-            start_date=today - datetime.timedelta(days=10),
-            end_date=today + datetime.timedelta(days=10),
+            start_date=today - dt.timedelta(days=10),
+            end_date=today + dt.timedelta(days=10),
             membership_type=self.membership_type,
         )
         Order.objects.create(payment_method=Order.BY_SMS, product=membership, price_nok=0, phone_number="+4794430002")
@@ -101,8 +101,8 @@ class MembershipTest(APITestCase):
 
     def test_disallow_claiming_orders_from_deleted_users(self):
         membership_from_deleted_user = Membership.objects.create(
-            start_date=today - datetime.timedelta(days=10),
-            end_date=today + datetime.timedelta(days=10),
+            start_date=today - dt.timedelta(days=10),
+            end_date=today + dt.timedelta(days=10),
             membership_type=self.membership_type,
         )
         Order.objects.create(
@@ -131,7 +131,7 @@ class KassaMembershipTest(APITestCase):
         self.membership_type = MembershipType.objects.create(
             name="Cool Club Membership",
             slug="standard",
-            duration=datetime.timedelta(days=365),
+            duration=dt.timedelta(days=365),
             is_default=True,
         )
         self.member_card = MemberCard.objects.create(card_number=123456789)
@@ -181,8 +181,8 @@ class KassaMembershipTest(APITestCase):
 
     def test_kassa_renew_for_non_user_without_card(self):
         membership = Membership.objects.create(
-            start_date=today - datetime.timedelta(days=10),
-            end_date=today + datetime.timedelta(days=10),
+            start_date=today - dt.timedelta(days=10),
+            end_date=today + dt.timedelta(days=10),
             membership_type=self.membership_type,
         )
         Order.objects.create(payment_method=Order.BY_SMS, product=membership, price_nok=0, phone_number="+4794430002")
@@ -195,7 +195,7 @@ class KassaMembershipTest(APITestCase):
         }
         response = self.client.post(url, payload, format="json")
 
-        expected_start_date = today + datetime.timedelta(days=10 + 1)
+        expected_start_date = today + dt.timedelta(days=10 + 1)
         expected_end_date = expected_start_date + self.membership_type.duration
 
         assert response.status_code == status.HTTP_201_CREATED, response.data
@@ -229,7 +229,7 @@ class KassaMembershipTest(APITestCase):
     def test_kassa_cannot_renew_if_expires_in_more_than_one_year(self):
         Membership.objects.create(
             start_date=today,
-            end_date=today + datetime.timedelta(days=370),
+            end_date=today + dt.timedelta(days=370),
             membership_type=self.membership_type,
             user=self.user,
         )
@@ -242,8 +242,8 @@ class KassaMembershipTest(APITestCase):
         assert response.status_code == status.HTTP_400_BAD_REQUEST, response.data
 
     def test_kassa_renewing_valid_membership_gives_proper_start_date(self):
-        old_membership_ends = today + datetime.timedelta(days=10)
-        new_membership_starts = old_membership_ends + datetime.timedelta(days=1)
+        old_membership_ends = today + dt.timedelta(days=10)
+        new_membership_starts = old_membership_ends + dt.timedelta(days=1)
         Membership.objects.create(
             start_date=today,
             end_date=old_membership_ends,

@@ -51,7 +51,7 @@ dev = [
     "pytest-django",
     "pytest-socket",
     "requests-mock",
-    "ruff==0.15.5",
+    "ruff==0.17.1",
     "types-requests==2.*",
     "types-stripe>=3.5.0,<4",
 ]
@@ -85,7 +85,8 @@ ignore = [
   "TRY003",          # Allow long exception messages
   "E501",            # Allow long lines
   "PGH003",          # FIXME: Improve typing
-  "COM812", "ISC001" # Avoid conflicting with ruff formatter
+  "COM812", "ISC001", # Avoid conflicting with ruff formatter
+  "CPY001",          # Allow files without copyright notice
 ]
 
 [tool.ruff.lint.pyupgrade]
