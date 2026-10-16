@@ -38,6 +38,7 @@ dependencies = [
     "strawberry-graphql-django==0.93.*",
     "stripe==14.*",
     "nh3==0.3.*",
+    "whitenoise==6.*",
 ]
 
 [dependency-groups]
