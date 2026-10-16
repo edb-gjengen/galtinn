@@ -113,6 +113,12 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     slug_field = "uuid"
     context_object_name = "userobj"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(pk=self.request.user.pk)
+
 
 class UserUpdateMeView(UserUpdateView):
     def get_object(self, _queryset=None):

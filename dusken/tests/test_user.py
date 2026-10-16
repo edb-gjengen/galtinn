@@ -279,3 +279,46 @@ class DuskenUserDelete(TestCase):
         assert self.order.phone_number is None
 
         self.membership.refresh_from_db()  # Will trigger DoesNotExists if was deleted
+
+
+class DuskenUserUpdateTestCase(TestCase):
+    def setUp(self):
+        self.user = DuskenUser.objects.create_user("olanord", email="olanord@example.com", password="mypassword")
+        self.victim = DuskenUser.objects.create_user("karinord", email="karinord@example.com", password="mypassword")
+        self.superuser = DuskenUser.objects.create_superuser("admin", email="admin@example.com", password="mypassword")
+        self.data = {
+            "first_name": "Kari",
+            "last_name": "Nordmann",
+            "email": "attacker@example.com",
+            "phone_number": "+4748105885",
+        }
+
+    def test_user_cannot_view_other_users_update_form(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("user-update", kwargs={"slug": self.victim.uuid}))
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_user_cannot_update_other_user(self):
+        self.client.force_login(self.user)
+        data = {**self.data, "first_name": "Hacked"}
+        response = self.client.post(reverse("user-update", kwargs={"slug": self.victim.uuid}), data)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        self.victim.refresh_from_db()
+        assert self.victim.email == "karinord@example.com"
+        assert self.victim.first_name != "Hacked"
+
+    def test_user_can_update_self(self):
+        self.client.force_login(self.user)
+        data = {**self.data, "email": self.user.email}
+        response = self.client.post(reverse("user-update", kwargs={"slug": self.user.uuid}), data)
+        assert response.status_code == status.HTTP_302_FOUND
+        self.user.refresh_from_db()
+        assert self.user.first_name == "Kari"
+
+    def test_superuser_can_update_other_user(self):
+        self.client.force_login(self.superuser)
+        data = {**self.data, "email": self.victim.email}
+        response = self.client.post(reverse("user-update", kwargs={"slug": self.victim.uuid}), data)
+        assert response.status_code == status.HTTP_302_FOUND
+        self.victim.refresh_from_db()
+        assert self.victim.first_name == "Kari"
