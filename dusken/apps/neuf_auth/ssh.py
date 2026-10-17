@@ -34,12 +34,10 @@ def create_home_dir(username, dry_run=False):
 def get_home_dirs():
     conn = get_connection()
 
-    separator = f"\n{settings.FILESERVER_HOME_PATH}"
-    if settings.FILESERVER_HOME_PATH[-1] != "/":
-        separator = f"{separator}/"
-
+    # The file server's forced command allows exactly this command (roles/galtinn_homes.md in edb-infra)
     res = conn.run(f"find {settings.FILESERVER_HOME_PATH} -maxdepth 1 -type d", hide=True)
-    return res.stdout.split(separator)[1:]
+    prefix = settings.FILESERVER_HOME_PATH.rstrip("/") + "/"
+    return [line.removeprefix(prefix) for line in res.stdout.splitlines() if line.startswith(prefix)]
 
 
 def homedir_exists(username):

@@ -12,6 +12,7 @@ from django.utils import timezone
 
 from dusken.apps.neuf_auth.management.commands import sync_active_to_internal_systems as sync
 from dusken.apps.neuf_auth.models import AuthProfile
+from dusken.apps.neuf_auth.ssh import get_home_dirs
 from dusken.apps.neuf_ldap.utils import create_ldap_group
 from dusken.models import DuskenUser, GroupProfile
 
@@ -211,3 +212,13 @@ def test_create_ldap_group_counts_up_from_after():
         assert create_ldap_group("dns-a", dry_run=True) == 9501
         assert create_ldap_group("dns-b", after=9501, dry_run=True) == 9502
     groups.return_value.save.assert_not_called()
+
+
+@pytest.mark.parametrize("home_path", ["/tank/homes", "/tank/homes/"])
+def test_get_home_dirs_parses_find(settings, home_path):
+    settings.FILESERVER_HOME_PATH = home_path
+    output = "/tank/homes\n/tank/homes/alice\n/tank/homes/nissen_tm\n"
+    with mock.patch("dusken.apps.neuf_auth.ssh.get_connection") as connection:
+        connection.return_value.run.return_value = mock.Mock(stdout=output)
+        assert get_home_dirs() == ["alice", "nissen_tm"]
+    connection.return_value.run.assert_called_once_with(f"find {home_path} -maxdepth 1 -type d", hide=True)
