@@ -123,12 +123,15 @@ def create_ldap_user(user, dry_run=False):  # noqa: C901
     return True
 
 
-def create_ldap_group(name, dry_run=False):
-    """Create an empty posixGroup with the next free gid between LDAP_GID_MIN and LDAP_GID_MAX."""
+def create_ldap_group(name, after=0, dry_run=False):
+    """Create an empty posixGroup with the next free gid between LDAP_GID_MIN and LDAP_GID_MAX, and above `after`.
+
+    A dry run saves nothing, so pass the gid it returned last as `after` to get the gids a real run would take.
+    """
     from .models import LdapGroup  # noqa: PLC0415
 
     gids = LdapGroup.objects.filter(gid__gte=settings.LDAP_GID_MIN, gid__lte=settings.LDAP_GID_MAX)
-    gid = max(gids.values_list("gid", flat=True), default=settings.LDAP_GID_MIN - 1) + 1
+    gid = max(*gids.values_list("gid", flat=True), after, settings.LDAP_GID_MIN - 1) + 1
     if gid > settings.LDAP_GID_MAX:
         raise ValueError(f"No free gid for group {name} up to LDAP_GID_MAX")
 
@@ -185,23 +188,6 @@ def ldap_update_user_groups(dusken_user, ldap_user_diffable, dry_run=False, dele
 
     if len(stale_groups) > 0 and delete_group_memberships:
         logger.debug(f"Group memberships removed: {','.join(stale_groups)}")
-
-
-def create_ldap_automount(username, dry_run=False):
-    from .models import LdapAutomountHome  # noqa: PLC0415
-
-    if LdapAutomountHome.objects.filter(username=username).exists():
-        # Bail if it already exists
-        return True
-
-    automount = LdapAutomountHome(username=username)
-    automount.set_automount_info()
-
-    if not dry_run:
-        automount.save()
-    logger.debug(f"Automount {automount.automountInformation} added for user {username}")
-
-    return True
 
 
 def delete_ldap_automount(username):

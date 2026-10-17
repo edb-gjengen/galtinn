@@ -1,15 +1,16 @@
 import re
 import traceback
 from collections import defaultdict
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 import ldap
+from django.conf import settings
+from django.core.cache import cache
 from django.core.management.base import BaseCommand, CommandError
 
-from dusken.apps.neuf_auth.ssh import create_home_dir
+from dusken.apps.neuf_auth.ssh import create_home_dir, get_home_dirs
 from dusken.apps.neuf_ldap.models import LdapGroup, LdapUser
 from dusken.apps.neuf_ldap.utils import (
-    create_ldap_automount,
     create_ldap_group,
     create_ldap_user,
     ldap_update_user_details,
@@ -45,7 +46,13 @@ class Command(BaseCommand):
     SYNC_GROUP_PREFIX = "dns-"
     # The sync creates a missing LDAP group only for a posix name of this form
     CREATABLE_GROUP_NAME = re.compile(r"dns-[a-z0-9]+(-[a-z0-9]+)*")
-    COUNTS = {"create": 0, "update": 0, "in_sync": 0, "failed": 0}
+    COUNTS = {"create": 0, "update": 0, "in_sync": 0, "home_dir": 0, "failed": 0}
+    # More missing home directories than this means a wrong path or an unmounted file system, not lost homes
+    MAX_NEW_HOME_DIRS = 50
+    # The users that failed when the run last exited with an error, and when. A failed run is posted to Discord,
+    # so the same failures exit 0 again until FAILED_ALERT_INTERVAL has passed.
+    FAILED_CACHE_KEY = "sync_active_to_internal_systems:failed"
+    FAILED_ALERT_INTERVAL = timedelta(hours=24)
     verbosity = 1
     dry_run = False
 
@@ -70,11 +77,16 @@ class Command(BaseCommand):
 
         # Do actual sync
         failed = self.sync_users(dusken_users_diffable, ldap_users_diffable, options["delete_group_memberships"])
+        # Accounts created in this run got their home directory then
+        existing = set(dusken_users_diffable) & set(ldap_users_diffable)
+        failed += self.create_missing_home_dirs(existing - set(failed))
 
         self.log_totals()
 
-        if failed:
+        if failed and self.should_alert(failed):
             raise CommandError(f"Sync failed for {len(failed)} users: {', '.join(failed)}")
+        if not self.dry_run and not failed:
+            cache.delete(self.FAILED_CACHE_KEY)
 
         if self.verbosity >= VERBOSE:
             self.stdout.write(f"[{datetime.now(tz=UTC)}] Finished sync job")
@@ -110,8 +122,9 @@ class Command(BaseCommand):
         wanted = {g for g in wanted if self.CREATABLE_GROUP_NAME.fullmatch(g)}
         existing = set(LdapGroup.objects.filter(name__in=wanted).values_list("name", flat=True))
 
+        gid = 0
         for name in sorted(wanted - existing):
-            gid = create_ldap_group(name, dry_run=self.dry_run)
+            gid = create_ldap_group(name, after=gid, dry_run=self.dry_run)
             self.stdout.write(f"[CREATED] Group {name} with gid {gid}")
 
     def get_all_ldap_users_diffable(self):
@@ -154,15 +167,65 @@ class Command(BaseCommand):
 
         return failed
 
+    def create_missing_home_dirs(self, usernames):
+        """Create the home directories the file server lacks for these accounts. Returns what failed."""
+        try:
+            missing = sorted(usernames - set(get_home_dirs()))
+        except Exception:  # noqa: BLE001
+            self.stderr.write(
+                f"[FAILED] Listing home directories on {settings.FILESERVER_HOST}\n{traceback.format_exc()}"
+            )
+            return ["(home directory listing)"]
+
+        if len(missing) > self.MAX_NEW_HOME_DIRS:
+            self.stderr.write(
+                f"[FAILED] {len(missing)} home directories missing in {settings.FILESERVER_HOME_PATH}, "
+                f"more than MAX_NEW_HOME_DIRS ({self.MAX_NEW_HOME_DIRS}); created none",
+            )
+            return ["(too many missing home directories)"]
+
+        failed = []
+        for username in missing:
+            if create_home_dir(username, dry_run=self.dry_run):
+                self.COUNTS["home_dir"] += 1
+                self.stdout.write(f"[CREATED] Home directory for {username}")
+            else:
+                failed.append(username)
+                self.COUNTS["failed"] += 1
+                self.stderr.write(f"[FAILED] Home directory for {username}")
+
+        return failed
+
+    def should_alert(self, failed):
+        """True if a user failed who was not in the last alert, or once FAILED_ALERT_INTERVAL has passed."""
+        if self.dry_run:
+            return True
+
+        now = datetime.now(tz=UTC)
+        last = cache.get(self.FAILED_CACHE_KEY)
+        if last and set(failed) <= set(last["users"]) and now - last["at"] < self.FAILED_ALERT_INTERVAL:
+            self.stderr.write(
+                f"No alert: the {len(failed)} failed users were all in the last one, {last['at']:%Y-%m-%d %H:%M} UTC"
+            )
+            return False
+
+        cache.set(self.FAILED_CACHE_KEY, {"users": sorted(failed), "at": now}, timeout=None)
+        return True
+
+    @staticmethod
+    def check_password_hash(user):
+        # The auth profile's default is "", which would empty or remove the account's userPassword
+        if not user["ldap_password"]:
+            raise RuntimeError("No LDAP password hash in Galtinn")
+
     def sync_user(self, user, ldap_user, delete_group_memberships):
         username = user["username"]
         if ldap_user is None:
             # Create
+            self.check_password_hash(user)
             if not create_ldap_user(user, dry_run=self.dry_run):
                 raise RuntimeError("LDAP user not created")
-            home_dir_created = create_home_dir(username, dry_run=self.dry_run)
-            create_ldap_automount(username, dry_run=self.dry_run)
-            if not home_dir_created:
+            if not create_home_dir(username, dry_run=self.dry_run):
                 raise RuntimeError("Home directory not created")
 
             self.COUNTS["create"] += 1
@@ -174,6 +237,7 @@ class Command(BaseCommand):
             delete_group_memberships,
         ):
             # Update
+            self.check_password_hash(user)
             ldap_update_user_details(user, dry_run=self.dry_run)
             ldap_update_user_groups(
                 user,
@@ -192,12 +256,13 @@ class Command(BaseCommand):
                 self.stdout.write(f"[OK] Dusken user {username} is in sync with LDAP")
 
     def log_totals(self):
-        if self.COUNTS["create"] or self.COUNTS["update"] or self.COUNTS["failed"] or self.verbosity >= VERBOSE:
+        if any(self.COUNTS[k] for k in ("create", "update", "home_dir", "failed")) or self.verbosity >= VERBOSE:
             self.stdout.write(
-                "Totals: created {}, updated {}, in sync: {}, failed: {}".format(
+                "Totals: created {}, updated {}, in sync: {}, home directories created: {}, failed: {}".format(
                     self.COUNTS["create"],
                     self.COUNTS["update"],
                     self.COUNTS["in_sync"],
+                    self.COUNTS["home_dir"],
                     self.COUNTS["failed"],
                 ),
             )

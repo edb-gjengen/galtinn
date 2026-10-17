@@ -127,11 +127,6 @@ class LdapAutomountHome(ldapdb.models.Model):
     username = CharField(db_column="cn", primary_key=True)
     automountInformation = CharField(db_column="automountInformation")  # noqa: N815
 
-    def set_automount_info(self, username=None):
-        krb5_automount_info = f"-fstype=nfs4,rw,sec=krb5 {settings.FILESERVER_HOST}:{settings.FILESERVER_HOME_PATH}/{username if username is not None else self.username}"
-
-        self.automountInformation = krb5_automount_info
-
     def __str__(self):
         return self.username
 
