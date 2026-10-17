@@ -1,6 +1,7 @@
 import logging
 import random
 import re
+import unicodedata
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -15,16 +16,30 @@ from dusken.tasks import send_mail_task
 logger = logging.getLogger(__name__)
 
 
+# Letters NFKD doesn't split into a base letter and an accent
+TRANSLITERATIONS = str.maketrans({"æ": "ae", "ø": "o", "ß": "ss", "ð": "d", "þ": "th", "ł": "l", "đ": "d"})
+
+
+def username_part(name, length):
+    """Lowercase ASCII letters from a name: "Øystein" -> "oystein", "Anne-Lise" -> "annelise"."""
+    name = unicodedata.normalize("NFKD", name.lower().translate(TRANSLITERATIONS))
+    return re.sub(r"[^a-z]", "", name)[:length]
+
+
 def generate_username(first_name, last_name):
-    """Generate a fairly unique username based on first and last name.
+    """Generate a unique username based on first and last name.
     Example: nikolakr1234
     """
-    whitespace_re = re.compile(r"\s")
-    first_name = first_name.encode("ascii", "ignore").lower()[:6].decode("utf-8")
-    last_name = last_name.encode("ascii", "ignore").lower()[:2].decode("utf-8")
-    random_number = random.randint(1, 9999)  # noqa: S311
-    username = f"{first_name}{last_name}{random_number:04d}"
-    return whitespace_re.sub("", username)
+    from dusken.models import DuskenUser  # noqa: PLC0415
+
+    prefix = username_part(first_name, 6) + username_part(last_name, 2) or "user"
+    # Four digits until a prefix gets crowded, then longer suffixes
+    for digits in (4, 4, 4, 6, 6, 6, 8):
+        username = f"{prefix}{random.randint(1, 10**digits - 1):0{digits}d}"  # noqa: S311
+        if not DuskenUser.objects.filter(username=username).exists():
+            return username
+    msg = f"No free username for prefix {prefix}"
+    raise RuntimeError(msg)
 
 
 class InlineClass:

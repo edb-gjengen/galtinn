@@ -9,6 +9,7 @@ from dusken.admin import DuskenUserChangeForm, DuskenUserCreationForm
 from dusken.apps.neuf_auth.forms import SetUsernameForm
 from dusken.apps.neuf_auth.validators import LDAPUsernameValidator, blacklist_validator
 from dusken.models import DuskenUser
+from dusken.utils import generate_username
 
 
 @pytest.mark.parametrize("username", ["abc", "jonas", "jonas2", "a" * 32])
@@ -29,6 +30,39 @@ def test_invalid_usernames(username):
 def test_blacklisted_usernames(username):
     with pytest.raises(ValidationError):
         blacklist_validator(username)
+
+
+@pytest.mark.parametrize(
+    ("first_name", "last_name", "prefix"),
+    [
+        ("Øystein", "Ærlig", "oysteiae"),
+        ("Anne-Lise", "O'Brien", "anneliob"),
+        ("ole remi", "nordmann", "oleremno"),
+        ("Åse", "Ødegård", "aseod"),
+        ("Zoë", "Ünal", "zoeun"),
+        ("", "", "user"),
+        ("李", "王", "user"),
+    ],
+)
+@pytest.mark.django_db
+def test_generate_username(first_name, last_name, prefix):
+    username = generate_username(first_name, last_name)
+    assert username.removeprefix(prefix).isdigit()
+    LDAPUsernameValidator(username)
+
+
+@pytest.mark.django_db
+def test_generate_username_skips_taken():
+    DuskenUser.objects.create_user("olano0001", email="taken@example.com")
+    with patch("dusken.utils.random.randint", side_effect=[1, 2]):
+        assert generate_username("Ola", "Nordmann") == "olano0002"
+
+
+@pytest.mark.django_db
+def test_generate_username_crowded_prefix():
+    DuskenUser.objects.create_user("olano0001", email="taken@example.com")
+    with patch("dusken.utils.random.randint", side_effect=[1, 1, 1, 123456]):
+        assert generate_username("Ola", "Nordmann") == "olano123456"
 
 
 ldap_group_exists = patch("dusken.apps.neuf_auth.validators.ldap_user_group_exists", return_value=False)
