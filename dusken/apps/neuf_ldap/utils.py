@@ -123,6 +123,22 @@ def create_ldap_user(user, dry_run=False):  # noqa: C901
     return True
 
 
+def create_ldap_group(name, dry_run=False):
+    """Create an empty posixGroup with the next free gid between LDAP_GID_MIN and LDAP_GID_MAX."""
+    from .models import LdapGroup  # noqa: PLC0415
+
+    gids = LdapGroup.objects.filter(gid__gte=settings.LDAP_GID_MIN, gid__lte=settings.LDAP_GID_MAX)
+    gid = max(gids.values_list("gid", flat=True), default=settings.LDAP_GID_MIN - 1) + 1
+    if gid > settings.LDAP_GID_MAX:
+        raise ValueError(f"No free gid for group {name} up to LDAP_GID_MAX")
+
+    if not dry_run:
+        LdapGroup(name=name, gid=gid, members=[]).save()
+    logger.debug(f"Group {name} created with gid {gid}")
+
+    return gid
+
+
 def ldap_update_user_details(dusken_user, dry_run=False):
     from .models import LdapUser  # noqa: PLC0415
 
