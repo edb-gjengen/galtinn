@@ -1,11 +1,17 @@
 import re
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
-username_re = re.compile(r"^[a-z_][a-z0-9_-]{2,31}$")  # From 3-32 alphanum chars (man useradd), starting with a char
+from dusken.apps.neuf_ldap.utils import ldap_user_group_exists, ldap_username_exists
+
+# 3-32 lowercase letters and digits, starting with a letter. Stricter than useradd allows, so the name
+# works unchanged as a mail address, home directory and in every system we provision.
+username_re = re.compile(r"^[a-z][a-z0-9]{2,31}\Z")
 LDAPUsernameValidator = RegexValidator(username_re, _("Enter a valid username."))
+USERNAME_HELP_TEXT = _("Between 3 and 32 characters. Lowercase letters and digits only. It must start with a letter.")
 
 # This is vendored from https://github.com/marteinn/The-Big-Username-Blacklist/blob/master/list.py
 username_blacklist = [
@@ -525,6 +531,69 @@ username_blacklist = [
 ]
 
 
+# Accounts and groups that exist, or commonly exist, on our Linux hosts
+system_usernames = [
+    "adm",
+    "apt",
+    "avahi",
+    "bin",
+    "chrony",
+    "cups",
+    "daemon",
+    "debian",
+    "dnsmasq",
+    "docker",
+    "galtinn",
+    "games",
+    "gitdeploy",
+    "gitea",
+    "gnats",
+    "halt",
+    "irc",
+    "ldap",
+    "list",
+    "lp",
+    "lxd",
+    "man",
+    "messagebus",
+    "mysql",
+    "nginx",
+    "nscd",
+    "nslcd",
+    "ntp",
+    "openldap",
+    "operator",
+    "polkitd",
+    "postgres",
+    "proxy",
+    "redis",
+    "rpc",
+    "shutdown",
+    "sshd",
+    "statd",
+    "sys",
+    "syslog",
+    "tcpdump",
+    "toor",
+    "tss",
+    "ubuntu",
+    "uuidd",
+]
+
+
 def blacklist_validator(value):
-    if value in username_blacklist:
+    if value in username_blacklist or value in system_usernames:
         raise ValidationError(_("%(value)s is not an allowed username"), params={"value": value})
+
+
+def validate_new_username(username, user=None):
+    """Check a username about to be given to user. Older names may break these rules, so only check new ones."""
+    LDAPUsernameValidator(username)
+    blacklist_validator(username)
+
+    users = get_user_model().objects.filter(username=username)
+    if user is not None and user.pk is not None:
+        users = users.exclude(pk=user.pk)
+    # Every account gets a personal group of the same name, so an existing group blocks it too
+    if users.exists() or ldap_username_exists(username) or ldap_user_group_exists(username):
+        raise ValidationError(_("Username %(value)s is taken"), params={"value": username})

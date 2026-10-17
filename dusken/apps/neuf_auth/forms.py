@@ -8,7 +8,7 @@ from django.utils.connection import ConnectionDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
 from dusken.apps.neuf_auth.models import AuthProfile
-from dusken.apps.neuf_auth.validators import LDAPUsernameValidator, blacklist_validator
+from dusken.apps.neuf_auth.validators import USERNAME_HELP_TEXT, validate_new_username
 from dusken.apps.neuf_ldap.utils import ldap_username_exists, set_ldap_password
 
 logger = logging.getLogger(__name__)
@@ -41,10 +41,7 @@ class SetUsernameForm(forms.Form):
     username = forms.CharField(
         label=_("Username"),
         initial="",
-        help_text=_(
-            "Between 3 and 32 characters. Lowercase letters, digits and - or _ only. It must start with a letter.",
-        ),
-        validators=[LDAPUsernameValidator, blacklist_validator],
+        help_text=USERNAME_HELP_TEXT,
     )
 
     def __init__(self, *args, **kwargs):
@@ -67,10 +64,5 @@ class SetUsernameForm(forms.Form):
 
     def clean_username(self):
         username = self.cleaned_data["username"].lower()
-        if self.instance.__class__.objects.exclude(pk=self.instance.pk).filter(username__iexact=username).exists():
-            raise ValidationError(_("Username {value} is taken"), params={"value": username})
-
-        if ldap_username_exists(username):
-            raise ValidationError(_("Username {value} is taken"), params={"value": username})
-
+        validate_new_username(username, self.instance)
         return username

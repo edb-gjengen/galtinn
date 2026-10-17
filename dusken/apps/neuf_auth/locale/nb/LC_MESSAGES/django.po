@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-04 21:26+0100\n"
+"POT-Creation-Date: 2026-10-17 09:41+0200\n"
 "PO-Revision-Date: 2017-11-22 20:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,36 +18,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.0.4\n"
 
-#: apps/neuf_auth/forms.py:42
+#: forms.py:42
 msgid "Username"
 msgstr "Brukernavn"
 
-#: apps/neuf_auth/forms.py:45
-msgid ""
-"Between 3 and 32 characters. Lowercase letters, digits and - or _ only. It "
-"must start with a letter."
-msgstr ""
-"Mellom 3 og 32 tegn. Bare små bokstaver, tall og - eller _. Må starte med en "
-"bokstav."
-
-#: apps/neuf_auth/forms.py:57
+#: forms.py:54
 msgid "Username can only be set once"
 msgstr "Brukernavn kan bare settes en gang"
 
-#: apps/neuf_auth/forms.py:71 apps/neuf_auth/forms.py:74
-#, python-brace-format
-msgid "Username {value} is taken"
-msgstr "Brukernavnet {value} er allerede i bruk"
-
-#: apps/neuf_auth/validators.py:8
+#: validators.py:13
 msgid "Enter a valid username."
 msgstr "Skriv inn et gyldig brukernavn."
 
-#: apps/neuf_auth/validators.py:530
+#: validators.py:14
+msgid ""
+"Between 3 and 32 characters. Lowercase letters and digits only. It must "
+"start with a letter."
+msgstr ""
+"Mellom 3 og 32 tegn. Bare små bokstaver og tall. Må starte med en bokstav."
+
+#: validators.py:586
 #, python-format
 msgid "%(value)s is not an allowed username"
 msgstr "%(value)s er ikke et gyldig brukernavn"
 
-#: apps/neuf_auth/views.py:16 apps/neuf_auth/views.py:32
+#: validators.py:599
+#, python-format
+msgid "Username %(value)s is taken"
+msgstr "Brukernavnet %(value)s er allerede i bruk"
+
+#: views.py:16 views.py:32
 msgid "Password changed"
 msgstr "Passordet er endret"

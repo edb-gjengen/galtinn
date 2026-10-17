@@ -2,7 +2,7 @@ from datetime import date
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm
 from django.db.models import Min
 from django.urls import reverse
 from django.utils import timezone
@@ -10,6 +10,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from mptt.admin import MPTTModelAdmin
 
+from dusken.apps.neuf_auth.validators import validate_new_username
 from dusken.models import (
     DuskenUser,
     GroupDiscordRole,
@@ -135,6 +136,24 @@ class DuskenUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = DuskenUser
 
+    def clean_username(self):
+        username = self.cleaned_data["username"].lower()
+        # Only a new name has to follow the current rules; older ones may contain - or _
+        if username != self.initial.get("username"):
+            validate_new_username(username, self.instance)
+        return username
+
+
+class DuskenUserCreationForm(AdminUserCreationForm):
+    class Meta(AdminUserCreationForm.Meta):
+        model = DuskenUser
+        fields = ("username", "email")
+
+    def clean_username(self):
+        username = self.cleaned_data["username"].lower()
+        validate_new_username(username)
+        return username
+
 
 class UserDiscordProfileInline(admin.StackedInline):
     model = UserDiscordProfile
@@ -143,6 +162,10 @@ class UserDiscordProfileInline(admin.StackedInline):
 @admin.register(DuskenUser)
 class DuskenUserAdmin(UserAdmin):
     form = DuskenUserChangeForm
+    add_form = DuskenUserCreationForm
+    add_fieldsets = (
+        (None, {"classes": ("wide",), "fields": ("username", "email", "usable_password", "password1", "password2")}),
+    )
 
     _extra_fields = (
         "phone_number",
