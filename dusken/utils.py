@@ -62,7 +62,7 @@ def create_email_key(length=12):
 def email_exists(email):
     from dusken.models import DuskenUser  # noqa: PLC0415
 
-    return DuskenUser.objects.filter(email=email).exists()
+    return DuskenUser.objects.filter(email=email.lower()).exists()
 
 
 def phone_number_exist(phone_number):

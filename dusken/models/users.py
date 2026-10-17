@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser, Group
 from django.contrib.auth.models import Group as DjangoGroup
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -131,7 +132,18 @@ class DuskenUser(AbstractUser):  # type: ignore
             changed_by = self
         UserLogMessage(user=self, message=message, changed_by=changed_by).save()
 
+    def normalize_case(self):
+        # Usernames and email addresses are matched case-insensitively, so they are stored lowercase
+        self.username = self.username.lower()
+        self.email = self.email.lower()
+
+    def clean(self):
+        super().clean()
+        self.normalize_case()
+
     def save(self, **kwargs):
+        self.normalize_case()
+
         # If email or phone number has changed, invalidate confirmation state
         self.invalidate_confirmation_state()
 
@@ -162,7 +174,8 @@ class DuskenUser(AbstractUser):  # type: ignore
         if self.pk is not None:
             orig = DuskenUser.objects.get(pk=self.pk)
 
-            if orig.email != self.email:
+            # Case only: older addresses were stored as typed, and lowercasing one isn't a new address
+            if orig.email.lower() != self.email:
                 self.email_confirmed_at = None
                 self.email_key = create_email_key()
                 send_validation_email(self)
@@ -204,6 +217,10 @@ class DuskenUser(AbstractUser):  # type: ignore
         verbose_name = _("User")
         verbose_name_plural = _("Users")
         default_permissions = ("add", "change", "delete", "view")
+        constraints = [
+            models.CheckConstraint(condition=models.Q(username=Lower("username")), name="username_lowercase"),
+            models.CheckConstraint(condition=models.Q(email=Lower("email")), name="email_lowercase"),
+        ]
 
 
 class UserDiscordProfile(BaseModel):

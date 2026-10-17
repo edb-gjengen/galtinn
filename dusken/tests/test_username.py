@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import pytest
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
@@ -104,6 +105,54 @@ class AdminUsernameTests(TestCase):
         valid = form("OlaNord")
         assert valid.is_valid(), valid.errors
         assert valid.save().username == "olanord"
+
+
+class CaseInsensitiveLoginTests(TestCase):
+    def setUp(self):
+        self.user = DuskenUser.objects.create_user("olanord", email="Ola.Nord@Example.com", password="hunter2hunter2")
+
+    def test_stored_lowercase(self):
+        self.user.refresh_from_db()
+        assert self.user.email == "ola.nord@example.com"
+
+    def test_login_with_username(self):
+        assert authenticate(username="OlaNord", password="hunter2hunter2") == self.user
+        assert authenticate(username="olanord", password="wrong") is None
+
+    def test_login_with_email(self):
+        assert authenticate(username="OLA.NORD@example.com", password="hunter2hunter2") == self.user
+
+    def test_login_view(self):
+        response = self.client.post("/", {"username": "OlaNord", "password": "hunter2hunter2"})
+        assert response.status_code == 302
+        assert int(self.client.session["_auth_user_id"]) == self.user.pk
+
+
+class EmailCaseTests(TestCase):
+    def setUp(self):
+        self.user = DuskenUser.objects.create_user("olanord", email="ola@example.com")
+        self.user.confirm_email()
+
+    @patch("dusken.models.users.send_validation_email")
+    def test_case_change_keeps_confirmation(self, send_validation_email):
+        self.user.email = "Ola@Example.com"
+        self.user.save()
+        send_validation_email.assert_not_called()
+        self.user.refresh_from_db()
+        assert self.user.email_is_confirmed
+
+    @patch("dusken.models.users.send_validation_email")
+    def test_new_address_needs_confirmation(self, send_validation_email):
+        self.user.email = "kari@example.com"
+        self.user.save()
+        send_validation_email.assert_called_once()
+        assert not self.user.email_is_confirmed
+
+    def test_uniqueness_ignores_case(self):
+        DuskenUser.objects.create_user("karinord", email="kari@example.com")
+        self.user.email = "KARI@example.com"
+        with pytest.raises(ValidationError):
+            self.user.full_clean()
 
 
 @pytest.mark.django_db

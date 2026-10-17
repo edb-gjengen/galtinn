@@ -10,11 +10,11 @@ UserModel = get_user_model()
 class UsernameModelBackend(ModelBackend):
     """Lookup user on UserModel.username vs on UserModel.USERNAME_FIELD"""
 
-    def authenticate(self, _request, username=None, password=None, **kwargs):
-        if username is None:
-            username = kwargs.get("username")
+    def authenticate(self, _request, username=None, password=None, **_kwargs):
+        if username is None or password is None:
+            return None
         try:
-            user = UserModel.objects.get(username=username)
+            user = UserModel.objects.get(username=username.lower())
         except UserModel.DoesNotExist:
             # Run the default password hasher once to reduce the timing
             # difference between an existing and a non-existing user (#20760).

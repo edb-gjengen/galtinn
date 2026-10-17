@@ -22,6 +22,10 @@ class DuskenUserQuerySet(QuerySet):
 
 
 class DuskenUserManager(UserManager):
+    def get_by_natural_key(self, username):
+        # Logging in with an email address; they are stored lowercase
+        return self.get(**{self.model.USERNAME_FIELD: username.lower()})
+
     def get_queryset(self):
         return DuskenUserQuerySet(self.model, using=self._db)
 
