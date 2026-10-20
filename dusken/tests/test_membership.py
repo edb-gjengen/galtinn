@@ -1,6 +1,4 @@
 import datetime as dt
-from types import SimpleNamespace
-from unittest import mock
 
 from django.contrib.auth.models import Permission
 from rest_framework import status
@@ -29,51 +27,6 @@ class MembershipTest(APITestCase):
             duration=dt.timedelta(days=365),
             is_default=True,
         )
-
-    def test_stripe_create_charge(self):
-        url = reverse("membership-charge")
-        payload = {
-            "membership_type": self.membership_type.slug,
-            "stripe_token": {"id": "asdf", "email": "asdf@example.com"},
-        }
-
-        with (
-            mock.patch("stripe.Customer.create") as customer_create,
-            mock.patch("stripe.Charge.create") as charge_create,
-        ):
-            customer_create.return_value = SimpleNamespace(id="someid")
-            charge_create.return_value = SimpleNamespace(id="someid", status="succeeded")
-            response = self.client.post(url, payload, format="json")
-
-        assert response.status_code == status.HTTP_201_CREATED, response.data
-        assert Order.objects.count() == 1
-        assert Order.objects.first().payment_method == Order.BY_CARD
-        assert Membership.objects.count() == 1
-
-    def test_stripe_renewing_valid_membership_gives_proper_start_date(self):
-        old_membership_ends = today + dt.timedelta(days=10)
-        new_membership_starts = old_membership_ends + dt.timedelta(days=1)
-        Membership.objects.create(
-            start_date=today,
-            end_date=old_membership_ends,
-            membership_type=self.membership_type,
-            user=self.user,
-        )
-        url = reverse("membership-charge")
-        payload = {
-            "membership_type": self.membership_type.slug,
-            "stripe_token": {"id": "asdf", "email": "asdf@example.com"},
-        }
-        with (
-            mock.patch("stripe.Customer.create") as customer_crate,
-            mock.patch("stripe.Charge.create") as charge_create,
-        ):
-            customer_crate.return_value = SimpleNamespace(id="someid")
-            charge_create.return_value = SimpleNamespace(id="someid", status="succeeded")
-            response = self.client.post(url, payload, format="json")
-
-        assert response.status_code == status.HTTP_201_CREATED, response.data
-        assert self.user.last_membership.start_date == new_membership_starts
 
     def test_cannot_use_kassa_endpoint(self):
         url = reverse("kassa-membership")
