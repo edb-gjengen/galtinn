@@ -5,4 +5,4 @@
 
 --
 {% trans "Galtinn" %}
-{% trans "The Norwegian Student's Society - Chateau Neuf" %}
+{% trans "The Norwegian Students' Society - Chateau Neuf" %}

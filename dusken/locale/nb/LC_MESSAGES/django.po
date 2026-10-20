@@ -564,7 +564,7 @@ msgid "Our space geckos on duty have been notified #GoGetThoseGeckos"
 msgstr "Stuegrisene som er på vakt har blitt varslet"
 
 #: templates/base.html:9
-msgid "The membership database at Chateau Neuf - The Norwegian Student Society"
+msgid "The membership database at Chateau Neuf - The Norwegian Students' Society"
 msgstr "Medlemskapsdatabasen på Chateau Neuf - Det Norske Studentersamfund"
 
 #: templates/dusken/components/app_download.html:4
@@ -608,7 +608,7 @@ msgstr "Galtinn"
 
 #: templates/dusken/emails/validation_email.html:8
 #: templates/dusken/emails/validation_email.txt:8
-msgid "The Norwegian Student's Society - Chateau Neuf"
+msgid "The Norwegian Students' Society - Chateau Neuf"
 msgstr "Det Norske Studentersamfund - Chateau Neuf"
 
 #: templates/dusken/home.html:11 templates/nav.html:14
@@ -745,7 +745,7 @@ msgstr ""
 
 #: templates/dusken/home_volunteer.html:11
 msgid ""
-"The effort of our active volunteers form The Norwegian Student Society, want "
+"The effort of our active volunteers form The Norwegian Students' Society, want "
 "to become a part of it?"
 msgstr ""
 "Innsatsen som de aktive legger ned er med på å forme Det Norske "
@@ -809,7 +809,7 @@ msgid "This is Galtinn, the membership database at"
 msgstr "Dette er Galtinn, medlemskapsdatabasen på"
 
 #: templates/dusken/index.html:10
-msgid "Chateau Neuf – The Norwegian Student Society"
+msgid "Chateau Neuf – The Norwegian Students' Society"
 msgstr "Chateau Neuf – Det Norske Studentersamfund"
 
 #: templates/dusken/index.html:12
