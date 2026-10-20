@@ -4,6 +4,7 @@ import pytest
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.urls import reverse
 
 from dusken.admin import DuskenUserChangeForm, DuskenUserCreationForm
 from dusken.apps.neuf_auth.forms import SetUsernameForm
@@ -97,6 +98,29 @@ class SetUsernameFormTests(TestCase):
         group_exists.side_effect = lambda name: name == "styret"
         assert not self.form("styret").is_valid()
         assert self.form("styre").is_valid()
+
+
+@ldap_user_exists
+@ldap_group_exists
+class SetUsernameViewTests(TestCase):
+    def setUp(self):
+        self.user = DuskenUser.objects.create_user("olano1234", email="ola@example.com")
+        self.client.force_login(self.user)
+
+    def test_sets_username_once(self, *_mocks):
+        url = reverse("user-update-username")
+        assert self.client.get(url).status_code == 200
+
+        response = self.client.post(url, {"username": "OlaNord"})
+        assert response.status_code == 302
+        self.user.refresh_from_db()
+        assert self.user.username == "olanord"
+        assert self.user.has_set_username
+
+        response = self.client.post(url, {"username": "kari"})
+        assert response.status_code == 302
+        self.user.refresh_from_db()
+        assert self.user.username == "olanord"
 
 
 @ldap_user_exists

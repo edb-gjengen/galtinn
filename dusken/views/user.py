@@ -128,7 +128,7 @@ class UserUpdateMeView(UserUpdateView):
         return reverse("user-detail-me")
 
 
-class UserSetUsernameView(LoginRequiredMixin, UpdateView):
+class UserSetUsernameView(LoginRequiredMixin, FormView):
     form_class = SetUsernameForm
     template_name = "dusken/user_username.html"
     success_url = reverse_lazy("home")
@@ -140,13 +140,16 @@ class UserSetUsernameView(LoginRequiredMixin, UpdateView):
 
         return super().dispatch(request, *args, **kwargs)
 
-    def get_object(self, _queryset=None):
-        return self.request.user
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            "instance": self.request.user,
+        }
 
     def form_valid(self, form):
         form.save()
         username = form.cleaned_data["username"]
-        self.object.log(f"Username set to {username}")
+        self.request.user.log(f"Username set to {username}")
         messages.success(self.request, "{} 😎".format(_("Username set to {username}").format(username=username)))
 
         return redirect(self.success_url)
