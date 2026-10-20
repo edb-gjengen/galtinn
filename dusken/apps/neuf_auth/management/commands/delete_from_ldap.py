@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 
-from distutils.util import strtobool
 from django.core.management.base import BaseCommand
 
 from dusken.apps.neuf_ldap.models import LdapAutomountHome, LdapGroup, LdapUser
@@ -61,12 +60,7 @@ class Command(BaseCommand):
             return True
 
         val = input(f"Do you want to permanently remove {object_type} '{username}'? [y/N]")
-        try:
-            confirmed = strtobool(val)
-        except ValueError:
-            confirmed = False
-
-        return confirmed
+        return val.strip().lower() in {"y", "yes"}
 
     def delete_group_memberships(self, username):
         # FIXME: Horribly inefficient
