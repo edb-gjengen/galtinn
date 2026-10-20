@@ -6,7 +6,7 @@ from dusken.utils import send_validation_email
 
 
 @receiver(post_save, sender=DuskenUser)
-def on_new_user_send_validation_email(_sender, instance=None, created=False, **_kwargs):
+def on_new_user_send_validation_email(sender, instance=None, created=False, **_kwargs):  # noqa: ARG001
     if created:
         user = instance
         send_validation_email(user)
