@@ -9,7 +9,7 @@ dependencies = [
     "argon2-cffi==25.1.*",
     "celery==5.6.*",
     "dj-database-url==3.1.*",
-    "Django==6.0.*",
+    "Django==6.1.*",
     "django-bootstrap5==26.*",
     "django-countries==9.*",
     "django-extensions==4.1.*",
