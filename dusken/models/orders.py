@@ -45,7 +45,7 @@ class Membership(BaseModel):
     @staticmethod
     def start_date_for_user(user):
         if user and user.is_member:
-            return user.last_membership.end_date + timezone.timedelta(days=1)
+            return user.last_membership.end_date + timedelta(days=1)
         return timezone.now().date()
 
     def __str__(self):

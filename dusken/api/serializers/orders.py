@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
@@ -88,7 +90,7 @@ class StripeOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
 
     def _get_start_date(self, user):
         if user and user.is_member:
-            return user.last_membership.end_date + timezone.timedelta(days=1)
+            return user.last_membership.end_date + timedelta(days=1)
         return timezone.now().date()
 
     class Meta:
@@ -154,12 +156,12 @@ class KassaOrderSerializer(BaseMembershipOrder, serializers.ModelSerializer):
 
     def _get_start_date(self, user, phone_number, member_card):
         if user and user.is_member:
-            return user.last_membership.end_date + timezone.timedelta(days=1)
+            return user.last_membership.end_date + timedelta(days=1)
 
         if not user:
             last_order = Order.objects.unclaimed(phone_number, member_card).first()
             if last_order and last_order.product.is_valid:
-                return last_order.product.end_date + timezone.timedelta(days=1)
+                return last_order.product.end_date + timedelta(days=1)
 
         return timezone.now().date()
 
