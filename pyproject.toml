@@ -36,7 +36,7 @@ dependencies = [
     "sentry-sdk==2.72.*",
     "strawberry-graphql==0.336.*",
     "strawberry-graphql-django==0.93.*",
-    "stripe==14.*",
+    "stripe==16.*",
     "nh3==0.3.*",
     "whitenoise==6.*",
 ]
