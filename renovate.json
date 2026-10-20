@@ -1,11 +1,82 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "group:allNonMajor"
   ],
-  "ignoreDeps": [
-    "python",
-    "django"
-  ],
-  "schedule": ["before 7am on the first day of the month"]
+  "timezone": "Europe/Oslo",
+  "rangeStrategy": "update-lockfile",
+  "prConcurrentLimit": 3,
+  "pre-commit": {
+    "enabled": true
+  },
+  "major": {
+    "dependencyDashboardApproval": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "before 7am on the first day of the month"
+    ]
+  },
+  "packageRules": [
+    {
+      "description": "Minor, patch and git digest updates land in one monthly PR",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "schedule": [
+        "before 7am on the first day of the month"
+      ],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    },
+    {
+      "description": "Django feature releases need migration review, so wait for approval",
+      "matchPackageNames": [
+        "/^django$/i"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "dependencyDashboardApproval": true,
+      "groupName": "django"
+    },
+    {
+      "description": "Python is pinned to 3.14 in many places; upgrade it in one approved PR",
+      "matchDepNames": [
+        "python",
+        "nikolaik/python-nodejs"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ],
+      "groupName": "python",
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Upgrade node across mise, the Dockerfile and CI together",
+      "matchDepNames": [
+        "node"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "groupName": "node"
+    },
+    {
+      "description": "Local services mirror production's tags, which edb-infra manages",
+      "matchManagers": [
+        "docker-compose"
+      ],
+      "matchDepNames": [
+        "postgres",
+        "redis"
+      ],
+      "enabled": false
+    }
+  ]
 }
