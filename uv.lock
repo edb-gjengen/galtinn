@@ -839,6 +839,7 @@ dev = [
     { name = "pytest-socket" },
     { name = "requests-mock" },
     { name = "ruff" },
+    { name = "types-jwcrypto" },
     { name = "types-requests" },
 ]
 
@@ -891,6 +892,7 @@ dev = [
     { name = "pytest-socket", specifier = "==0.8.*" },
     { name = "requests-mock", specifier = "==1.12.*" },
     { name = "ruff", specifier = "==0.17.1" },
+    { name = "types-jwcrypto", specifier = "==1.*" },
     { name = "types-requests", specifier = "==2.*" },
 ]
 
@@ -1499,6 +1501,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/69/ed/8f07e893132d5051d86a553e749d5c89b2a4776eb3a579b72ed61f8559ca/tokenize_rt-6.2.0.tar.gz", hash = "sha256:8439c042b330c553fdbe1758e4a05c0ed460dbbbb24a606f11f0dee75da4cad6", size = 5476, upload-time = "2025-05-23T23:48:00.035Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/33/f0/3fe8c6e69135a845f4106f2ff8b6805638d4e85c264e70114e8126689587/tokenize_rt-6.2.0-py2.py3-none-any.whl", hash = "sha256:a152bf4f249c847a66497a4a95f63376ed68ac6abf092a2f7cfb29d044ecff44", size = 6004, upload-time = "2025-05-23T23:47:58.812Z" },
+]
+
+[[package]]
+name = "types-jwcrypto"
+version = "1.6.1.20260928"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/06/f2/c1c153127184b5d4de04b71fd879df798e72f03f4e3d0cc3d14588b3d3bc/types_jwcrypto-1.6.1.20260928.tar.gz", hash = "sha256:8bec6bba590b9f51ccfa8908083329600be49800c04eade9f0745eddfad70714", size = 12942, upload-time = "2026-09-28T07:50:56.359Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8b/97/d4ac9077b0529638e778bfa48230b623123aa4084fe5314f1649108b69de/types_jwcrypto-1.6.1.20260928-py3-none-any.whl", hash = "sha256:237fa9287e78513bd15ce64260f892dd0923786d002c229532e6ea7a9795dc82", size = 13546, upload-time = "2026-09-28T07:50:55.39Z" },
 ]
 
 [[package]]

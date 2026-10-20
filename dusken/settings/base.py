@@ -217,7 +217,7 @@ FILESERVER_HOST = "localhost"
 FILESERVER_SSH_USER = "nikolark"  # change this to your own user for development
 FILESERVER_SSH_KEY_PATH = ""  # e.g. '/home/nikolark/.ssh/id_rsa'
 FILESERVER_HOME_PATH = "/tmp/"  # noqa: S108
-FILESERVER_CREATE_HOMEDIR_SCRIPT = BASE_DIR / "scripts/create_home_directory.sh"
+FILESERVER_CREATE_HOMEDIR_SCRIPT = str(BASE_DIR / "scripts/create_home_directory.sh")
 
 # Celery
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")

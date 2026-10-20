@@ -12,6 +12,7 @@
 - Run python tests: `uv run pytest -xvs`
 - Run a single test: `uv run pytest -xvs dusken/tests/test_user.py::TestName`
 - Lint python with ruff only: `prek run ruff-check`
+- Type check python: `mise run typecheck`
 - Format python with ruff only: `prek run ruff-format`
 - Build javascript: `mise run frontend-build`
 - Lint javascript: `mise run frontend-lint`, or `prek run eslint` (needs `frontend/node_modules`)
@@ -34,6 +35,7 @@
 
 - Max line length: 120 characters
 - Ruff with nearly all rules enabled (see pyproject.toml) — docstrings and type annotations are NOT required
+- mypy with the django-stubs and DRF plugins must pass; a `# type: ignore` names its error code and says why
 - ESLint flat config with Prettier formatting for JS
 - Tests must not make network calls (pytest-socket enforced)
 - Documentation uses rumdl for linting
@@ -71,7 +73,7 @@ PostgreSQL, so migrations must work on both.
 A push to `main` runs, in `.gitea/workflows/`:
 
 1. `prek` — all pre-commit hooks (ruff-check, ruff-format, django-upgrade, rumdl) except eslint
-2. `tests` — frontend lint and build, Django migrations, `manage.py check`, pytest with coverage
+2. `tests` — frontend lint and build, Django migrations, `manage.py check`, mypy, pytest with coverage
 3. `deploy` — once both pass, kaniko builds and pushes `git.neuf.no/edb/galtinn:<sha>`, then
    `ssh gitdeploy@amiga.neuf.no <sha>` deploys it. Both jobs run only while the repository variable
    `DEPLOY_AMIGA` is `true`.

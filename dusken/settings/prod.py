@@ -10,7 +10,8 @@ from sentry_sdk.integrations.redis import RedisIntegration
 
 from .base import *  # noqa: F403
 
-DATABASES["default"] = dj_database_url.config(conn_max_age=600)  # noqa: F405
+# Unpacked into a plain dict, since dj_database_url returns a TypedDict
+DATABASES["default"] = {**dj_database_url.config(conn_max_age=600)}  # noqa: F405
 DATABASES["ldap"] = {  # noqa: F405
     "ENGINE": "ldapdb.backends.ldap",
     "NAME": os.getenv("LDAP_URL", "ldaps://pacman.neuf.no/"),

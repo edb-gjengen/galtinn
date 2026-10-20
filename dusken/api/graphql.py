@@ -19,8 +19,8 @@ class Query:
     @strawberry.field()
     def membership_types(self, _info: Info, is_default: bool | None = None) -> list[MembershipType]:  # noqa: FBT001
         query = {} if is_default is None else {"is_default": is_default}
-        # FIXME: How to allow using django types here?
-        return models.MembershipType.objects.filter(**query)  # type: ignore
+        # strawberry-django resolves the model instances into the GraphQL type, which mypy cannot see
+        return models.MembershipType.objects.filter(**query)  # type: ignore[return-value]
 
     # TODO: Add opening hours and other static app info from a separate app
 

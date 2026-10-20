@@ -18,6 +18,10 @@ run = "uv run manage.py runserver"
 description = "Run Python test suite"
 run = "uv run pytest -v"
 
+[tasks.typecheck]
+description = "Type check Python with mypy"
+run = "uv run mypy dusken"
+
 [tasks.worker]
 description = "Run Celery worker in development"
 run = "DJANGO_SETTINGS_MODULE=dusken.settings.dev uv run celery -A dusken worker"

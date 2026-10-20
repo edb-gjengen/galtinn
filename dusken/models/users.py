@@ -1,6 +1,7 @@
 import logging
 import uuid
 from itertools import chain
+from typing import ClassVar
 
 from django.contrib.auth.models import AbstractUser, Group
 from django.contrib.auth.models import Group as DjangoGroup
@@ -24,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 # FIXME: We can't use the django-stubs type plugin to infer types from OrgUnit, since MPTTModel is untyped/any
-class DuskenUser(AbstractUser):  # type: ignore
+class DuskenUser(AbstractUser):  # type: ignore[django-manager-missing]  # OrgUnit is an MPTTModel, without stubs
     updated = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4)
     first_name = models.CharField(_("first name"), max_length=254, blank=True)
@@ -59,7 +60,7 @@ class DuskenUser(AbstractUser):  # type: ignore
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
 
-    objects = DuskenUserManager()  # type: ignore
+    objects: ClassVar[DuskenUserManager] = DuskenUserManager()
 
     @property
     def email_is_confirmed(self):
@@ -282,7 +283,7 @@ class GroupDiscordRole(BaseModel):
 
 
 # FIXME: We can't seem use the django-stubs type plugin to infer types from BaseModel, since MPTTModel is untyped/any
-class OrgUnit(MPTTModel, BaseModel):  # type: ignore
+class OrgUnit(MPTTModel, BaseModel):  # type: ignore[django-manager-missing]  # MPTTModel has no stubs
     """Association, comittee or similar"""
 
     name = models.CharField(_("name"), max_length=255)

@@ -53,6 +53,7 @@ dev = [
     "pytest-socket==0.8.*",
     "requests-mock==1.12.*",
     "ruff==0.17.1",
+    "types-jwcrypto==1.*",
     "types-requests==2.*",
 ]
 
@@ -84,7 +85,6 @@ ignore = [
   "EM101", "EM102",  # Allow string in exceptions (prioritice code readability vs exception time readability)
   "TRY003",          # Allow long exception messages
   "E501",            # Allow long lines
-  "PGH003",          # FIXME: Improve typing
   "COM812", "ISC001", # Avoid conflicting with ruff formatter
   "CPY001",          # Allow files without copyright notice
 ]
@@ -109,14 +109,20 @@ module = [
     "django_filters.*",
     "django_tomselect.*",
     "fabric.*",
+    "ldap",
+    "ldap.*",
     "ldapdb.*",
     "mptt.*",
     "oauth2_provider.*",
     "passlib.*",
     "phonenumber_field.*",
-    "dusken.settings.local",
 ]
 ignore_missing_imports = true
+
+# Each developer's own untracked settings
+[[tool.mypy.overrides]]
+module = "dusken.settings.local"
+ignore_errors = true
 
 [tool.django-stubs]
 django_settings_module = "dusken.settings.dev"

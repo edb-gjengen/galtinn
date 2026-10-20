@@ -15,7 +15,8 @@ from dusken.utils import email_exists, phone_number_exist
 
 user_config = TomSelectConfig(
     url="user-autocomplete",
-    css_framework="bootstrap5",
+    # Annotated as AllowedCSSFrameworks, but validated against the enum's string values
+    css_framework="bootstrap5",  # type: ignore[arg-type]
     value_field="id",
     label_field="display_label",
     placeholder=_("User"),
@@ -219,4 +220,4 @@ class UserDeleteForm(forms.Form):
 
     def clean_confirm_username(self):
         if self.cleaned_data["confirm_username"] != self.user.username:
-            raise ValidationError(_("The username entered is not equal to your own."), code=400)
+            raise ValidationError(_("The username entered is not equal to your own."), code="invalid")
