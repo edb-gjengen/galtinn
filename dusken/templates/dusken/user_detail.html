@@ -10,7 +10,7 @@
 {% block body %}
 <div class="form-page">
     <script>
-    var config = {
+    var config = {
         validateEmail: '{% url "resend-validation-email" %}'
     };
     </script>
@@ -71,7 +71,7 @@
             <span>
                 {% svg "icons/license" %} {% trans "Membership" %}:
                 {% with userobj.last_membership as ms %}
-                    {% if ms != null %}
+                    {% if ms != null %}
                         <strong>
                             {% if ms.end_date %}
                                 {{ ms.end_date }}
@@ -79,7 +79,7 @@
                                 {% trans "Lifelong" %}
                             {% endif %}
                         </strong>
-                        {% if ms.is_valid %}
+                        {% if ms.is_valid %}
                             <span class="badge bg-success">{% trans "Valid" %}</span>
                         {% else %}
                             <span class="badge bg-danger">{% trans "Expired" %}</span>
