@@ -118,10 +118,11 @@ module = [
 ]
 ignore_missing_imports = true
 
-# Each developer's own untracked settings
+# Each developer's own untracked settings, absent in CI
 [[tool.mypy.overrides]]
 module = "dusken.settings.local"
 ignore_errors = true
+ignore_missing_imports = true
 
 [tool.django-stubs]
 django_settings_module = "dusken.settings.dev"
