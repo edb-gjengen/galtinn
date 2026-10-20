@@ -4,7 +4,6 @@ from pathlib import Path
 
 import dj_database_url
 import sentry_sdk
-from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
@@ -65,7 +64,7 @@ sentry_sdk.init(
     dsn=SENTRY_DSN,
     environment=SENTRY_ENVIRONMENT,
     release=os.getenv("SENTRY_RELEASE", "N/A"),
-    integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()],
+    integrations=[DjangoIntegration(), RedisIntegration()],
     # Bugsink likes the following settings
     send_default_pii=True,
     max_request_body_size="always",

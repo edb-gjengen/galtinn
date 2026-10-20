@@ -7,7 +7,6 @@ on:
 
 env:
   POSTGRES_DB: dusken
-  CELERY_BROKER_URL: "redis://redis:6379/0"
 
 jobs:
   build_frontend:

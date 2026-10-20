@@ -23,8 +23,8 @@ description = "Type check Python with mypy"
 run = "uv run mypy dusken"
 
 [tasks.worker]
-description = "Run Celery worker in development"
-run = "DJANGO_SETTINGS_MODULE=dusken.settings.dev uv run celery -A dusken worker"
+description = "Run the background task worker in development"
+run = "uv run manage.py ox_worker"
 
 # Frontend tasks
 [tasks.frontend-build]

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "django_filters",
     "django_tomselect",
     "django_recaptcha",
+    "django_ox",
     "svg",
 ]
 INSTALLED_APPS += [
@@ -219,8 +220,17 @@ FILESERVER_SSH_KEY_PATH = ""  # e.g. '/home/nikolark/.ssh/id_rsa'
 FILESERVER_HOME_PATH = "/tmp/"  # noqa: S108
 FILESERVER_CREATE_HOMEDIR_SCRIPT = str(BASE_DIR / "scripts/create_home_directory.sh")
 
-# Celery
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
+# Background tasks, run by `manage.py ox_worker`
+TASKS = {
+    "default": {
+        "BACKEND": "django_ox.backend.OxBackend",
+        "OPTIONS": {
+            "SCHEDULES": {
+                "prune-tasks": {"task": "dusken.tasks.prune_tasks", "cron": "30 4 * * *"},
+            },
+        },
+    },
+}
 
 # Google Analytics
 GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv("GOOGLE_ANALYTICS_PROPERTY_ID", "")

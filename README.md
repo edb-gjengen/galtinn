@@ -20,7 +20,7 @@ mise run run-frontend
 
 # start databases
 docker-compose up
-# start Celery worker
+# start the background task worker (sends email)
 mise run worker
 
 # Add Stripe keys in dusken/settings/local.py

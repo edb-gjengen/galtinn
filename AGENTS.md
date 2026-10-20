@@ -24,7 +24,7 @@
 - Load test fixtures: `uv run python manage.py loaddata testdata`
 - Run dev server: `mise run run`
 - Run frontend dev server: `mise run frontend-run`
-- Run Celery worker: `mise run worker`
+- Run the background task worker: `mise run worker`
 - Format and lint markdown `prek run rumdl`
 - Extract translations: `mise run makemessages`
 - Extract translations for a sub-app: `uv run ../../../manage.py makemessages -l nb` (from `dusken/apps/<app>/`)
@@ -52,6 +52,9 @@ important information that isn't already in the code or comments. No trailers.
 - **Django settings**: `dusken/settings/` — `base.py` (shared), `dev.py`, `prod.py`. Tests use `dev` settings.
 - **Database routing**: Custom router in `dusken/router.py` routes LDAP and Kassa models to separate databases.
 - **API layers**: REST (DRF) at `dusken/api/` and GraphQL (Strawberry) at `dusken/api/graphql.py`.
+- **Background tasks**: Django's tasks framework with the django-ox database backend, in `dusken/tasks.py`. `ox_worker`
+  runs them; `TASKS` in `base.py` holds retry policy and recurring schedules. Tests run tasks with
+  `django_ox.testing.run_tasks()`.
 - **Templates**: Django templates with Bootstrap 5 in `dusken/templates/`.
 - **Static assets**: Built by Rspack from `frontend/app/` into `staticfiles/`.
 - **i18n**: Norwegian Bokmål (`nb`) translations in `dusken/locale/`, and in `dusken/apps/<app>/locale/` for
@@ -65,7 +68,7 @@ Run `docker-compose up -d` to start required services:
 - Redis (port 6379)
 - OpenLDAP (ports 389, 636)
 
-SQLite is used by default in dev; Docker services are needed for LDAP and Celery features. Production runs
+SQLite is used by default in dev; Docker services are needed for LDAP features. Production runs
 PostgreSQL, so migrations must work on both.
 
 ## CI Pipeline

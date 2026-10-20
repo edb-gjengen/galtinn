@@ -7,7 +7,6 @@ requires-python = ">=3.14,<3.15"
 license = "MIT"
 dependencies = [
     "argon2-cffi==25.1.*",
-    "celery==5.6.*",
     "dj-database-url==3.1.*",
     "Django==6.1.*",
     "django-bootstrap5==26.*",
@@ -18,6 +17,7 @@ dependencies = [
     "django-ldapdb",  # pinned to a git rev in [tool.uv.sources]
     "django-mptt==0.20.*",
     "django-oauth-toolkit==3.*",
+    "django-ox==1.9.*",
     "django-phonenumber-field==8.*",
     "django-recaptcha==4.*",
     "django-redis==7.0.*",
@@ -43,7 +43,6 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "celery-types==0.26.*",
     "django-stubs[compatible-mypy]==6.1.*",
     "django-upgrade==1.33.*",
     "djangorestframework-stubs[compatible-mypy]==3.18.*",
