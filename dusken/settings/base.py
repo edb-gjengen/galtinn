@@ -115,7 +115,7 @@ SITE_URL = os.getenv("SITE_URL", "http://localhost:8000")
 
 # Email
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "webmaster@localhost")
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+MAILERS: dict[str, dict[str, object]] = {"default": {"BACKEND": "django.core.mail.backends.console.EmailBackend"}}
 
 AUTH_USER_MODEL = "dusken.DuskenUser"
 AUTHENTICATION_BACKENDS = [

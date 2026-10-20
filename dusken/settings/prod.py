@@ -31,8 +31,12 @@ FILESERVER_HOME_PATH = os.getenv("FILESERVER_HOME_PATH", "/export/homes")
 FILESERVER_CREATE_HOMEDIR_SCRIPT = os.getenv("FILESERVER_CREATE_HOMEDIR_SCRIPT", "/opt/ldap/create_home_directory.sh")
 
 # Email
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.getenv("EMAIL_HOST", "mx.neuf.no")
+MAILERS = {
+    "default": {
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {"host": os.getenv("EMAIL_HOST", "mx.neuf.no")},
+    },
+}
 
 # Security
 # https://docs.djangoproject.com/en/1.10/topics/security/#ssl-https
