@@ -1,7 +1,7 @@
 import logging
 
 from django import forms
-from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.connection import ConnectionDoesNotExist
@@ -35,6 +35,10 @@ class NeufSetPasswordForm(SetPasswordForm):
             logger.warning(f"Skipping password update of user {username}, since the LDAP connection does not exist")
 
         return self.user
+
+
+class NeufPasswordChangeForm(PasswordChangeForm, NeufSetPasswordForm):
+    """Asks for the current password, then saves the new one like NeufSetPasswordForm."""
 
 
 class SetUsernameForm(forms.Form):

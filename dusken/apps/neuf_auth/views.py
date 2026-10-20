@@ -3,11 +3,11 @@ from django.contrib.auth.views import PasswordChangeView, PasswordResetConfirmVi
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 
-from dusken.apps.neuf_auth.forms import NeufSetPasswordForm
+from dusken.apps.neuf_auth.forms import NeufPasswordChangeForm, NeufSetPasswordForm
 
 
 class NeufPasswordChangeView(PasswordChangeView):
-    form_class = NeufSetPasswordForm
+    form_class = NeufPasswordChangeForm
     success_url = reverse_lazy("home")
 
     def form_valid(self, form):
