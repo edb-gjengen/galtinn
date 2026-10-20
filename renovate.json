@@ -16,7 +16,7 @@
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": [
-      "before 7am on the first day of the month"
+      "* * 1 * *"
     ]
   },
   "packageRules": [
@@ -28,7 +28,7 @@
         "digest"
       ],
       "schedule": [
-        "before 7am on the first day of the month"
+        "* * 1 * *"
       ],
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch"
