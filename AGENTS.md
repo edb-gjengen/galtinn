@@ -14,7 +14,7 @@
 - Lint python with ruff only: `prek run ruff-check`
 - Format python with ruff only: `prek run ruff-format`
 - Build javascript: `mise run frontend-build`
-- Lint javascript: `mise run frontend-lint`
+- Lint javascript: `mise run frontend-lint`, or `prek run eslint` (needs `frontend/node_modules`)
 - Format javascript: `mise run frontend-format`
 - Run pre-commit checks on staged files: `prek run`
 - Run pre-commit checks on all tracked files: `prek run -a`
@@ -70,8 +70,8 @@ PostgreSQL, so migrations must work on both.
 
 A push to `main` runs, in `.gitea/workflows/`:
 
-1. `prek` — all pre-commit hooks (ruff-check, ruff-format, django-upgrade, rumdl)
-2. `tests` — frontend build, Django migrations, `manage.py check`, pytest with coverage
+1. `prek` — all pre-commit hooks (ruff-check, ruff-format, django-upgrade, rumdl) except eslint
+2. `tests` — frontend lint and build, Django migrations, `manage.py check`, pytest with coverage
 3. `deploy` — once both pass, kaniko builds and pushes `git.neuf.no/edb/galtinn:<sha>`, then
    `ssh gitdeploy@amiga.neuf.no <sha>` deploys it. Both jobs run only while the repository variable
    `DEPLOY_AMIGA` is `true`.

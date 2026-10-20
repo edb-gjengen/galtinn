@@ -1,8 +1,7 @@
 FROM node:24-trixie-slim AS frontend
 WORKDIR /src/frontend
 COPY frontend/package.json frontend/package-lock.json ./
-# --ignore-scripts skips husky's prepare hook, which needs a git checkout
-RUN npm ci --ignore-scripts
+RUN npm ci
 COPY frontend/ ./
 RUN npm run build -- --env production
 

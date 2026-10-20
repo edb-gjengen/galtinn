@@ -6,14 +6,7 @@
     "build": "rspack build",
     "format": "eslint --fix app",
     "lint": "eslint --quiet app",
-    "lint-staged": "lint-staged",
-    "prepare": "husky",
     "start": "rspack serve"
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --quiet"
-    ]
   },
   "browserslist": [
     "defaults"
@@ -37,8 +30,6 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.4.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.3.3",
     "postcss": "^8.5.8",
     "postcss-loader": "^8.2.1",
     "prettier": "^3.8.1",

@@ -17,3 +17,11 @@ repos:
     hooks:
       - id: rumdl
         args: [--fix]
+  # Needs frontend/node_modules (mise run frontend-build). CI skips it and lints in the tests workflow.
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint
+        language: system
+        entry: bash -c 'cd frontend && npx --no-install eslint --quiet "${@#frontend/}"' --
+        files: ^frontend/app/.*\.js$
