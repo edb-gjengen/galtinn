@@ -164,6 +164,7 @@ OAUTH2_PROVIDER = {
     "OIDC_ENABLED": True,
     "OIDC_RSA_PRIVATE_KEY": os.getenv("OIDC_RSA_PRIVATE_KEY", ""),
     "OAUTH2_VALIDATOR_CLASS": "dusken.api.oauth_validators.CustomOAuth2Validator",
+    "OIDC_RP_INITIATED_LOGOUT_ENABLED": True,
 }
 
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
