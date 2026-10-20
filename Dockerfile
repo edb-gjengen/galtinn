@@ -6,7 +6,7 @@ COPY frontend/ ./
 RUN npm run build -- --env production
 
 FROM python:3.14-slim-trixie AS build
-COPY --from=ghcr.io/astral-sh/uv:0.13.1 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.13.4 /uv /bin/uv
 # python-ldap and mysqlclient ship no wheels; git fetches the django-ldapdb fork
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential git pkg-config libldap2-dev libsasl2-dev \

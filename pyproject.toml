@@ -16,7 +16,7 @@ dependencies = [
     "django-filter==26.*",
     "django-inline-svg==0.1.*",
     "django-ldapdb",  # pinned to a git rev in [tool.uv.sources]
-    "django-mptt==0.19.*",
+    "django-mptt==0.20.*",
     "django-oauth-toolkit==3.*",
     "django-phonenumber-field==8.*",
     "django-recaptcha==4.*",
@@ -34,7 +34,7 @@ dependencies = [
     "redis==7.*",
     "requests==2.34.*",
     "sentry-sdk==2.72.*",
-    "strawberry-graphql==0.335.*",
+    "strawberry-graphql==0.336.*",
     "strawberry-graphql-django==0.93.*",
     "stripe==14.*",
     "nh3==0.3.*",
@@ -43,7 +43,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "celery-types==0.25.*",
+    "celery-types==0.26.*",
     "django-stubs[compatible-mypy]==5.2.*",
     "django-upgrade==1.33.*",
     "djangorestframework-stubs[compatible-mypy]==3.16.*",
