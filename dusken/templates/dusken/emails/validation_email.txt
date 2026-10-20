@@ -1,7 +1,8 @@
-{% load i18n %}
-{% trans "Hi" %}, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}! {% trans "Do you want to confirm your email?" %}
-{% blocktrans %}Go forth and click the link to confirm: {{ validation_url }}{% endblocktrans %}
+{% load i18n %}{% trans "Hi" %} {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}!
+
+{% trans "Confirm your email address by opening this link:" %}
+{{ validation_url }}
 
 --
 {% trans "Galtinn" %}
-{% trans "The Norwegian Student Society - Chateau Neuf" %}
+{% trans "The Norwegian Student's Society - Chateau Neuf" %}

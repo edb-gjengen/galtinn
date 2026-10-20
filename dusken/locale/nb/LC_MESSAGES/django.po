@@ -587,34 +587,29 @@ msgstr "Last ned mobilappen fra App Store"
 msgid "Download mobile app"
 msgstr "Last ned mobilappen"
 
-#: templates/dusken/emails/validation_email.html:2
-#: templates/dusken/emails/validation_email.txt:2 templates/dusken/index.html:7
+#: templates/dusken/emails/validation_email.html:1
+#: templates/dusken/emails/validation_email.txt:1 templates/dusken/index.html:7
 msgid "Hi"
 msgstr "Hei"
 
-#: templates/dusken/emails/validation_email.html:2
-#: templates/dusken/emails/validation_email.txt:2
-msgid "Do you want to confirm your email?"
-msgstr "Vil du bekrefte e-postadressen din?"
+#: templates/dusken/emails/validation_email.html:3
+#: templates/dusken/emails/validation_email.txt:3
+msgid "Confirm your email address by opening this link:"
+msgstr "Bekreft e-postadressen din ved å åpne denne lenken:"
 
 #: templates/dusken/emails/validation_email.html:4
-msgid "Go forth and confirm!"
-msgstr "Bekreft min e-post!"
+msgid "Confirm your email address"
+msgstr "Bekreft e-postadressen din"
 
 #: templates/dusken/emails/validation_email.html:7
-#: templates/dusken/emails/validation_email.txt:6
+#: templates/dusken/emails/validation_email.txt:7
 msgid "Galtinn"
 msgstr "Galtinn"
 
 #: templates/dusken/emails/validation_email.html:8
-#: templates/dusken/emails/validation_email.txt:7
-msgid "The Norwegian Student Society - Chateau Neuf"
+#: templates/dusken/emails/validation_email.txt:8
+msgid "The Norwegian Student's Society - Chateau Neuf"
 msgstr "Det Norske Studentersamfund - Chateau Neuf"
-
-#: templates/dusken/emails/validation_email.txt:3
-#, python-format
-msgid "Go forth and click the link to confirm: %(validation_url)s"
-msgstr "Trykk på lenken for å bekrefte: %(validation_url)s"
 
 #: templates/dusken/home.html:11 templates/nav.html:14
 msgid "Home"
