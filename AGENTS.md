@@ -78,7 +78,7 @@ A push to `main` runs, in `.gitea/workflows/`:
    `ssh gitdeploy@amiga.neuf.no <sha>` deploys it. Both jobs run only while the repository variable
    `DEPLOY_AMIGA` is `true`.
 
-Renovate runs every 4 hours from [edb/renovate-runner](https://git.neuf.no/edb/renovate-runner) as the `renovate`
+Renovate runs daily from [edb/renovate-runner](https://git.neuf.no/edb/renovate-runner) as the `renovate`
 account. `renovate.json` opens one grouped minor/patch PR and one lockfile maintenance PR on the first of each month.
 Majors, Django feature releases and Python upgrades wait for approval on the Dependency Dashboard issue.
 
