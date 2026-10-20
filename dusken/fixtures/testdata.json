@@ -5,12 +5,12 @@
     "fields": {
         "created": "2015-09-05T16:59:59.831Z",
         "updated": "2015-09-05T17:02:33.350Z",
-        "name": "Membership 1 year",
+        "name": "Membership 1 year (legacy)",
         "slug": "standard",
         "description": "Membership in The Norwegian Students' Society for 365 days.",
         "is_active": true,
         "price": 25000,
-        "is_default": true,
+        "is_default": false,
         "duration": "365 00:00:00",
         "expiry_type": "duration",
         "stripe_price_id": ""
@@ -31,6 +31,57 @@
         "duration": "365 00:00:00",
         "expiry_type": "duration",
         "stripe_price_id": ""
+    }
+},
+{
+    "model": "dusken.membershiptype",
+    "pk": 3,
+    "fields": {
+        "created": "2026-10-21T00:00:00Z",
+        "updated": "2026-10-21T00:00:00Z",
+        "name": "Membership 1 year (student)",
+        "slug": "student",
+        "description": "Membership, with discount for students, in The Norwegian Students' Society for 365 days.",
+        "is_active": true,
+        "price": 10000,
+        "is_default": false,
+        "duration": "365 00:00:00",
+        "expiry_type": "duration",
+        "stripe_price_id": "price_1P7i6Z4eMzZcUxJ7ZxZp5xvi"
+    }
+},
+{
+    "model": "dusken.membershiptype",
+    "pk": 4,
+    "fields": {
+        "created": "2026-10-21T00:00:00Z",
+        "updated": "2026-10-21T00:00:00Z",
+        "name": "Membership 1 year (supporting member)",
+        "slug": "support",
+        "description": "Supporting membership in The Norwegian Students' Society for 365 days.",
+        "is_active": true,
+        "price": 100000,
+        "is_default": false,
+        "duration": "365 00:00:00",
+        "expiry_type": "duration",
+        "stripe_price_id": "price_1Pk9PZ4eMzZcUxJ7rW4k6nNW"
+    }
+},
+{
+    "model": "dusken.membershiptype",
+    "pk": 5,
+    "fields": {
+        "created": "2026-10-21T00:00:00Z",
+        "updated": "2026-10-21T00:00:00Z",
+        "name": "Membership 1 year (regular)",
+        "slug": "regular",
+        "description": "Membership in The Norwegian Students' Society for 365 days.",
+        "is_active": true,
+        "price": 25000,
+        "is_default": true,
+        "duration": "365 00:00:00",
+        "expiry_type": "duration",
+        "stripe_price_id": "price_1PjoL44eMzZcUxJ7R3mqPNIA"
     }
 },
 {
