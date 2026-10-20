@@ -45,7 +45,7 @@
       "groupName": "django"
     },
     {
-      "description": "Python is pinned to 3.14 in many places; upgrade it in one approved PR",
+      "description": "Python is pinned to 3.15 in many places; upgrade it in one approved PR",
       "matchDepNames": [
         "python",
         "nikolaik/python-nodejs"

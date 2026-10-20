@@ -2,7 +2,7 @@
 act = "latest"
 node = "24"
 prek = "latest"
-python = "3.14"
+python = "3.15"
 uv = "latest"
 
 # Backend tasks

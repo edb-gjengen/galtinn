@@ -2,7 +2,7 @@
 
 ## Environment Setup
 
-- **Python 3.14**, managed with [uv](https://docs.astral.sh/uv/)
+- **Python 3.15**, managed with [uv](https://docs.astral.sh/uv/)
 - **Node 24**, managed with [mise](https://mise.jdx.dev/)
 - Install prek: `uv tool install prek`
 - Enable commit hooks: `prek install`

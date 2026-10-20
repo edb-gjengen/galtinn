@@ -23,7 +23,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    container: nikolaik/python-nodejs:python3.14-nodejs24
+    container: nikolaik/python-nodejs:python3.15-nodejs24
     steps:
       - uses: actions/checkout@v4
       - name: Install system dependencies

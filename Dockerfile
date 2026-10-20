@@ -5,7 +5,7 @@ RUN npm ci
 COPY frontend/ ./
 RUN npm run build -- --env production
 
-FROM python:3.14-slim-trixie AS build
+FROM python:3.15-slim-trixie AS build
 COPY --from=ghcr.io/astral-sh/uv:0.13.4 /uv /bin/uv
 # python-ldap and mysqlclient ship no wheels; git fetches the django-ldapdb fork
 RUN apt-get update \
@@ -22,7 +22,7 @@ COPY . .
 COPY --from=frontend /src/frontend/dist frontend/dist
 RUN DJANGO_SETTINGS_MODULE=dusken.settings.prod /venv/bin/python manage.py collectstatic --noinput
 
-FROM python:3.14-slim-trixie
+FROM python:3.15-slim-trixie
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libldap2 libsasl2-2 libmariadb3 libpq5 \
     && rm -rf /var/lib/apt/lists/* \

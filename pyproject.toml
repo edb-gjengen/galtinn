@@ -3,7 +3,7 @@ name = "dusken"
 version = "0.1.0"
 description = ""
 authors = [{ name = "EDB", email = "edb@neuf.no" }]
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.15,<3.16"
 license = "MIT"
 dependencies = [
     "argon2-cffi==25.1.*",
@@ -70,7 +70,7 @@ omit = [
 
 [tool.ruff]
 line-length = 120
-target-version = "py314"
+target-version = "py315"
 
 [tool.ruff.lint]
 select = ["ALL"]
